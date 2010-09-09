@@ -1,0 +1,50 @@
+{-
+ - Prelude> product [1..9]
+ - 362880
+ - Prelude> 1000000/362880
+ - 2.755731922398589
+ - Prelude> 362880*2
+ - 725760
+ - Prelude> 1000000 - 725760
+ - 274240
+ - Prelude> 1000000 `mod` 362880
+ - 274240
+ - Prelude> product [1..8]
+ - 40320
+ - Prelude> 274240 / 40320
+ - 6.801587301587301
+ - Prelude> 274240 `mod` 40320
+ - 32320
+ - Prelude> product [1..7]
+ - 5040
+ - Prelude> 
+ - Prelude> 
+ - Prelude> 32320 / 5040
+ - 6.412698412698413
+ - Prelude> 32320 `mod` 5040
+ - 2080
+ - Prelude> product [1..6]
+ - 720
+ - Prelude> 2080 / 720
+ - 2.888888888888889
+ - Prelude> 2080 `div` 720
+ - 2
+ - Prelude> 2080 `mod` 720
+ - 640
+ - Prelude> product [1..5]
+ - 120
+ - Prelude> 640 / 120
+ - 5.333333333333333
+ - Prelude> 640 `mod` 120
+ - 40
+ - Prelude> product [1..4]
+ - 24
+ - Prelude> product [1..3]
+ - 6
+ - Prelude> 
+ - Prelude> 
+ - Prelude> 
+ - Leaving GHCi.
+ -
+ - Solution: 2783915460
+ -}
