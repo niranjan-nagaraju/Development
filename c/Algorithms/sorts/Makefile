@@ -10,6 +10,7 @@ SRC = test/main.c
 OBJS = out/sort_common.o 
 OBJS += out/selection_sort.o out/bubble_sort.o out/insertion_sort.o out/merge_sort.o
 OBJS += out/quick_sort.o
+OBJS += out/bubble_sortR.o
 
 all:
 	mkdir -p out
@@ -19,6 +20,7 @@ all:
 	$(CC) insertion_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/insertion_sort.o
 	$(CC) merge_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/merge_sort.o
 	$(CC) quick_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/quick_sort.o
+	$(CC) bubble_sortR.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/bubble_sortR.o
 
 # Mac Dynamic Libray (Add to DYLD_LIBRARY_PATH)
 dylib: all 	
@@ -34,6 +36,7 @@ tests:
 	$(CC) -D_INSERTION_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/insertion_sort_test -l$(LIBNAME)
 	$(CC) -D_MERGE_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/merge_sort_test -l$(LIBNAME)
 	$(CC) -D_QUICK_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/quick_sort_test -l$(LIBNAME)
+	$(CC) -D_BUBBLE_SORTR_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/bubble_sortR_test -l$(LIBNAME)
 
 cleanobjs:
 	rm -f out/*.o 

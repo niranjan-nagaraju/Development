@@ -15,6 +15,8 @@ int main()
 	sortfn = merge_sort;
 #elif _QUICK_SORT_
 	sortfn = quick_sort;
+#elif _BUBBLE_SORTR_
+	sortfn = bubble_sortR;
 #endif
 
 	assert(sortfn != NULL);
