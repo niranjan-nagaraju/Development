@@ -1,54 +1,29 @@
 #!/usr/bin/python
 
-def combinations_helper(lst, a, prefix, startindex, n, r):
-	if (startindex >= n):
-		return
+from combinations import *
+from all_permutations import *
 
-	prefix.append(a[startindex])
+def generate_permutations(a, n, r):
+	# Generate ordered arrangements first
+	combinations = generate_combinations(a, n, r)
 
-	if len(prefix) == r:
-		lst.append(prefix[:])
-		return 
+	# for each ordered arrangement of length r in nCr, generate rPr unordered arrangements (permutations)
+	permutations = []
+	for combination in combinations:
+		permutations_rr = permute_all(combination, r)
+		for permutation in permutations_rr:
+			permutations.append(permutation)
 
-	combinations_helper(lst, a, prefix[:], startindex+1, n, r)
-
-	for i in range(startindex+2, n):
-		combinations_helper(lst, a, prefix[:], i, n, r)
-
-
-def combinations(a, n, r):
-	lst = []
-	for i in range(n, r-1, -1):
-		curr = combinations_helper (lst, a, [], 0, i, r) 
-		a.pop(0)
-
-	return lst
-
-def right_rotations(comb, r):
-	perms_for_comb = []
-	for i in range(0, r):
-		comb = comb[1:] + comb[:1]
-		perms_for_comb.append(comb)
-
-	return perms_for_comb[:]
-
-def permutations(a, n, r):
-	comb_list = combinations(a, n, r)
-	perm_list = []
-
-	for comb in comb_list:
-		perm_list.extend(right_rotations(comb, r))
-
-	return perm_list
+	return permutations
 
 def main():
 	n = int(raw_input())
 	r = int(raw_input())
 	a = range(1, n+1)
 
-	perm_list = permutations(a, n, r)
-	print len(perm_list)
-	for i in perm_list:
+	permutations = generate_permutations(a, n, r)
+	print len(permutations)
+	for i in permutations:
 		print i
 
 if __name__ == "__main__":

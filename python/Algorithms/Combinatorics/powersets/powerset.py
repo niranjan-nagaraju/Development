@@ -35,6 +35,7 @@ def main():
 	n = int(raw_input())
 	a = range(1, n+1)
 
+	# Initialize an empty 2D list to store subsets ordered by length
 	powerset = []
 	for i in range(0, n+1):
 		powerset.append([])
