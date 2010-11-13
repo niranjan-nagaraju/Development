@@ -4,10 +4,10 @@ from combinations import *
 from all_permutations import *
 
 def generate_permutations(a, n, r):
-	# Generate ordered arrangements first
+	# Generate unordered arrangements first
 	combinations = generate_combinations(a, n, r)
 
-	# for each ordered arrangement of length r in nCr, generate rPr unordered arrangements (permutations)
+	# for each unordered arrangement of length r in nCr, generate rPr ordered arrangements (permutations)
 	permutations = []
 	for combination in combinations:
 		permutations_rr = permute_all(combination, r)
