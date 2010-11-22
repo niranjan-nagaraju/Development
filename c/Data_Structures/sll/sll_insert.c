@@ -1,22 +1,26 @@
 #include <sll.h>
 
+/** Helper to Insert an SLL node at a specified position in the SLL; No validation done */
 static int _insertNodeAt_sll(sll_t *this, sll_node *node, int pos);
 
 /** No Validation for node or pos */
 static int 
 _insertNodeAt_sll(sll_t *this, sll_node *node, int pos)
 {
-	sll_node *head = this->head;
-	int i = 1;
+	sll_node *head;
+	int i;
 	int orig_size;
 
-	orig_size = (this->_size)++;
+	SLL_LOCK(this);
+	orig_size = (this->_size)++; /** Update size since Insert will(should) never fail */
+	head = this->head;
 
+	/** If the SLL is empty, Insert this node at the start and return */
 	if (pos == 0 || !head) {
 		node->next = head;
 		this->head = node;
 
-		if (!head)
+		if (!head) /** Update tail if the list was initially empty */
 			this->tail = node;
 
 		return 0;
@@ -30,6 +34,7 @@ _insertNodeAt_sll(sll_t *this, sll_node *node, int pos)
 		return 0;
 	}
 
+	i = 1;
 	while (i++ < pos)
 		head = head->next;
 
@@ -39,14 +44,16 @@ _insertNodeAt_sll(sll_t *this, sll_node *node, int pos)
 	return 0;
 }
 
+/** Insert an object at a specified position in the SLL */
 int 
 insertAt_sll(struct sll_s *this, void *object, int pos)
 {
 	sll_node *tmp;
 
-	if (pos < 0)
+	if (!this || pos < 0)
 		return -EINVAL;
 
+	/** Encapsulate object in node to begin with */
 	tmp = this->newNode(object);
 	if (!tmp)
 		return -ENOMEM;
@@ -54,25 +61,53 @@ insertAt_sll(struct sll_s *this, void *object, int pos)
 	return _insertNodeAt_sll(this, tmp, pos);
 }
 
+/** Insert an SLL node at a specified position */
 int 
 insertNodeAt_sll(struct sll_s *this, sll_node *node, int pos)
 {
-	if (pos < 0 || !node)
+	if (!this || pos < 0 || !node)
 		return -EINVAL;
 
 	return _insertNodeAt_sll(this, node, pos);
 }
 
+/** Insert an object at a specified position from the end */
 int 
 insertAtRev_sll(struct sll_s *this, void *object, int pos)
 {
-	return 0;
+	sll_node *tmp;
+
+	/** More validations in insertNode... */
+	if (!this)
+		return -EINVAL;
+	
+	/** Encapsulate object in node to begin with */
+	tmp = this->newNode(object);
+	if (!tmp)
+		return -ENOMEM;
+	
+	return insertNodeAtRev_sll(this, tmp, pos);
 }
 
+/** Insert an SLL node at a specified position from the end */
 int 
 insertNodeAtRev_sll(struct sll_s *this, sll_node *node, int pos)
 {
-	return 0;
+	int size, lpos;
+
+	if (!this || !node || pos < 0)
+		return -EINVAL;
+
+	/** Calculate pos from left */
+	SLL_LOCK(this);
+	size = this->_size;
+	SLL_UNLOCK(this);
+	
+	lpos = size - pos;	
+	if (lpos < 0)
+		return -EINVAL;
+
+	return _insertNodeAt_sll(this, node, lpos);
 }
 
 int 
