@@ -1,6 +1,6 @@
 #include <sll.h>
 
-static sll_node *_prev_sll(sll_node *trav, sll_node *node);
+sll_node *_prev_sll(sll_node *trav, sll_node *node);
 
 /** Initialize SLL book-keeping and function pointers */
 void 
@@ -195,7 +195,7 @@ next_sll(struct sll_s *this, sll_node *curr)
  * Helper function to retrieve the node previous to the specified node 
  * Caller is assumed to have acquired a lock
  */
-static sll_node *
+sll_node *
 _prev_sll(sll_node *trav, sll_node *node)
 {
 	while (trav && trav->next != node)
