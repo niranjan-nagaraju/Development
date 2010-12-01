@@ -8,7 +8,7 @@ void place_sll(struct sll_s *this, void *object, int (*compare)(void *obj1, void
 {
 }
 
-void placeNode_sll(struct sll_s *this, sll_node *node, int (*compare)(void *obj1, void *obj2))
+void placeNode_sll(struct sll_s *this, sll_node_t *node, int (*compare)(void *obj1, void *obj2))
 {
 }
 

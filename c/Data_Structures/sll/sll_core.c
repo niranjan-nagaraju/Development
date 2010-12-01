@@ -1,6 +1,6 @@
 #include <sll.h>
 
-sll_node *_prev_sll(sll_node *trav, sll_node *node);
+sll_node_t *_prev_sll(sll_node_t *trav, sll_node_t *node);
 
 /** Initialize SLL book-keeping and function pointers */
 void 
@@ -14,8 +14,6 @@ init_sll(struct sll_s *this)
 
 	/** Assign function pointers */
 	this->destroy = destroy_sll;
-	this->newNode = newNode_sll;
-	this->freeNode = freeNode_sll;
 
 	this->isThreadSafe = isThreadSafe_sll;
 
@@ -111,7 +109,7 @@ init_sll(struct sll_s *this)
 void 
 destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 {
-	sll_node *trav, *prev;
+	sll_node_t *trav, *prev;
 
 	SLL_LOCK(this);
 
@@ -132,37 +130,6 @@ destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 
 	SLL_UNLOCK(this);
 }
-
-/** Create a SLL node encapsulation of the "object" to be inserted into the SLL */
-sll_node *
-newNode_sll(void *object)
-{
-	sll_node *node = (sll_node *)malloc(sizeof(sll_node));
-	if (!node)
-		return NULL;
-
-	node->object = object;
-	node->next = NULL;
-
-	return node;
-}
-
-/** Free the encapsulated SLL node and return its content */
-void *
-freeNode_sll(sll_node *node)
-{
-	void *object;
-
-	if (!node)
-		return NULL;
-
-	object = node->object;
-
-	free(node);
-
-	return object;
-}
-
 /** if _MULTI_THREADED_ is defined, the SLL is threadsafe */
 int 
 isThreadSafe_sll (struct sll_s *this)
@@ -176,10 +143,10 @@ isThreadSafe_sll (struct sll_s *this)
 
 
 /** Retrieve pointer of node next to 'curr' */
-sll_node *
-next_sll(struct sll_s *this, sll_node *curr)
+sll_node_t *
+next_sll(struct sll_s *this, sll_node_t *curr)
 {
-	sll_node *next;
+	sll_node_t *next;
 
 	if(!this || !curr)
 		return NULL;
@@ -195,8 +162,8 @@ next_sll(struct sll_s *this, sll_node *curr)
  * Helper function to retrieve the node previous to the specified node 
  * Caller is assumed to have acquired a lock
  */
-sll_node *
-_prev_sll(sll_node *trav, sll_node *node)
+sll_node_t *
+_prev_sll(sll_node_t *trav, sll_node_t *node)
 {
 	while (trav && trav->next != node)
 		trav = trav->next;
@@ -205,10 +172,10 @@ _prev_sll(sll_node *trav, sll_node *node)
 }
 
 /** Retrieve pointer of node previous to 'curr' */
-sll_node *
-prev_sll(struct sll_s *this, sll_node *curr)
+sll_node_t *
+prev_sll(struct sll_s *this, sll_node_t *curr)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	if (!this)
 		return NULL;
@@ -222,7 +189,7 @@ prev_sll(struct sll_s *this, sll_node *curr)
 
 /** Retrieve the value encapsulated in the SLL node */
 void *
-value_sll(sll_node *node)
+value_sll(sll_node_t *node)
 {
 	if(!node)
 		return NULL;
@@ -251,7 +218,7 @@ fromArray_sll (void **objects, int n)
 void **
 toArray_sll(struct sll_s *this, void **objects)
 {
-	sll_node *trav;
+	sll_node_t *trav;
 	int i;
 
 	if (!this) {
@@ -288,7 +255,7 @@ toArray_sll(struct sll_s *this, void **objects)
 int 
 findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
 {
-	sll_node *trav;
+	sll_node_t *trav;
 	int pos = 0;
 
 	if (!this)
@@ -320,10 +287,10 @@ findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *o
 }
 
 /** Retrieve the node in the SLL if a matching 'object' is found */
-sll_node *
+sll_node_t *
 findNode_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
 {
-	sll_node *trav;
+	sll_node_t *trav;
 
 	if (!this)
 		return NULL;
@@ -368,7 +335,7 @@ length_sll(struct sll_s *this)
 void *
 objectAt_sll(struct sll_s *this, int pos)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	/** Locate node at specified position and return its content */
 	node = nodeAt_sll(this, pos);
@@ -379,10 +346,10 @@ objectAt_sll(struct sll_s *this, int pos)
 }
 
 /** Retrieve node at position */
-sll_node *
+sll_node_t *
 nodeAt_sll(struct sll_s *this, int pos)
 {
-	sll_node *trav;
+	sll_node_t *trav;
 
 	if (!this)
 		return NULL;
@@ -409,7 +376,7 @@ nodeAt_sll(struct sll_s *this, int pos)
 void *
 objectAtRev_sll(struct sll_s *this, int rpos)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	node = nodeAtRev_sll(this, rpos);
 	if (node)
@@ -419,7 +386,7 @@ objectAtRev_sll(struct sll_s *this, int rpos)
 }
 
 /** Retrieve node at position from the end */
-sll_node *
+sll_node_t *
 nodeAtRev_sll(struct sll_s *this, int rpos)
 {
 	int pos, size;
@@ -439,7 +406,7 @@ nodeAtRev_sll(struct sll_s *this, int rpos)
 void *
 objectAtFront_sll(struct sll_s *this)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	node = nodeAtFront_sll(this);
 	if (node)
@@ -449,10 +416,10 @@ objectAtFront_sll(struct sll_s *this)
 }
 
 /** Retrieve node at the beginning of the SLL */
-sll_node *
+sll_node_t *
 nodeAtFront_sll(struct sll_s *this)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	if (!this)
 		return NULL;
@@ -468,7 +435,7 @@ nodeAtFront_sll(struct sll_s *this)
 void *
 objectAtEnd_sll(struct sll_s *this)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	node = nodeAtEnd_sll(this);
 	if (node)
@@ -478,10 +445,10 @@ objectAtEnd_sll(struct sll_s *this)
 }
 
 /** Retrieve node at the end of the SLL */
-sll_node *
+sll_node_t *
 nodeAtEnd_sll(struct sll_s *this)
 {
-	sll_node *node;
+	sll_node_t *node;
 
 	if (!this)
 		return NULL;

@@ -1,13 +1,13 @@
 #include <sll.h>
 
 /** Helper to Insert an SLL node at a specified position in the SLL; No validation done */
-static int _insertNodeAt_sll(sll_t *this, sll_node *node, int pos);
+static int _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos);
 
 /** No Validation for node or pos */
 static int 
-_insertNodeAt_sll(sll_t *this, sll_node *node, int pos)
+_insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 {
-	sll_node *head;
+	sll_node_t *head;
 	int i;
 	int orig_size;
 
@@ -48,13 +48,13 @@ _insertNodeAt_sll(sll_t *this, sll_node *node, int pos)
 int 
 insertAt_sll(struct sll_s *this, void *object, int pos)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
 	if (!this || pos < 0)
 		return -EINVAL;
 
 	/** Encapsulate object in node to begin with */
-	tmp = this->newNode(object);
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 
@@ -63,7 +63,7 @@ insertAt_sll(struct sll_s *this, void *object, int pos)
 
 /** Insert an SLL node at a specified position */
 int 
-insertNodeAt_sll(struct sll_s *this, sll_node *node, int pos)
+insertNodeAt_sll(struct sll_s *this, sll_node_t *node, int pos)
 {
 	if (!this || pos < 0 || !node)
 		return -EINVAL;
@@ -75,14 +75,14 @@ insertNodeAt_sll(struct sll_s *this, sll_node *node, int pos)
 int 
 insertAtRev_sll(struct sll_s *this, void *object, int pos)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
 	/** More validations in insertNode... */
 	if (!this)
 		return -EINVAL;
 	
 	/** Encapsulate object in node to begin with */
-	tmp = this->newNode(object);
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 	
@@ -91,7 +91,7 @@ insertAtRev_sll(struct sll_s *this, void *object, int pos)
 
 /** Insert an SLL node at a specified position from the end */
 int 
-insertNodeAtRev_sll(struct sll_s *this, sll_node *node, int pos)
+insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos)
 {
 	int size, lpos;
 
@@ -110,24 +110,30 @@ insertNodeAtRev_sll(struct sll_s *this, sll_node *node, int pos)
 	return _insertNodeAt_sll(this, node, lpos);
 }
 
+/** Insert at the beginning of the SLL */
 int 
 insertAtFront_sll(struct sll_s *this, void *object)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
-	tmp = this->newNode(object);
+	if (!this)
+		return -EINVAL;
+
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 
 	return insertNodeAtFront_sll(this, tmp);
 }
 
+/** Insert an SLL node at the beginning */
 int 
-insertNodeAtFront_sll(struct sll_s *this, sll_node *node)
+insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
 {
-	if (!node)
+	if (!this ||!node)
 		return -EINVAL;
 
+	SLL_LOCK(this);
 	++(this->_size);
 	node->next = this->head;
 
@@ -136,15 +142,21 @@ insertNodeAtFront_sll(struct sll_s *this, sll_node *node)
 		this->tail = node;
 
 	this->head = node;
+	SLL_UNLOCK(this);
+
 	return 0;
 }
 
+/** Insert at the end of the SLL */
 int 
 insertAtEnd_sll(struct sll_s *this, void *object)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
-	tmp = this->newNode(object);
+	if (!this)
+		return -EINVAL;
+
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 
@@ -152,7 +164,7 @@ insertAtEnd_sll(struct sll_s *this, void *object)
 }
 
 int 
-insertNodeAtEnd_sll(struct sll_s *this, sll_node *node)
+insertNodeAtEnd_sll(struct sll_s *this, sll_node_t *node)
 {
 	if (!node)
 		return -EINVAL;
@@ -172,11 +184,11 @@ insertNodeAtEnd_sll(struct sll_s *this, sll_node *node)
 }
 
 int 
-insertAfter_sll(struct sll_s *this, sll_node *node, void *object)
+insertAfter_sll(struct sll_s *this, sll_node_t *node, void *object)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
-	tmp = this->newNode(object);
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 
@@ -184,7 +196,7 @@ insertAfter_sll(struct sll_s *this, sll_node *node, void *object)
 }
 
 int 
-insertNodeAfter_sll(struct sll_s *this, sll_node *node, sll_node *node_to_insert)
+insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert)
 {
 	if (!node || !node_to_insert)
 		return -EINVAL;
@@ -197,11 +209,11 @@ insertNodeAfter_sll(struct sll_s *this, sll_node *node, sll_node *node_to_insert
 }
 
 int 
-insertBefore_sll(struct sll_s *this, sll_node *node, void *object)
+insertBefore_sll(struct sll_s *this, sll_node_t *node, void *object)
 {
-	sll_node *tmp;
+	sll_node_t *tmp;
 
-	tmp = this->newNode(object);
+	tmp = new_sll_node(object);
 	if (!tmp)
 		return -ENOMEM;
 
@@ -210,7 +222,7 @@ insertBefore_sll(struct sll_s *this, sll_node *node, void *object)
 
 /** Insert after node, and swap contents */
 int
-insertNodeBefore_sll(struct sll_s *this, sll_node *node, sll_node *node_to_insert)
+insertNodeBefore_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert)
 {
 	void *node_content;
 

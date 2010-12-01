@@ -5,9 +5,9 @@ void *removeObject_sll(struct sll_s *this, void *object)
 	return NULL;
 }
 
-sll_node *removeNode_sll(struct sll_s *this, sll_node *node)
+sll_node_t *removeNode_sll(struct sll_s *this, sll_node_t *node)
 {
-	sll_node *head = this->head;
+	sll_node_t *head = this->head;
 
 	if (!node || !head)
 		return NULL;
@@ -38,7 +38,7 @@ void *removeAt_sll(struct sll_s *this, int pos)
 	return NULL;
 }
 
-sll_node *removeNodeAt_sll(struct sll_s *this, int pos)
+sll_node_t *removeNodeAt_sll(struct sll_s *this, int pos)
 {
 	return NULL;
 }
@@ -48,27 +48,27 @@ void *removeAtRev_sll(struct sll_s *this, int pos)
 	return NULL;
 }
 
-sll_node *removeNodeAtRev_sll(struct sll_s *this, int pos)
+sll_node_t *removeNodeAtRev_sll(struct sll_s *this, int pos)
 {
 	return NULL;
 }
 
-void *removeAfter_sll(struct sll_s *this, sll_node *node)
+void *removeAfter_sll(struct sll_s *this, sll_node_t *node)
 {
 	return NULL;
 }
 
-sll_node *removeNodeAfter_sll(struct sll_s *this, sll_node *node)
+sll_node_t *removeNodeAfter_sll(struct sll_s *this, sll_node_t *node)
 {
 	return NULL;
 }
 
-void *removeBefore_sll(struct sll_s *this, sll_node *node)
+void *removeBefore_sll(struct sll_s *this, sll_node_t *node)
 {
 	return NULL;
 }
 
-sll_node *removeNodeBefore_sll(struct sll_s *this, sll_node *node)
+sll_node_t *removeNodeBefore_sll(struct sll_s *this, sll_node_t *node)
 {
 	return NULL;
 }
@@ -78,7 +78,7 @@ void *removeFirst_sll(struct sll_s *this)
 	return NULL;
 }
 
-sll_node *removeFirstNode_sll(struct sll_s *this)
+sll_node_t *removeFirstNode_sll(struct sll_s *this)
 {
 	return NULL;
 }
@@ -89,7 +89,7 @@ void *removeLast_sll(struct sll_s *this)
 	return NULL;
 }
 
-sll_node *removeLastNode_sll(struct sll_s *this)
+sll_node_t *removeLastNode_sll(struct sll_s *this)
 {
 	return NULL;
 }

@@ -7,6 +7,7 @@
 #include <errno.h>
 
 #include <common.h>
+#include <sll_node.h>
 
 #ifdef _MULTI_THREADED_
 	#define	SLL_LOCK_INIT(sll)	pthread_mutex_init(&(sll->lock), NULL)
@@ -18,14 +19,10 @@
 	#define SLL_UNLOCK(sll)
 #endif
 
-typedef struct sll_node {
-	void *object;
-	struct sll_node *next;
-} sll_node;
 
 typedef struct sll_s {
-	sll_node *head;
-	sll_node *tail;
+	sll_node_t *head;
+	sll_node_t *tail;
 
 	int _size;	/** Keep a running total of the number of elements in the SLL */
 
@@ -36,13 +33,9 @@ typedef struct sll_s {
 
 	int (*isThreadSafe) (struct sll_s *this);	/** if _MULTI_THREADED_ is defined, the SLL is threadsafe */
 
-	/** Create a SLL node encapsulation of the "object" to be inserted into the SLL */
-	sll_node *(*newNode)(void *object);
-	void *(*freeNode)(sll_node *node); /** Free the encapsulated SLL node and return its content */
-
-	sll_node *(*next)(struct sll_s *this, sll_node *curr);	/** Retrieve pointer of node next to 'curr' */
-	sll_node *(*prev)(struct sll_s *this, sll_node *curr);	/** Retrieve pointer of node previous to 'curr' */
-	void *(*value)(sll_node *node);							/** Retrieve the value encapsulated in the SLL node */
+	sll_node_t *(*next)(struct sll_s *this, sll_node_t *curr);	/** Retrieve pointer of node next to 'curr' */
+	sll_node_t *(*prev)(struct sll_s *this, sll_node_t *curr);	/** Retrieve pointer of node previous to 'curr' */
+	void *(*value)(sll_node_t *node);							/** Retrieve the value encapsulated in the SLL node */
 
 	struct sll_s (*fromArray) (void **objects, int n);	/** Construct an SLL from an array */
 	void **(*toArray)(struct sll_s *this, void **objects);		/** Retrieve an array of 'objects' stored in the SLL */
@@ -51,46 +44,46 @@ typedef struct sll_s {
 	int (*findPos)(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2));
 
 	/** Retrieve the node in the SLL if a matching 'object' is found */
-	sll_node *(*findNode)(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2)); 
+	sll_node_t *(*findNode)(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2)); 
 
 	int (*length)(struct sll_s *this);	/** Retrieve the number of nodes */
 
 	void *(*objectAt)(struct sll_s *this, int pos);	/** Retrieve object at position */
-	sll_node *(*nodeAt)(struct sll_s *this, int pos);	/** Retrieve node at position */
+	sll_node_t *(*nodeAt)(struct sll_s *this, int pos);	/** Retrieve node at position */
 	void *(*objectAtRev)(struct sll_s *this, int pos);	/** Retrieve object at position from the end */
-	sll_node *(*nodeAtRev)(struct sll_s *this, int pos);	/** Retrieve node at position from the end */
+	sll_node_t *(*nodeAtRev)(struct sll_s *this, int pos);	/** Retrieve node at position from the end */
 	void *(*objectAtFront)(struct sll_s *this);		/** Retrieve object at the beginning of the SLL */
-	sll_node *(*nodeAtFront)(struct sll_s *this);	/** Retrieve node at the beginning of the SLL */
+	sll_node_t *(*nodeAtFront)(struct sll_s *this);	/** Retrieve node at the beginning of the SLL */
 	void *(*objectAtEnd)(struct sll_s *this);		/** Retrieve object at the end of the SLL */
-	sll_node *(*nodeAtEnd)(struct sll_s *this);		/** Retrieve node at the end of the SLL */
+	sll_node_t *(*nodeAtEnd)(struct sll_s *this);		/** Retrieve node at the end of the SLL */
 
 	int (*insertAt)(struct sll_s *this, void *object, int pos);	/** Insert an object at a specified position in the SLL */
-	int (*insertNodeAt)(struct sll_s *this, sll_node *node, int pos);	/** Insert an SLL node at a specified position */
+	int (*insertNodeAt)(struct sll_s *this, sll_node_t *node, int pos);	/** Insert an SLL node at a specified position */
 	int (*insertAtRev)(struct sll_s *this, void *object, int pos);	/** Insert an object at a specified position from the end */
-	int (*insertNodeAtRev)(struct sll_s *this, sll_node *node, int pos);/** Insert an SLL node at a specified position from the end */
+	int (*insertNodeAtRev)(struct sll_s *this, sll_node_t *node, int pos);/** Insert an SLL node at a specified position from the end */
 	int (*insertAtFront)(struct sll_s *this, void *object);				/** Insert at the beginning of the SLL */
-	int (*insertNodeAtFront)(struct sll_s *this, sll_node *node);		/** Insert an SLL node at the beginning */
+	int (*insertNodeAtFront)(struct sll_s *this, sll_node_t *node);		/** Insert an SLL node at the beginning */
 	int (*insertAtEnd)(struct sll_s *this, void *object);				/** Insert at the end of the SLL */
-	int (*insertNodeAtEnd)(struct sll_s *this, sll_node *node);			/** Insert an SLL node at the end */
-	int (*insertAfter)(struct sll_s *this, sll_node *node, void *object);	/** Insert an object after the specified 'node' */
-	int (*insertNodeAfter)(struct sll_s *this, sll_node *node, sll_node *node_to_insert);	/** Insert an SLL node after the specified 'node' */
-	int (*insertBefore)(struct sll_s *this, sll_node *node, void *object);					/** Insert an object before the specified 'node' */
-	int (*insertNodeBefore)(struct sll_s *this, sll_node *node, sll_node *node_to_insert);	/** Insert an SLL node before the specified 'node' */
+	int (*insertNodeAtEnd)(struct sll_s *this, sll_node_t *node);			/** Insert an SLL node at the end */
+	int (*insertAfter)(struct sll_s *this, sll_node_t *node, void *object);	/** Insert an object after the specified 'node' */
+	int (*insertNodeAfter)(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert);	/** Insert an SLL node after the specified 'node' */
+	int (*insertBefore)(struct sll_s *this, sll_node_t *node, void *object);					/** Insert an object before the specified 'node' */
+	int (*insertNodeBefore)(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert);	/** Insert an SLL node before the specified 'node' */
 
 	void *(*removeObject)(struct sll_s *this, void *object);	/** Remove an SLL node matching 'object' in the SLL */
-	sll_node *(*removeNode)(struct sll_s *this, sll_node *node);	/** Remove the specified 'node' from the SLL */
+	sll_node_t *(*removeNode)(struct sll_s *this, sll_node_t *node);	/** Remove the specified 'node' from the SLL */
 	void *(*removeAt)(struct sll_s *this, int pos);				/** Remove an object at position and return its content */
-	sll_node *(*removeNodeAt)(struct sll_s *this, int pos);		/** Remove an SLL node at position and return it */
+	sll_node_t *(*removeNodeAt)(struct sll_s *this, int pos);		/** Remove an SLL node at position and return it */
 	void *(*removeAtRev)(struct sll_s *this, int pos);				/** Remove an object at position from the end and return its content */
-	sll_node *(*removeNodeAtRev)(struct sll_s *this, int pos);		/** Remove an SLL node at position from the end and return it */
-	void *(*removeAfter)(struct sll_s *this, sll_node *node);	/** Remove an object following the spcified 'node' and return its content */
-	sll_node *(*removeNodeAfter)(struct sll_s *this, sll_node *node);	/** Remove an SLL node following the specified 'node' and return it */
-	void *(*removeBefore)(struct sll_s *this, sll_node *node);			/** Remove an object preceeding the specified 'node' and return its content */
-	sll_node *(*removeNodeBefore)(struct sll_s *this, sll_node *node);	/** Remove an SLL node preceeding the specified 'node' and return it */
+	sll_node_t *(*removeNodeAtRev)(struct sll_s *this, int pos);		/** Remove an SLL node at position from the end and return it */
+	void *(*removeAfter)(struct sll_s *this, sll_node_t *node);	/** Remove an object following the spcified 'node' and return its content */
+	sll_node_t *(*removeNodeAfter)(struct sll_s *this, sll_node_t *node);	/** Remove an SLL node following the specified 'node' and return it */
+	void *(*removeBefore)(struct sll_s *this, sll_node_t *node);			/** Remove an object preceeding the specified 'node' and return its content */
+	sll_node_t *(*removeNodeBefore)(struct sll_s *this, sll_node_t *node);	/** Remove an SLL node preceeding the specified 'node' and return it */
 	void *(*removeFirst)(struct sll_s *this);			/** Remove first object and return its content */
-	sll_node *(*removeFirstNode)(struct sll_s *this);	/** Remove first SLL node and return it */
+	sll_node_t *(*removeFirstNode)(struct sll_s *this);	/** Remove first SLL node and return it */
 	void *(*removeLast)(struct sll_s *this);			/** Remove last object and return its content */
-	sll_node *(*removeLastNode)(struct sll_s *this);	/** Remove last SLL node and return it */
+	sll_node_t *(*removeLastNode)(struct sll_s *this);	/** Remove last SLL node and return it */
 	
 	void (*print)(struct sll_s *this, void (*printfn)(void *object));	/** Print the contents of the SLL */
 	void (*printR)(struct sll_s *this, void (*printfn)(void *object));	/** Print the contents of the SLL, recursive version */
@@ -99,7 +92,7 @@ typedef struct sll_s {
 
 	void (*sort)(struct sll_s *this, int (*compare)(void *obj1, void *obj2));	/** Sort the SLL based on the compare function */
 	void (*place)(struct sll_s *this, void *object, int (*compare)(void *obj1, void *obj2)); /** Place the 'object' s.t. SLL nodes are always are sorted */
-	void (*placeNode)(struct sll_s *this, sll_node *node, int (*compare)(void *obj1, void *obj2)); /** Place 'node' s.t. SLL nodes are always are sorted */
+	void (*placeNode)(struct sll_s *this, sll_node_t *node, int (*compare)(void *obj1, void *obj2)); /** Place 'node' s.t. SLL nodes are always are sorted */
 	int (*isSorted) (struct sll_s *this, int (*compare)(void *obj1, void *obj2));	/** Check if the SLL is sorted */
 
 	void (*reverse)(struct sll_s *this);		/** Reverse the SLL */
@@ -129,7 +122,7 @@ typedef struct sll_s {
 	void (*unLoop) (struct sll_s *this);		/** Unroll the loop and make the SLL linear */
 
 	int (*hasJoin)(struct sll_s *this, struct sll_s *sll2);			/** Check if two SLLs are merged at a joint */
-	sll_node *(*nodeOfJoin)(struct sll_s *this, struct sll_s *sll2);	/** Return the node of join if the two SLLs are merged */
+	sll_node_t *(*nodeOfJoin)(struct sll_s *this, struct sll_s *sll2);	/** Return the node of join if the two SLLs are merged */
 	struct sll_s *(*commonNodes)(struct sll_s *this, struct sll_s *sll2);	/** Return the common nodes of the merged SLLs */
 	
 } sll_t;
@@ -140,65 +133,62 @@ void init_sll(struct sll_s *this);	/** Initialize new SLL */
 void destroy_sll(struct sll_s *this, void (*deallocate)(void *object)); /** Completely destroy the SLL, use deallocate to manually manage memory */
 
 /** -- BEGIN -- Member functions */
-sll_node *newNode_sll(void *object);
-void *freeNode_sll(sll_node *node);
-
 int isThreadSafe_sll(struct sll_s *this);
 
-sll_node *next_sll(struct sll_s *this, sll_node *curr);
-sll_node *prev_sll(struct sll_s *this, sll_node *curr);
+sll_node_t *next_sll(struct sll_s *this, sll_node_t *curr);
+sll_node_t *prev_sll(struct sll_s *this, sll_node_t *curr);
 
-void *value_sll(sll_node *node);
+void *value_sll(sll_node_t *node);
 
 struct sll_s fromArray_sll (void **objects, int n);
 void **toArray_sll(struct sll_s *this, void **objects);
 
 int findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2));
-sll_node *findNode_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2));
+sll_node_t *findNode_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2));
 
 int length_sll(struct sll_s *this);
 
 void *objectAt_sll(struct sll_s *this, int pos);
-sll_node *nodeAt_sll(struct sll_s *this, int pos);
+sll_node_t *nodeAt_sll(struct sll_s *this, int pos);
 void *objectAtRev_sll(struct sll_s *this, int pos);
-sll_node *nodeAtRev_sll(struct sll_s *this, int pos);
+sll_node_t *nodeAtRev_sll(struct sll_s *this, int pos);
 void *objectAtFront_sll(struct sll_s *this);
-sll_node *nodeAtFront_sll(struct sll_s *this);
+sll_node_t *nodeAtFront_sll(struct sll_s *this);
 void *objectAtEnd_sll(struct sll_s *this);
-sll_node *nodeAtEnd_sll(struct sll_s *this);
+sll_node_t *nodeAtEnd_sll(struct sll_s *this);
 
 /** Core */
 
 /** Insert */
 int insertAt_sll(struct sll_s *this, void *object, int pos);
-int insertNodeAt_sll(struct sll_s *this, sll_node *node, int pos);
+int insertNodeAt_sll(struct sll_s *this, sll_node_t *node, int pos);
 int insertAtRev_sll(struct sll_s *this, void *object, int pos);
-int insertNodeAtRev_sll(struct sll_s *this, sll_node *node, int pos);
+int insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos);
 int insertAtFront_sll(struct sll_s *this, void *object);
-int insertNodeAtFront_sll(struct sll_s *this, sll_node *node);
+int insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node);
 int insertAtEnd_sll(struct sll_s *this, void *object);
-int insertNodeAtEnd_sll(struct sll_s *this, sll_node *node);
-int insertAfter_sll(struct sll_s *this, sll_node *node, void *object);
-int insertNodeAfter_sll(struct sll_s *this, sll_node *node, sll_node *node_to_insert);
-int insertBefore_sll(struct sll_s *this, sll_node *node, void *object);
-int insertNodeBefore_sll(struct sll_s *this, sll_node *node, sll_node *node_to_insert);
+int insertNodeAtEnd_sll(struct sll_s *this, sll_node_t *node);
+int insertAfter_sll(struct sll_s *this, sll_node_t *node, void *object);
+int insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert);
+int insertBefore_sll(struct sll_s *this, sll_node_t *node, void *object);
+int insertNodeBefore_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert);
 /** Insert */
 
 /** Remove */
 void *removeObject_sll(struct sll_s *this, void *object);
-sll_node *removeNode_sll(struct sll_s *this, sll_node *node);
+sll_node_t *removeNode_sll(struct sll_s *this, sll_node_t *node);
 void *removeAt_sll(struct sll_s *this, int pos);
-sll_node *removeNodeAt_sll(struct sll_s *this, int pos);
+sll_node_t *removeNodeAt_sll(struct sll_s *this, int pos);
 void *removeAtRev_sll(struct sll_s *this, int pos);	
-sll_node *removeNodeAtRev_sll(struct sll_s *this, int pos);
-void *removeAfter_sll(struct sll_s *this, sll_node *node);
-sll_node *removeNodeAfter_sll(struct sll_s *this, sll_node *node);
-void *removeBefore_sll(struct sll_s *this, sll_node *node);
-sll_node *removeNodeBefore_sll(struct sll_s *this, sll_node *node);
+sll_node_t *removeNodeAtRev_sll(struct sll_s *this, int pos);
+void *removeAfter_sll(struct sll_s *this, sll_node_t *node);
+sll_node_t *removeNodeAfter_sll(struct sll_s *this, sll_node_t *node);
+void *removeBefore_sll(struct sll_s *this, sll_node_t *node);
+sll_node_t *removeNodeBefore_sll(struct sll_s *this, sll_node_t *node);
 void *removeFirst_sll(struct sll_s *this);
-sll_node *removeFirstNode_sll(struct sll_s *this);
+sll_node_t *removeFirstNode_sll(struct sll_s *this);
 void *removeLast_sll(struct sll_s *this);
-sll_node *removeLastNode_sll(struct sll_s *this);
+sll_node_t *removeLastNode_sll(struct sll_s *this);
 /** Remove */
 
 /** Display */
@@ -211,7 +201,7 @@ void printRevR_sll(struct sll_s *this, void (*printfn)(void *object));
 /** Sort */
 void sort_sll(struct sll_s *this, int (*compare)(void *obj1, void *obj2));
 void place_sll(struct sll_s *this, void *object, int (*compare)(void *obj1, void *obj2));
-void placeNode_sll(struct sll_s *this, sll_node *node, int (*compare)(void *obj1, void *obj2));
+void placeNode_sll(struct sll_s *this, sll_node_t *node, int (*compare)(void *obj1, void *obj2));
 int isSorted_sll(struct sll_s *this, int (*compare)(void *obj1, void *obj2));
 /** Sort */
 
@@ -250,7 +240,7 @@ void unLoop_sll (struct sll_s *this);
 
 /** Join */
 int hasJoin_sll(struct sll_s *this, struct sll_s *sll2);
-sll_node *nodeOfJoin_sll(struct sll_s *this, struct sll_s *sll2);
+sll_node_t *nodeOfJoin_sll(struct sll_s *this, struct sll_s *sll2);
 struct sll_s *commonNodes_sll(struct sll_s *this, struct sll_s *sll2);
 /** Join */
 

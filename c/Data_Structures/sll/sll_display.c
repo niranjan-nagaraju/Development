@@ -1,8 +1,8 @@
 #include <sll.h>
 
 static void print_sll_meta (struct sll_s *this, void (*print)(void *object));
-static void _printR_sll(sll_node *node, void (*print)(void *object));
-static void _printRevR_sll(sll_node *node, void (*print)(void *object));
+static void _printR_sll(sll_node_t *node, void (*print)(void *object));
+static void _printRevR_sll(sll_node_t *node, void (*print)(void *object));
 
 /**
  * Prints Meta information of the SLL, (size, head, tail)
@@ -23,7 +23,7 @@ print_sll_meta (struct sll_s *this, void (*print)(void *object))
 void 
 print_sll(struct sll_s *this, void (*print)(void *object))
 {
-	sll_node *head;
+	sll_node_t *head;
 	
 	/** No print function specified; Just print the pointers */
 	if (!print) {
@@ -56,7 +56,7 @@ print_sll(struct sll_s *this, void (*print)(void *object))
  *	The Caller is assumed to have acquired the lock
  */
 static void
-_printR_sll(sll_node *node, void (*print)(void *object))
+_printR_sll(sll_node_t *node, void (*print)(void *object))
 {
 	if (!node)
 		return;
@@ -71,7 +71,7 @@ _printR_sll(sll_node *node, void (*print)(void *object))
 void 
 printR_sll(struct sll_s *this, void (*print)(void *object))
 {
-	sll_node *head;
+	sll_node_t *head;
 
 	if (!print)
 		print = printPtr;
@@ -96,7 +96,7 @@ printR_sll(struct sll_s *this, void (*print)(void *object))
 void 
 printRev_sll(struct sll_s *this, void (*print)(void *object))
 {
-	sll_node *head, *last, *node;
+	sll_node_t *head, *last, *node;
 
 	if (!print)
 		print = printPtr;
@@ -131,7 +131,7 @@ printRev_sll(struct sll_s *this, void (*print)(void *object))
  * Caller is assumed to have acquired the lock
  */
 static void 
-_printRevR_sll(sll_node *node, void (*print)(void *object)) 
+_printRevR_sll(sll_node_t *node, void (*print)(void *object)) 
 {
 	if (node)
 		_printRevR_sll(node->next, print);
@@ -144,7 +144,7 @@ _printRevR_sll(sll_node *node, void (*print)(void *object))
 void 
 printRevR_sll(struct sll_s *this, void (*print)(void *object))
 {
-	sll_node *head;
+	sll_node_t *head;
 
 	if (!print)
 		print = printPtr;
