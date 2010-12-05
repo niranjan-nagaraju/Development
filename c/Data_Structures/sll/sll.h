@@ -246,6 +246,8 @@ struct sll_s *commonNodes_sll(struct sll_s *this, struct sll_s *sll2);
 
 /** -- END -- Member functions */
 
+/** Extern Functions */
+sll_node_t *_prev_sll(sll_node_t *trav, sll_node_t *node);
 
 #endif
 

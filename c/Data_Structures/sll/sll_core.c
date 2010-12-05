@@ -1,7 +1,5 @@
 #include <sll.h>
 
-sll_node_t *_prev_sll(sll_node_t *trav, sll_node_t *node);
-
 /** Initialize SLL book-keeping and function pointers */
 void 
 init_sll(struct sll_s *this)

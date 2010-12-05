@@ -1,0 +1,69 @@
+CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+OS = $(shell uname)
+
+FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions
+OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be created
+OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
+
+# switch output directory based on Operating System
+ifeq ($(OS), Darwin) 
+	OUTDIR = out/mac
+else
+ifeq ($(OS), Linux)
+	OUTDIR = out/linux
+endif
+endif
+
+OBJS = $(addprefix $(OUTDIR)/, $(OBJ_NAMES)) # Prefix Output directory to the list of object files
+OBJS_MT = $(addprefix $(OUTDIR)/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
+
+opt:	# Optimize libraries
+	make "CFLAGS=$(CFLAGS) -O2 " libs
+
+debug:	# Enable debug symbols and profiling
+	make "CFLAGS=$(CFLAGS) -g -pg -Wall " libs 
+
+obj:	# Create Object files for library source files
+	mkdir -p $(OUTDIR)
+	for file in $(FILENAMES); do\
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/$$file.o; \
+	done
+ifdef LIBNAME_MT # Build multi-threaded object files
+	for file in $(FILENAMES); do\
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/$${file}_mt.o; \
+	done
+endif
+
+libs:
+	mkdir -p $(OUTDIR)
+ifeq ($(OS), Darwin) 
+	make dylib
+else
+ifeq ($(OS), Linux)
+	make so 
+else
+	@echo 'Unknown Operating System'
+	exit 1;
+endif
+endif
+
+dylib: obj	# Build for Mac
+	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OUTDIR)/lib$(LIBNAME).dylib $(OBJS) -lgcc $(LDFLAGS)
+ifdef LIBNAME_MT	# Create a multi-threaded version of the library if needed
+	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OUTDIR)/lib$(LIBNAME_MT).dylib $(OBJS_MT) -lgcc $(LDFLAGS)
+endif
+
+so: obj # Build for Linux
+	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME).so $(OBJS) -lgcc $(LDFLAGS)
+ifdef LIBNAME_MT	# Create a multi-threaded version of the library if needed
+	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME_MT).so $(OBJS_MT) -lgcc $(LDFLAGS)
+endif
+
+clean:	# Clean the Output directory for this system
+	rm -rf $(OUTDIR)
+
+cleanobj:	# Clean the object files generated for this system
+	rm -rf $(OUTDIR)/*.o
+
+cleanall:	# Clean the entire output directory
+	rm -rf out
