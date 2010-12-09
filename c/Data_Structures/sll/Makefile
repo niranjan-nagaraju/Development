@@ -5,6 +5,15 @@ LIBNAME = sll
 LIBNAME_MT = sll_mt
 TESTDIR = testcases
 
+TEST_SRC = core/test_core.c
+#TEST_SRC += display/test_display.c
+#TEST_SRC += insert/test_insert.c insert/test_insertMT.c
+#TEST_SRC += join/test_join.c loop/test_loop.c
+#TEST_SRC += remove/test_remove.c
+#TEST_SRC += reverse/test_reverse.c
+#TEST_SRC += sort/test_sort.c
+
+
 SRC = sll_core.c sll_insert.c sll_remove.c sll_display.c
 SRC += sll_sort.c sll_reverse.c sll_shiftRotate.c
 SRC += sll_set.c sll_join.c sll_loop.c
@@ -15,14 +24,6 @@ include $(BASE_DIR)/build/GlobalMake
 LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread
 
 tests: 
-	$(CC) $(TESTDIR)/core/test_core.c $(CFLAGS) -o $(OUTDIR)/test_core -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_insert.c $(CFLAGS) -o out/test_insert -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_remove.c $(CFLAGS) -o out/test_remove -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_display.c $(CFLAGS) -o out/test_display -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_sort.c $(CFLAGS) -o out/test_sort -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_reverse.c $(CFLAGS) -o out/test_reverse -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_shiftRotate.c $(CFLAGS) -o out/test_shiftRotate -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_set.c $(CFLAGS) -o out/test_set -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_join.c $(CFLAGS) -o out/test_join -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-	#$(CC) $(TESTDIR)/test_loop.c $(CFLAGS) -o out/test_loop -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS)
-
+	for f in $(TEST_SRC); do \
+		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` -L$(OUTDIR) -l$(LIBNAME) $(INCLUDE) $(LDFLAGS); \
+	done
