@@ -23,6 +23,7 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 		if (!head) /** Update tail if the list was initially empty */
 			this->tail = node;
 
+		SLL_UNLOCK(this);
 		return 0;
 	}
 	
@@ -31,6 +32,7 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 		this->tail->next = node;
 		this->tail = node;
 
+		SLL_UNLOCK(this);
 		return 0;
 	}
 
@@ -40,6 +42,8 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 
 	node->next = head->next;
 	head->next = node;
+
+	SLL_UNLOCK(this);
 
 	return 0;
 }
@@ -77,7 +81,10 @@ insertAtRev_sll(struct sll_s *this, void *object, int pos)
 {
 	sll_node_t *tmp;
 
-	/** More validations in insertNode... */
+	/** 
+	 * NOTE: "this" is checked at insertNodeXXX as well, however, we might leak memory out if we dont check it here
+	 * and the nodeXXX function fails
+	 */
 	if (!this)
 		return -EINVAL;
 	
@@ -116,6 +123,10 @@ insertAtFront_sll(struct sll_s *this, void *object)
 {
 	sll_node_t *tmp;
 
+	/** 
+	 * NOTE: "this" is checked at insertNodeXXX as well, however, we might leak memory out if we dont check it here
+	 * and the nodeXXX function fails
+	 */
 	if (!this)
 		return -EINVAL;
 
@@ -134,6 +145,7 @@ insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
 		return -EINVAL;
 
 	SLL_LOCK(this);
+	
 	++(this->_size);
 	node->next = this->head;
 
@@ -142,6 +154,7 @@ insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
 		this->tail = node;
 
 	this->head = node;
+
 	SLL_UNLOCK(this);
 
 	return 0;
@@ -153,6 +166,10 @@ insertAtEnd_sll(struct sll_s *this, void *object)
 {
 	sll_node_t *tmp;
 
+	/** 
+	 * NOTE: "this" is checked at insertNodeXXX as well, however, we might leak memory out if we dont check it here
+	 * and the nodeXXX function fails
+	 */
 	if (!this)
 		return -EINVAL;
 
@@ -163,30 +180,45 @@ insertAtEnd_sll(struct sll_s *this, void *object)
 	return insertNodeAtEnd_sll(this, tmp);
 }
 
+/** Insert an SLL node at the end */
 int 
 insertNodeAtEnd_sll(struct sll_s *this, sll_node_t *node)
 {
-	if (!node)
+	if (!this || !node)
 		return -EINVAL;
+
+	SLL_LOCK(this);
 
 	++(this->_size);
 
 	/** SLL Empty */
 	if (!this->tail) {
 		this->tail = this->head = node;
+		SLL_UNLOCK(this);
+
 		return 0;
 	}
 
 	(this->tail)->next = node;
 	this->tail = node;
 
+	SLL_UNLOCK(this);
+
 	return 0;
 }
 
+/** Insert an object after the specified 'node' */
 int 
 insertAfter_sll(struct sll_s *this, sll_node_t *node, void *object)
 {
 	sll_node_t *tmp;
+	
+	/** 
+	 * NOTE: "this" is checked at insertNodeXXX as well, however, we might leak memory out if we dont check it here
+	 * and the nodeXXX function fails
+	 */
+	if (!this)
+		return -EINVAL;
 
 	tmp = new_sll_node(object);
 	if (!tmp)
@@ -195,10 +227,11 @@ insertAfter_sll(struct sll_s *this, sll_node_t *node, void *object)
 	return insertNodeAfter_sll(this, node, tmp);
 }
 
+/** Insert an SLL node after the specified 'node' */
 int 
 insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert)
 {
-	if (!node || !node_to_insert)
+	if (!this || !node || !node_to_insert)
 		return -EINVAL;
 
 	++(this->_size);
@@ -208,10 +241,18 @@ insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_in
 	return 0;
 }
 
+/** Insert an object before the specified 'node' */
 int 
 insertBefore_sll(struct sll_s *this, sll_node_t *node, void *object)
 {
 	sll_node_t *tmp;
+
+	/** 
+	 * NOTE: "this" is checked at insertNodeXXX as well, however, we might leak memory out if we dont check it here
+	 * and the nodeXXX function fails
+	 */
+	if (!this)
+		return -EINVAL;
 
 	tmp = new_sll_node(object);
 	if (!tmp)
@@ -220,20 +261,27 @@ insertBefore_sll(struct sll_s *this, sll_node_t *node, void *object)
 	return insertNodeBefore_sll(this, node, tmp);
 }
 
-/** Insert after node, and swap contents */
+/** Insert an SLL node before the specified 'node'
+ *  Insert "after" node, and swap contents (saves traversing time)
+ */
 int
 insertNodeBefore_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert)
 {
 	void *node_content;
 
-	if (!node || !node_to_insert)
+	if (!this || !node || !node_to_insert)
 		return -EINVAL;
 
+	SLL_LOCK(this);
+
 	++(this->_size);
+
+	/** swap contents */
 	node_content = node->object;
 	node->object = node_to_insert->object;
 	node_to_insert->object = node_content;
 
+	/** insert new node "next" to specified node */
 	node_to_insert->next = node->next;
 	node->next = node_to_insert;
 

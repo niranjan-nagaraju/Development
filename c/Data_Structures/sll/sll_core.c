@@ -128,6 +128,8 @@ destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 
 	SLL_UNLOCK(this);
 }
+
+
 /** if _MULTI_THREADED_ is defined, the SLL is threadsafe */
 int 
 isThreadSafe_sll (struct sll_s *this)
@@ -138,7 +140,6 @@ isThreadSafe_sll (struct sll_s *this)
 	return 0;
 #endif
 }
-
 
 /** Retrieve pointer of node next to 'curr' */
 sll_node_t *
