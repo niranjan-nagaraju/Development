@@ -11,7 +11,7 @@ caesar_encrypt_letter key letter =
 caesar_decrypt_letter :: Int -> Char -> Char
 caesar_decrypt_letter key letter =
 	if isAlpha(letter)
-		then chr(((ord(toUpper(letter)) - ord('A') - key) `mod` 26) + ord('A'))
+		then toLower(chr(((ord(toUpper(letter)) - ord('A') - key) `mod` 26) + ord('A')))
 		else letter
 
 
