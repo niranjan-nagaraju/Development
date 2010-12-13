@@ -1,0 +1,6 @@
+Common Conventions:
+	1. All plaintexts are assumed(and handled) as lowercase letters
+	2. All ciphertexts are assumed(and handled) as uppercase letters
+
+	3. All substitution ciphers encrypt/decrypt only alphabets.
+	4. Non-alphabetic characters appear as-is on the (encrypted)ciphertext/(decrypted)plaintext
