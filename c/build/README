@@ -1,0 +1,69 @@
+HOWTO use this Makefile system
+
+*******
+ USAGE 
+*******
+
+0. cd <library_folder>; touch Makefile
+
+1. Start with defining the C Development root relative to the current directory
+# C Development root
+BASE_DIR=../..
+
+2. Define directories where the header files are located
+# include flags for the compiler
+INCLUDE += -I$(PWD) -I../include -I$(BASE_DIR)/common/include 
+
+3. Define Library name
+# Library name
+LIBNAME = <library>
+
+4. Define Multi-threaded library (*OPTIONAL)
+# Multi-threaded library name
+LIBNAME_MT = <library_mt>
+
+5. Define directory where the testcases are located
+# Testcases directory
+TESTDIR = <testcases>
+
+6. Source files needed to compile the library (See "CURRENT LIMITATIONS" section)
+SRC = a.c b.c c.c
+SRC += d.c
+
+7. Define sourcefiles for testcases that need the single-threaded library (See "CURRENT LIMITATIONS" section)
+TEST_SRC = test_a/test_a.c
+TEST_SRC += test_b/test_b.c 
+
+8. Define sourcefiles for testcases that need the multi-threaded library
+TEST_SRC_MT = insert/test_insertMT.c 
+
+9. Linker flags for dependent libraries to compile this library
+LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread
+
+10. Add reference to this library to be used in the testcases [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
+LIBS += -L$(OUTDIR) -l $(LIBNAME)
+
+11. Add referece to the mult-thread version of this library to be used in the testcases
+LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT) [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
+
+12. Finally include the "GlobalMake" file to define all the targets
+include $(BASE_DIR)/build/GlobalMake
+
+13. To build libraries, use
+	$ make libs
+
+14. To build testcases, use
+	$ make tests
+
+
+*********************
+ CURRENT LIMITATIONS
+*********************
+
+I. When compiling a library, all the source files need to be under the library directory
+   and cannot be arbitrarily organized under folders such as a/a.c, b/b.c, c/c.c etc.
+   (Testcases source files however, can be organized this way)
+
+II. The variables cannot be changed w/o manually editing the GlobalMake
+
+III. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake

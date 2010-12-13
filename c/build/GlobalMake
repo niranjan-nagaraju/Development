@@ -6,10 +6,10 @@ OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be crea
 OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
 
 # switch output directory based on Operating System
-ifeq ($(OS), Darwin) 
+ifeq ($(OS), Darwin) # MAC OS X
 	OUTDIR = out/mac
 else
-ifeq ($(OS), Linux)
+ifeq ($(OS), Linux) # Linux
 	OUTDIR = out/linux
 endif
 endif
@@ -57,6 +57,17 @@ so: obj # Build for Linux
 	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME).so $(OBJS) -lgcc $(LDFLAGS)
 ifdef LIBNAME_MT	# Create a multi-threaded version of the library if needed
 	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME_MT).so $(OBJS_MT) -lgcc $(LDFLAGS)
+endif
+
+tests:	# Build testcases
+	# Compile testcases with Single-threaded libraries
+	for f in $(TEST_SRC); do \
+		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` $(LIBS) $(INCLUDE) $(LDFLAGS); \
+	done
+ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
+	for f in $(TEST_SRC_MT); do \
+		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` $(LIBS_MT) $(INCLUDE) $(LDFLAGS); \
+	done
 endif
 
 clean:	# Clean the Output directory for this system
