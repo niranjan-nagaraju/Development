@@ -9,8 +9,9 @@ def test_enc_dec():
 	print 'Key: ',
 	key = int(input())
 
-	ciphertext = Caesar_cipher.encrypt(plaintext, key)
-	dec_plaintext = Caesar_cipher.decrypt(ciphertext, key)
+	c = CaesarCipher(key)
+	ciphertext = c.encrypt(plaintext)
+	dec_plaintext = c.decrypt(ciphertext)
 
 	print 'Ciphertext: {0}'.format(ciphertext)
 	print 'Decrypted plaintext: {0}'.format(dec_plaintext)
