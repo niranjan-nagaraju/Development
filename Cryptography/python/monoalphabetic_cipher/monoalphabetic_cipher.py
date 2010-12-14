@@ -21,7 +21,7 @@ class MonoalphabeticCipher:
 		for i in range(0, 26):
 			c = keymap[i]
 			rev_index = ord(c.lower()) - ord('a')
-			dec_key_map[rev_index] = chr((ord('a') + i))
+			dec_key_map[rev_index] = chr(ord('a') + i)
 
 		return dec_key_map
 
