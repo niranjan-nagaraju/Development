@@ -1,3 +1,9 @@
+module CaesarCipher (caesar_encrypt,
+					 caesar_decrypt,
+					 caesar_brute_force
+					 )
+	where
+
 import IO
 import Char
 
@@ -28,14 +34,3 @@ caesar_decrypt ciphertext key =
 caesar_brute_force :: String -> IO()
 caesar_brute_force ciphertext =
 	mapM_ (\x -> putStrLn ((show x) ++ "\t" ++ caesar_decrypt ciphertext x)) [1 .. 25]
-
-
-main = do
-	let plaintext = "Meet me after the toga party"
-	let ciphertext = (caesar_encrypt plaintext 3)
-	putStrLn ("Plaintext: " ++ plaintext)
-	putStrLn ("Ciphertext: " ++ ciphertext)
-
-	putStrLn ("\nBrute forcing Ciphertext " ++ ciphertext)
-	
-	caesar_brute_force (caesar_encrypt "Meet me after the toga party" 3)
