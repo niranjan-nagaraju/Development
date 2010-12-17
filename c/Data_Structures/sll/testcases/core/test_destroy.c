@@ -11,6 +11,7 @@ void
 my_free (void *obj)
 {
 	free(obj);
+	obj = NULL;
 }
 
 /** Objectes to be used in SLL2 */
@@ -44,8 +45,7 @@ main(void)
 {
 	sll_t *sll;	/** SLL1 uses static allocation, but the container itself is managed on heap */ 
 	sll_t sll2; /** SLL2 uses dynamic memory allocation using its own memory manager, but the container itself is on the stack */
-	struct sll3_obj *obj;
-
+	int i;
 
 	sll = (sll_t *)malloc(sizeof(sll_t));
 	if (!sll) {
@@ -56,23 +56,22 @@ main(void)
 	init_sll(sll);
 	init_sll(&sll2);
 
-	sll->insertAtFront(sll, (void *)0);
-	sll->insertAtFront(sll, (void *)1);
-	sll->insertAtFront(sll, (void *)2);
-	sll->insertAtFront(sll, (void *)3);
+	for (i=0; i<10; i++) {
+		sll->insertAtFront(sll, (void *)i);
+	}
 
 	printf("Printing SLL\n");
 	sll->print(sll, printAsInt);
 
-	sll2.insertAtFront(&sll2, allocate_sll2_obj(1,2));	
-	sll2.insertAtFront(&sll2, allocate_sll2_obj(3,4));	
-	sll2.insertAtFront(&sll2, allocate_sll2_obj(5,6));	
+	for (i=0; i<10; i++) {
+		sll2.insertAtFront(&sll2, allocate_sll2_obj(i,(i+1)));	/** use custom allocator */
+	}
 
 	printf("Printing SLL2\n");
 	sll2.print(&sll2, printsll2_obj);
 
 	destroy_sll(sll, 0);
-	destroy_sll(&sll2, my_free);
+	destroy_sll(&sll2, my_free);	/** Use custom de-allocator */
 
 	return 0;
 }

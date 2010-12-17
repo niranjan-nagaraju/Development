@@ -18,10 +18,10 @@ OBJS = $(addprefix $(OUTDIR)/, $(OBJ_NAMES)) # Prefix Output directory to the li
 OBJS_MT = $(addprefix $(OUTDIR)/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
 
 opt:	# Optimize libraries
-	make "CFLAGS=$(CFLAGS) -O2 " libs
+	make "CFLAGS=$(CFLAGS) -O2 " libs tests
 
 debug:	# Enable debug symbols and profiling
-	make "CFLAGS=$(CFLAGS) -g -pg -Wall " libs 
+	make "CFLAGS=$(CFLAGS) -g -Wall " libs tests
 
 obj:	# Create Object files for library source files
 	mkdir -p $(OUTDIR)
@@ -59,8 +59,8 @@ ifdef LIBNAME_MT	# Create a multi-threaded version of the library if needed
 	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME_MT).so $(OBJS_MT) -lgcc $(LDFLAGS)
 endif
 
-tests:	# Build testcases
-	# Compile testcases with Single-threaded libraries
+# Build testcases
+tests:	# Compile testcases with Single-threaded libraries
 	for f in $(TEST_SRC); do \
 		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` $(LIBS) $(INCLUDE) $(LDFLAGS); \
 	done
