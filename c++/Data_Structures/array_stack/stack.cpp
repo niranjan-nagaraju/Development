@@ -33,9 +33,12 @@ class stack {
 				cout<<"Stack Empty!!"<<endl;
 				return;
 			}
+
+			cout<<"["<<(tos+1)<<"]: ";
 			for (int i=0; i<=tos; i++) {
-				cout<<values[i]<<endl;
+				cout<<values[i]<<" ";
 			}
+			cout<<endl;
 		}
 };
 
@@ -48,6 +51,7 @@ int main(void)
 	intstack.push(2);
 
 	fltstack.push(3.01);
+	fltstack.push(4.02);
 
 	intstack.display();
 	fltstack.display();
