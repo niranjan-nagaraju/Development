@@ -61,7 +61,7 @@ include $(BASE_DIR)/build/GlobalMake
 *********************
 
 I. When compiling a library, all the source files need to be under the library directory
-   and cannot be arbitrarily organized under folders such as a/a.c, b/b.c, c/c.c etc.
+   and cannot be arbitrarily organized under folders such as a/a.c, b/b.c, c/c.c etc. [TODO]
    (Testcases source files however, can be organized this way)
 
 II. The variables cannot be changed w/o manually editing the GlobalMake
