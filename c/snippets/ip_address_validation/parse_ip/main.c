@@ -1,37 +1,34 @@
 #include "ip_utils.h"
-#include <arpa/inet.h>
 
 int main(void)
 {
-	char str[] = "192.168.1.4 - 192.168.1.10, 192.168.1.1 - 192.168.1.2, 192.168.2.3";
-	char ip_to_check[] = "192.168.1.5";
+	char str[1000] = {0};
+	char ip_to_check[30] = {0};
 	uint32_t ip;
-
 	ip_ranges_t ranges;
 	int i;
+
+	printf("Enter IP Ranges list: \n");
+	scanf("%[^\n]", str);
+
+	printf("Enter IP address to be validated: ");
+	scanf("%s", ip_to_check);
 	
 	ranges = string_to_ip_ranges(str);
 
-	/**
-	if (0x01020304 <= 0x01020305 && 0x0102030A >= 0x01020305)
-		printf("%x In range\n", 0x01020305);
-	*/
-
-	printf("\n In Main.. IP ranges : %d\n", ranges.ips_num);
-
-	ip = ipaddress_from_string(ip_to_check);
-	printf("Checking if 0x%X is permitted\n", ip);
-
-	for (i=0; i<ranges.ips_num; i++) {
-		printf("0x%X - 0x%X\n", ranges.ips[i].lb, ranges.ips[i].ub);
-		if (ranges.ips[i].lb <= ip && ranges.ips[i].ub >= ip) {
-			printf("In range\n");
-		}
+	printf("\n IP ranges : %d\n", ranges.ips_num);
+	for(i=0; i<ranges.ips_num; i++) {
+		printf("\t0x%X - 0x%X\n", ranges.ips[i].lb, ranges.ips[i].ub);
 	}
 
-	printf("%X\n", htonl(ipaddress_from_string("192.168.1.2")));
+	ip = ipaddress_from_string(ip_to_check);
+	printf("Checking if 0x%X(%s) is permitted\n", ip, ip_to_check);
 
-
+	if (is_ip_in_range(ranges, ip) != -1) {
+		printf("IP address %s is in range(0x%X - 0x%X)\n", ip_to_check, ranges.ips[i].lb, ranges.ips[i].ub);
+	} else {
+		printf("IP address %s is NOT in range\n", ip_to_check);
+	}
 
 	return 0;
 }
