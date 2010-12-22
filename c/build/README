@@ -4,6 +4,10 @@ HOWTO use this Makefile system
  USAGE 
 *******
 
+******************************************
+	I. Build libraries and testcases
+******************************************
+
 0. cd <library_folder>; touch Makefile
 
 1. Start with defining the C Development root relative to the current directory
@@ -55,6 +59,14 @@ include $(BASE_DIR)/build/GlobalMake
 14. To build testcases, use
 	$ make tests
 
+
+******************************************
+	II. Build a standalone program
+******************************************
+
+0. cd <source_folder>; touch Makefile
+
+1. Define SRC, EXE, INCLUDE, CFLAGS, LDFLAGS
 
 *********************
  CURRENT LIMITATIONS
