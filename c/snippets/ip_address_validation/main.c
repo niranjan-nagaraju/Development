@@ -24,7 +24,7 @@ int main(void)
 	ip = ipaddress_from_string(ip_to_check);
 	printf("Checking if 0x%X(%s) is permitted\n", ip, ip_to_check);
 
-	if (is_ip_in_range(ranges, ip) != -1) {
+	if ((i = is_ip_in_range(ranges, ip)) != -1) {
 		printf("IP address %s is in range(0x%X - 0x%X)\n", ip_to_check, ranges.ips[i].lb, ranges.ips[i].ub);
 	} else {
 		printf("IP address %s is NOT in range\n", ip_to_check);

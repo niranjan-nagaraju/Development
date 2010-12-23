@@ -7,7 +7,7 @@ ipaddress_from_string(char *ipstr)
 	uint32_t ipaddress;
 	int ret;
 
-	ret = sscanf(ipstr, "%d.%d.%d.%d", &b4, &b3, &b2, &b1);
+	ret = sscanf(ipstr, "%d.%d.%d.%d", &b1, &b2, &b3, &b4);
 	if (ret != 4)
 		return 0;
 
@@ -37,7 +37,7 @@ extract_ipaddress_range(char *range_str)
 		range.ub = 0;
 	}
 
-	printf("Integer: (%X) - (%X)\n", range.lb, range.ub);
+	printf("Integer: (%X) - (%X) [%u] - [%u]\n", range.lb, range.ub, range.lb, range.ub);
 	return range;
 }
 
