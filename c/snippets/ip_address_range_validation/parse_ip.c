@@ -21,16 +21,13 @@ extract_ipaddress_range(char *range_str)
 {
 	char *p;
 	char range_delim = '-';
-	char lb[30]={0}, ub[30] = {0};
 	ip_range_t range;
 
 	if ((p = strchr(range_str, range_delim))) {
-		strncpy(lb, range_str, (p-range_str));
-		strcpy(ub, p+1);
-
-		printf("lb: %s ub: %s\t", lb, ub);
-		range.lb = ipaddress_from_string(lb);
-		range.ub = ipaddress_from_string(ub);
+		*p = '\0';
+		printf("lb: %s ub: %s\t", range_str, p+1);
+		range.lb = ipaddress_from_string(range_str);
+		range.ub = ipaddress_from_string(p+1);
 	} else {
 		printf("lb: %s ub: %s\t", range_str, "NULL");
 		range.lb = ipaddress_from_string(range_str);

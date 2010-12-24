@@ -1,6 +1,6 @@
 INCLUDE = -I./include/
 SRC = parse_ip.c check_ip_range.c  main.c
-EXE = parse_ip
+EXE = validate_ip_range
 
 CFLAGS = -g -Wall
 
