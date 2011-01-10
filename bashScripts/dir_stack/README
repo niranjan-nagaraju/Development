@@ -1,0 +1,44 @@
+
+DIRECTORY STACK
+===============
+
+DETAILS
+-------
+	pushd/popd alternative with more features and control over the directory stack
+	Provide more fine-grained control over the stack.
+	Relative Paths should work even if the user has moved to a different parent directory, but with an identical sub-directory structure
+
+	Four complementary functions(commands) to implement the directory stack
+	* dpush  <directory>
+		- push a <directory> onto the top of the stack.
+	* dpop [-i index] [-d directory]
+		- pop a directory entry of the top of the stack and change to it
+		- if an index is specified, remove entry at 'index' and change to the directory at 'index'
+		- if a directory is specified and the corresponding entry is found in the stack, remove the entry from it and change to the directory.
+		- NOTE: 
+			1. It's not possible to specify both the index and directory.
+			2. Only one index or a directory can be specified to keep things simple.
+			3. Consider writing a shell-script wrapper around for enhanced functionality.
+	* didx [-i index] [-d directory]
+		- on no arguments, list the complete contents of the stack
+		- on an index, print directory entry at 'index'
+		- on a directory, print index of directory.
+	* dclr
+		- Clear the stack
+
+NOTE
+----
+	The switches are designed to reduce the keystrokes for common usage, i.e. dpush(<dir>), dpop(), didx(), dclr()
+
+IMPLEMENTATION
+--------------
+	1. Shell Variable (dir_stack_var.sh)
+		- Use a shell variable ${DIRECTORY_STACK} to store the stack entries.
+		- Affects only the current shell which is kind of a good thing, every new shell will have a fresh stack to start with.
+		- Trivial to have a common stack across child-shells, Just execute a "export DIRECTORY_STACK" before executing a new shell or
+			better yet, Have an entry in .bashrc
+
+	2. File /tmp/directory_stack.$$ (dir_stack_tmpfile.sh)
+		- Use a file /tmp/directory.$$ to store the stack entries.
+		- Provides more localization than the previous version.
+		- Common stack is not trivial to implement requiring both parent and child shell Identifiers and an explicit copy which is kinda an ugly hack.
