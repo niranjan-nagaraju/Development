@@ -8,14 +8,14 @@ function dpush()
 	if [ ! -e $1 ]
 	then
 		echo "dpush: ${1}: Directory does not exist";
-		exit 1;
+		return 1;
 	fi
 
 	# Parameter is not a directory
 	if [ ! -d $1 ]
 	then
 		echo "dpush: ${1}: Not a directory"
-		exit 1;
+		return 1;
 	fi
 
 	# Stack is empty
@@ -28,11 +28,15 @@ function dpush()
 
 	echo ${DIRECTORY_STACK[*]}
 	cd $1
+
+	return 0
 }
 
 function dpop()
 {
-	echo "blah";
+	if [ $# != 3 -o $# -o 1 ] 
+	then
+		echo "dpop: Usage: 
 }
 
 function didx()

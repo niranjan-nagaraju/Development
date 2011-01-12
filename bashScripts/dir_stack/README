@@ -11,7 +11,7 @@ DETAILS
 	Four complementary functions(commands) to implement the directory stack
 	* dpush  <directory>
 		- push a <directory> onto the top of the stack.
-	* dpop [-i index] [-d directory]
+	* dpop [-i index] [directory]
 		- pop a directory entry of the top of the stack and change to it
 		- if an index is specified, remove entry at 'index' and change to the directory at 'index'
 		- if a directory is specified and the corresponding entry is found in the stack, remove the entry from it and change to the directory.
@@ -19,7 +19,7 @@ DETAILS
 			1. It's not possible to specify both the index and directory.
 			2. Only one index or a directory can be specified to keep things simple.
 			3. Consider writing a shell-script wrapper around for enhanced functionality.
-	* didx [-i index] [-d directory]
+	* didx [-i index] [directory]
 		- on no arguments, list the complete contents of the stack
 		- on an index, print directory entry at 'index'
 		- on a directory, print index of directory.
@@ -42,3 +42,4 @@ IMPLEMENTATION
 		- Use a file /tmp/directory.$$ to store the stack entries.
 		- Provides more localization than the previous version.
 		- Common stack is not trivial to implement requiring both parent and child shell Identifiers and an explicit copy which is kinda an ugly hack.
+		- Removing temp file (stack file) on bash exit could be tricky.
