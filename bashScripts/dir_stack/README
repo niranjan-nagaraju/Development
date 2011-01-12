@@ -43,3 +43,7 @@ IMPLEMENTATION
 		- Provides more localization than the previous version.
 		- Common stack is not trivial to implement requiring both parent and child shell Identifiers and an explicit copy which is kinda an ugly hack.
 		- Removing temp file (stack file) on bash exit could be tricky.
+
+TODO
+----
+	Implement -n/+n rotation as originally supported by pushd/popd.
