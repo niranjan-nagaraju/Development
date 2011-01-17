@@ -6,11 +6,11 @@ DETAILS
 -------
 	pushd/popd alternative with more features and control over the directory stack
 	Provide more fine-grained control over the stack.
-	Relative Paths should work even if the user has moved to a different parent directory, but with an identical sub-directory structure
 
 	Four complementary functions(commands) to implement the directory stack
 	* dpush  <directory>
 		- push a <directory> onto the top of the stack.
+		- No arguments - swap {tos} and {tos-1} [to be consistent with pushd]
 	* dpop [-i index] [directory]
 		- pop a directory entry of the top of the stack and change to it
 		- if an index is specified, remove entry at 'index' and change to the directory at 'index'

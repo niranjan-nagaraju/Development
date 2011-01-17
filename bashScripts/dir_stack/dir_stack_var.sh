@@ -3,6 +3,13 @@
 # More parameters if present will be ignored.
 function dpush()
 {
+	# Swap {tos} and {tos-1}
+	if [ $# == 0 ]
+	then
+		DIRECTORY_STACK=( ${DIRECTORY_STACK[1]} ${DIRECTORY_STACK[0]} ${DIRECTORY_STACK[*]:2} ) 
+		cd $DIRECTORY_STACK
+	fi
+
 	# Directory does not exist
 	if [ ! -e $1 ]
 	then
@@ -20,9 +27,9 @@ function dpush()
 	# Stack is empty
 	if [ -z ${DIRECTORY_STACK} ]
 	then
-		DIRECTORY_STACK[0]=$1
+		DIRECTORY_STACK[0]=`readlink -f $1` # push absolute path
 	else	# New TOS is length(stack) i.e. max_index+1
-		DIRECTORY_STACK[${#DIRECTORY_STACK[*]}]=$1
+		DIRECTORY_STACK[${#DIRECTORY_STACK[*]}]=`readlink -f $1`
 	fi
 
 	echo ${DIRECTORY_STACK[*]}
@@ -45,7 +52,7 @@ function dpop()
 
 	case $# in
 		0) # Remove directory entry off the top of the stack and cd to it
-			stk_idx=`expr ${#DIRECTORY_STACK[*]} - 1`
+			stk_idx=`expr ${#DIRECTORY_STACK[*]} - 2`
 			dir_entry=${DIRECTORY_STACK[$stk_idx]}
 			unset DIRECTORY_STACK[$stk_idx]
 
@@ -54,7 +61,7 @@ function dpop()
 		;;
 
 		1) # Remove specified directory if found
-			dir_entry=$1
+			dir_entry=`readlink -f $1`
 			i=0
 			for dir_in_stk in ${DIRECTORY_STACK[*]}
 			do
@@ -87,7 +94,18 @@ function dpop()
 				return 1
 			fi
 	
-			unset ${DIRECTORY_STACK[$stk_idx]}
+			i=0
+			for dir_in_stk in ${DIRECTORY_STACK[*]}
+			do
+				if [ $stk_idx == $i ]
+				then
+					break
+				fi
+				(( i = $i + 1 ))
+			done
+
+			cd $dir_in_stk
+			unset ${DIRECTORY_STACK[$i]}
 			return 0
 		;;
 
