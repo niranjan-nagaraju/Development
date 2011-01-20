@@ -4,7 +4,7 @@ DIRECTORY STACK
 
 DETAILS
 -------
-	pushd/popd alternative with more features and control over the directory stack
+	pushd/popd/dirs alternative with more features and control over the directory stack
 	Provide more fine-grained control over the stack.
 
 	Four complementary functions(commands) to implement the directory stack
