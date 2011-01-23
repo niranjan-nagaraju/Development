@@ -5,10 +5,9 @@ DIRECTORY STACK
 DETAILS
 -------
 	pushd/popd/dirs alternative with more features and control over the directory stack
-	Provide more fine-grained control over the stack.
 
 	Four complementary functions(commands) to implement the directory stack
-	* dpush  <directory>
+	* dpush  [<directory>]
 		- push a <directory> onto the top of the stack.
 		- No arguments - swap {tos} and {tos-1} [to be consistent with pushd]
 	* dpop [-i index] [directory]
@@ -32,17 +31,12 @@ NOTE
 
 IMPLEMENTATION
 --------------
-	1. Shell Variable (dir_stack_var.sh)
-		- Use a shell variable ${DIRECTORY_STACK} to store the stack entries.
+	Use a shell variable 
+		- Use a shell variable, cd and pushd/popd use ${DIRECTORY_STACK} to store the stack entries.
 		- Affects only the current shell which is kind of a good thing, every new shell will have a fresh stack to start with.
 		- Trivial to have a common stack across child-shells, Just execute a "export DIRECTORY_STACK" before executing a new shell or
 			better yet, Have an entry in .bashrc
 
-	2. File /tmp/directory_stack.$$ (dir_stack_tmpfile.sh)
-		- Use a file /tmp/directory.$$ to store the stack entries.
-		- Provides more localization than the previous version.
-		- Common stack is not trivial to implement requiring both parent and child shell Identifiers and an explicit copy which is kinda an ugly hack.
-		- Removing temp file (stack file) on bash exit could be tricky.
 
 TODO
 ----
