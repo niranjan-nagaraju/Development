@@ -117,6 +117,26 @@ insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos)
 	return _insertNodeAt_sll(this, node, lpos);
 }
 
+/**
+ * Insert a node at the beginning of SLL
+ * UNSAFE/FAST version
+ * NO checks performed.
+ * Assumes locks are already acquired
+ */
+void
+_insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
+{
+	++(this->_size);
+	node->next = this->head;
+
+	/** SLL empty; Update tail */
+	if (!this->head)
+		this->tail = node;
+
+	this->head = node;
+}
+
+
 /** Insert at the beginning of the SLL */
 int 
 insertAtFront_sll(struct sll_s *this, void *object)
@@ -134,7 +154,11 @@ insertAtFront_sll(struct sll_s *this, void *object)
 	if (!tmp)
 		return -ENOMEM;
 
-	return insertNodeAtFront_sll(this, tmp);
+	SLL_LOCK(this);
+	_insertNodeAtFront_sll(this, tmp);
+	SLL_UNLOCK(this);
+
+	return 0;
 }
 
 /** Insert an SLL node at the beginning */
@@ -145,20 +169,12 @@ insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
 		return -EINVAL;
 
 	SLL_LOCK(this);
-	
-	++(this->_size);
-	node->next = this->head;
-
-	/** SLL empty; Update tail */
-	if (!this->head)
-		this->tail = node;
-
-	this->head = node;
-
+	_insertNodeAtFront_sll(this, node);	
 	SLL_UNLOCK(this);
 
 	return 0;
 }
+
 
 /** Insert at the end of the SLL */
 int 

@@ -117,12 +117,15 @@ destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 		prev = trav;
 		trav = trav->next;
 
+		/** If the object has a custom allocator, use its deallocate routine */
 		if (deallocate)
 			deallocate(prev->object);
 
+		/** De-allocate the node itself */
 		free(prev);
 	}
 
+	/** Just playing safe */
 	this->_size = 0;
 	this->head = this->tail = NULL;
 
@@ -140,6 +143,7 @@ isThreadSafe_sll (struct sll_s *this)
 	return 0;
 #endif
 }
+
 
 /** Retrieve pointer of node next to 'curr' */
 sll_node_t *
@@ -160,6 +164,10 @@ next_sll(struct sll_s *this, sll_node_t *curr)
 /** 
  * Helper function to retrieve the node previous to the specified node 
  * Caller is assumed to have acquired a lock
+ *
+ * This helper function is separately defined so other member functions can use a previous node reference
+ * while already have acquired a lock themselves.
+ * Avoids having to release the lock just to call prev(sll)
  */
 sll_node_t *
 _prev_sll(sll_node_t *trav, sll_node_t *node)
@@ -169,6 +177,7 @@ _prev_sll(sll_node_t *trav, sll_node_t *node)
 
 	return trav;
 }
+
 
 /** Retrieve pointer of node previous to 'curr' */
 sll_node_t *
@@ -186,6 +195,7 @@ prev_sll(struct sll_s *this, sll_node_t *curr)
 	return node;
 }
 
+
 /** Retrieve the value encapsulated in the SLL node */
 void *
 value_sll(sll_node_t *node)
@@ -196,22 +206,34 @@ value_sll(sll_node_t *node)
 	return node->object;
 }
 
-/** Construct an SLL from an array */
+
+/** Construct an SLL from an array 
+ *  On Error, n != size(sll)
+ */
 struct sll_s 
 fromArray_sll (void **objects, int n)
 {
-	struct sll_s sll;
+	sll_t sll;
+	sll_node_t *node;
 
 	init_sll(&sll);
 
+	/** Return empty SLL */
 	if (!objects)
 		return sll;
 
-	while (n-- > 0)
-		sll.insertAtFront(&sll, objects[n]);
+	/** We don't need to acquire a lock.. nobody else has a reference to the SLL, yet */
+	while (n-- > 0) {
+		node = new_sll_node(objects[n]);
+		if (!node)
+			break; /** Caller needs to verify if n == size(sll) */
+
+		_insertNodeAtFront_sll(&sll, node);
+	}
 
 	return sll;
 }
+
 
 /** Retrieve an array of 'objects' stored in the SLL */
 void **
@@ -225,6 +247,7 @@ toArray_sll(struct sll_s *this, void **objects)
 	}
 
 	SLL_LOCK(this);
+
 	trav = this->head;
 
 	if (! trav) {
