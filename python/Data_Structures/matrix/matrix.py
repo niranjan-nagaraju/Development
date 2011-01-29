@@ -4,25 +4,22 @@ class Matrix:
 	def __init__(self, rows=None, cols=None, matrix=None):
 		self.rows = rows
 		self.cols = cols
-		self.matrix = matrix
+		self.matrix = []
 		
 		if cols ==  None:
 			self.cols = rows
 
-		if matrix == None:
-			self.matrix = []
+		if (matrix == None) or (not isinstance(matrix, list)):
+			return
+		
+		if isinstance(matrix[0], list):	# We have a proper 2D list
+			self.matrix = matrix
+		else: # it's a flattened 1D list
+			for i in range(0, rows):
+				self.matrix.append([])	# open new row
+				for j in range(0, cols):
+					self.matrix[i].append(matrix[i*cols+j])
 
-
-	# Initialize matrix from list
-	def matrixFromList(self, rows, cols, matrix_list):
-		self.rows = rows
-		self.cols = cols
-		self.matrix = []
-
-		for i in range(0, rows):
-			self.matrix.append([])	# open new row
-			for j in range(0, cols):
-				self.matrix[i].append(matrix_list[i*cols+j])
 
 	# Prepare formatted string for print()
 	def __str__(self):
@@ -77,5 +74,8 @@ class Matrix:
 					prod_matrix.matrix[i][j] += (self.matrix[i][k] * other.matrix[k][j])
 
 		return prod_matrix
+
+	#def isIdentity(self):
+
 
 
