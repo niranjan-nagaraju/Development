@@ -6,7 +6,7 @@ class Matrix:
 		self.cols = cols
 		self.matrix = []
 		
-		if cols ==  None:
+		if cols ==  None: # Square matrix
 			self.cols = rows
 
 		if (matrix == None) or (not isinstance(matrix, list)):
@@ -75,7 +75,35 @@ class Matrix:
 
 		return prod_matrix
 
-	#def isIdentity(self):
+	def isIdentity(self):
+		# All Identity matrices are square matrices
+		if self.cols != self.rows:
+			return False
+
+		for i in range(0, self.rows):
+			for j in range(0, self.rows):
+				if (i != j):
+					if (self.matrix[i][j] != 0):
+						return False
+				else:
+					if (self.matrix[i][i] != 1):
+						return False
+
+		return True
+
+	@staticmethod
+	def getIdentityMatrix(order):
+		iMatrix = Matrix(order)
+
+		for i in range(0, order):	# Prepare the rows
+			iMatrix.matrix.append([])
+			for j in range(0, order):
+				iMatrix.matrix[i].append(0)	# Initialize all columns of current row to zero
+		
+		for i in range(0, order):
+			iMatrix.matrix[i][i] = 1
+
+		return iMatrix
 
 
 
