@@ -105,5 +105,14 @@ class Matrix:
 
 		return iMatrix
 
+	# Transpose a matrix, rows <-> columns
+	def transpose(self):
+		tm = Matrix(self.cols, self.rows)
 
+		for i in range(0, tm.rows):
+			tm.matrix.append([])	# Prepare the rows
+			for j in range(0, tm.cols):
+				tm.matrix[i].append(self.matrix[j][i])
+
+		return tm
 
