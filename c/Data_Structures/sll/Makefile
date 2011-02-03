@@ -40,5 +40,8 @@ LIBS += -L$(OUTDIR) -l $(LIBNAME)
 # Add referece to the mult-thread version of this library to be used in the testcases
 LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT)
 
+all: libs tests
+
 include $(BASE_DIR)/build/GlobalMake
+
 
