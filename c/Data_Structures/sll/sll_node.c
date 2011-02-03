@@ -31,3 +31,12 @@ free_sll_node(sll_node_t *node)
 }
 
 
+/** Retrieve the value encapsulated in the SLL node */
+void *
+value_sll_node(sll_node_t *node)
+{
+	if(!node)
+		return NULL;
+
+	return node->object;
+}

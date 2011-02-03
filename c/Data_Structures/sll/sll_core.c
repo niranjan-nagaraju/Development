@@ -1,5 +1,7 @@
 #include <sll.h>
 
+static sll_node_pos_t _findNodePos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2));
+
 /** Initialize SLL book-keeping and function pointers */
 void 
 init_sll(struct sll_s *this)
@@ -17,7 +19,7 @@ init_sll(struct sll_s *this)
 
 	this->next = next_sll;
 	this->prev = prev_sll;
-	this->value = value_sll;
+	this->value = value_sll_node;
 
 	this->fromArray = fromArray_sll;
 	this->toArray = toArray_sll;
@@ -113,7 +115,7 @@ destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 
 	trav = this->head;
 
-	while(trav) {
+	while (trav) {
 		prev = trav;
 		trav = trav->next;
 
@@ -122,7 +124,7 @@ destroy_sll(struct sll_s *this, void (*deallocate)(void *object))
 			deallocate(prev->object);
 
 		/** De-allocate the node itself */
-		free(prev);
+		free_sll_node(prev);
 	}
 
 	/** Just playing safe */
@@ -151,7 +153,7 @@ next_sll(struct sll_s *this, sll_node_t *curr)
 {
 	sll_node_t *next;
 
-	if(!this || !curr)
+	if (!this || !curr)
 		return NULL;
 
 	SLL_LOCK(this);
@@ -195,18 +197,6 @@ prev_sll(struct sll_s *this, sll_node_t *curr)
 	return node;
 }
 
-
-/** Retrieve the value encapsulated in the SLL node */
-void *
-value_sll(sll_node_t *node)
-{
-	if(!node)
-		return NULL;
-
-	return node->object;
-}
-
-
 /** Construct an SLL from an array 
  *  On Error, n != size(sll)
  */
@@ -223,10 +213,10 @@ fromArray_sll (void **objects, int n)
 		return sll;
 
 	/** We don't need to acquire a lock.. nobody else has a reference to the SLL, yet */
-	while (n-- > 0) {
+	while (n--) {
 		node = new_sll_node(objects[n]);
 		if (!node)
-			break; /** Caller needs to verify if n == size(sll) */
+			break; /** Caller needs to verify if n == size(sll); We try to fill as many nodes as we can */
 
 		_insertNodeAtFront_sll(&sll, node);
 	}
@@ -242,26 +232,16 @@ toArray_sll(struct sll_s *this, void **objects)
 	sll_node_t *trav;
 	int i;
 
-	if (!this) {
+	if (!this || !objects) {
 		return NULL;
 	}
 
 	SLL_LOCK(this);
 
-	trav = this->head;
-
-	if (! trav) {
+	*objects = calloc(this->_size, sizeof(void *));
+	if (! *objects) {
 		SLL_UNLOCK(this);
 		return NULL;
-	}
-
-	if (! objects) {
-		*objects = calloc(this->_size, sizeof(void *));
-
-		if (! *objects) {
-			SLL_UNLOCK(this);
-			return NULL;
-		}
 	}
 
 	trav = this->head;
@@ -273,15 +253,17 @@ toArray_sll(struct sll_s *this, void **objects)
 	return objects;
 }
 
-/** Retrieve the position in the SLL if a matching 'object' is found */
-int 
-findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
+
+/** Return matching node's position and pointer */
+static sll_node_pos_t
+_findNodePos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
 {
+	sll_node_pos_t node_and_pos = {NULL, -1};
 	sll_node_t *trav;
 	int pos = 0;
 
 	if (!this)
-		return -1;
+		return node_and_pos;
 
 	/** if no equality function is specified, compare pointers */
 	if (!isEqual)
@@ -292,7 +274,7 @@ findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *o
 
 	if (!trav) {
 		SLL_UNLOCK(this);
-		return -1;
+		return node_and_pos;
 	}
 
 	while (trav && !isEqual(trav->object, object)) {
@@ -303,38 +285,37 @@ findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *o
 
 	/** Reached End of SLL, Couldn't find 'object' */
 	if (! trav)
-		return -1;
+		return node_and_pos;
 	
-	return pos;	
+	/** If we have made it till here, we have found a matching node and its position */
+	node_and_pos.pos = pos;
+	node_and_pos.node = trav;
+
+	return node_and_pos;	
 }
+
+
+/** Retrieve the position in the SLL if a matching 'object' is found */
+int 
+findPos_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
+{
+	sll_node_pos_t node_and_pos;
+
+	node_and_pos = _findNodePos_sll(this, object, isEqual);
+
+	return node_and_pos.pos;
+}
+
 
 /** Retrieve the node in the SLL if a matching 'object' is found */
 sll_node_t *
 findNode_sll(struct sll_s *this, void *object, int (*isEqual)(void *obj1, void *obj2))
 {
-	sll_node_t *trav;
+	sll_node_pos_t node_and_pos;
 
-	if (!this)
-		return NULL;
+	node_and_pos = _findNodePos_sll(this, object, isEqual);
 
-	/** if no equality function is specified, compare pointers */
-	if (!isEqual)
-		isEqual = comparePtrs;
-
-	SLL_LOCK(this);
-	trav = this->head;
-
-	if (!trav) {
-		SLL_UNLOCK(this);
-		return NULL;
-	}
-
-	while (trav && !isEqual(trav->object, object)) {
-		trav = trav->next;
-	}
-	SLL_UNLOCK(this);
-
-	return trav;
+	return node_and_pos.node;
 }
 
 /** Retrieve the number of nodes in the SLL */
@@ -373,19 +354,13 @@ nodeAt_sll(struct sll_s *this, int pos)
 {
 	sll_node_t *trav;
 
-	if (!this)
+	if (!this || pos < 0) /** Because a good program always always checks for insane inputs :) */
 		return NULL;
 
 	SLL_LOCK(this);
+
 	trav = this->head;
-
-	/** SLL is empty or not long enough */
-	if ((!trav) || (this->_size <= pos)) {
-		SLL_UNLOCK(this);
-		return NULL;
-	}
-
-	while (trav && pos-- > 0) {
+	while (trav && pos--) {
 		trav = trav->next;
 	}
 
@@ -411,18 +386,30 @@ objectAtRev_sll(struct sll_s *this, int rpos)
 sll_node_t *
 nodeAtRev_sll(struct sll_s *this, int rpos)
 {
-	int pos, size;
+	sll_node_t *trav, *nfollow_trav;	/** nfollow_trav trails behind trav by exactly 'rpos' nodes' */
 
-	if (!this)
+	if (!this || rpos < 0)  /** Because a good program always always checks for insane inputs :) */
 		return NULL;
 
-	size = length_sll(this);
+	SLL_LOCK(this);
 
-	/** Calculate position from left => (n-r-1) */
-	pos = size - rpos - 1;
+	/** Travel the first 'rpos' nodes */
+	trav = this->head;
+	while (trav && rpos--)
+		trav = trav->next;
+
+	/** Start following the 'trav' pointer */
+	nfollow_trav = trav;
+	while (trav) {
+		nfollow_trav = nfollow_trav->next;
+		trav = trav->next;
+	}
 	
-	return nodeAt_sll(this, pos);
+	SLL_UNLOCK(this);
+
+	return nfollow_trav;
 }
+
 
 /** Retrieve object at the beginning of the SLL */
 void *

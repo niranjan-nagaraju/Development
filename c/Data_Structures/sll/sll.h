@@ -19,6 +19,12 @@
 	#define SLL_UNLOCK(sll)
 #endif
 
+/** Container for a node pointer and it's position in the SLL */
+typedef struct sll_node_pos_s {
+	sll_node_t *node;
+	int pos;
+} sll_node_pos_t;
+
 
 typedef struct sll_s {
 	sll_node_t *head;
@@ -138,7 +144,6 @@ int isThreadSafe_sll(struct sll_s *this);
 sll_node_t *next_sll(struct sll_s *this, sll_node_t *curr);
 sll_node_t *prev_sll(struct sll_s *this, sll_node_t *curr);
 
-void *value_sll(sll_node_t *node);
 
 struct sll_s fromArray_sll (void **objects, int n);
 void **toArray_sll(struct sll_s *this, void **objects);
