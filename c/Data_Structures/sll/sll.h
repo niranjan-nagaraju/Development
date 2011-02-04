@@ -19,6 +19,7 @@
 	#define SLL_UNLOCK(sll)
 #endif
 
+
 /** Container for a node pointer and it's position in the SLL */
 typedef struct sll_node_pos_s {
 	sll_node_t *node;
@@ -251,10 +252,6 @@ struct sll_s *commonNodes_sll(struct sll_s *this, struct sll_s *sll2);
 
 /** -- END -- Member functions */
 
-
-/** Helper functions */
-sll_node_t *_prev_sll(sll_node_t *trav, sll_node_t *node);
-void _insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node);
 
 #endif
 

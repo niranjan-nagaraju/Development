@@ -1,10 +1,14 @@
 #include <sll.h>
+#include <sll_internal.h>
 
 /** Helper to Insert an SLL node at a specified position in the SLL; No validation done */
-static int _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos);
+static void _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos);
 
-/** No Validation for node or pos */
-static int 
+/** 
+ * Helper to insert a node at a specified position
+ * No Validation for node or pos 
+ */
+static void 
 _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 {
 	sll_node_t *head;
@@ -24,7 +28,7 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 			this->tail = node;
 
 		SLL_UNLOCK(this);
-		return 0;
+		return;
 	}
 	
 	/** position exceeds curr range; add at end */
@@ -33,7 +37,7 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 		this->tail = node;
 
 		SLL_UNLOCK(this);
-		return 0;
+		return;
 	}
 
 	i = 1;
@@ -44,9 +48,8 @@ _insertNodeAt_sll(sll_t *this, sll_node_t *node, int pos)
 	head->next = node;
 
 	SLL_UNLOCK(this);
-
-	return 0;
 }
+
 
 /** Insert an object at a specified position in the SLL */
 int 
@@ -62,8 +65,11 @@ insertAt_sll(struct sll_s *this, void *object, int pos)
 	if (!tmp)
 		return -ENOMEM;
 
-	return _insertNodeAt_sll(this, tmp, pos);
+	_insertNodeAt_sll(this, tmp, pos);
+
+	return 0;
 }
+
 
 /** Insert an SLL node at a specified position */
 int 
@@ -72,8 +78,10 @@ insertNodeAt_sll(struct sll_s *this, sll_node_t *node, int pos)
 	if (!this || pos < 0 || !node)
 		return -EINVAL;
 
-	return _insertNodeAt_sll(this, node, pos);
+	_insertNodeAt_sll(this, node, pos);
+	return 0;
 }
+
 
 /** Insert an object at a specified position from the end */
 int 
@@ -96,6 +104,7 @@ insertAtRev_sll(struct sll_s *this, void *object, int pos)
 	return insertNodeAtRev_sll(this, tmp, pos);
 }
 
+
 /** Insert an SLL node at a specified position from the end */
 int 
 insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos)
@@ -114,14 +123,18 @@ insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos)
 	if (lpos < 0)
 		return -EINVAL;
 
-	return _insertNodeAt_sll(this, node, lpos);
+	_insertNodeAt_sll(this, node, lpos);
+	return 0;
 }
+
 
 /**
  * Insert a node at the beginning of SLL
  * UNSAFE/FAST version
  * NO checks performed.
  * Assumes locks are already acquired
+ *
+ * Lockless version to be used for "fromArray"
  */
 void
 _insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
@@ -161,6 +174,7 @@ insertAtFront_sll(struct sll_s *this, void *object)
 	return 0;
 }
 
+
 /** Insert an SLL node at the beginning */
 int 
 insertNodeAtFront_sll(struct sll_s *this, sll_node_t *node)
@@ -195,6 +209,7 @@ insertAtEnd_sll(struct sll_s *this, void *object)
 
 	return insertNodeAtEnd_sll(this, tmp);
 }
+
 
 /** Insert an SLL node at the end */
 int 
@@ -243,6 +258,7 @@ insertAfter_sll(struct sll_s *this, sll_node_t *node, void *object)
 	return insertNodeAfter_sll(this, node, tmp);
 }
 
+
 /** Insert an SLL node after the specified 'node' */
 int 
 insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert)
@@ -256,6 +272,7 @@ insertNodeAfter_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_in
 
 	return 0;
 }
+
 
 /** Insert an object before the specified 'node' */
 int 
@@ -276,6 +293,7 @@ insertBefore_sll(struct sll_s *this, sll_node_t *node, void *object)
 
 	return insertNodeBefore_sll(this, node, tmp);
 }
+
 
 /** Insert an SLL node before the specified 'node'
  *  Insert "after" node, and swap contents (saves traversing time)
@@ -300,6 +318,8 @@ insertNodeBefore_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_i
 	/** insert new node "next" to specified node */
 	node_to_insert->next = node->next;
 	node->next = node_to_insert;
+
+	SLL_UNLOCK(this);
 
 	return 0;
 }

@@ -1,4 +1,5 @@
 #include <sll.h>
+#include <sll_internal.h>
 
 static void print_sll_meta (struct sll_s *this, void (*print)(void *object));
 static void _printR_sll(sll_node_t *node, void (*print)(void *object));
