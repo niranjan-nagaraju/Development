@@ -31,3 +31,31 @@
               ("REJECTED"  :foreground "olivedrab"    :weight bold)
               ("OPEN"      :foreground "magenta"      :weight bold)
               ("CLOSED"    :foreground "forest green" :weight bold))))
+
+;;Cycle the buffers
+(global-set-key [(control tab)] 'bs-cycle-next)
+
+;;  Avoid the annoying startup message.
+(setq inhibit-startup-message t)
+
+;; Setup a nice theme if we have the color-theme package loaded.
+(if (require 'color-theme nil t)
+    (if window-system
+     	(color-theme-arjen)
+      (color-theme-arjen)))
+
+;; Global fontlock
+(if (fboundp 'global-font-lock-mode)
+    (global-font-lock-mode 1))
+
+;; Show the time on the status bar.
+(setq display-time-24hr-format t)
+(display-time)
+
+;;
+;; Make all "yes or no" prompts show "y or n" instead
+;;
+(fset 'yes-or-no-p 'y-or-n-p)
+
+;; Always show the toolbar
+(tool-bar-mode)
