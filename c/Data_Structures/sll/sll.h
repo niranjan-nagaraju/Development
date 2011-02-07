@@ -77,8 +77,8 @@ typedef struct sll_s {
 	int (*insertBefore)(struct sll_s *this, sll_node_t *node, void *object);					/** Insert an object before the specified 'node' */
 	int (*insertNodeBefore)(struct sll_s *this, sll_node_t *node, sll_node_t *node_to_insert);	/** Insert an SLL node before the specified 'node' */
 
-	void *(*removeObject)(struct sll_s *this, void *object);	/** Remove an SLL node matching 'object' in the SLL */
-	sll_node_t *(*removeNode)(struct sll_s *this, sll_node_t *node);	/** Remove the specified 'node' from the SLL */
+	void (*removeObject)(struct sll_s *this, void *object);	/** Remove an SLL node matching 'object' in the SLL */
+	void *(*removeNode)(struct sll_s *this, sll_node_t *node);	/** Remove the specified 'node' from the SLL */
 	void *(*removeAt)(struct sll_s *this, int pos);				/** Remove an object at position and return its content */
 	sll_node_t *(*removeNodeAt)(struct sll_s *this, int pos);		/** Remove an SLL node at position and return it */
 	void *(*removeAtRev)(struct sll_s *this, int pos);				/** Remove an object at position from the end and return its content */
@@ -181,8 +181,8 @@ int insertNodeBefore_sll(struct sll_s *this, sll_node_t *node, sll_node_t *node_
 /** Insert */
 
 /** Remove */
-void *removeObject_sll(struct sll_s *this, void *object);
-sll_node_t *removeNode_sll(struct sll_s *this, sll_node_t *node);
+void removeObject_sll(struct sll_s *this, void *object);
+void *removeNode_sll(struct sll_s *this, sll_node_t *node);
 void *removeAt_sll(struct sll_s *this, int pos);
 sll_node_t *removeNodeAt_sll(struct sll_s *this, int pos);
 void *removeAtRev_sll(struct sll_s *this, int pos);	
