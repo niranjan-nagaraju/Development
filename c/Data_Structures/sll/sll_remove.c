@@ -158,7 +158,9 @@ removeNodeAt_sll(struct sll_s *this, int pos)
 }
 
 
-void *removeAtRev_sll(struct sll_s *this, int pos)
+/** Remove an object at position from the end and return its content */
+void *
+removeAtRev_sll(struct sll_s *this, int pos)
 {
 	return NULL;
 }
