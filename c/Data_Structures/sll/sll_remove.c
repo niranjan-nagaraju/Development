@@ -46,16 +46,20 @@ _removeObjectAtNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node)
 
 
 /** Remove an SLL node matching 'object' in the SLL */
-void 
-removeObject_sll(struct sll_s *this, void *object)
+void *
+removeObject_sll(struct sll_s *this, void *object, comparefn compare)
 {
 	sll_node_t *trav, *prev;
+	void *object_to_return;
+
+	if (!this)
+		return NULL;
 
 	SLL_LOCK(this);
 	trav = this->head;
 
 	prev = NULL;
-	while (trav && trav->object != object) {
+	while (trav && (compare(trav->object, object) == 0)) {
 		prev = trav;
 		trav = trav->next;
 	}
@@ -63,13 +67,17 @@ removeObject_sll(struct sll_s *this, void *object)
 	/** Couldn't find a matching node containing "object" */
 	if (! trav) {
 		SLL_UNLOCK(this);
-		return;
+		return NULL;
 	}
+
+	object_to_return = trav->object;
 
 	/** Remove the node from the SLL */
 	_removeObjectAtNode(this, prev, trav);
 
 	SLL_UNLOCK(this);
+
+	return object_to_return;
 }
 
 
@@ -83,7 +91,7 @@ removeNode_sll(struct sll_s *this, sll_node_t *node)
 	sll_node_t *follow;
 	void *object;
 
-	if (!node)
+	if (!this || !node)
 		return NULL;
 
 	SLL_LOCK(this);
@@ -118,6 +126,9 @@ removeAt_sll(struct sll_s *this, int pos)
 	void *object;
 	sll_node_t *node;
 
+	if (!this)
+		return NULL;
+
 	/** No locks required here, because removeNodeAt_sll yanks the node off the SLL and we are just dealing with an orphaned node */
 	node = removeNodeAt_sll(this, pos);
 
@@ -138,10 +149,14 @@ removeNodeAt_sll(struct sll_s *this, int pos)
 {
 	sll_node_t *trav;
 
+	/** NOTE: Consider -pos to remove from reverse?? */
+	if (!this || pos <= 0)
+		return NULL;
+
 	SLL_LOCK(this);
 
 	trav = this->head;
-	while (trav && pos--) {
+	while (trav && --pos) {
 		trav = trav->next;
 	}
 
@@ -162,17 +177,61 @@ removeNodeAt_sll(struct sll_s *this, int pos)
 void *
 removeAtRev_sll(struct sll_s *this, int pos)
 {
-	return NULL;
+	void *object;
+	sll_node_t *node;
+
+	if (!this)
+		return NULL;
+
+	/** No locks required here, because removeNodeAtRev_sll yanks the node off the SLL and we are just dealing with an orphaned node */
+	node = removeNodeAtRev_sll(this, pos);
+
+	if (! node)
+		return NULL;
+
+	object = node->object;
+
+	free_sll_node(node);
+	
+	return object;
 }
 
-sll_node_t *removeNodeAtRev_sll(struct sll_s *this, int pos)
+
+/** 
+ * Remove an SLL node at position from the end and return it
+ * NOTE: ALTERNATE METHOD:
+ *   Use trav and travN, make travN trail trav by 'pos'.
+ *   When trav falls off the SLL, travN points to 'pos' node from end.
+ */   
+sll_node_t *
+removeNodeAtRev_sll(struct sll_s *this, int pos)
 {
-	return NULL;
+	int size, lpos;
+
+	if (!this)
+		return NULL;
+
+	/** Calculate position from left */
+	lpos = size - pos + 1;
+
+	return removeNodeAt_sll(this, lpos);
 }
 
-void *removeAfter_sll(struct sll_s *this, sll_node_t *node)
+/** Remove an object following the spcified 'node' and return its content */
+void *
+removeAfter_sll(struct sll_s *this, sll_node_t *node)
 {
-	return NULL;
+	void *object;
+
+	if (!this || !node)
+		return NULL;
+
+	SLL_LOCK(this);
+	object = node->object;
+	_removeNode(this, node, node->next);
+	SLL_UNLOCK(this);
+
+	return object;
 }
 
 sll_node_t *removeNodeAfter_sll(struct sll_s *this, sll_node_t *node)

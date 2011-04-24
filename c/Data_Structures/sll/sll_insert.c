@@ -105,7 +105,12 @@ insertAtRev_sll(struct sll_s *this, void *object, int pos)
 }
 
 
-/** Insert an SLL node at a specified position from the end */
+/**
+ * Insert an SLL node at a specified position from the end 
+ * NOTE: ALTERNATE METHOD:
+ *   Use trav and travN, make travN trail trav by 'pos'.
+ *   When trav falls off the SLL, travN points to 'pos' node from end.
+ */
 int 
 insertNodeAtRev_sll(struct sll_s *this, sll_node_t *node, int pos)
 {
