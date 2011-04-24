@@ -13,19 +13,19 @@ execute_cmd (char* cmd)
 {
 	FILE* pipe = popen(cmd, "r");
 	char *result = (char *)malloc(1024);
+	char buffer[128];
 	
-	if ( !pipe ) return "ERROR";
-		char buffer[128];
-		if (! result )
-			return NULL;
-
-		while ( !feof(pipe) ) {
-			if ( fgets(buffer, 128, pipe ) != NULL) {
-				strcat (result, buffer);
-			}
+	if (! result || !pipe)
+		return NULL;
+	
+	*result = 0;
+	while ( !feof(pipe) ) {
+		if ( fgets(buffer, 128, pipe ) != NULL) {
+			strcat (result, buffer);
 		}
+	}
 
-		pclose(pipe);
+	pclose(pipe);
 	
 	return result;
 }
