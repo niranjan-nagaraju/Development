@@ -1,7 +1,7 @@
 #include <sll.h>
 
 /** Delete the specified node off the SLL and return the object; Use the previous node reference to keep the chain coherent */
-static void *_removeObjectAtNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node);
+static void * _removeObjectAtNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node);
 
 /** Delete the specified node off the SLL; Use the previous node reference to keep the chain coherent */
 static void _removeNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node);
@@ -9,6 +9,7 @@ static void _removeNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node);
 /** Delete the specified node off the SLL; Use the previous node reference to keep the chain coherent
  *  No checks performed -- UNSAFE to be called directly
  *  Needs Lock context
+ *  FAIR WARNING: DO NOT call on an empty list.
  */
 static void 
 _removeNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node)
@@ -31,19 +32,17 @@ _removeNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node)
 /** Delete the specified node off the SLL and return the object; Use the previous node reference to keep the chain coherent 
  *  No checks performed -- UNSAFE to be called directly
  *  Needs Lock context
+ *  FAIR WARNING: DO NOT call on an empty list.
  */
 static void *
 _removeObjectAtNode(struct sll_s *this, sll_node_t *prev, sll_node_t *node)
 {
-	void *object;
-	
-	object = node->object; /** Get the encapsulated object */
 	_removeNode(this, prev, node);
-	free_sll_node(node);
-
-	return object;
+	return free_sll_node(node);
 }
 
+/** Remove an SLL node matching 'object' in the SLL and return its content */
+void *(*removeMatchingObj)(struct sll_s *this, void *object, comparator compare)	
 
 /** Remove an SLL node matching 'object' in the SLL */
 void *
@@ -70,14 +69,19 @@ removeObject_sll(struct sll_s *this, void *object, comparefn compare)
 		return NULL;
 	}
 
-	object_to_return = trav->object;
-
 	/** Remove the node from the SLL */
-	_removeObjectAtNode(this, prev, trav);
+	object_to_return = _removeObjectAtNode(this, prev, trav);
 
 	SLL_UNLOCK(this);
 
 	return object_to_return;
+}
+
+
+/** Remove the object at specified 'node' from the SLL */
+void *
+removeObjectAtNode_sll (struct sll_s *this, sll_node_t *node)
+{
 }
 
 
@@ -217,7 +221,8 @@ removeNodeAtRev_sll(struct sll_s *this, int pos)
 	return removeNodeAt_sll(this, lpos);
 }
 
-/** Remove an object following the spcified 'node' and return its content */
+
+/** Remove an object following the specified 'node' and return its content */
 void *
 removeAfter_sll(struct sll_s *this, sll_node_t *node)
 {
@@ -229,6 +234,13 @@ removeAfter_sll(struct sll_s *this, sll_node_t *node)
 	SLL_LOCK(this);
 	object = node->object;
 	_removeNode(this, node, node->next);
+
+	if (! node)
+		return NULL;
+
+	object = node->object;
+
+
 	SLL_UNLOCK(this);
 
 	return object;
@@ -236,7 +248,16 @@ removeAfter_sll(struct sll_s *this, sll_node_t *node)
 
 sll_node_t *removeNodeAfter_sll(struct sll_s *this, sll_node_t *node)
 {
-	return NULL;
+	if (!this || !node)
+		return NULL;
+
+	SLL_LOCK(this);
+
+	if (!node->next) {
+		SLL_UNLOCK(this);
+		return NULL;
+	}
+	node_removed = node->next;
 }
 
 void *removeBefore_sll(struct sll_s *this, sll_node_t *node)
