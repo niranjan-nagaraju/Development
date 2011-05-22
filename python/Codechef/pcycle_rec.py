@@ -20,34 +20,15 @@ def perm_cycle_rec (inList, n, last_unvisited_pos, cycles):
 
 	cycles.append(curr_cycle)
 
-	last_unvisited_pos = find_least_missing_number (curr_cycle)
+	last_unvisited_pos = find_least_missing_number (curr_cycle, last_unvisited_pos)
 	return perm_cycle_rec(inList, n, last_unvisited_pos, cycles)
 
 
-def perm_cycle (inList, n):
-	last_unvisited_pos = 1
-	cycles = []
-
-	while last_unvisited_pos != n:
-		x = inList[last_unvisited_pos]
-		curr_cycle = [last_unvisited_pos]
-		while x != last_unvisited_pos:
-			curr_cycle.append(x) 
-			x = inList[x]
-		curr_cycle.append(x)
-
-		cycles.append(curr_cycle)
-
-		last_unvisited_pos = find_least_missing_number (curr_cycle)
-	
-	return cycles
-
-
-def find_least_missing_number (inList):
+def find_least_missing_number (inList, min):
 	for i in inList:
 		buckets[i] = i
 
-	for i in range(1, 1002):
+	for i in range(min, 1002):
 		if buckets[i] != i:
 			break
 	
@@ -56,7 +37,7 @@ def find_least_missing_number (inList):
 def perm_cycles (perm, n):
 	# x = [0] + [2, 4, 5, 1, 7, 6, 3, 8]
 
-	cycles = perm_cycle(perm, n)
+	cycles = perm_cycle_rec(perm, n, 1, [])
 	print len(cycles)
 	for c in cycles:
 		for i in c:
