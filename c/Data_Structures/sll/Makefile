@@ -20,7 +20,7 @@ SRC += sll_set.c sll_join.c sll_loop.c
 SRC += sll_node.c
 
 # Define sourcefiles for testcases that need the single-threaded library
-TEST_SRC = core/test_destroy.c
+TEST_SRC = core/test_destroy.c core/test_init.c
 TEST_SRC += display/test_display.c
 TEST_SRC += insert/test_insert.c insert/test_insertMT.c
 TEST_SRC += join/test_join.c loop/test_loop.c
