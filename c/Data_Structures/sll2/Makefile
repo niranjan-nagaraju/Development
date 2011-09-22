@@ -14,22 +14,24 @@ LIBNAME_MT = sll_mt
 TESTDIR = testcases
 
 # Source files needed to compile the library
-SRC = sll_core.c sll_insert.c sll_remove.c sll_display.c
-SRC += sll_sort.c sll_reverse.c sll_shiftRotate.c
-SRC += sll_set.c sll_join.c sll_loop.c
-SRC += sll_node.c
+#SRC = sll_core.c sll_insert.c sll_remove.c sll_display.c
+#SRC += sll_sort.c sll_reverse.c sll_shiftRotate.c
+#SRC += sll_set.c sll_join.c sll_loop.c
+#SRC += sll_node.c
+SRC = sll_core.c sll_node.c
 
 # Define sourcefiles for testcases that need the single-threaded library
-TEST_SRC = core/test_destroy.c core/test_init.c
-TEST_SRC += display/test_display.c
-TEST_SRC += insert/test_insert.c insert/test_insertMT.c
-TEST_SRC += join/test_join.c loop/test_loop.c
-TEST_SRC += remove/test_remove.c
-TEST_SRC += reverse/test_reverse.c
-TEST_SRC += sort/test_sort.c
+#TEST_SRC = core/test_destroy.c core/test_init.c
+#TEST_SRC += display/test_display.c
+#TEST_SRC += insert/test_insert.c insert/test_insertMT.c
+#TEST_SRC += join/test_join.c loop/test_loop.c
+#TEST_SRC += remove/test_remove.c
+#TEST_SRC += reverse/test_reverse.c
+#TEST_SRC += sort/test_sort.c
+TEST_SRC = core/sll_init.c
 
 # Define sourcefiles for testcases that need the multi-threaded library
-TEST_SRC_MT = insert/test_insertMT.c 
+#TEST_SRC_MT = insert/test_insertMT.c 
 
 # Linker flags for dependent libraries to compile this library
 LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread
