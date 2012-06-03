@@ -12,6 +12,6 @@ module LCG (lcg)
 lcg a b m x =
 	x : lcg a b m xi
 	where
-		xi = (a * x + b) `mod` (m+1)
+		xi = (a * x + b) `mod` m
 
 
