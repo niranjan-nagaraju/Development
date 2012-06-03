@@ -63,9 +63,8 @@ def insert_into_ordered_pairs(list_of_ordered_pairs, new_pair):
 
 	# Keep merging as far as you possibly can
 	while (i < len(list_of_ordered_pairs)-1 and 
-		  merge_ordered_pairs(list_of_ordered_pairs, i, i+1) == True):
+	  merge_ordered_pairs(list_of_ordered_pairs, i, i+1) == True):
 		continue
-
 
 ''' Trial runs
 
