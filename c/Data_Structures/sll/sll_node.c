@@ -33,7 +33,7 @@ sll_node_delete (sll_node_t *node)
 
 
 void 
-sll_node_print (sll_node_t *node, (void *) printfn(void *))
+sll_node_print (sll_node_t *node, void (*printfn)(void *))
 {
 	printfn(node->data);
 }

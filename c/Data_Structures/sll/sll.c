@@ -1,4 +1,5 @@
 #include <sll.h>
+#include <stdio.h>
 
 
 void 
@@ -31,7 +32,7 @@ sll_insert_at_front (sll_t *sll, void *data)
 	sll_node_create (data);
 
 	if (!node)
-		return -ENOMEM;
+		return -1;
 
 	/** Insert never fails :) */
 	sll->_size++;
@@ -44,5 +45,58 @@ sll_insert_at_front (sll_t *sll, void *data)
 		sll->tail = node;
 
 	return 0;
+}
+
+
+int 
+sll_insert_at_end (sll_t *sll, void *data)
+{
+	return 0;
+}
+
+
+int 
+sll_insert_at_position (sll_t *sll, void *data, int pos)
+{
+	return 0;
+}
+
+void *
+sll_delete_from_front (sll_t *sll)
+{
+	return NULL;
+}
+
+
+void *
+sll_delete_from_end (sll_t *sll)
+{
+	return NULL;
+}
+void *
+sll_delete_from_position (sll_t *sll, int pos)
+{
+	return NULL;
+}
+
+void 
+sll_print (sll_t *sll, void(*printfn)(void *))
+{
+	sll_node_t *tmp;
+
+	if (!sll)
+		return;
+
+	/** print size */
+	printf("[%d]: ", sll->_size);
+
+	tmp = sll->head;
+
+	while ( tmp != NULL ) {
+		sll_node_print(tmp, printfn);
+		tmp = tmp->next;
+	}
+
+	printf("\n");
 }
 
