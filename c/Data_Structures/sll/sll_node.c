@@ -1,4 +1,5 @@
 #include <sll_node.h>
+#include <stdio.h>
 
 sll_node_t *
 sll_node_create (void *data)
@@ -13,6 +14,7 @@ sll_node_create (void *data)
 	tmp->data = data;
 	tmp->next = NULL;
 
+	printf ("%p\n", tmp);
 	return tmp;
 }
 
