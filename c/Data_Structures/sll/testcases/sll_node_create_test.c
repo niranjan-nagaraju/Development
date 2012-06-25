@@ -12,9 +12,11 @@ main (void)
 	struct test_struct {
 		int tsi;
 		char tsc;
+		float f;
 	};
+	float f = 4.24;
 
-	struct test_struct test_obj = {42, 'Z'};
+	struct test_struct test_obj = {42, 'Z', 4.24};
 	struct test_struct *tsptr;
 
 	test_node = sll_node_create ((void *)i);
@@ -26,7 +28,8 @@ main (void)
 
 	test_node = sll_node_create ((void *) &test_obj);
 	tsptr = (struct test_struct *) test_node->data;	
-	assert(42 == tsptr->tsi &&  'Z' == tsptr->tsc);
+	assert(42 == tsptr->tsi &&  'Z' == tsptr->tsc && tsptr->f == f);
+
 
 	return 0;
 }
