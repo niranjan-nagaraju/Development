@@ -59,6 +59,13 @@ include $(BASE_DIR)/build/GlobalMake
 14. To build testcases, use
 	$ make tests
 
+15. Alternately, Use 
+	$ make debug
+	  to compile both testcases and library with gdb flags
+	*OR*
+	$ make opt
+	  to compile both testcases and library with -O2
+
 
 ******************************************
 	II. Build a standalone program
