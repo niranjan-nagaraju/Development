@@ -1,7 +1,7 @@
 #include <sll.h>
 #include <stdio.h>
 
-
+/** Initialize Singly Linked List */
 void 
 sll_init (sll_t *sll)
 {
@@ -12,6 +12,7 @@ sll_init (sll_t *sll)
 	sll->_size = 0;
 }
 
+/** Return size of the SLL */
 int 
 sll_length (sll_t *sll)
 {
@@ -21,6 +22,7 @@ sll_length (sll_t *sll)
 	return sll->_size;
 }
 
+/** Insert at the beginning of the SLL */
 int 
 sll_insert_at_front (sll_t *sll, void *data)
 {
@@ -29,10 +31,10 @@ sll_insert_at_front (sll_t *sll, void *data)
 	if (!sll)
 		return -1;
 
-	sll_node_create (data);
+	node = sll_node_create (data);
 
 	if (!node)
-		return -1;
+		return -ENOMEM;
 
 	/** Insert never fails :) */
 	sll->_size++;
@@ -51,6 +53,21 @@ sll_insert_at_front (sll_t *sll, void *data)
 int 
 sll_insert_at_end (sll_t *sll, void *data)
 {
+	sll_node_t *node = NULL;
+
+	if (!sll)
+		return -1;
+
+	node = sll_node_create (data);
+	if (!node)
+		return -ENOMEM;
+
+	/** SLL is empty */
+	if (! sll->tail) {
+		sll->tail = sll->head = node;
+		return 0;
+	}
+
 	return 0;
 }
 
@@ -73,6 +90,8 @@ sll_delete_from_end (sll_t *sll)
 {
 	return NULL;
 }
+
+
 void *
 sll_delete_from_position (sll_t *sll, int pos)
 {

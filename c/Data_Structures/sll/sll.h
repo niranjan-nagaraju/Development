@@ -3,6 +3,8 @@
 
 #include <sll_node.h>
 
+#include <errno.h>
+
 typedef struct sll_s {
 	sll_node_t *head;
 	sll_node_t *tail;

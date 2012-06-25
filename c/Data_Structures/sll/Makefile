@@ -1,20 +1,17 @@
 BASE_DIR=../..
 
-INCLUDE +=-I$(PWD)
+INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common/include
 
 LIBNAME=sll
 LIBNAME_MT=sll_mt
 
-TESTDIR=testcases
-
 SRC = sll.c sll_node.c
 
-TEST_SRC = sll_node_test.c
+TESTDIR=testcases
+TEST_SRC = sll_node_create_test.c
+TEST_SRC += sll_node_print_test.c
 
-# Pointers are truncated to 32-bit in SL for some weird reason. So switch to -m32
-CFLAGS += -m32
-
-LDFLAGS += -lpthread -m32
+LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
 
 LIBS += -L$(OUTDIR) -l $(LIBNAME_MT)
 

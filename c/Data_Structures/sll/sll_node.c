@@ -1,6 +1,15 @@
 #include <sll_node.h>
-#include <stdio.h>
 
+/** 
+ * SLL Node helper functions
+ * No Error checking is performed here
+ *  for 
+ *   a) The functions are not expected to be called directly
+ *   b) SLL is assumed to check for the boundary conditions, et, al.
+ */
+
+
+/** Create an SLL node; Initialize it with given data */
 sll_node_t *
 sll_node_create (void *data)
 {
@@ -14,17 +23,17 @@ sll_node_create (void *data)
 	tmp->data = data;
 	tmp->next = NULL;
 
-	printf ("%p\n", tmp);
 	return tmp;
 }
 
+/** Deallocate specifed SLL node, return data */
+/** TODO: Extend to deallocate 'data' as well if deallocation method 
+ *		for 'data' is specified
+ */
 void *
 sll_node_delete (sll_node_t *node)
 {
 	void *data = NULL;
-
-	if (!node)
-		return;
 
 	data = node->data;
 	
@@ -33,7 +42,7 @@ sll_node_delete (sll_node_t *node)
 	return data;
 }
 
-
+/** Print the data contained in an SLL; SLL/User provides how to print the data */
 void 
 sll_node_print (sll_node_t *node, void (*printfn)(void *))
 {
