@@ -6,8 +6,11 @@ OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be crea
 OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
 
 # switch output directory based on Operating System
+# Pointers are truncated to 32-bit in SL for some weird reason. So switch to -m32
 ifeq ($(OS), Darwin) # MAC OS X
 	OUTDIR = out/mac
+	CFLAGS += -m32
+	LDFLAGS += -m32
 else
 ifeq ($(OS), Linux) # Linux
 	OUTDIR = out/linux
