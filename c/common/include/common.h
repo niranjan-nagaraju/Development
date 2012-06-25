@@ -13,8 +13,10 @@ void printAsInt(void *object);
 void printAsUInt(void *object);
 void printAsLong(void *object);
 void printAsULong(void *object);
+void printAsChar(void *object);
 void printAsString(void *object);
 void printPtr(void *object);
+void printNL(void);
 
 #endif
 

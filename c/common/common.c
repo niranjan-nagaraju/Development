@@ -70,6 +70,12 @@ void printAsULong(void *object)
 	printf("%lu", (unsigned long)object);
 }
 
+void printAsChar (void *object)
+{
+	printf("%c", (char)object);
+}
+
+
 void printAsString(void *object)
 {
 	printf("%s", (char *)object);
@@ -78,5 +84,10 @@ void printAsString(void *object)
 void printPtr(void *object)
 {
 	printf("%p", object);
+}
+
+void printNL(void)
+{
+	printf("\n");
 }
 

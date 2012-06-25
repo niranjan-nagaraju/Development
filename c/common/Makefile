@@ -1,13 +1,12 @@
 LIBNAME = common
 TESTDIR = tests
 
-CFLAGS = -I$(PWD)/include
-LIBS = -L./out/ -lcommon
+INCLUDE += -I$(PWD)/include
+LIBS = -L$(OUTDIR) -lcommon
 
 SRC = common.c
 
-include ../build/GlobalMake
+TESTDIR = testcases
+TEST_SRC = testCommon.c
 
-test:
-	mkdir -p out
-	$(CC) $(TESTDIR)/testCommon.c -o out/testCommon $(CFLAGS) $(LIBS)
+include ../build/GlobalMake
