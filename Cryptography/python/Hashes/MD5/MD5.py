@@ -44,15 +44,42 @@ class MD5:
 
 	def __init__(self, inText, inTextLen):
 		self.digest = None
+
+		# Intext is a sequence of bytes
 		self.inText = inText
 		self.inTextLen = inTextLen
 
 	def preprocess(self):
+		# Append 1 + m zeroes to the message
+		# m s.t. message length becomes 448 mod 512 ergo 56 mod 64
+		# In essence add 0x80 followed 
+		# by (l+1) == 56 mod 64
+		self.inText += [0x80]
 
+		# e.g. 1: msglen = 112
+		#			+1 == 113
+		#			msglen % 64 == 49
+		#			56 - 49 == 7
+		#			ergo, msglen + 7 == 113+7 == 120 == 56 % 64
+		# e.g. 2: msglen == 124
+		#			+1 == 125
+		#			msglen % 64 == 61
+		#			56 - 61 == -5
+		#			<0, +64, == -5 + 64 == 59
+		#			msglen + 59 == 125+59 == 184 == 56 % 64
+		num_zerobytes = 56 - (self.inText + 1) % 64
+		if (num_zerobytes < 0):
+			num_zerobytes += 64
 
+		# Add required zero bytes
+		self.inText += [0] * num_zerobytes
 
+		# Add unpadded length mod (2 ** 64) to message
+		self.inText += (self.inTextLen % (2**64)) # TODO: Optimize
 
-	#def calculate(self, plaintext, plaintext_len):
+		self.inTextLen += 1 + num_zerobytes
+
+	def calculate(self):
 
         
 
