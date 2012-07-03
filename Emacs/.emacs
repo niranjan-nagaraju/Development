@@ -57,3 +57,12 @@
 ;; Enable Ido-mode always
 (ido-mode t)
 
+
+;; Kill current buffer without confirmation, unless its modified.
+(defun volatile-kill-buffer ()
+   "Kill current buffer unconditionally."
+   (interactive)
+   (let ((buffer-modified-p nil))
+     (kill-buffer (current-buffer))))
+
+(global-set-key (kbd "C-x k") 'volatile-kill-buffer)     ;; Unconditionally kill unmodified buffers.
