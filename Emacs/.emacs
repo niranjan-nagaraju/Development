@@ -1,5 +1,4 @@
 
-
 (setq org-todo-keywords (quote ((sequence "TODO(t!)" "NEXT(n!)" "STARTED(S)" "|" "DONE(d!/!)" "COMPLETED(l!)" "VERIFIED(v)")
                                 (sequence "FIXED(F@/!)" "WAITING(w@/!)" "PROGRESS(p)" "|" "CANCELLED(c@/!)" "FAILED(f!)")
                                 (sequence "SUCCEEDED(s)" "DEFERRED(D)" "|" "APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)")
@@ -57,3 +56,6 @@
 ;; Enable Ido-mode always
 (ido-mode t)
 
+
+;; Kill current buffer without confirmation, unless its modified.
+(global-set-key "\C-xk" 'kill-this-buffer)
