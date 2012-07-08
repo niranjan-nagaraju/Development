@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# Replicate the current nP(k-1) permutations 'k' times to make room for a new element
+# Replicate each of the current nP(k-1) permutations 'k' times to make room for a new element
 def replicate(a, k):
 	n = len(a)
 	for j in range(1, k):
@@ -24,15 +24,3 @@ def permute_all(b, n):
 
 	return permutations
 
-def main():
-	n = int(input())
-	a = range(1, n+1)
-	permutations = permute_all(a, n)
-
-	permutations.sort()
-	for i in permutations:
-		print i
-
-
-if __name__ == "__main__":
-	main()
