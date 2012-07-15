@@ -107,15 +107,21 @@ class MD5:
 		# Add required zero bytes
 		self.inText += [0] * num_zerobytes
 
-		# Add unpadded length mod (2 ** 64) to message (Big-endian)
+		# Add unpadded length mod (2 ** 64) to message
+		# Store number if 'bits' not bytes,
+		# essentially (len * 8) % (2 ** 64)
 		unpadded_len = self.inTextLen
 		packed_8byte_len = [0] * 8
 
-		# TODO: I have no idea what' going on here or if it'll work for all lengths;
-		#		Shamelessly copied from RFC-1321
-		#		Consider revising/understanding this bit.
-		unpack (packed_8byte_len, 
-				[((unpadded_len & 0xFFFFFFFF)<<3), ((unpadded_len & 0xFFFFFFFF) >> 29)], 8)
+		# Split 8-byte length (in bits) into two 4-byte words and unpack them into list of 8-bytes
+		# when stored in little endian
+		# NOTE: 0xabcdef12 will appear byte-wise as 0x12 0xef 0xcd 0xab
+		#		so a length of 1 => 0x08 00 00 00, 00 00 00 00 (0x08 == 08 == 1*8)
+		#					   2 => 0x10 00 00 00, 00 00 00 00 (0x10 == 16 == 2*8)
+		#					   3 => 0x18 00 00 00, 00 00 00 00 (0x18 == 24 == 3*8) ...
+		# TODO: Chances of overflow?! FIX if found
+		unpack ( packed_8byte_len,
+				 [((unpadded_len << 3) & 0xFFFFFFFF), ((unpadded_len >> 29) & 0xFFFFFFFF)], 8)
 
 		self.inText += packed_8byte_len 
 
