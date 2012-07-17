@@ -24,6 +24,8 @@ endif
 OBJS = $(addprefix $(OUTDIR)/, $(OBJ_NAMES)) # Prefix Output directory to the list of object files
 OBJS_MT = $(addprefix $(OUTDIR)/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
 
+all: opt
+
 # Compile a general exe from source files
 exe: 
 	mkdir -p $(OUTDIR)
