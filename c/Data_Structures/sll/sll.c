@@ -114,6 +114,7 @@ sll_print (sll_t *sll, void(*printfn)(void *))
 	while ( tmp != NULL ) {
 		sll_node_print(tmp, printfn);
 		tmp = tmp->next;
+		printf(" ");
 	}
 
 	printf("\n");

@@ -7,9 +7,10 @@ LIBNAME_MT=sll_mt
 
 SRC = sll.c sll_node.c
 
-TESTDIR=testcases
+TESTDIR = testcases
 TEST_SRC = node/sll_node_create_test.c
 TEST_SRC += node/sll_node_print_test.c
+TEST_SRC += sll/insert/sll_insert_test.c
 
 # TEST_SRC_MT += node/sll_node_print_test_mt.c
 
