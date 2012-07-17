@@ -1,7 +1,11 @@
 CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
+CC = gcc
 
 FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions
+TEST_SRC_FILES = $(basename $(TEST_SRC)) # Get test source filenames without the extension
+TEST_SRC_MT_FILES = $(basename $(TEST_SRC_MT)) # Ditto for Multi-threaded test files
+
 OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be created
 OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
 
@@ -69,12 +73,14 @@ endif
 
 # Build testcases
 tests:	# Compile testcases with Single-threaded libraries
-	for f in $(TEST_SRC); do \
-		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` $(LIBS) $(INCLUDE) $(LDFLAGS); \
+	for f in $(TEST_SRC_FILES); do \
+		mkdir -p $(OUTDIR)/`dirname $$f`; \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS); \
 	done
 ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
-	for f in $(TEST_SRC_MT); do \
-		$(CC) $(TESTDIR)/$$f $(CFLAGS) -o $(OUTDIR)/`basename $$f .c` $(LIBS_MT) $(INCLUDE) $(LDFLAGS); \
+	for f in $(TEST_SRC_MT_FILES); do \
+		mkdir -p $(OUTDIR)/`dirname $$f`; \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS); \
 	done
 endif
 
