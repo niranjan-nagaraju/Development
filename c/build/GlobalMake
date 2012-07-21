@@ -2,15 +2,20 @@ CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
 CC = gcc
 
-FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions
-TEST_SRC_FILES = $(basename $(TEST_SRC)) # Get test source filenames without the extension
-TEST_SRC_MT_FILES = $(basename $(TEST_SRC_MT)) # Ditto for Multi-threaded test files
+# Include current library paths to testcases
+LIBS += -L$(OUTDIR) -l $(LIBNAME)
+LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT)
+
+# Get files to compile
+FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions - the library source files
+TEST_SRC_FILES = $(basename $(TEST_SRC)) # Get test source filenames without the extension - Test source files
+TEST_SRC_MT_FILES = $(basename $(TEST_SRC_MT)) # Ditto for Multi-threaded test files - Test source files - but multithreaded
 
 OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be created
 OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
 
 # switch output directory based on Operating System
-# Pointers are truncated to 32-bit in SL for some weird reason. So switch to -m32
+# Pointers are truncated to 32-bit in Snow Leopard for some weird reason. So switch to -m32
 ifeq ($(OS), Darwin) # MAC OS X
 	OUTDIR = out/mac
 	CFLAGS += -m32
@@ -21,9 +26,11 @@ ifeq ($(OS), Linux) # Linux
 endif
 endif
 
-OBJS = $(addprefix $(OUTDIR)/, $(OBJ_NAMES)) # Prefix Output directory to the list of object files
-OBJS_MT = $(addprefix $(OUTDIR)/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
+# Construct Full paths to object files
+OBJS = $(addprefix $(OUTDIR)/obj/, $(OBJ_NAMES)) # Prefix Output directory to the list of object files
+OBJS_MT = $(addprefix $(OUTDIR)/obj/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
 
+# Build 'opt' by default
 all: opt
 
 # Compile a general exe from source files
@@ -38,17 +45,17 @@ debug:	# Enable debug symbols and profiling
 	make "CFLAGS=$(CFLAGS) -g -Wall " libs tests
 
 obj:	# Create Object files for library source files
-	mkdir -p $(OUTDIR)
+	mkdir -p $(OUTDIR)/obj
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/$$file.o; \
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/obj/$$file.o; \
 	done
 ifdef LIBNAME_MT # Build multi-threaded object files
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/$${file}_mt.o; \
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/obj/$${file}_mt.o; \
 	done
 endif
 
-libs:
+libs: # Build library 
 	mkdir -p $(OUTDIR)
 ifeq ($(OS), Darwin) 
 	make dylib
@@ -86,11 +93,11 @@ ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
 	done
 endif
 
-clean:	# Clean the Output directory for this system
+clean:	# Clean the Output directory for this operating system
 	rm -rf $(OUTDIR)
 
 cleanobj:	# Clean the object files generated for this system
 	rm -rf $(OUTDIR)/*.o
 
-cleanall:	# Clean the entire output directory
+cleanall: # Clean everything ever compiled.
 	rm -rf out
