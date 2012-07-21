@@ -1,0 +1,38 @@
+SLL Node functions:
+	Create node
+	Delete node
+	Print node
+
+SLL functions:
+	Insert:
+		AtFirst (data, node)
+		AtEnd (data, node)
+		AtPos (data, node)
+	Remove:
+		AtFirst (data, node)
+		AtEnd (data, node)
+		AtPos (data, node)
+		data, node # find and remove node/data
+	Search:
+		Search (node, data)
+	Print:
+		PrintSLL
+	Sort:
+		Place(data)
+		Sort SLL
+	Export:
+		(To containers)
+	Import:
+		(From containers)
+	splice:
+		pos1-pos2
+	Set Operations:
+		Join
+		Union
+		Intersection
+		Find point of intersection
+	Loop:
+		find if loop exists
+		find node at which sll loops
+	
+
