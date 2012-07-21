@@ -1,0 +1,42 @@
+BST Node functions:
+	Create node
+	Delete node
+	Print node
+
+BST functions:
+	Insert:
+		data
+		node
+	Remove:
+		data
+		node
+	Search:
+		Search for data, node
+	Print:
+		Inorder
+		Preorder
+		Postorder
+		Levelorder (Breadth First Search)
+		Depthorder (Depth First Search)
+	Export To Containers:
+		Inorder
+		Preorder
+		Postorder
+		Levelorder (Breadth First Search)
+		Depthorder (Depth First Search)
+	Import From Containers:
+		Build Tree from Containers
+	Properties:
+		width
+		height
+	Mirror:
+		Swap left and right subtree
+	Paths:
+		Lowest Common Ancestor
+		Path to any node (print, export)
+		Distance between two nodes
+	Operations:
+		Level Sum
+		Depth Sum
+		Maximum level sum
+		Maximum Depth sum

@@ -1,24 +1,27 @@
-CFLAGS += -g -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast 
-INCLUDE += -I. -I../../common/include 
-LIBS += -L../../common/out -lcommon
+BASE_DIR=../..
 
-OBJS = out/bst.o
+# Include files
+INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common/include
 
-LIBNAME = bst
+# Library filenames, _MT for multi-threaded version
+LIBNAME=bst
+LIBNAME_MT=bst_mt
+
+# Source directory for the library
+SRC = bst.c bst_node.c
+
+# Testcases directory
 TESTDIR = testcases
 
-all:
-	mkdir -p out
-	$(CC) $(LIBNAME).c $(CFLAGS) -c -fPIC -Wall -o out/$(LIBNAME).o
+# Testcases for single-threaded library
+TEST_SRC = node/bst_node_create_test.c
+TEST_SRC += node/bst_node_print_test.c
+#TEST_SRC += bst/insert/bst_insert_test.c
 
-dylib: all
-	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o out/lib$(LIBNAME).dylib out/$(LIBNAME).o -lgcc
+# Testcases for Multi-threaded library
+#TEST_SRC_MT += node/sll_node_print_test_mt.c
 
-so: all
-	$(CC) -shared -fPIC -o out/lib$(LIBNAME).so out/$(LIBNAME).o -lgcc
+# library flags
+LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
 
-testTree: 
-	$(CC) $(TESTDIR)/$@.c $(CFLAGS) -o out/$@ -L$(PWD)/out/ -l$(LIBNAME) $(INCLUDE) $(LIBS)
-
-clean:
-	rm -rf out
+include $(BASE_DIR)/build/GlobalMake
