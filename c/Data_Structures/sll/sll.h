@@ -18,9 +18,9 @@ int sll_insert_at_front (sll_t *sll, void *data);
 int sll_insert_at_end (sll_t *sll, void *data);
 int sll_insert_at_position (sll_t *sll, void *data, int pos);
 
-void *sll_delete_from_front (sll_t *sll);
-void *sll_delete_from_end (sll_t *sll);
-void *sll_delete_from_position (sll_t *sll, int pos);
+void *sll_remove_from_front (sll_t *sll);
+void *sll_remove_from_end (sll_t *sll);
+void *sll_remove_from_position (sll_t *sll, int pos);
 
 void sll_print (sll_t *sll, void(*printfn)(void *));
 
