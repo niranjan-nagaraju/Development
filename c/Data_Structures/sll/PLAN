@@ -17,6 +17,9 @@ SLL functions:
 		Search (node, data)
 	Print:
 		PrintSLL
+		PrintSLL reverse
+		printSLL recursive
+		printSLL reverse recursive
 	Sort:
 		Place(data)
 		Sort SLL
@@ -34,5 +37,7 @@ SLL functions:
 	Loop:
 		find if loop exists
 		find node at which sll loops
+	Reverse:
+		reverse
+		reverse recursive
 	
-
