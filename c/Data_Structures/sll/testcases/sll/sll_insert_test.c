@@ -10,8 +10,6 @@ struct test_struct {
 int main(void)
 {
 	sll_t sll;
-	int i = 10;
-	char c = 'a';
 
 	sll_node_t *node;
 

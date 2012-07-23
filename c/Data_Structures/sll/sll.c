@@ -1,5 +1,4 @@
 #include <sll.h>
-#include <stdio.h>
 
 /** Initialize Singly Linked List */
 void 

@@ -4,6 +4,10 @@
 #define INSERT_AT_END	2
 #define INSERT_AT_POS	3
 
+int sll_insert_node_at_front (sll_t *sll, sll_node_t *node);
+int sll_insert_node_at_end (sll_t *sll, sll_node_t *node);
+int sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos);
+
 /** Helper function to insert into the SLL */
 static int
 _sll_insert (sll_t *sll, int cmd, void *data, int pos)
@@ -89,7 +93,7 @@ int
 sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos)
 {
 	int i;
-	sll_node_t *trav, *prev;
+	sll_node_t *trav;
 
 	if ( pos == 0 )
 		return sll_insert_node_at_front(sll, node);

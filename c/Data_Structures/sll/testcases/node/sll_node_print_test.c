@@ -22,7 +22,6 @@ main (void)
 	char c = 'a';
 
 	struct test_struct test_obj = {42, 'Z'};
-	struct test_struct *tsptr;
 
 	test_node = sll_node_create ((void *)i);
 	sll_node_print (test_node, printAsInt);

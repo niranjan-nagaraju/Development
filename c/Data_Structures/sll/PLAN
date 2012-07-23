@@ -8,13 +8,17 @@ SLL functions:
 		AtFirst (data, node)
 		AtEnd (data, node)
 		AtPos (data, node)
+		Atpos from end (data, node)
 	Remove:
 		AtFirst (data, node)
 		AtEnd (data, node)
 		AtPos (data, node)
+		Atpos from end (data, node)
 		data, node # find and remove node/data
 	Search:
 		Search (node, data)
+		nth Element from the front
+		nth Element from the end
 	Print:
 		PrintSLL
 		PrintSLL reverse
