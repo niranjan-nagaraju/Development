@@ -18,8 +18,9 @@ TESTDIR = testcases
 TEST_SRC = node/sll_node_create_test.c
 TEST_SRC += node/sll_node_print_test.c
 
-TEST_SRC += sll/insert/sll_insert_test.c
-TEST_SRC += sll/print/sll_print_test.c
+TEST_SRC += sll/sll_init_test.c
+TEST_SRC += sll/sll_insert_test.c
+TEST_SRC += sll/sll_print_test.c
 
 # Testcases for Multi-threaded library
 #TEST_SRC_MT += node/sll_node_print_test_mt.c
