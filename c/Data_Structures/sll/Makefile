@@ -9,7 +9,7 @@ LIBNAME_MT=sll_mt
 
 # Source directory for the library
 SRC = sll.c sll_node.c
-SRC += sll_insert.c sll_remove.c
+SRC += sll_insert.c sll_remove.c sll_print.c
 
 # Testcases directory
 TESTDIR = testcases
