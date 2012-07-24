@@ -30,6 +30,7 @@ main (void)
 	tsptr = (struct test_struct *) test_node->data;	
 	assert(42 == tsptr->tsi &&  'Z' == tsptr->tsc && tsptr->f == f);
 
+	printf("SLL Node create tests successful\n");
 
 	return 0;
 }

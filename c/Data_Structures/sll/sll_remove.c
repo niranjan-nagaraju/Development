@@ -22,10 +22,13 @@ _sll_remove (sll_t *sll, int cmd, int pos)
 	switch (cmd) {
 		case REMOVE_AT_FRONT:
 			node = sll_remove_node_at_front(sll);
+			break;
 		case REMOVE_AT_END:
 			node = sll_remove_node_at_end(sll);
+			break;
 		case REMOVE_AT_POS:
 			node = sll_remove_node_at_position(sll, pos);
+			break;
 	}
 
 	if (node) {
@@ -125,11 +128,18 @@ sll_remove_node_at_position (sll_t *sll, int pos)
 		i++;
 	}
 
-	/** trav now points to the node before the one that needs to be removed */
-	node = trav;
+	sll->_size--;
 
+	/** trav now points to the node before the one that needs to be removed */
+	node = trav->next;
+
+	/** NOTE: 
+	 *  if sll had only one element in it at this point, pos could only have been 0 and that's handled by (pos==0)
+	 *  So trav->next->next will not run into a NULL pointer exception
+	 */
 	trav->next = trav->next->next;
 
+	/** node removed was last in the SLL; update tail */
 	if (! trav->next)
 		sll->tail = trav;
 
