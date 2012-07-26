@@ -8,7 +8,8 @@ LIBNAME=bst
 LIBNAME_MT=bst_mt
 
 # Source directory for the library
-SRC = bst.c bst_node.c
+SRC = bst_node.c bst_node_insert.c
+SRC += bst.c
 
 # Testcases directory
 TESTDIR = testcases

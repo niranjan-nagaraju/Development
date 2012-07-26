@@ -45,6 +45,30 @@ bst_node_delete (bst_node_t *node)
 }
 
 
+/** Return 1 if specified node has a node to the left, 0 otherwise */
+int 
+bst_node_has_left (bst_node_t *node)
+{
+	return (node->left != NULL);
+}
+
+
+/** Return 1 if specified node has a node to the right, 0 otherwise */
+int 
+bst_node_has_right (bst_node_t *node)
+{
+	return (node->right != NULL);
+}
+
+
+/** Return 1 if node is a leaf node, else return 0 */
+int
+bst_node_is_leaf (bst_node_t *node)
+{
+	return ((! node->left) && (! node->right));
+}
+
+
 /** Print the data contained in an BST; BST/User provides how to print the data */
 void 
 bst_node_print (bst_node_t *node, void (*printfn)(void *))

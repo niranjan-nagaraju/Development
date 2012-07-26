@@ -2,6 +2,12 @@ BST Node functions:
 	Create node
 	Delete node
 	Print node
+	Is Leaf
+	has left
+	has right
+	Insert:
+		to left (data, node)
+		to right (data, node)
 
 BST functions:
 	Insert:
