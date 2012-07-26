@@ -22,4 +22,3 @@ sll_length (sll_t *sll)
 	return sll->_size;
 }
 
-
