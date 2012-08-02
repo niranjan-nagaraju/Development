@@ -5,7 +5,10 @@
 
 
 typedef int (*comparefn) (void *data1, void *data2);
+
 int comparePtrs (void *p, void *q);
+int compareInts (void *p, void *q);
+int compareChars (void *p, void *q);
 
 void swapInt(int *p, int *q);
 void swapChar(char *p, char *q);

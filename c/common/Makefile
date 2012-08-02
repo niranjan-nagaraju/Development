@@ -1,7 +1,7 @@
 LIBNAME = common
 TESTDIR = tests
 
-INCLUDE += -I$(PWD)/include
+INCLUDE = -I$(PWD)
 LIBS = -L$(OUTDIR) -lcommon
 
 SRC = common.c
