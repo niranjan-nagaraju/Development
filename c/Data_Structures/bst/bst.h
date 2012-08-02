@@ -16,4 +16,6 @@ int bst_size (bst_t *tree);
 int bst_width (bst_t *tree);
 int bst_depth (bst_t *tree);
 
+/** Insert operation */
+int bst_insert(bst_t *tree, void *data, comparefn compare);
 #endif /* _BINARY_SEARCH_TREE_H_ */

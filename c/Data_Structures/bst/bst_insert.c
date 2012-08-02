@@ -5,8 +5,8 @@
 static int
 bst_insert_node_helper_R(bst_node_t *parent, bst_node_t *node, comparefn compare)
 {
-	/** parent's data > node's data; Insert to the right */
-	if (compare(parent, node) > 0) {
+	/** node's data > parent's data; Insert to the right */
+	if (compare(node->data, parent->data) > 0) {
 		/** 
 		 * parent's node has an empty slot to the right; 
 		 * Place new node there and return
@@ -16,8 +16,8 @@ bst_insert_node_helper_R(bst_node_t *parent, bst_node_t *node, comparefn compare
 		}
 
 		/** else 'try' to insert under parent node */
-		return bst_insert_node_helper_R (parent->right, node);
-	} else { /** parent's data <= node's data; Insert to the left */
+		return bst_insert_node_helper_R (parent->right, node, compare);
+	} else { /** node's data <= parent's data; Insert to the left */
 		/** 
 		 * parent's node has an empty slot to the left; 
 		 * Place new node there and return
@@ -27,7 +27,7 @@ bst_insert_node_helper_R(bst_node_t *parent, bst_node_t *node, comparefn compare
 		}
 
 		/** else 'try' to insert under parent node */
-		return bst_insert_node_helper_R (parent->left, node);
+		return bst_insert_node_helper_R (parent->left, node, compare);
 	}
 
 	return 0;
@@ -61,5 +61,5 @@ bst_insert(bst_t *tree, void *data, comparefn compare)
 	if (!node)
 		return -ENOMEM;
 
-	return bst_insert_node (tree, node);
+	return bst_insert_node (tree, node, compare);
 }
