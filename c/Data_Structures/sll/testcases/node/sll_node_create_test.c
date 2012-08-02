@@ -1,4 +1,5 @@
 #include <sll_node.h>
+#include <stdio.h>
 #include <assert.h>
 
 /** Don't worry about freeing just yet :) */

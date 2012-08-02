@@ -1,7 +1,7 @@
 BASE_DIR=../..
 
 # Include files
-INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common/include
+INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
 
 # Library filenames, _MT for multi-threaded version
 LIBNAME=bst
