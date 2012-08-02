@@ -7,26 +7,12 @@ int comparePtrs (void *p, void *q)
 
 int compareInts (void *p, void *q)
 {
-	int i = (int)p, j = (int)q;
-
-	if (i < j)
-		return -1;
-	else if (i == j)
-		return 0;
-	else /** (i > j) - law of trichotomy :P */
-		return 1;
+	return ((int)p - (int)q);
 }
 
 int compareChars (void *p, void *q)
 {
-	char i = (char)p, j = (char)q;
-
-	if (i < j)
-		return -1;
-	else if (i == j)
-		return 0;
-	else /** (i > j) - law of trichotomy :P */
-		return 1;
+	return ((char)p - (char)q);
 }
 
 void swapInt(int *p, int *q)
