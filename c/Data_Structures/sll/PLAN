@@ -45,4 +45,6 @@ SLL functions:
 	Reverse:
 		reverse
 		reverse recursive
+	Destroy:
+		Destroy SLL completely
 	
