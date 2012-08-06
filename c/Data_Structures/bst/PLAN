@@ -46,3 +46,6 @@ BST functions:
 		Depth Sum
 		Maximum level sum
 		Maximum Depth sum
+	Destroy:
+		Destroy BST completely
+
