@@ -5,6 +5,7 @@
 
 
 # Stackoverflow solution to maximize profit
+# http://stackoverflow.com/questions/1663545/find-buy-sell-prices-in-array-of-stock-values-to-maximize-positive-difference
 
 def find_optimal_buy_and_sell (priceList):
 	max = 0
