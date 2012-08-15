@@ -1,45 +1,29 @@
-CFLAGS += -g
-INCLUDE += -I$(PWD)/include -I../../common/include
-LIBS += -L../../common/out -lcommon -L./out/
+BASE_DIR=../..
 
-LIBNAME = sort
+# Include files
+INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
 
-SRC = test/main.c
+# Library filenames, _MT for multi-threaded version
+LIBNAME=sort
 
-# Add more sorting algorithms here
-OBJS = out/sort_common.o 
-OBJS += out/selection_sort.o out/bubble_sort.o out/insertion_sort.o out/merge_sort.o
-OBJS += out/quick_sort.o
-OBJS += out/bubble_sortR.o
+# Source directory for the library
+SRC = sort_common.c
+SRC += bubble_sort.c bubble_sortR.c
+# SRC += counting_sort.c
+# SRC += heap_sort.c              
+SRC += insertion_sort.c
+SRC += merge_sort.c             
+SRC += quick_sort.c    
+# SRC += radix_sort.c             
+SRC += selection_sort.c
 
-all:
-	mkdir -p out
-	$(CC) sort_common.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/sort_common.o
-	$(CC) selection_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/selection_sort.o
-	$(CC) bubble_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/bubble_sort.o
-	$(CC) insertion_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/insertion_sort.o
-	$(CC) merge_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/merge_sort.o
-	$(CC) quick_sort.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/quick_sort.o
-	$(CC) bubble_sortR.c $(CFLAGS) $(INCLUDE) -c -fPIC -Wall -o out/bubble_sortR.o
+# Testcases directory
+TESTDIR = testcases
 
-# Mac Dynamic Libray (Add to DYLD_LIBRARY_PATH)
-dylib: all 	
-	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o out/lib$(LIBNAME).dylib $(OBJS) -lgcc $(LIBS)
+# Testcases for single-threaded library
+TEST_SRC = test_sorts.c
 
-# Unix Shared Library (Add to LD_LIBRARY_PATH)
-so: all
-	$(CC) -shared -fPIC -o out/lib$(LIBNAME).so $(OBJS) -lgcc $(LIBS)
+# library flags
+LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
 
-tests:
-	$(CC) -D_SELECTION_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/selection_sort_test -l$(LIBNAME)
-	$(CC) -D_BUBBLE_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/bubble_sort_test -l$(LIBNAME)
-	$(CC) -D_INSERTION_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/insertion_sort_test -l$(LIBNAME)
-	$(CC) -D_MERGE_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/merge_sort_test -l$(LIBNAME)
-	$(CC) -D_QUICK_SORT_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/quick_sort_test -l$(LIBNAME)
-	$(CC) -D_BUBBLE_SORTR_ $(SRC) $(CFLAGS) $(INCLUDE) $(LIBS) -o out/bubble_sortR_test -l$(LIBNAME)
-
-cleanobjs:
-	rm -f out/*.o 
-
-clean:
-	rm -f out/*
+include $(BASE_DIR)/build/GlobalMake
