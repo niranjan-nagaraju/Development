@@ -30,6 +30,7 @@ SLL functions:
 		Sort SLL
 	Export:
 		(To containers)
+		To xor LL (inplace)
 	Import:
 		(From containers)
 	splice:
