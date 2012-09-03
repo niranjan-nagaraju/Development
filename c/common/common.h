@@ -3,8 +3,9 @@
 
 #include <stdio.h>
 
-
-typedef int (*comparefn) (void *data1, void *data2);
+/** define function pointer types for common operations */
+typedef int (*comparefn) (void *data1, void *data2); /** Compare function pointer */
+typedef void (*printfn) (void *data);	/** Print function pointer */
 
 int comparePtrs (void *p, void *q);
 int compareInts (void *p, void *q);
