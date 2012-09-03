@@ -22,7 +22,10 @@ void printAsULong(void *object);
 void printAsChar(void *object);
 void printAsString(void *object);
 void printPtr(void *object);
+
 void printNL(void);
+void printSPC(void);
+void printTAB(void);
 
 #endif
 

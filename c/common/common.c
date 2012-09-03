@@ -101,3 +101,13 @@ void printNL(void)
 	printf("\n");
 }
 
+void printSPC (void)
+{
+	printf(" ");
+}
+
+void printTAB (void)
+{
+	printf("\t");
+}
+
