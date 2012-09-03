@@ -18,16 +18,14 @@ int main(void)
 	bst_insert(&bst, (void *)5, compareInts);
 	bst_insert(&bst, (void *)7, compareInts);
 
-	/**
-	 * BST:
-	 *	       7
-	 *	    6->
-	 *	       5 
-	 *   3->
-	 *         *
-	 *      2->
-	 *         1
-	 */      
+	/** BST:
+	 *	3
+	 *	  6
+	 *	    5
+	 *	    7
+	 *	  2
+	 *	    1
+	 */ 
 
 	assert(bst._num_nodes == 6);
 

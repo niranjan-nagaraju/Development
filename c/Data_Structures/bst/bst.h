@@ -18,4 +18,12 @@ int bst_depth (bst_t *tree);
 
 /** Insert operation */
 int bst_insert(bst_t *tree, void *data, comparefn compare);
+
+/** Print operations */
+void bst_print_preorder (bst_t *bst, printfn print);
+void bst_print_inorder (bst_t *bst, printfn print);
+void bst_print_postorder (bst_t *bst, printfn print);
+void bst_print_level_order (bst_t *bst, printfn print);
+void bst_print_depth_order (bst_t *bst, printfn print);
+
 #endif /* _BINARY_SEARCH_TREE_H_ */

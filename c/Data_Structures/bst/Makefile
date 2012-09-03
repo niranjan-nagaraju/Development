@@ -10,6 +10,7 @@ LIBNAME_MT=bst_mt
 # Source directory for the library
 SRC = bst_node.c bst_node_insert.c
 SRC += bst.c bst_insert.c
+SRC += bst_print.c
 
 # Testcases directory
 TESTDIR = testcases
@@ -18,6 +19,7 @@ TESTDIR = testcases
 TEST_SRC = node/bst_node_create_test.c
 TEST_SRC += node/bst_node_print_test.c
 TEST_SRC += bst/bst_insert_test.c
+TEST_SRC += bst/bst_print_test.c
 
 # Testcases for Multi-threaded library
 #TEST_SRC_MT += node/sll_node_print_test_mt.c
