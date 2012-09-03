@@ -62,38 +62,38 @@ void swapPtr(void **p, void **q)
 
 void printAsInt(void *object)
 {
-	printf("%d", (int)object);
+	printf("%d ", (int)object);
 }
 
 void printAsUInt(void *object)
 {
-	printf("%u", (unsigned int)object);
+	printf("%u ", (unsigned int)object);
 }
 
 void printAsLong(void *object)
 {
-	printf("%ld", (long)object);
+	printf("%ld ", (long)object);
 }
 
 void printAsULong(void *object)
 {
-	printf("%lu", (unsigned long)object);
+	printf("%lu ", (unsigned long)object);
 }
 
 void printAsChar (void *object)
 {
-	printf("%c", (char)object);
+	printf("%c ", (char)object);
 }
 
 
 void printAsString(void *object)
 {
-	printf("%s", (char *)object);
+	printf("%s ", (char *)object);
 }
 
 void printPtr(void *object)
 {
-	printf("%p", object);
+	printf("%p ", object);
 }
 
 void printNL(void)
