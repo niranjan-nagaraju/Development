@@ -2,8 +2,11 @@
 #define _SLL_H_
 
 #include <sll_node.h>
+#include <common.h>
 
 #include <errno.h>
+
+//typedef void (*deallocatorfn) (void *ptr);
 
 typedef struct sll_s {
 	sll_node_t *head;
@@ -14,6 +17,7 @@ typedef struct sll_s {
 /** Core operations */
 void sll_init (sll_t *sll);
 int sll_length (sll_t *sll);
+void sll_destroy (sll_t *sll, deallocatorfn deallocate);
 
 /** Insert operations */
 int sll_insert_at_front (sll_t *sll, void *data);

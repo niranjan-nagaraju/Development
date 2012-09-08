@@ -27,6 +27,6 @@ TEST_SRC += sll/sll_print_test.c
 #TEST_SRC_MT += node/sll_node_print_test_mt.c
 
 # library flags
-LDFLAGS += -Lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
+LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
 
 include $(BASE_DIR)/build/GlobalMake

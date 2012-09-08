@@ -69,6 +69,14 @@ int main(void)
 	node = node->next;
 	assert ((int)(node->data) == 150);
 
+
+	/** Test destory too, while at it */
+	sll_destroy(&sll, NULL);
+
+	assert(sll.head == NULL);
+	assert(sll.tail == NULL);
+	assert(sll._size == 0);
+
 	printf("SLL Insert tests successful\n");
 
 	return 0;
