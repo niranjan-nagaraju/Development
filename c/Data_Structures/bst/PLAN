@@ -18,6 +18,8 @@ BST functions:
 		node
 	Search:
 		Search for data, node
+		next smaller element/node to element specified
+		next larger element/node to element specified
 	Print:
 		Inorder
 		Preorder
@@ -35,6 +37,7 @@ BST functions:
 	Properties:
 		width
 		height
+		leafCounter
 	Mirror:
 		Swap left and right subtree
 	Paths:
