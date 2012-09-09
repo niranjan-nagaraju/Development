@@ -20,6 +20,13 @@ SLL functions:
 		Search (node, data)
 		nth Element from the front
 		nth Element from the end
+		Smallest element in the SLL
+		Largest element in the SLL
+		kth order statistics 
+			kth smallest element in the SLL
+			kth largest element in the SLL
+		find element next smaller than key in the SLL
+		find element next larger than key in the SLL
 	Print:
 		PrintSLL
 		PrintSLL reverse

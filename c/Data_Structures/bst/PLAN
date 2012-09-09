@@ -18,8 +18,14 @@ BST functions:
 		node
 	Search:
 		Search for data, node
+		Search Maximum, minimum element in the tree
 		next smaller element/node to element specified
+			(largest element < key k)
 		next larger element/node to element specified
+			(smallest element > key k)
+		kth order statistics
+			kth greater element in the tree
+			kth smaller element in the tree
 	Print:
 		Inorder
 		Preorder
