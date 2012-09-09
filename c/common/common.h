@@ -32,5 +32,10 @@ void printNL(void);
 void printSPC(void);
 void printTAB(void);
 
+
+/** Rudimentary memory allocator/deallocator */
+extern int mem_blocks_counter;
+void *allocator (int size);
+void deallocator(void *ptr);
 #endif
 
