@@ -16,8 +16,8 @@ SLL functions:
 		Atpos from end (data, node)
 		data, node # find and remove matching node/data
 		Remove specified node (swap next.. works only if not last node */
-	Search:
-		Search (node, data)
+	Find:
+		Find (node, data)
 		nth Element from the front
 		nth Element from the end
 		Smallest element in the SLL
