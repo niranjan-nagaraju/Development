@@ -36,3 +36,13 @@ autocmd BufReadPost *
   \ if line("'\"") > 0 && line("'\"") <= line("$") |
   \   exe "normal g`\"" |
   \ endif
+
+" for vimdiff, Open all folds
+"  Set a large number for context
+"    context being the number of unfolded lines
+"
+" Alternately zR inside vimdiff works as well
+" Courtesy: Superuser(http://superuser.com/questions/198779/make-vimdiff-show-entire-file)
+if &diff " only for diff mode/vimdiff
+      set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
+endif 
