@@ -41,7 +41,7 @@ autocmd BufReadPost *
 "  Set a large number for context
 "    context being the number of unfolded lines
 "
-" Alternately zR inside vimdiff works as well
+" Alternately zR inside vimdiff works as well.
 " Courtesy: Superuser(http://superuser.com/questions/198779/make-vimdiff-show-entire-file)
 if &diff " only for diff mode/vimdiff
       set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
