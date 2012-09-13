@@ -22,6 +22,7 @@ TEST_SRC += node/sll_node_print_test.c
 TEST_SRC += sll/sll_init_test.c
 TEST_SRC += sll/sll_insert_test.c
 TEST_SRC += sll/sll_remove_test.c
+TEST_SRC += sll/sll_find_test.c
 TEST_SRC += sll/sll_print_test.c
 TEST_SRC += sll/sll_destroy_test.c
 
