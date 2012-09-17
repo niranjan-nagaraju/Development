@@ -1,8 +1,8 @@
 #include <sll.h>
 
-/** Return a SLL node matching key */
+/** Return a SLL node containing key */
 sll_node_t *
-sll_find_node (sll_t *sll, void *key, comparefn compare)
+sll_find_containing_node (sll_t *sll, void *key, comparefn compare)
 {
 	sll_node_t *tmp;
 
@@ -12,8 +12,9 @@ sll_find_node (sll_t *sll, void *key, comparefn compare)
 
 	tmp = sll->head;
 
-	while (tmp != NULL && compare(tmp->data, key) != 0)
+	while (tmp != NULL && compare(tmp->data, key) != 0) {
 		tmp = tmp->next;
+	}
 
 
 	return tmp;
@@ -26,10 +27,30 @@ sll_find (sll_t *sll, void *key, comparefn compare)
 {
 	sll_node_t *tmp;
 
-	tmp = sll_find_node (sll, key, compare);
+	tmp = sll_find_containing_node (sll, key, compare);
 
 	if (!tmp)
 		return NULL;
 
 	return tmp->data;
+}
+
+
+/** Return True if node exists in SLL, False otherwise */
+int
+sll_find_node (sll_t *sll, sll_node_t *node)
+{
+	sll_node_t *tmp;
+
+	/** SLL doesn't exist or is empty */
+	if (!sll || !sll->head)
+		return 0;
+
+	tmp = sll->head;
+	
+	while (tmp && tmp != node) {
+		tmp = tmp->next;
+	}
+
+	return ((tmp == NULL)? 0:1);
 }
