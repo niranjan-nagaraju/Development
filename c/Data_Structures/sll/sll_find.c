@@ -37,14 +37,14 @@ sll_find (sll_t *sll, void *key, comparefn compare)
 
 
 /** Return True if node exists in SLL, False otherwise */
-int
+boolean
 sll_find_node (sll_t *sll, sll_node_t *node)
 {
 	sll_node_t *tmp;
 
 	/** SLL doesn't exist or is empty */
 	if (!sll || !sll->head)
-		return 0;
+		return false;
 
 	tmp = sll->head;
 	
@@ -52,5 +52,5 @@ sll_find_node (sll_t *sll, sll_node_t *node)
 		tmp = tmp->next;
 	}
 
-	return ((tmp == NULL)? 0:1);
+	return ((tmp == NULL)? false : true);
 }

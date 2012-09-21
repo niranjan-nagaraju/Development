@@ -32,7 +32,7 @@ void *sll_remove_at_position (sll_t *sll, int pos);
 /** Find operations */
 sll_node_t *sll_find_containing_node (sll_t *sll, void *key, comparefn compare);
 void *sll_find (sll_t *sll, void *key, comparefn compare);
-int sll_find_node (sll_t *sll, sll_node_t *node);
+boolean sll_find_node (sll_t *sll, sll_node_t *node);
 
 /** Print operations */
 void sll_print (sll_t *sll, void(*printfn)(void *));
