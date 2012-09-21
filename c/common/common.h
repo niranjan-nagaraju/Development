@@ -2,6 +2,7 @@
 #define __COMMON_H__
 
 #include <stdio.h>
+#include <boolean.h>
 
 /** define function pointer types for common operations */
 typedef int (*comparefn) (void *data1, void *data2); /** Compare function pointer */

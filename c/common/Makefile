@@ -6,6 +6,8 @@ LIBS = -L$(OUTDIR) -lcommon
 SRC = common.c
 
 TESTDIR = testcases
-TEST_SRC = testCommon.c
+
+TEST_SRC = test_common.c
+TEST_SRC += test_boolean.c
 
 include ../build/GlobalMake
