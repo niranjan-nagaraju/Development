@@ -2,6 +2,7 @@
 #include <common.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <test_common.h>
 
 int main (void)
 {

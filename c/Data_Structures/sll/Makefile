@@ -3,6 +3,9 @@ BASE_DIR=../..
 # Include files
 INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
 
+# Include files for testcases
+TEST_INCLUDE += -I$(BASE_DIR)/test_common
+
 # Library filenames, _MT for multi-threaded version
 LIBNAME=sll
 LIBNAME_MT=sll_mt
@@ -31,5 +34,8 @@ TEST_SRC += sll/sll_destroy_test.c
 
 # library flags
 LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
+
+# Test library flags; testcases will be linked with both LDFLAGS and TEST_LDFLAGS
+TEST_LDFLAGS += -L$(BASE_DIR)/test_common/$(OUTDIR) -ltest_common
 
 include $(BASE_DIR)/build/GlobalMake

@@ -3,8 +3,8 @@ OS = $(shell uname)
 CC = gcc
 
 # Include current library paths to testcases
-LIBS += -L$(OUTDIR) -l $(LIBNAME)
-LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT)
+LIBS += -L$(OUTDIR) -l$(LIBNAME)
+LIBS_MT += -L$(OUTDIR) -l$(LIBNAME_MT)
 
 # Get files to compile
 FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions - the library source files
@@ -84,12 +84,12 @@ endif
 tests:	# Compile testcases with Single-threaded libraries
 	for f in $(TEST_SRC_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS); \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS); \
 	done
 ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
 	for f in $(TEST_SRC_MT_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS); \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS); \
 	done
 endif
 

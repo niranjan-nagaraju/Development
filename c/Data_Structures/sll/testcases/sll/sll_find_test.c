@@ -1,26 +1,7 @@
 #include <sll.h>
 #include <common.h>
 #include <assert.h>
-
-struct test_struct {
-	int tsi;
-	char tsc;
-};
-
-/** compare int fields in the struct */
-int
-compareIntKey (void *obj1, void *obj2)
-{
-	return (((struct test_struct *)(obj1))->tsi - (int)obj2);
-}
-
-/** compare char fields in the struct */
-int
-compareCharKey (void *obj1, void *obj2)
-{
-	return (((struct test_struct *)(obj1))->tsc - (int)obj2);
-}
-
+#include <test_common.h>
 
 /** Simple find, direct integer compare */
 void 

@@ -1,0 +1,4 @@
+Contains common objects and functions for using in testcases
+such as an example struct, a diagnostic memory allocator
+
+

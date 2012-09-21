@@ -1,4 +1,4 @@
-#include <stdlib.h>
+#include <rudimentary_mem_manager.h>
 
 /** 
  * Rudimentary Memory allocator/deallocator : 
