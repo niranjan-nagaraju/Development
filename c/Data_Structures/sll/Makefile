@@ -1,22 +1,26 @@
 BASE_DIR=../..
 
 # Include files
-INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
+INCLUDE +=-I./sll -I./node -I$(BASE_DIR)/common
 
-# Include files for testcases
-TEST_INCLUDE += -I$(BASE_DIR)/test_common
 
 # Library filenames, _MT for multi-threaded version
 LIBNAME=sll
 LIBNAME_MT=sll_mt
 
 # Source directory for the library
-SRC = sll.c sll_node.c
-SRC += sll_insert.c sll_remove.c sll_print.c
-SRC += sll_find.c
+SRC = node/sll_node.c
+SRC += sll/sll.c
+SRC += sll/sll_insert.c sll/sll_remove.c sll/sll_print.c
+SRC += sll/sll_find.c
 
 # Testcases directory
 TESTDIR = testcases
+
+# Include files for testcases
+TEST_INCLUDE += -I$(BASE_DIR)/test_common -I$(PWD)/$(TESTDIR)/sll
+
+TEST_COMMON_FILES = sll/sll_test_common.c
 
 # Testcases for single-threaded library
 TEST_SRC = node/sll_node_create_test.c

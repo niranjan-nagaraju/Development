@@ -88,7 +88,7 @@ sll_insert_at_end (sll_t *sll, void *data)
 }
 
 
-/** Insert SLL at a specified position */
+/** Insert into SLL at a specified position */
 int 
 sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos)
 {
@@ -98,9 +98,25 @@ sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos)
 	if ( pos == 0 )
 		return sll_insert_node_at_front(sll, node);
 	
-	/** SLL is empty */
-	if ( (! sll->head ) || ( pos > sll->_size ) )
+	/** SLL is empty and pos is NOT 0; can't insert  */
+	if (! sll->head )  
 		return -1;
+
+	/** specified position is beyond size; just insert at end */
+	if ( pos > sll->_size )
+		return sll_insert_node_at_end(sll, node);
+
+	/** -pos: Insert at position from end */
+	if ( pos < 0 ) {
+		/** Align position from right */
+		pos = sll->_size + pos;
+
+		/** -pos offset was higher than the list itself; Insert to the front */
+		if ( pos < 0 )
+			pos = 0;
+
+		return sll_insert_node_at_position (sll, node, pos); 
+	}
 
 	i = 0;
 	trav = sll->head;
@@ -124,9 +140,13 @@ sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos)
 }
 
 
-/** Insert SLL at a specified position */
+/** Insert to SLL at a specified position 
+ *  +pos: count position from left
+ *  -pos: count position from right
+ */
 int 
 sll_insert_at_position (sll_t *sll, void *data, int pos)
 {
 	return _sll_insert(sll, INSERT_AT_POS, data, pos);
 }
+

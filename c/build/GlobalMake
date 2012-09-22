@@ -2,18 +2,6 @@ CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
 CC = gcc
 
-# Include current library paths to testcases
-LIBS += -L$(OUTDIR) -l$(LIBNAME)
-LIBS_MT += -L$(OUTDIR) -l$(LIBNAME_MT)
-
-# Get files to compile
-FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions - the library source files
-TEST_SRC_FILES = $(basename $(TEST_SRC)) # Get test source filenames without the extension - Test source files
-TEST_SRC_MT_FILES = $(basename $(TEST_SRC_MT)) # Ditto for Multi-threaded test files - Test source files - but multithreaded
-
-OBJ_NAMES = $(addsuffix .o, $(FILENAMES)) # List of Object files that'll be created
-OBJ_MT_NAMES = $(addsuffix _mt.o, $(FILENAMES)) # List of Multi-threaded object files that'll created (if at all)
-
 # switch output directory based on Operating System
 # Pointers are truncated to 32-bit in Snow Leopard for some weird reason. So switch to -m32
 ifeq ($(OS), Darwin) # MAC OS X
@@ -26,9 +14,33 @@ ifeq ($(OS), Linux) # Linux
 endif
 endif
 
+# Include current library paths to testcases
+LIBS += -L$(OUTDIR) -l$(LIBNAME)
+LIBS_MT += -L$(OUTDIR) -l$(LIBNAME_MT)
+
+# Get files to compile
+FILENAMES = $(basename $(SRC)) # nothing but the filenames sans extensions - the library source files
+TEST_SRC_FILES = $(basename $(TEST_SRC)) # Get test source filenames without the extension - Test source files
+TEST_SRC_MT_FILES = $(basename $(TEST_SRC_MT)) # Ditto for Multi-threaded test files - Test source files - but multithreaded
+
+# List of object files that'll be created
+OBJ_NO_DIRS = $(notdir $(FILENAMES)) # Remove directory information, just the filenames sans the extensions
+OBJ_NAMES = $(addsuffix .o, $(OBJ_NO_DIRS)) # List of Object files that'll be created
+
+OBJ_NO_DIRS_MT = $(notdir $(FILENAMES)) # Remove directory information, just the filenames sans the extensions
+OBJ_MT_NAMES = $(addsuffix _mt.o, $(OBJ_NO_DIRS_MT)) # List of Multi-threaded object files that'll created (if at all)
+
 # Construct Full paths to object files
 OBJS = $(addprefix $(OUTDIR)/obj/, $(OBJ_NAMES)) # Prefix Output directory to the list of object files
 OBJS_MT = $(addprefix $(OUTDIR)/obj/, $(OBJ_MT_NAMES)) # Prefix Output directory to the list of Multi-threaded object files
+
+# Object filenames for common test files
+TEST_COMMON_FILENAMES = $(basename $(TEST_COMMON_FILES)) # test common filenames without the extensions
+TEST_COMMON_NO_DIRS = $(notdir $(TEST_COMMON_FILENAMES)) # Strip off directory information from the filenames
+TEST_COMMON_OBJ_NAMES = $(addsuffix .o, $(TEST_COMMON_NO_DIRS)) # List of all object files for test common (no directories)
+TEST_COMMON_OBJ_MT_NAMES = $(addsuffix _mt.o, $(TEST_COMMON_NO_DIRS)) # List of all object files for test common (no directories)
+TEST_COMMON_OBJS = $(addprefix $(OUTDIR)/obj/, $(TEST_COMMON_OBJ_NAMES)) # Prefix Output directory to the list of test common object files
+TEST_COMMON_OBJS_MT = $(addprefix $(OUTDIR)/obj/, $(TEST_COMMON_OBJ_MT_NAMES)) # Prefix Output directory to the list of test common object files
 
 # Build 'opt' by default
 all: opt
@@ -47,11 +59,11 @@ debug:	# Enable debug symbols and profiling
 obj:	# Create Object files for library source files
 	mkdir -p $(OUTDIR)/obj
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/obj/$$file.o; \
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/obj/`basename $$file`.o; \
 	done
 ifdef LIBNAME_MT # Build multi-threaded object files
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/obj/$${file}_mt.o; \
+	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/obj/`basename $${file}`_mt.o; \
 	done
 endif
 
@@ -80,16 +92,28 @@ ifdef LIBNAME_MT	# Create a multi-threaded version of the library if needed
 	$(CC) -shared -fPIC -o $(OUTDIR)/lib$(LIBNAME_MT).so $(OBJS_MT) -lgcc $(LDFLAGS)
 endif
 
+# Build object files for common test files to be linked to standalone testcases later
+tests_common_obj:
+	mkdir -p $(OUTDIR)/obj
+	for f in $(TEST_COMMON_FILENAMES); do \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -c -o $(OUTDIR)/obj/`basename $$f`.o $(INCLUDE) $(TEST_INCLUDE) ; \
+	done
+ifdef LIBNAME_MT # Build multi-threaded object files
+	for f in $(TEST_COMMON_FILENAMES); do \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -D_MULTI_THREADED_ -c -o $(OUTDIR)/obj/`basename $$f`_mt.o $(INCLUDE) $(TEST_INCLUDE); \
+	done
+endif
+
 # Build testcases
-tests:	# Compile testcases with Single-threaded libraries
+tests: tests_common_obj	# Compile testcases with Single-threaded libraries
 	for f in $(TEST_SRC_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS); \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS); \
 	done
 ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
 	for f in $(TEST_SRC_MT_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS); \
+		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS_MT); \
 	done
 endif
 
