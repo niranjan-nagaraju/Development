@@ -15,7 +15,7 @@ int main(void)
 
 	printf ("%d\n", (int)(long)e); /** so sizeof(long) == sizeof(ptr).. no warnings here */
 
-	printf ("%d %d %d\n", (int)a[0], (int)a[1], (int)a[2]);
+	printf ("%d %d %d %d\n", sizeof(a)/sizeof(void *), (int)a[0], (int)a[1], (int)a[2]);
 
 	printf ("(%d, %c)\n", ((struct test_struct *)d[1])->tsi,((struct test_struct *)d[1])->tsc);
 	return 0;
