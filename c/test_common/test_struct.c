@@ -14,4 +14,9 @@ compareCharKey (void *obj1, void *obj2)
 	return (((struct test_struct *)(obj1))->tsc - (int)obj2);
 }
 
-
+int
+compareStruct (void *obj1, void *obj2)
+{
+	return ( (((struct test_struct *)obj1)->tsi - ((struct test_struct *)obj1)->tsi) &&
+			 (((struct test_struct *)obj1)->tsc - ((struct test_struct *)obj1)->tsc) );
+}

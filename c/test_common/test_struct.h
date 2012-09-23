@@ -10,6 +10,7 @@ struct test_struct {
 
 int compareIntKey (void *obj1, void *obj2);
 int compareCharKey (void *obj1, void *obj2);
+int compareStruct (void *obj1, void *obj2);
 
 #endif __TEST_STRUCT_H_
 
