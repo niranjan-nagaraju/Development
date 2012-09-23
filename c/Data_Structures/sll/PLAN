@@ -9,13 +9,17 @@ SLL functions:
 		AtEnd (data, node)
 		AtPos (data, node)
 		Atpos from end (data, node)
+		After (data, node) # Insert after matching data/node
+		Before (data, node) # Insert before matching data/node
 	Remove:
 		AtFirst (data, node)
 		AtEnd (data, node)
 		AtPos (data, node)
 		Atpos from end (data, node)
 		data, node # find and remove matching node/data
-		Remove specified node (swap next.. works only if not last node */
+		After (data, node) 
+		Before (data, node)
+		Remove specified node # swap next.. works only if not last node
 	Find:
 		Find (node, data): return node containing key/data matching key
 		Findpos (node, data): return position matching node containing key/key

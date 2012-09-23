@@ -1,6 +1,8 @@
 #include <sll_test_common.h>
 
-int main(void)
+
+void 
+test_int_sll_inserts(void)
 {
 	sll_t sll;
 
@@ -65,7 +67,44 @@ int main(void)
 	assert(sll.tail == NULL);
 	assert(sll._size == 0);
 
-	printf("SLL Insert tests successful\n");
+}
 
+void 
+test_struct_sll_inserts(void)
+{
+	sll_t sll;
+
+	sll_node_t *node;
+	struct test_struct a = {1, 'A'}, b = {2, 'B'}, c = {3, 'C'}, *test_list[] = {&a , &b, &c};
+	struct test_struct d = {4, 'D'};
+
+	sll_init(&sll);
+
+	assert ((sll.head) == NULL);
+	assert ((sll.tail) == NULL);
+
+	sll_insert_at_front (&sll, (void *)&a);
+	sll_insert_at_end (&sll, (void *) &c);
+	sll_insert_at_position (&sll, (void *)&b, 1);
+
+	assert (compareStruct (sll.head->data, &a) == 0);
+	assert (compareStruct (sll.tail->data, &c) == 0);
+
+	assert (sll_length(&sll) == 3);
+	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareStruct);
+
+	sll_insert_after (&sll, (void *)&d, (void *)'C', compareCharKey);
+	assert (sll_length(&sll) == 4);
+	assert (compareStruct (sll.head->data, &a) == 0);
+	assert (compareStruct (sll.tail->data, &d) == 0);
+}
+
+
+int main(void)
+{
+	test_int_sll_inserts();
+	test_struct_sll_inserts();
+
+	printf("SLL Insert tests successful\n");
 	return 0;
 }

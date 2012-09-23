@@ -4,10 +4,6 @@
 #define INSERT_AT_END	2
 #define INSERT_AT_POS	3
 
-int sll_insert_node_at_front (sll_t *sll, sll_node_t *node);
-int sll_insert_node_at_end (sll_t *sll, sll_node_t *node);
-int sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos);
-
 /** Helper function to insert into the SLL */
 static int
 _sll_insert (sll_t *sll, int cmd, void *data, int pos)
@@ -150,3 +146,36 @@ sll_insert_at_position (sll_t *sll, void *data, int pos)
 	return _sll_insert(sll, INSERT_AT_POS, data, pos);
 }
 
+
+/** 
+ * Insert new_node next to the node specified
+ *   Doesn't check if the node belongs to the SLL or not
+ */
+void 
+sll_insert_after_node (sll_t *sll, sll_node_t *node, sll_node_t *new_node)
+{
+	sll->_size++;
+
+	new_node->next = node->next;
+	node->next = new_node;
+
+	if (new_node->next == NULL)
+		sll->tail = new_node;
+}
+
+/** Insert after node matching key in SLL */
+int 
+sll_insert_after (sll_t *sll, void *data, void *key, comparefn compare)
+{
+	sll_node_t *node = sll_find_containing_node (sll, key, compare);
+	sll_node_t *new_node = NULL;
+
+	if ( !node )
+		return -1;
+
+	new_node = sll_node_create (data);
+
+	sll_insert_after_node (sll, node, new_node);
+
+	return 0;
+}
