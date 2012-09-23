@@ -5,7 +5,7 @@ int main(void)
 	sll_t sll;
 
 	sll_node_t *node;
-	int *test_list[] = {30, 10, 120, 20, 100, 122, 101, 140, 150};
+	int *test_list[] = {-15, -10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150};
 
 	sll_init(&sll);
 
@@ -42,7 +42,21 @@ int main(void)
 	assert ((int)(sll.head->data) == 30);
 	assert ((int)(sll.tail->data) == 150);
 
-	verify_list_against_sll (&sll, (void **)test_list, 9, compareInts);
+	/** Now start with -pos */
+
+	sll_insert_at_position(&sll, (void *) (-1), -1);  /** [30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll_length(&sll) == 10); 
+
+	sll_insert_at_position(&sll, (void *) (-10), -10);  /** [-10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll_length(&sll) == 11); 
+
+	sll_insert_at_position(&sll, (void *) (-15), -15);  /** [-15, -10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll_length(&sll) == 12); 
+
+	assert ((int)(sll.head->data) == (-15));
+	assert ((int)(sll.tail->data) == 150);
+
+	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareInts);
 
 	/** Test destory too, while at it */
 	sll_destroy(&sll, NULL);
