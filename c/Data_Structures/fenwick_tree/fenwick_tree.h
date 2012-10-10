@@ -1,8 +1,6 @@
 #ifndef __FENWICK_TREE_H_
 #define __FENWICK_TREE_H_
 
-#include <common.h>
-
 typedef struct fenwick_tree_s
 {
 	int *_tree; /** Store fenwick tree */

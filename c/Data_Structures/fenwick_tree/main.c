@@ -1,4 +1,5 @@
 #include <fenwick_tree.h>
+#include <stdio.h>
 
 int main(void)
 {
