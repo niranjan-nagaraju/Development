@@ -1,4 +1,15 @@
 #include <fenwick_tree.h>
+#include <errno.h>
+#include <stdlib.h>
+
+static int 
+fenwick_tree_read (fenwick_tree_t *ftree, int idx);
+
+static void 
+fenwick_tree_update (fenwick_tree_t *ftree, int idx, int val);
+
+static int 
+fenwick_tree_construct_from_event_frequencies (fenwick_tree_t *ftree, int ftable[], int ftable_len);
 
 /** Initialize fenwick tree 
  *   Reset size and tree 
@@ -14,17 +25,18 @@ void fenwick_tree_init (fenwick_tree_t *ftree)
 
 	ftree->read = fenwick_tree_read;
 	ftree->update = fenwick_tree_update;
-	ftree->construct = fenwick_tree_construct;
+	ftree->construct = fenwick_tree_construct_from_event_frequencies;
 }
 
 /** Read cumulative frequency for event at index idx */
-int 
+static int 
 fenwick_tree_read (fenwick_tree_t *ftree, int idx)
 {
 	int sum = 0;
-
+/**
 	if (!ftree || !ftree->_tree || idx >= ftree->_size)
 		return -1;
+*/
 
 	while (idx > 0) {
 		sum += ftree->_tree[idx];
@@ -35,11 +47,13 @@ fenwick_tree_read (fenwick_tree_t *ftree, int idx)
 }
 
 /** Update cumulative frequency for event at index idx */
-void 
+static void 
 fenwick_tree_update (fenwick_tree_t *ftree, int idx, int val)
 {
+	/**
 	if (!ftree || !ftree->_tree || idx >= ftree->_size)
-		return -1;
+		return;
+*/
 
 	/** FIXME: 
 	 *   Technically we should be able to update with
@@ -56,7 +70,7 @@ fenwick_tree_update (fenwick_tree_t *ftree, int idx, int val)
 }
 
 
-int 
+static int 
 fenwick_tree_construct_from_event_frequencies (fenwick_tree_t *ftree, int ftable[], int ftable_len)
 {
 	int i = 0;
@@ -67,17 +81,18 @@ fenwick_tree_construct_from_event_frequencies (fenwick_tree_t *ftree, int ftable
 	if ( !_tree)
 		return -ENOMEM;
 
-	for (i=1; i<; i++)
-		update(tmp_tree, 17, i, f[i]);
+	for (i=0; i<ftable_len; i++)
+		_tree[i] = 0;
+
+	ftree->_tree = _tree;
+	ftree->_size = ftable_len;
+
+	for (i=1; i<ftable_len; i++)
+		fenwick_tree_update(ftree, i, ftable[i]);
+
+	for(i=0; i<ftable_len; i++)
+		printf("%d ", _tree[i]);
 
 	return 0;
 }
 
-int main(void)
-{
-	printf("%d\n", read(13));
-
-	construct_tree_from_frequencies(f);
-
-	return 0;
-}
