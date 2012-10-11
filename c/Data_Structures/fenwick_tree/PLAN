@@ -1,0 +1,6 @@
+Fenwick Tree functions:
+	Read (idx) => Cumulative frequency for event idx
+	Update(idx) => Change frequency for event idx
+	Construct => Construct fenwick tree from a frequency table
+	frequency(idx) => Calculate frequency for event idx { = CF(idx) - CF(idx-1) = read(idx) - read(idx-1) }
+	Find => Index with cumulative frequency
