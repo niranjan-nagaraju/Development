@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 
 #define REMOVE_AT_FRONT 1
 #define REMOVE_AT_END	2

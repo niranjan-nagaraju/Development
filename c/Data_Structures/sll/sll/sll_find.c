@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 
 /** Return a SLL node containing key */
 sll_node_t *

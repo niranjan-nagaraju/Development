@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 #include <stdio.h>
 
 /** Print the SLL, what else? ;) */

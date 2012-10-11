@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 
 #define INSERT_AT_FRONT	1
 #define INSERT_AT_END	2

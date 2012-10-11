@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 
 
 /** Initialize Singly Linked List */

@@ -10,16 +10,7 @@ typedef struct sll_s {
 	int _size;
 } sll_t;
 
-#include <sll_find.h>
-#include <sll_insert.h>
-#include <sll_print.h>
-#include <sll_remove.h>
-
-#include <errno.h>
-
-/** Core operations */
+/** The only public interface that can be called outside of sll object */
 void sll_init (sll_t *sll);
-int sll_length (sll_t *sll);
-void sll_destroy (sll_t *sll, deallocatorfn deallocate);
 
 #endif // _SLL_H_

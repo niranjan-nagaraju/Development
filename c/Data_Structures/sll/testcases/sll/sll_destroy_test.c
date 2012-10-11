@@ -1,4 +1,4 @@
-#include <sll.h>
+#include <sll_internal.h>
 #include <common.h>
 #include <stdlib.h>
 #include <assert.h>
