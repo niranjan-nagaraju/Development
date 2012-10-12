@@ -1,12 +1,9 @@
-#include <sll_internal.h>
+#include <sll.h>
+#include <sll_remove.h>
 
 #define REMOVE_AT_FRONT 1
 #define REMOVE_AT_END	2
 #define REMOVE_AT_POS	3
-
-sll_node_t *sll_remove_node_at_front (sll_t *sll);
-sll_node_t *sll_remove_node_at_end (sll_t *sll);
-sll_node_t *sll_remove_node_at_position (sll_t *sll, int pos);
 
 /** Helper function to remove from the SLL */
 static void *
