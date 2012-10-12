@@ -14,46 +14,46 @@ test_int_sll_inserts(void)
 	assert ((sll.head) == NULL);
 	assert ((sll.tail) == NULL);
 
-	sll_insert_at_front(&sll, (void *)20); /** [20] */ 
-	assert(sll_length(&sll) == 1);
+	sll.insert_at_front(&sll, (void *)20); /** [20] */ 
+	assert(sll.length(&sll) == 1);
 
-	sll_insert_at_front(&sll, (void *)10); /** [10, 20] */
-	assert(sll_length(&sll) == 2);
+	sll.insert_at_front(&sll, (void *)10); /** [10, 20] */
+	assert(sll.length(&sll) == 2);
 
-	sll_insert_at_front(&sll, (void *)30); /** [30, 10, 20] */
-	assert(sll_length(&sll) == 3);
+	sll.insert_at_front(&sll, (void *)30); /** [30, 10, 20] */
+	assert(sll.length(&sll) == 3);
 
-	sll_insert_at_end(&sll, (void *) 100); /** [30, 10, 20, 100] */
-	assert(sll_length(&sll) == 4);
+	sll.insert_at_end(&sll, (void *) 100); /** [30, 10, 20, 100] */
+	assert(sll.length(&sll) == 4);
 	
-	sll_insert_at_position(&sll, (void *) 120, 2); /** [30, 10, 120, 20, 100] */
-	assert(sll_length(&sll) == 5);
+	sll.insert_at_position(&sll, (void *) 120, 2); /** [30, 10, 120, 20, 100] */
+	assert(sll.length(&sll) == 5);
 
-	sll_insert_at_position(&sll, (void *) 101, 15);  /** Insert at end  ==> [30, 10, 120, 20, 100, 101] */
-	assert(sll_length(&sll) == 6); 
+	sll.insert_at_position(&sll, (void *) 101, 15);  /** Insert at end  ==> [30, 10, 120, 20, 100, 101] */
+	assert(sll.length(&sll) == 6); 
 
-	sll_insert_at_position(&sll, (void *) 122, 5); /** [30, 10, 120, 20, 100, 122, 101] */
-	assert(sll_length(&sll) == 7); 
+	sll.insert_at_position(&sll, (void *) 122, 5); /** [30, 10, 120, 20, 100, 122, 101] */
+	assert(sll.length(&sll) == 7); 
 
-	sll_insert_at_end(&sll, (void *) 140); /** [30, 10, 120, 20, 100, 122, 101, 140] */
-	assert(sll_length(&sll) == 8); 
+	sll.insert_at_end(&sll, (void *) 140); /** [30, 10, 120, 20, 100, 122, 101, 140] */
+	assert(sll.length(&sll) == 8); 
 
-	sll_insert_at_position(&sll, (void *) 150, 8);  /** [30, 10, 120, 20, 100, 122, 101, 140, 150] */
-	assert(sll_length(&sll) == 9); 
+	sll.insert_at_position(&sll, (void *) 150, 8);  /** [30, 10, 120, 20, 100, 122, 101, 140, 150] */
+	assert(sll.length(&sll) == 9); 
 
 	assert ((int)(sll.head->data) == 30);
 	assert ((int)(sll.tail->data) == 150);
 
 	/** Now start with -pos */
 
-	sll_insert_at_position(&sll, (void *) (-1), -1);  /** [30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
-	assert(sll_length(&sll) == 10); 
+	sll.insert_at_position(&sll, (void *) (-1), -1);  /** [30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll.length(&sll) == 10); 
 
-	sll_insert_at_position(&sll, (void *) (-10), -10);  /** [-10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
-	assert(sll_length(&sll) == 11); 
+	sll.insert_at_position(&sll, (void *) (-10), -10);  /** [-10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll.length(&sll) == 11); 
 
-	sll_insert_at_position(&sll, (void *) (-15), -15);  /** [-15, -10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
-	assert(sll_length(&sll) == 12); 
+	sll.insert_at_position(&sll, (void *) (-15), -15);  /** [-15, -10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150] */
+	assert(sll.length(&sll) == 12); 
 
 	assert ((int)(sll.head->data) == (-15));
 	assert ((int)(sll.tail->data) == 150);
@@ -61,7 +61,7 @@ test_int_sll_inserts(void)
 	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareInts);
 
 	/** Test destory too, while at it */
-	sll_destroy(&sll, NULL);
+	sll.destroy(&sll, NULL);
 
 	assert(sll.head == NULL);
 	assert(sll.tail == NULL);
@@ -83,18 +83,18 @@ test_struct_sll_inserts(void)
 	assert ((sll.head) == NULL);
 	assert ((sll.tail) == NULL);
 
-	sll_insert_at_front (&sll, (void *)&a);
-	sll_insert_at_end (&sll, (void *) &c);
-	sll_insert_at_position (&sll, (void *)&b, 1);
+	sll.insert_at_front (&sll, (void *)&a);
+	sll.insert_at_end (&sll, (void *) &c);
+	sll.insert_at_position (&sll, (void *)&b, 1);
 
 	assert (compareStruct (sll.head->data, &a) == 0);
 	assert (compareStruct (sll.tail->data, &c) == 0);
 
-	assert (sll_length(&sll) == 3);
+	assert (sll.length(&sll) == 3);
 	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareStruct);
 
-	sll_insert_after (&sll, (void *)&d, (void *)'C', compareCharKey);
-	assert (sll_length(&sll) == 4);
+	sll.insert_after (&sll, (void *)&d, (void *)'C', compareCharKey);
+	assert (sll.length(&sll) == 4);
 	assert (compareStruct (sll.head->data, &a) == 0);
 	assert (compareStruct (sll.tail->data, &d) == 0);
 }

@@ -20,10 +20,10 @@ int main(void)
 	
 	sll_init(&sll);
 
-	sll_insert_at_front(&sll, (void *)&test_obj);
-	sll_insert_at_front(&sll, (void *)&test_obj2);
+	sll.insert_at_front(&sll, (void *)&test_obj);
+	sll.insert_at_front(&sll, (void *)&test_obj2);
 
-	sll_print(&sll, printStruct);
+	sll.print(&sll, printStruct);
 
 	return 0;
 }

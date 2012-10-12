@@ -1,4 +1,4 @@
-#include <sll_internal.h>
+#include <sll.h>
 #include <common.h>
 #include <stdlib.h>
 #include <assert.h>
@@ -15,17 +15,17 @@ int main (void)
 	for (i=0; i<10; i++) {
 		int *tmp = allocator(sizeof(int));
 		*tmp = i;
-		sll_insert_at_front (&sll, (void *)tmp);
+		sll.insert_at_front (&sll, (void *)tmp);
 	}
 
-	assert(sll._size == 10);
+	assert(sll.length(&sll) == 10);
 
 	/** verify what the memory allocator says about allocated blocks */
 	assert(mem_blocks_counter == 10);
 
-	sll_destroy(&sll, deallocator);
+	sll.destroy(&sll, deallocator);
 
-	assert(sll._size == 0);
+	assert(sll.length(&sll) == 0);
 	assert(sll.head == NULL);
 	assert(sll.tail == NULL);
 
