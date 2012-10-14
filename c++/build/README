@@ -10,7 +10,7 @@ HOWTO use this Makefile system
 
 0. cd <library_folder>; touch Makefile
 
-1. Start with defining the C Development root relative to the current directory
+1. Start with defining the C++ Development root relative to the current directory
 # C Development root
 BASE_DIR=../..
 
@@ -31,15 +31,15 @@ LIBNAME_MT = <library_mt>
 TESTDIR = <testcases>
 
 6. Source files needed to compile the library 
-SRC = a.c b.c c.c
-SRC += d.c
+SRC = a.cpp b.cpp c.cpp
+SRC += d.cpp
 
 7. Define sourcefiles for testcases that need the single-threaded library 
-TEST_SRC = test_a/test_a.c
-TEST_SRC += test_b/test_b.c 
+TEST_SRC = test_a/test_a.cpp
+TEST_SRC += test_b/test_b.cpp
 
 8. Define sourcefiles for testcases that need the multi-threaded library
-TEST_SRC_MT = test_a/test_a_mt.c 
+TEST_SRC_MT = test_a_mt/test_a_mt.cpp
 
 9. Linker flags for dependent libraries to compile this library
 LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread

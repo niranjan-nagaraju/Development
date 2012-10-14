@@ -1,8 +1,8 @@
-# C Build system
+# C++ Build System
 
 CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
-CC = gcc
+CC = g++
 
 # switch output directory based on Operating System
 # Pointers are truncated to 32-bit in Snow Leopard for some weird reason. So switch to -m32
@@ -61,11 +61,11 @@ debug:	# Enable debug symbols and profiling
 obj:	# Create Object files for library source files
 	mkdir -p $(OUTDIR)/obj
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/obj/`basename $$file`.o; \
+	 	$(CC) $$file.cpp $(CFLAGS) $(INCLUDE) -c -fPIC -o $(OUTDIR)/obj/`basename $$file`.o; \
 	done
 ifdef LIBNAME_MT # Build multi-threaded object files
 	for file in $(FILENAMES); do\
-	 	$(CC) $$file.c $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/obj/`basename $${file}`_mt.o; \
+	 	$(CC) $$file.cpp $(CFLAGS) $(INCLUDE) -D_MULTI_THREADED_ -c -fPIC -o $(OUTDIR)/obj/`basename $${file}`_mt.o; \
 	done
 endif
 
@@ -98,11 +98,11 @@ endif
 tests_common_obj:
 	mkdir -p $(OUTDIR)/obj
 	for f in $(TEST_COMMON_FILENAMES); do \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -c -o $(OUTDIR)/obj/`basename $$f`.o $(INCLUDE) $(TEST_INCLUDE) ; \
+		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -c -o $(OUTDIR)/obj/`basename $$f`.o $(INCLUDE) $(TEST_INCLUDE) ; \
 	done
 ifdef LIBNAME_MT # Build multi-threaded object files
 	for f in $(TEST_COMMON_FILENAMES); do \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -D_MULTI_THREADED_ -c -o $(OUTDIR)/obj/`basename $$f`_mt.o $(INCLUDE) $(TEST_INCLUDE); \
+		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -D_MULTI_THREADED_ -c -o $(OUTDIR)/obj/`basename $$f`_mt.o $(INCLUDE) $(TEST_INCLUDE); \
 	done
 endif
 
@@ -110,12 +110,12 @@ endif
 tests: tests_common_obj	# Compile testcases with Single-threaded libraries
 	for f in $(TEST_SRC_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS); \
+		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS); \
 	done
 ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
 	for f in $(TEST_SRC_MT_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.c $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS_MT); \
+		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS_MT) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS_MT); \
 	done
 endif
 
