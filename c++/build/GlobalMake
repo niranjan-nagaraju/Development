@@ -1,6 +1,6 @@
 # C++ Build System
 
-CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+#CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
 CC = g++
 
@@ -110,7 +110,7 @@ endif
 tests: tests_common_obj	# Compile testcases with Single-threaded libraries
 	for f in $(TEST_SRC_FILES); do \
 		mkdir -p $(OUTDIR)/`dirname $$f`; \
-		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(INCLUDE) $(LDFLAGS) $(TEST_INCLUDE) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS); \
+		$(CC) $(TESTDIR)/$$f.cpp $(CFLAGS) -o $(OUTDIR)/$$f $(LIBS) $(TEST_INCLUDE) $(INCLUDE) $(LDFLAGS) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS); \
 	done
 ifdef LIBNAME_MT # Compile testcases with multi-threaded libraries
 	for f in $(TEST_SRC_MT_FILES); do \
