@@ -3,8 +3,8 @@
 
 int main(void)
 {
-	boolean a = true;
-	boolean b = false;
+	boolean a = TRUE;
+	boolean b = FALSE;
 
 	printf ("True:%d, False:%d\n", a, b);
 	return 0;

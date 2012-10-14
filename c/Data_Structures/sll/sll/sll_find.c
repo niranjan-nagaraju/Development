@@ -45,7 +45,7 @@ sll_find_node (sll_t *sll, sll_node_t *node)
 
 	/** SLL doesn't exist or is empty */
 	if (!sll || !sll->head)
-		return false;
+		return FALSE;
 
 	tmp = sll->head;
 	
@@ -53,5 +53,5 @@ sll_find_node (sll_t *sll, sll_node_t *node)
 		tmp = tmp->next;
 	}
 
-	return ((tmp == NULL)? false : true);
+	return ((tmp == NULL)? FALSE : TRUE);
 }

@@ -1,5 +1,5 @@
 typedef enum 
 {
-	false,
-	true
+	FALSE,
+	TRUE
 } boolean;
