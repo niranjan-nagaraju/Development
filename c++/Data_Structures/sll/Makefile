@@ -1,12 +1,13 @@
 BASE_DIR=../..
 C_BASE_DIR = ../../../c
+C_LIB_DIR = $(C_BASE_DIR)/Data_Structures/sll/
 
 # Include files
-INCLUDE += -I$(C_BASE_DIR)/Data_Structures/sll/node -I$(C_BASE_DIR)/Data_Structures/sll/sll -I$(C_BASE_DIR)/common
+INCLUDE += -I$(C_LIB_DIR)/node -I$(C_LIB_DIR)/sll -I$(C_BASE_DIR)/common
 
 # Library filenames, _MT for multi-threaded version
-LIBNAME=cppsll
-LIBNAME_MT=sll_mt
+LIBNAME=sll+
+LIBNAME_MT=sll+_mt
 
 # Source directory for the library
 #SRC = node/sll_node.cpp
@@ -38,9 +39,9 @@ TEST_SRC = test_core.c
 #TEST_SRC_MT += node/sll_node_print_test_mt.c
 
 # library flags
-LDFLAGS += -lpthread -L$(C_BASE_DIR)/common/$(OUTDIR) -lcommon -L$(C_BASE_DIR)/Data_Structures/sll/$(OUTDIR) -lsll 
+LDFLAGS += -lpthread -L$(C_BASE_DIR)/common/$(OUTDIR) -lcommon 
 
 # Test library flags; testcases will be linked with both LDFLAGS and TEST_LDFLAGS
-TEST_LDFLAGS += -L./out/mac -lcppsll # -L$(BASE_DIR)/test_common/$(OUTDIR) -ltest_common 
+TEST_LDFLAGS += -L./out/mac -lsll+ -L$(C_LIB_DIR)/out/mac -lsll # -L$(BASE_DIR)/test_common/$(OUTDIR) -ltest_common 
 
 include $(BASE_DIR)/build/GlobalMake
