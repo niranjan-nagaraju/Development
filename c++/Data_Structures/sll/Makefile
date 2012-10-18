@@ -42,6 +42,6 @@ TEST_SRC = test_core.c
 LDFLAGS += -lpthread -L$(C_BASE_DIR)/common/$(OUTDIR) -lcommon 
 
 # Test library flags; testcases will be linked with both LDFLAGS and TEST_LDFLAGS
-TEST_LDFLAGS += -L./out/mac -lsll+ -L$(C_LIB_DIR)/out/mac -lsll # -L$(BASE_DIR)/test_common/$(OUTDIR) -ltest_common 
+TEST_LDFLAGS += -L$(OUTDIR) -lsll+ -L$(C_LIB_DIR)/$(OUTDIR) -lsll # -L$(BASE_DIR)/test_common/$(OUTDIR) -ltest_common 
 
 include $(BASE_DIR)/build/GlobalMake
