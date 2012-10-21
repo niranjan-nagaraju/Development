@@ -8,8 +8,8 @@ CC = g++
 # Pointers are truncated to 32-bit in Snow Leopard for some weird reason. So switch to -m32
 ifeq ($(OS), Darwin) # MAC OS X
 	OUTDIR = out/mac
-	CFLAGS += -m32
-	LDFLAGS += -m32
+	#CFLAGS += -m32
+	#LDFLAGS += -m32
 else
 ifeq ($(OS), Linux) # Linux
 	OUTDIR = out/linux
