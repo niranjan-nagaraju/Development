@@ -1,18 +1,15 @@
-from MD5 import MD5
+from MD5_naive import MD5
 
 def run_test (inText):
 	inText = map( lambda x: ord(x), inText )
-	md = MD5()
-	md.update(inText, len(inText))
-	md.finish()
-	print md
+	MD5(inText, len(inText)).printFormattedDigest()
 
 def runTestCases ():
 	test_inputs = [ "", "a", "abc", "message digest", "abcdefghijklmnopqrstuvwxyz", \
 					"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", \
 					"12345678901234567890123456789012345678901234567890123456789012345678901234567890", \
 					"The quick brown fox jumps over the lazy dog" \
-					] 
+					]
 
 	for i in test_inputs:
 		run_test (i)
@@ -32,5 +29,4 @@ d174ab98d277d9f5a5611c2c9f419d9f
 MD5 ("12345678901234567890123456789012345678901234567890123456789012345678901234567890") = 57edf4a22be3c955ac49da2e2107b67a
 MD5 ("The quick brown fox jumps over the lazy dog"): 9e107d9d372bb6826bd81d3542a419d6
 '''
-
 
