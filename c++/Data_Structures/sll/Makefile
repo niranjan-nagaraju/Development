@@ -3,7 +3,7 @@ C_BASE_DIR = ../../../c
 C_LIB_DIR = $(C_BASE_DIR)/Data_Structures/sll/
 
 # Include files
-INCLUDE += -I$(C_LIB_DIR)/node -I$(C_LIB_DIR)/sll -I$(C_BASE_DIR)/common
+INCLUDE += -I$(PWD)/sll -I$(C_LIB_DIR)/node -I$(C_LIB_DIR)/sll -I$(C_BASE_DIR)/common
 
 # Library filenames, _MT for multi-threaded version
 LIBNAME=sll+
@@ -11,7 +11,7 @@ LIBNAME_MT=sll+_mt
 
 # Source directory for the library
 #SRC = node/sll_node.cpp
-SRC += sll.cpp
+SRC += sll/sll.cpp
 #SRC += sll/sll_insert.cpp sll/sll_remove.cpp sll/sll_print.cpp
 #SRC += sll/sll_find.cpp
 
