@@ -1,6 +1,6 @@
-#ifndef _SLL_NODE_H
+#ifndef _SLL_NODE_H_
 
-#define _SLL_NODE_H
+#define _SLL_NODE_H_
 
 #include <stdlib.h>
 #include <errno.h>
