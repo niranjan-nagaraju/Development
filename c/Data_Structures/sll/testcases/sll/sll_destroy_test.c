@@ -6,10 +6,8 @@
 
 int main (void)
 {
-	sll_t sll;
+	sll_t sll = SLL_INITIALIZER;
 	int i;
-
-	sll_init (&sll);
 
 	/** Insert 10 integers created by the memory allocator */
 	for (i=0; i<10; i++) {

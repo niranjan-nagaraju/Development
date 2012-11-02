@@ -4,12 +4,10 @@
 void 
 test_int_sll_inserts(void)
 {
-	sll_t sll;
+	sll_t sll = SLL_INITIALIZER;
 
 	sll_node_t *node;
 	int *test_list[] = {-15, -10, 30, 10, 120, 20, 100, 122, 101, 140, -1, 150};
-
-	sll_init(&sll);
 
 	assert ((sll.head) == NULL);
 	assert ((sll.tail) == NULL);

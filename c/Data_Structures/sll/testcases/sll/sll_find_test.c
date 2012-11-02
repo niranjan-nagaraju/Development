@@ -7,11 +7,9 @@
 void 
 test_int_sll_find(void)
 {
-	sll_t sll;
+	sll_t sll = SLL_INITIALIZER;
 	int i;
 	sll_node_t *node;
-
-	sll_init(&sll);
 
 	for (i=1; i<11; i++) {
 		sll.insert_at_front (&sll, (void *)i);

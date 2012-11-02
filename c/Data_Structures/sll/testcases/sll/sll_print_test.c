@@ -14,12 +14,10 @@ void printStruct (void *object)
 
 int main(void)
 {
-	sll_t sll;
+	sll_t sll = SLL_INITIALIZER;
 
 	struct test_struct test_obj = {42, 'Z'}, test_obj2 = {120, 'a'};
 	
-	sll_init(&sll);
-
 	sll.insert_at_front(&sll, (void *)&test_obj);
 	sll.insert_at_front(&sll, (void *)&test_obj2);
 

@@ -5,10 +5,8 @@
 
 int main (void)
 {
-	sll_t sll;
+	sll_t sll = SLL_INITIALIZER;
 	int i = 0;
-
-	sll_init(&sll);
 
 	/** Check graceful return for underflow conditions */
 	i = (int)sll.remove_at_front(&sll);
