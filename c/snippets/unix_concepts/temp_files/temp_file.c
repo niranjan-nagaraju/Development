@@ -8,7 +8,6 @@ int main(void)
 {
 	int tmp_fd;
 	char buf[10];
-	int len;
 	char temp_filename[] = "./temp_file.XXXXXX";
 
 	tmp_fd = mkstemp(temp_filename);
