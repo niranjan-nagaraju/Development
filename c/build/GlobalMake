@@ -53,10 +53,18 @@ exe:
 	$(CC) $(SRC) $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $(OUTDIR)/$(EXE)
 
 opt:	# Optimize libraries
+ifdef EXE
+	make "CFLAGS=$(CFLAGS) -O2" exe
+else
 	make "CFLAGS=$(CFLAGS) -O2 " libs tests
+endif
 
 debug:	# Enable debug symbols and profiling
+ifdef EXE
+	make "CFLAGS=$(CFLAGS) -g -Wall" exe
+else
 	make "CFLAGS=$(CFLAGS) -g -Wall " libs tests
+endif
 
 obj:	# Create Object files for library source files
 	mkdir -p $(OUTDIR)/obj
