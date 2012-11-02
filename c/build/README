@@ -63,8 +63,9 @@ include $(BASE_DIR)/build/GlobalMake
 	$ make debug
 	  to compile both testcases and library with gdb flags
 	*OR*
-	$ make opt
+	$ make opt  
 	  to compile both testcases and library with -O2
+  PS: Just "make" without any targets will also build using "make opt"
 
 
 ******************************************
@@ -75,12 +76,17 @@ include $(BASE_DIR)/build/GlobalMake
 
 1. Define SRC, EXE, INCLUDE, CFLAGS, LDFLAGS
 
+2. Use 
+	$ make
+	  which is equivalent to "make opt"
+	*OR*
+	$ make debug
+	  to compile with debug symbols
+
 *********************
  CURRENT LIMITATIONS
 *********************
 
-I. The variables cannot be changed w/o manually editing the GlobalMake
+I. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake
 
-II. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake
-
-III. Won't compile under windows
+II. Won't compile under windows
