@@ -47,4 +47,19 @@ struct sll_s {
 /** The only public interface that can be called outside of sll object */
 void sll_init (sll_t *sll);
 
+sll_t sll_lib_initialized_object (void);
+
+/** An initialized SLL object so the user doesn't have to call sll_init() */
+sll_t _sll_lib_initialized_sll_object;
+
+/** Although, this trick won't work on global SLL objects
+ *  Wonder how PTHREAD_MUTEX_INITIALIZER works
+ *
+ *  I could technically in-line macro-define the whole sll_init() here
+ *  But everytime sll_init changes, this has to be updated
+ *  Also, the private implementation functions will have to be exported here
+ *  Not worth the effort :)
+ */
+#define SLL_INITIALIZER sll_lib_initialized_object();
+
 #endif // _SLL_H_

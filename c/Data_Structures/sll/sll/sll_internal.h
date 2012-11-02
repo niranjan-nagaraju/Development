@@ -11,4 +11,5 @@
 /** Core operations */
 int sll_length (sll_t *sll);
 void sll_destroy (sll_t *sll, deallocatorfn deallocate);
+
 #endif
