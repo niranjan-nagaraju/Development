@@ -34,6 +34,9 @@ int main (void)
 	/** NULL the first byte, so the other process can exit */
 	*shm_mem = 0;
 
+	/* Detach from  the shared memory segment. */ 
+	shmdt (shm_mem);
+
 	exit(0);
 }
 

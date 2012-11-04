@@ -39,5 +39,9 @@ int main (void)
 
 	printf("Other process NULLed shared memory\n");
 
+	/* Detach and Deallocate the shared memory segment. */ 
+	shmdt (shm_mem);
+	shmctl (seg_id, IPC_RMID, 0);
+
 	exit(0);
 }
