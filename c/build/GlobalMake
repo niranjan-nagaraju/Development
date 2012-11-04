@@ -56,14 +56,18 @@ opt:	# Optimize libraries
 ifdef EXE
 	make "CFLAGS=$(CFLAGS) -O2" exe
 else
+ifdef LIBNAME
 	make "CFLAGS=$(CFLAGS) -O2 " libs tests
+endif
 endif
 
 debug:	# Enable debug symbols and profiling
 ifdef EXE
 	make "CFLAGS=$(CFLAGS) -g -Wall" exe
 else
+ifdef LIBNAME
 	make "CFLAGS=$(CFLAGS) -g -Wall " libs tests
+endif
 endif
 
 obj:	# Create Object files for library source files
