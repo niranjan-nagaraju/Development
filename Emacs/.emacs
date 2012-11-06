@@ -1,17 +1,29 @@
+(setq journal-file "~/journal.org")
 
-(setq org-todo-keywords (quote ((sequence "TODO(t!)" "NEXT(n!)" "STARTED(S)" "|" "DONE(d!/!)" "COMPLETED(l!)" "VERIFIED(v)")
-                                (sequence "FIXED(F@/!)" "WAITING(w@/!)" "PROGRESS(p)" "|" "CANCELLED(c@/!)" "FAILED(f!)")
+(defun start-journal-entry ()
+  "Start a new journal entry."
+  (interactive)
+  (find-file journal-file)
+  (goto-line 4)
+  (org-insert-heading)
+  (org-insert-time-stamp (current-time) t)
+  (open-line 2)
+  (insert " "))
+
+(global-set-key (kbd "C-c j") 'start-journal-entry)
+
+(setq org-todo-keywords (quote ((sequence "TODO(t!)" "NEXT(n!)" "|" "DONE(d!/!)" "SCHEDULED(S@/!)")
+                                (sequence "STARTED(T)" "COMPLETED(l)" "WAITING(w@/!)" "PROGRESS(p)" "|" "CANCELLED(c@/!)" "FAILED(f!)")
                                 (sequence "SUCCEEDED(s)" "DEFERRED(D)" "|" "APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)")
-                                (sequence "OPEN(O!)" "PENDING(P@/!)" "WORKAROUND(W@/!)" "|" "NONISSUE(N)" "NOTREPRODUCIBLE(r)" "CLOSED(C!)"))))
+                                (sequence "OPEN(O!)" "|" "CLOSED(C!)"))))
 
 (setq org-todo-keyword-faces
       (quote (("TODO"      :foreground "red"          :weight bold)
               ("NEXT"      :foreground "blue"         :weight bold)
-              ("STARTED"    :foreground "blue"         :weight bold)
               ("DONE"      :foreground "forest green" :weight bold)
-              ("COMPLETED"      :foreground "forest green" :weight bold)
-              ("VERIFIED"  :foreground "forest green" :weight bold)
-              ("FIXED"   :foreground "green"       :weight bold)
+              ("SCHEDULED" :foreground "blue"         :weight bold)
+              ("STARTED"   :foreground "green"        :weight bold)
+	      ("COMPLETED"   :foreground "blue"        :weight bold)
               ("WAITING"   :foreground "yellow"       :weight bold)
               ("PROGRESS"  :foreground "blue"         :weight bold)
               ("CANCELLED" :foreground "orangered"    :weight bold)
@@ -21,12 +33,11 @@
               ("APPROVED"  :foreground "forest green" :weight bold)
               ("EXPIRED"   :foreground "olivedrab1"   :weight bold)
               ("REJECTED"  :foreground "olivedrab"    :weight bold)
-              ("OPEN"      :foreground "red"      :weight bold)
-              ("PENDING"   :foreground "magenta"      :weight bold)
-              ("WORKAROUND" :foreground "orangered"      :weight bold)
-              ("NONISSUE"  :foreground "forest green"      :weight bold)
-              ("NOTREPRODUCIBLE"      :foreground "forest green"      :weight bold)
-	      ("CLOSED"    :foreground "forest green" :weight bold))))
+              ("OPEN"      :foreground "magenta"      :weight bold)
+              ("CLOSED"    :foreground "forest green" :weight bold))))
+
+;;Cycle the buffers
+(global-set-key [(control tab)] 'bs-cycle-next)
 
 ;;  Avoid the annoying startup message.
 (setq inhibit-startup-message t)
@@ -50,12 +61,30 @@
 ;;
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Always show the toolbar
-(tool-bar-mode)
+;; Never show the toolbar
+(tool-bar-mode 0)
 
-;; Enable Ido-mode always
+;; Ido mode on
 (ido-mode t)
+(custom-set-variables
+  ;; custom-set-variables was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ )
+(custom-set-faces
+  ;; custom-set-faces was added by Custom.
+  ;; If you edit it by hand, you could mess it up, so be careful.
+  ;; Your init file should contain only one such instance.
+  ;; If there is more than one, they won't work right.
+ '(org-level-3 ((t (:inherit outline-6))))
+ '(org-level-4 ((t (:inherit outline-3))))
+ '(org-level-5 ((t (:inherit outline-5))))
+ '(org-level-6 ((t (:inherit outline-4)))))
 
-
-;; Kill current buffer without confirmation, unless its modified.
+;; Kill current buffer without confirmation, unless its modified
 (global-set-key "\C-xk" 'kill-this-buffer)
+
+
+;; visua-line mode wrap
+(global-visual-line-mode t)
