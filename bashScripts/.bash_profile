@@ -1,11 +1,27 @@
+# Create a directory if it doesn't exist and change to it
 function cdf() {
 	mkdir -p $1 && cd $1
 }
 
+# Move up <x> levels, or just one level if no level specified.
+function ..(){
+    if [ -z $1 ]
+    then
+        cd ..
+    else
+      for i in `seq $1`
+        do
+            cd ..                                                                                                                                                                                                                                                              
+        done
+    fi
+}
+
+# chmod +x
 function cx() {
 	chmod +x "$@"
 }
 
+# chmod -x
 function c-x() {
 	chmod -x "$@"
 }
