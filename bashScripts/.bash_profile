@@ -3,7 +3,7 @@ function cdf() {
 	mkdir -p $1 && cd $1
 }
 
-# Move up <x> levels, or just one level if no level specified.
+# Move up <x> levels, or just one level if no level specified
 function ..(){
     if [ -z $1 ]
     then
