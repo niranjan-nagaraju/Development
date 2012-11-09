@@ -9,12 +9,16 @@ function ..(){
     then
         cd ..
     else
+       _dir_path=
       for i in `seq $1`
         do
-            cd ..                                                                                                                                                                                                                                                              
+           _dir_path=${_dir_path}../
         done
+        echo "cd ${_dir_path}"
+        cd ${_dir_path}                                                                                                                                                                                                                                                        
     fi
 }
+
 
 # chmod +x
 function cx() {
