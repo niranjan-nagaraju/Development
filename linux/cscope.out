@@ -1,0 +1,56 @@
+cscope 15 /Volumes/Storage/Development/linux               0000000391
+	@Kernel Programming/hello-1.c
+
+3 
+	~<lšux/moduË.h
+>
+
+4 
+	~<lšux/k”Ãl.h
+>
+
+7 
+	$š™_moduË
+()
+
+9 
+	`´štk
+("<1>Hello world 1.\n");
+
+13 
+	}
+}
+
+16 
+	$þ—nup_moduË
+()
+
+18 
+	`´štk
+(
+KERN_ALERT
+ "Goodbye world 1.\n");
+
+19 
+	}
+}
+
+	@Kernel Programming/nothing.c
+
+1 
+	~<lšux/moduË.h
+>
+
+3 
+MODULE_LICENSE
+("Dual BSD/GPL");
+
+	@
+1
+.
+1
+/usr/include
+2
+58
+Kernel Programming/hello-1.c
+Kernel Programming/nothing.c
