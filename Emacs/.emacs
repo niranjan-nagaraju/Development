@@ -56,7 +56,7 @@
 ;;
 (fset 'yes-or-no-p 'y-or-n-p)
 
-;; Always show the toolbar
+;; Never show the toolbar
 (tool-bar-mode 0)
 
 ;; Enable Ido-mode always
