@@ -1,0 +1,5 @@
+Introduction to Monads, Lazy evaluation and splitting of IO and processing
+Source:
+http://www.haskell.org/haskellwiki/Haskell_IO_for_Imperative_Programmers
+
+4 Program snippets to get input lines from stdin and print the length of each line
