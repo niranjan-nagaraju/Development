@@ -5,6 +5,7 @@
      static int block; \
      block++; \
      __test(a,b,&block); \
+      printf("%d: %s ", __LINE__, __FUNCTION__); \
      })
 
 
