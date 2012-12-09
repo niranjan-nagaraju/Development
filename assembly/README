@@ -1,5 +1,9 @@
 Assembly Makefile
 
 To build:
-	Use make asrc=<asm>
+	opt:
+		make asrc=<asm> [opt] -- default
+	debug:
+		make asrc=<asm> debug
+
 
