@@ -6,8 +6,8 @@ char buf[12];
 
 int main(void)
 {
-    printf("%d\n", cookie);
     gets(buf);
+    // AAAAAAAAAAAADCBA should cause the print
     
     if (cookie == 0x41424344)
         printf("Stack overflown\n");
