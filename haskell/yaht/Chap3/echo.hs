@@ -2,7 +2,7 @@ module Main
 	where
 
 import Control.Monad
-import IO
+import System.IO
 
 main = do
 	hSetBuffering stdin LineBuffering
