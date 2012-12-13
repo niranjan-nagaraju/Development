@@ -5,10 +5,10 @@
 import Control.Monad
 
 maxInList :: [Integer] -> Integer
-maxInList [] = 0
 maxInList mylist = 
-	foldl max tmpMax mylist
-	where tmpMax = (head mylist) 
+	foldl max tmpMax mylist -- Repeatedly compare tmpMax and mylist[i]
+	where tmpMax = 0 -- return 0 on empty list
+    -- (head mylist)  -- tmpMax = mylist[0]
 
 main = do
 	n <- readLn

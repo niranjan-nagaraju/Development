@@ -1,9 +1,12 @@
 module AskForWords
 	where
 
-import IO
+-- import Control.IO
 import Data.Char
 
+{-- Get words and output upper case --}
+
+{-- Accept lines from stdin until a blank line is encountered --}
 askForWords :: IO [String]
 askForWords = do
 	word <- getLine
