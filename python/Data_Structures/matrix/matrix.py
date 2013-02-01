@@ -6,21 +6,22 @@ class Matrix:
 		self.matrix = []
 
 		# If the row is not specified, treat it as an empty matrix
-		if rows == None:
+		if not rows:
 			self.rows = self.cols = 0
 			return
 	
 		# When column is not specified, Create a square matrix with row x row dimensions
-		if cols ==  None: # Square matrix
+		if not cols: # Square matrix
 			self.cols = rows
 
 		# No contents specified for matrix OR the input matrix is not a list
-		if (matrix == None) or (not isinstance(matrix, list)):
+		if (not matrix) or (not isinstance(matrix, list)):
 			return
 		
 		if isinstance(matrix[0], list):	# We have a proper 2D list
 			self.matrix = matrix
 		else: # it's a flattened 1D list
+			# TODO: Use list comprehension
 			for i in range(0, rows):
 				self.matrix.append([])	# open new row
 				for j in range(0, cols):
@@ -33,48 +34,81 @@ class Matrix:
 				": " + str(self.matrix)
 
 
+	# Return a deep copy of the current matrix
+	def copy(self):
+		return Matrix(self.rows, self.cols, self.matrx[:])
+
+	
+	# Check if two matrices are identical
+	def __eq__(self, other):
+		if (self.rows != other.rows) or (self.cols != other.cols):
+			return False
+
+		return self.matrix == other.matrix	
+
+
+	# Verify Compatibility for addition/subtraction
+	@staticmethod
+	def add_compatible(m1, m2):
+		# Matrix addition is not defined if the rows and columns don't match
+		if (m1.rows != m2.rows or m1.cols != m2.cols):
+			return False
+		
+		if not m1 or not m2:
+			return False
+
+		return True
+
+	# Verify Compatibility for multiplication
+	@staticmethod
+	def mult_compatible(m1, m2):
+		# Matrix multiplication is only defined if the columns of lhs matrix == rows of rhs matrix
+		if (self.cols != other.rows):
+			return False
+
+		if not m1 or not m2:
+			return False
+
+		return True
+
+
+	# Add 2 matrices
 	def __add__ (self, other):
-        #
-        # TODO: Implementation Change 
-        #   sum_matrix = copy(m1)
-        #   sum_matrix += m2
+		# TODO: Use exceptions for corner conditions and cleaner code
 
-        # Matrix addition is not defined if the rows and columns don't match
-		if (self.rows != other.rows or self.cols != other.cols):
+		# Check compatibility before adding
+		if not Matrix.add_compatible(self, other):
 			return None
 
-		if (self.matrix == None or other.matrix == None):
-			return None
+		# Store a copy of current matrix into the result matrix
+		sum_matrix = self.copy()
 
-        # Create an empty matrix to hold the sum
-		sum_matrix = Matrix(self.rows, self.cols)
-
+		# Add the elements from the rhs matrix
 		for i in range(0, self.rows):
-			sum_matrix.matrix.append([])
 			for j in range(0, self.cols):
-				sum_matrix.matrix[i].append(self.matrix[i][j] + other.matrix[i][j])
+				sum_matrix.matrix[i][j] += other.matrix[i][j]
 
 		return sum_matrix
 
 
 	def __sub__(self, other):
-		if (self.rows != other.rows and self.cols != other.cols):
+		# TODO: Use exceptions for corner conditions and cleaner code
+
+		# Check compatibility before subtracting
+		if not Matrix.add_compatible(self, other):
 			return None
 
-		if (self.matrix == None or other.matrix == None):
-			return None
-
-		diff_matrix = Matrix(self.rows, self.cols)
+		# Store a copy of current matrix into the result matrix
+		diff_matrix = self.copy()
 		for i in range(0, self.rows):
-			diff_matrix.matrix.append([])
 			for j in range(0, self.cols):
-				diff_matrix.matrix[i].append(self.matrix[i][j] - other.matrix[i][j])
+				diff_matrix.matrix[i][j] -= other.matrix[i][j]
 
 		return diff_matrix
 
 
 	def __mul__(self, other):
-		if (self.cols != other.rows):
+		if not Matrix.mult_compatible(self, other):
 			return None
 
 		# A:mxp, B:pxn, A.B: mxn
