@@ -35,10 +35,11 @@ def construct_bit (f):
 	return tmp_tree
 	
 
-f = [0, 1, 0, 2, 1, 1, 3, 0, 4, 2, 5, 2, 2, 3, 1, 0, 2]
+if __name__ == "__main__":
+    f = [0, 1, 0, 2, 1, 1, 3, 0, 4, 2, 5, 2, 2, 3, 1, 0, 2]
 
-cf = cumulative_frequency(f)
-tree = construct_bit(f) # [0, 1, 1, 2, 4, 1, 4, 0, 12, 2, 7, 2, 11, 3, 4, 0, 29]
+    cf = cumulative_frequency(f)
+    tree = construct_bit(f) # [0, 1, 1, 2, 4, 1, 4, 0, 12, 2, 7, 2, 11, 3, 4, 0, 29]
 
-if read_bit (tree, 13) == cf[13] == 26:
-	print 'CF Tests success'
+    if read_bit (tree, 13) == cf[13] == 26:
+        print 'CF Tests success'
