@@ -1,4 +1,6 @@
-from Data_Structures.matrix.matrix import *
+from matrix import *
+
+# Test matrix init and __str__ in print
 
 m1 = Matrix(3, 2, [1,2,3,4,5,6])
 print "From Flatlist: ", m1

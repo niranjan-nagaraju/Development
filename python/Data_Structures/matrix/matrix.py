@@ -1,14 +1,20 @@
-#!/usr/bin/python
 
 class Matrix:
 	def __init__(self, rows=None, cols=None, matrix=None):
 		self.rows = rows
 		self.cols = cols
 		self.matrix = []
-		
+
+		# If the row is not specified, treat it as an empty matrix
+		if rows == None:
+			self.rows = self.cols = 0
+			return
+	
+		# When column is not specified, Create a square matrix with row x row dimensions
 		if cols ==  None: # Square matrix
 			self.cols = rows
 
+		# No contents specified for matrix OR the input matrix is not a list
 		if (matrix == None) or (not isinstance(matrix, list)):
 			return
 		
@@ -28,13 +34,21 @@ class Matrix:
 
 
 	def __add__ (self, other):
-		if (self.rows != other.rows and self.cols != other.cols):
+        #
+        # TODO: Implementation Change 
+        #   sum_matrix = copy(m1)
+        #   sum_matrix += m2
+
+        # Matrix addition is not defined if the rows and columns don't match
+		if (self.rows != other.rows or self.cols != other.cols):
 			return None
 
 		if (self.matrix == None or other.matrix == None):
 			return None
 
+        # Create an empty matrix to hold the sum
 		sum_matrix = Matrix(self.rows, self.cols)
+
 		for i in range(0, self.rows):
 			sum_matrix.matrix.append([])
 			for j in range(0, self.cols):
