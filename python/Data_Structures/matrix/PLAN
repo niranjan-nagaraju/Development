@@ -1,0 +1,18 @@
+Matrix:
+  operations:
+	add
+	sub
+	mult
+		cross-product
+		dot-product
+	transpose
+	Identity:
+		getIdentity(mxn)
+		isIdentity(matrix)
+	determinant
+	inverse
+	lower_triangular_matrix
+	upper_triangular_matrix
+	Strassen's multiplication
+
+
