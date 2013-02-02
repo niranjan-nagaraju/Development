@@ -1,3 +1,6 @@
+'''
+	Implement Matrix Operations for use with hill-cipher and other matrix based crypto-primitives
+'''
 
 class Matrix:
 	def __init__(self, rows=None, cols=None, matrix=None):
@@ -21,11 +24,37 @@ class Matrix:
 		if isinstance(matrix[0], list):	# We have a proper 2D list
 			self.matrix = matrix
 		else: # it's a flattened 1D list
-			# TODO: Use list comprehension
-			for i in range(0, rows):
-				self.matrix.append([])	# open new row
-				for j in range(0, cols):
-					self.matrix[i].append(matrix[i*cols+j])
+			# Not enough elements in the specified matrix
+			if len(matrix) != self.rows*self.cols:
+				return
+
+			# Use list comprehension to 'fold' into a 2D list
+			# [matrix[0:cols], matrix[cols:2*cols], ....]
+			self.matrix = [[matrix[i:i+self.cols] for i in range(0, self.rows*self.cols, self.cols)]
+
+	
+	# Check if the matrix is empty
+	def empty(self):
+		return (not self.matrix)
+
+
+	# Return a deep copy of the current matrix
+	def copy(self):
+		return Matrix(self.rows, self.cols, self.matrx[:])
+
+
+	# Return a matrix constructed from a list (1d or 2d)
+	@classmethod
+	def fromList (cls, rows=None, cols=None, mlist=None):
+		return cls(rows, cols, mlist)
+
+	
+	# Return a matrix constructed from a list of tuples
+	@classmethod
+	def fromListOfTuples(cls, listOfTuples):
+		# TODO: Implement 
+		# (Tuples don't need explicit rows/colums.. Get it from len)
+		return None 
 
 
 	# Prepare formatted string for print()
@@ -33,18 +62,18 @@ class Matrix:
 		return str(self.rows) + "x" + str(self.cols) + \
 				": " + str(self.matrix)
 
-
-	# Return a deep copy of the current matrix
-	def copy(self):
-		return Matrix(self.rows, self.cols, self.matrx[:])
-
 	
 	# Check if two matrices are identical
 	def __eq__(self, other):
-		if (self.rows != other.rows) or (self.cols != other.cols):
-			return False
+		# If we are comparing against another matrix, compare rows, cols and elements in the matrix
+		if isinstance(other, Matrix):
+			if (self.rows != other.rows) or (self.cols != other.cols):
+				return False
+			return self.matrix == other.matrix	
 
-		return self.matrix == other.matrix	
+		# If we are comparing against another list (assumed to be 2D), compare only the elements in the matrix
+		if isinstance(other, list):
+			return self.matrix == other
 
 
 	# Verify Compatibility for addition/subtraction
@@ -54,75 +83,81 @@ class Matrix:
 		if (m1.rows != m2.rows or m1.cols != m2.cols):
 			return False
 		
-		if not m1 or not m2:
-			return False
-
 		return True
 
-	# Verify Compatibility for multiplication
-	@staticmethod
-	def mult_compatible(m1, m2):
-		# Matrix multiplication is only defined if the columns of lhs matrix == rows of rhs matrix
-		if (self.cols != other.rows):
-			return False
+	
+	# Helper function to add or subtract 2 matrices
+	def __add_or_sub__ (self, other, addsubfn)
+		# TODO: Use exceptions for corner conditions and cleaner code
 
-		if not m1 or not m2:
-			return False
+		if self.empty() or other.empty():
+			return None
 
-		return True
+		# Check compatibility before adding/subtracting
+		if not Matrix.add_compatible(self, other):
+			return None
+
+		# Add/subtract the elements from the rhs matrix
+		result_matrix[i][j] = [ [addsubfn(a[i][j], b[i][j]) for j in range(self.cols)] for i in range(self.rows) ]
+
+		return result_matrix
 
 
 	# Add 2 matrices
 	def __add__ (self, other):
-		# TODO: Use exceptions for corner conditions and cleaner code
-
-		# Check compatibility before adding
-		if not Matrix.add_compatible(self, other):
-			return None
-
-		# Store a copy of current matrix into the result matrix
-		sum_matrix = self.copy()
-
-		# Add the elements from the rhs matrix
-		for i in range(0, self.rows):
-			for j in range(0, self.cols):
-				sum_matrix.matrix[i][j] += other.matrix[i][j]
-
-		return sum_matrix
+		return __add_or_sub__ (self, other, int.__add__) # Pass integer addition function to add/sub
 
 
+	# Subtract 2 matrices
 	def __sub__(self, other):
-		# TODO: Use exceptions for corner conditions and cleaner code
-
-		# Check compatibility before subtracting
-		if not Matrix.add_compatible(self, other):
-			return None
-
-		# Store a copy of current matrix into the result matrix
-		diff_matrix = self.copy()
-		for i in range(0, self.rows):
-			for j in range(0, self.cols):
-				diff_matrix.matrix[i][j] -= other.matrix[i][j]
-
-		return diff_matrix
+		return __add_or_sub__ (self, other, int.__sub__) # Pass integer subtraction function to add/sub
 
 
-	def __mul__(self, other):
-		if not Matrix.mult_compatible(self, other):
+	# Calculate dot-product of a matrix (Scalar multiplication)
+	def dot_product(self, multiplier):
+		return [ [a[i][j]*multiplier for j in range(self.cols)] for i in range(self.rows) ]
+
+
+	# Verify Compatibility for vector product
+	@staticmethod
+	def vector_prod_compatible(m1, m2):
+		# Matrix multiplication is only defined if the columns of lhs matrix == rows of rhs matrix
+		return (m1.cols == m2.rows):
+
+	
+	# Calculate vector product of two matrices (Cross-product)
+	def vector_product(self, other):
+		if not vector_prod_compatible(self, other):
 			return None
 
 		# A:mxp, B:pxn, A.B: mxn
-		prod_matrix = Matrix(self.rows, other.cols)
+		# Create a zero-matrix of mxn dimensions
+		prod_matrix = Matrix(self.rows, other.cols, [0]*(self.rows * other.cols))
 
 		for i in range(0, prod_matrix.rows):
-			prod_matrix.matrix.append([])	# prepare empty rows
 			for j in range(0, prod_matrix.cols):
-				prod_matrix.matrix[i].append(0)	# Create column j and set it to 0 -> matrix[i][j] = 0
+				# set matrix[i][j] = 0 in product matrix
+				prod_matrix[i][j] = 0
 				for k in range(0, self.cols):
 					prod_matrix.matrix[i][j] += (self.matrix[i][k] * other.matrix[k][j])
 
 		return prod_matrix
 
+
+	# Multiply 2 matrices
+	# Dot product if rhs is an integer
+	# Vector product, otherwise
+	def __mul__(self, other):
+		if self.empty() or other.empty():
+			return None
+
+		if isinstance(other, int):
+			return self.dot_product(other)
+		elif isinstance(other, Matrix):
+			return self.vector_product(other)
+
+
+	# Check if current matrix is an Identity Matrix
 	def isIdentity(self):
 		# All Identity matrices are square matrices
 		if self.cols != self.rows:
