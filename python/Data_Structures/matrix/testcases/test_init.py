@@ -2,18 +2,32 @@ from matrix import *
 
 # Test matrix init and __str__ in print
 
-m1 = Matrix(3, 2, [1,2,3,4,5,6])
-print "From Flatlist: ", m1
+m1 = Matrix(3, 2, [[1,2], [3,4], [5,6]])
+assert (m1.rows == 3)
+assert (m1.cols == 2)
+assert (m1.matrix == [[1,2],[3,4],[5,6]])
 
-m2 = Matrix(3, 2, [[1,2], [3,4], [5,6]])
-print "From matrix: ", m2
+m2 = Matrix(2, 3, [1,2,3,4,5,6])
+assert (m2.rows == 2)
+assert (m2.cols == 3)
+assert (m2.matrix == [[1,2,3],[4,5,6]])
 
 m3 = Matrix()
-print "Default No args: ", m3
+assert (m3.rows == 0)
+assert (m3.cols == 0)
+assert (m3.matrix == [])
 
 m4 = Matrix(4, 5)
-print "No matrix elements: ", m4
+assert (m4.rows == 4)
+assert (m4.cols == 5)
+assert (m4.matrix == [])
 
-m5 = Matrix(4)
-print "No matrix columns, Square empty matrix: ", m5
+m5 = Matrix(4, matrix=range(1, 17))
+assert (m5.rows == 4)
+assert (m5.cols == 4)
+assert (m5.matrix == [range(i,i+4) for i in range(1, 17, 4)])
 
+m6 = Matrix(4, matrix=(1,2)) # Should trigger TypeError
+m7 = Matrix(4, matrix=1.04)  # Should trigger TypeError
+
+print 'All Init testcases.... PASSED'

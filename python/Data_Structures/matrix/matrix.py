@@ -2,6 +2,8 @@
 	Implement Matrix Operations for use with hill-cipher and other matrix based crypto-primitives
 '''
 
+import sys
+
 class Matrix:
 	def __init__(self, rows=None, cols=None, matrix=None):
 		self.rows = rows
@@ -16,21 +18,28 @@ class Matrix:
 		# When column is not specified, Create a square matrix with row x row dimensions
 		if not cols: # Square matrix
 			self.cols = rows
+		try:
+			if isinstance(matrix[0], list):	# We have a proper 2D list
+				self.matrix = matrix
+			elif isinstance(matrix, list): # it's a flattened 1D list
+				# Not enough elements in the specified matrix
+				if len(matrix) != self.rows*self.cols:
+					return
 
-		# No contents specified for matrix OR the input matrix is not a list
-		if (not matrix) or (not isinstance(matrix, list)):
-			return
-		
-		if isinstance(matrix[0], list):	# We have a proper 2D list
-			self.matrix = matrix
-		else: # it's a flattened 1D list
-			# Not enough elements in the specified matrix
-			if len(matrix) != self.rows*self.cols:
+				# Use list comprehension to 'fold' into a 2D list
+				# [matrix[0:cols], matrix[cols:2*cols], ....]
+				self.matrix = [ matrix[i:i+self.cols] for i in range(0, len(matrix), self.cols) ]
+			elif isinstance(matrix[0], tuple):
+				# TODO: Implement tuple based import
 				return
-
-			# Use list comprehension to 'fold' into a 2D list
-			# [matrix[0:cols], matrix[cols:2*cols], ....]
-			self.matrix = [[matrix[i:i+self.cols] for i in range(0, self.rows*self.cols, self.cols)]
+		except AttributeError:
+			print 'AttributeErrror: matrix is not a list'
+		except TypeError:
+			print 'TypeError: matrix was an incompatible type'
+		except IndexError:
+			print 'IndexError: matrix was passed []'
+		except:
+			print 'Unexpected error occured while creating matrix:', sys.exc_info()[0]
 
 	
 	# Check if the matrix is empty
@@ -40,7 +49,7 @@ class Matrix:
 
 	# Return a deep copy of the current matrix
 	def copy(self):
-		return Matrix(self.rows, self.cols, self.matrx[:])
+		return Matrix(self.rows, self.cols, self.matrix[:])
 
 
 	# Return a matrix constructed from a list (1d or 2d)
@@ -87,7 +96,7 @@ class Matrix:
 
 	
 	# Helper function to add or subtract 2 matrices
-	def __add_or_sub__ (self, other, addsubfn)
+	def __add_or_sub__ (self, other, addsubfn):
 		# TODO: Use exceptions for corner conditions and cleaner code
 
 		if self.empty() or other.empty():
@@ -122,7 +131,7 @@ class Matrix:
 	@staticmethod
 	def vector_prod_compatible(m1, m2):
 		# Matrix multiplication is only defined if the columns of lhs matrix == rows of rhs matrix
-		return (m1.cols == m2.rows):
+		return (m1.cols == m2.rows)
 
 	
 	# Calculate vector product of two matrices (Cross-product)
@@ -159,43 +168,18 @@ class Matrix:
 
 	# Check if current matrix is an Identity Matrix
 	def isIdentity(self):
-		# All Identity matrices are square matrices
-		if self.cols != self.rows:
-			return False
+		# NOTE: All Identity matrices are square matrices
+		return self.matrix == Matrix.getIdentityMatrix(self.rows)
 
-		for i in range(0, self.rows):
-			for j in range(0, self.rows):
-				if (i != j):
-					if (self.matrix[i][j] != 0):
-						return False
-				else:
-					if (self.matrix[i][i] != 1):
-						return False
 
-		return True
-
+	# Create and return an Identity matrix with the specified dimension
+	# NOTE: All Identity matrices are square matrices
 	@staticmethod
 	def getIdentityMatrix(order):
-		iMatrix = Matrix(order)
+		id_matrix = [ [1 if i==j else 0 for j in range(order)] for i in range(order) ]
+		return Matrix(rows=order, matrix=id_matrix)
 
-		for i in range(0, order):	# Prepare the rows
-			iMatrix.matrix.append([])
-			for j in range(0, order):
-				iMatrix.matrix[i].append(0)	# Initialize all columns of current row to zero
-		
-		for i in range(0, order):
-			iMatrix.matrix[i][i] = 1
-
-		return iMatrix
 
 	# Transpose a matrix, rows <-> columns
 	def transpose(self):
-		tm = Matrix(self.cols, self.rows)
-
-		for i in range(0, tm.rows):
-			tm.matrix.append([])	# Prepare the rows
-			for j in range(0, tm.cols):
-				tm.matrix[i].append(self.matrix[j][i])
-
-		return tm
-
+		[[row[j] for row in self.matrix] for j in range(self.cols)]
