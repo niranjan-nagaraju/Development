@@ -8,38 +8,21 @@ class Matrix:
 	def __init__(self, rows=None, cols=None, matrix=None):
 		self.rows = rows
 		self.cols = cols
-		self.matrix = []
 
-		# If the row is not specified, treat it as an empty matrix
+		# If the row is not specified, Create an empty matrix
 		if not rows:
-			self.rows = self.cols = 0
+			# Reset matrix, rows and columns
+			self.rows, self.cols = 0,0
+			self.matrix = []
 			return
 	
 		# When column is not specified, Create a square matrix with row x row dimensions
 		if not cols: # Square matrix
 			self.cols = rows
-		try:
-			if isinstance(matrix[0], list):	# We have a proper 2D list
-				self.matrix = matrix
-			elif isinstance(matrix, list): # it's a flattened 1D list
-				# Not enough elements in the specified matrix
-				if len(matrix) != self.rows*self.cols:
-					return
 
-				# Use list comprehension to 'fold' into a 2D list
-				# [matrix[0:cols], matrix[cols:2*cols], ....]
-				self.matrix = [ matrix[i:i+self.cols] for i in range(0, len(matrix), self.cols) ]
-			elif isinstance(matrix[0], tuple):
-				# TODO: Implement tuple based import
-				return
-		except AttributeError:
-			print 'AttributeErrror: matrix is not a list'
-		except TypeError:
-			print 'TypeError: matrix was an incompatible type'
-		except IndexError:
-			print 'IndexError: matrix was passed []'
-		except:
-			print 'Unexpected error occured while creating matrix:', sys.exc_info()[0]
+		# Construct matrix elements from a 1d/2d list
+		self.fromList(matrix)
+	
 
 	
 	# Check if the matrix is empty
@@ -47,23 +30,44 @@ class Matrix:
 		return (not self.matrix)
 
 
+
 	# Return a deep copy of the current matrix
 	def copy(self):
 		return Matrix(self.rows, self.cols, self.matrix[:])
 
 
-	# Return a matrix constructed from a list (1d or 2d)
-	@classmethod
-	def fromList (cls, rows=None, cols=None, mlist=None):
-		return cls(rows, cols, mlist)
 
-	
-	# Return a matrix constructed from a list of tuples
-	@classmethod
-	def fromListOfTuples(cls, listOfTuples):
-		# TODO: Implement 
-		# (Tuples don't need explicit rows/colums.. Get it from len)
-		return None 
+	# Return a matrix constructed from a list (1d or 2d)
+	def fromList (self, matrix=None):
+		self.matrix = []
+
+		# None/[] passed to matrix
+		if not matrix:
+			# Reset matrix, rows and columns
+			self.rows, self.cols = 0,0
+			return
+
+		try:
+			if isinstance(matrix[0], list):	# We have a proper 2D list
+				self.matrix = matrix
+			elif isinstance(matrix, list): # it's a flattened 1D list
+				# Not enough elements in the specified matrix
+				if len(matrix) != self.rows*self.cols:
+					# Reset matrix, rows and columns
+					self.rows, self.cols = 0,0
+					return
+
+				# Use list comprehension to 'fold' into a 2D list
+				# [matrix[0:cols], matrix[cols:2*cols], ....]
+				self.matrix = [ matrix[i:i+self.cols] for i in range(0, len(matrix), self.cols) ]
+			else: # Tuple/another list like structure passed
+				# Reset matrix, rows and columns
+				self.rows, self.cols = 0,0
+				return
+		except: # AttributeError, TypeError - Just reset the matrix, rows and columns
+			# print 'Unexpected error occured while creating matrix:', sys.exc_info()[0]
+			self.rows, self.cols = 0,0
+
 
 
 	# Prepare formatted string for print()
@@ -107,19 +111,20 @@ class Matrix:
 			return None
 
 		# Add/subtract the elements from the rhs matrix
-		result_matrix[i][j] = [ [addsubfn(a[i][j], b[i][j]) for j in range(self.cols)] for i in range(self.rows) ]
+		result_matrix = Matrix(self.rows, self.cols)
+		result_matrix.matrix = [ [addsubfn(self.matrix[i][j], other.matrix[i][j]) for j in range(self.cols)] for i in range(self.rows) ]
 
 		return result_matrix
 
 
 	# Add 2 matrices
 	def __add__ (self, other):
-		return __add_or_sub__ (self, other, int.__add__) # Pass integer addition function to add/sub
+		return self.__add_or_sub__ (other, int.__add__) # Pass integer addition function to add/sub
 
 
 	# Subtract 2 matrices
 	def __sub__(self, other):
-		return __add_or_sub__ (self, other, int.__sub__) # Pass integer subtraction function to add/sub
+		return self.__add_or_sub__ (other, int.__sub__) # Pass integer subtraction function to add/sub
 
 
 	# Calculate dot-product of a matrix (Scalar multiplication)

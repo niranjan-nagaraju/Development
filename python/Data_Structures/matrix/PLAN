@@ -14,5 +14,3 @@ Matrix:
 	lower_triangular_matrix
 	upper_triangular_matrix
 	Strassen's multiplication
-
-
