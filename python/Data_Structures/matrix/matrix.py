@@ -19,7 +19,11 @@ class Matrix:
 		# When column is not specified, Create a square matrix with row x row dimensions
 		if not cols: # Square matrix
 			self.cols = rows
-
+		elif not isinstance (cols, int): # Second parameter was not an int, perhaps a list => square matrix
+			self.cols = rows
+			self.fromList(cols)
+			return
+			
 		# Construct matrix elements from a 1d/2d list
 		self.fromList(matrix)
 	
@@ -33,7 +37,9 @@ class Matrix:
 
 	# Return a deep copy of the current matrix
 	def copy(self):
-		return Matrix(self.rows, self.cols, self.matrix[:])
+		m = Matrix(self.rows, self.cols)
+		m.matrix = self.matrix[:]
+		return m
 
 
 
@@ -43,8 +49,6 @@ class Matrix:
 
 		# None/[] passed to matrix
 		if not matrix:
-			# Reset matrix, rows and columns
-			self.rows, self.cols = 0,0
 			return
 
 		try:
@@ -117,9 +121,11 @@ class Matrix:
 		return result_matrix
 
 
+
 	# Add 2 matrices
 	def __add__ (self, other):
 		return self.__add_or_sub__ (other, int.__add__) # Pass integer addition function to add/sub
+
 
 
 	# Subtract 2 matrices
@@ -127,21 +133,26 @@ class Matrix:
 		return self.__add_or_sub__ (other, int.__sub__) # Pass integer subtraction function to add/sub
 
 
+
 	# Calculate dot-product of a matrix (Scalar multiplication)
 	def dot_product(self, multiplier):
-		return [ [a[i][j]*multiplier for j in range(self.cols)] for i in range(self.rows) ]
+		return [ [self.matrix[i][j]*multiplier for j in range(self.cols)] for i in range(self.rows) ]
+
 
 
 	# Verify Compatibility for vector product
-	@staticmethod
-	def vector_prod_compatible(m1, m2):
+	def vector_prod_compatible(self, other):
+		if other.empty():
+			return False
+
 		# Matrix multiplication is only defined if the columns of lhs matrix == rows of rhs matrix
-		return (m1.cols == m2.rows)
+		return (self.cols == other.rows)
+
 
 	
 	# Calculate vector product of two matrices (Cross-product)
 	def vector_product(self, other):
-		if not vector_prod_compatible(self, other):
+		if not self.vector_prod_compatible(other):
 			return None
 
 		# A:mxp, B:pxn, A.B: mxn
@@ -151,18 +162,19 @@ class Matrix:
 		for i in range(0, prod_matrix.rows):
 			for j in range(0, prod_matrix.cols):
 				# set matrix[i][j] = 0 in product matrix
-				prod_matrix[i][j] = 0
+				# prod_matrix[i][j] = 0 -- not reqd
 				for k in range(0, self.cols):
 					prod_matrix.matrix[i][j] += (self.matrix[i][k] * other.matrix[k][j])
 
 		return prod_matrix
 
 
+
 	# Multiply 2 matrices
 	# Dot product if rhs is an integer
 	# Vector product, otherwise
 	def __mul__(self, other):
-		if self.empty() or other.empty():
+		if self.empty():
 			return None
 
 		if isinstance(other, int):
@@ -171,10 +183,12 @@ class Matrix:
 			return self.vector_product(other)
 
 
+
 	# Check if current matrix is an Identity Matrix
 	def isIdentity(self):
 		# NOTE: All Identity matrices are square matrices
 		return self.matrix == Matrix.getIdentityMatrix(self.rows)
+
 
 
 	# Create and return an Identity matrix with the specified dimension
@@ -185,6 +199,29 @@ class Matrix:
 		return Matrix(rows=order, matrix=id_matrix)
 
 
+
 	# Transpose a matrix, rows <-> columns
 	def transpose(self):
-		[[row[j] for row in self.matrix] for j in range(self.cols)]
+		return Matrix(self.cols, self.rows,
+				[[row[j] for row in self.matrix] for j in range(self.cols)])
+
+	
+	# Upper Triangular matrix
+	def upper_triangle(self):
+		# Triangular matrices are always square
+		if self.cols != self.rows:
+			return None
+
+		return Matrix (self.rows, 
+				[ [self.matrix[i][j] if i<=j else 0 for j in range(self.rows)] for i in range(self.rows)])
+
+
+	# Lower Triangular matrix
+	def lower_triangle(self):
+		# Triangular matrices are always square
+		if self.cols != self.rows:
+			return None
+
+		return Matrix (self.rows, 
+				[ [self.matrix[i][j] if i>=j else 0 for j in range(self.rows)] for i in range(self.rows)])
+
