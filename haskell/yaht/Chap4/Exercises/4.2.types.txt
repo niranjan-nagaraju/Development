@@ -1,0 +1,10 @@
+1. snd
+	(a,b) -> a
+2. head
+	[a] -> a
+3. null
+	[a] -> Bool
+4. head.tail
+	[a] -> a
+5. head.head
+	[[a]] -> a
