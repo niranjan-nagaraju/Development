@@ -1,10 +1,4 @@
-module Tuple
-	where
-
-data Tuple a b c d = One a
-				   | Two a b
-				   | Three a b c
-				   | Four a b c d
+import Tuple
 
 {- 
  - 'Maybe' Not required for tuple1, I suppose :), 
@@ -35,8 +29,3 @@ tuple4 (Three a b c	) = Nothing
 tuple4 (Four a b c d) = Just d
 
 
-{- Create four 'Tuple' objects with 1,2,3,4 members -}
-one = One 1
-two = Two 2 "2"
-three = Three 3 "3" '3'
-four = Four 4 "4" '4' 4.0
