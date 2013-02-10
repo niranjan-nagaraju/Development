@@ -1,14 +1,23 @@
 syntax on
 filetype plugin indent on
 colorscheme desert
+
+" Tabs = 4 columns
 set tabstop=4
-set incsearch
 set shiftwidth=4
 set softtabstop=4
+
+" Directly jump to matching prefixes as soon as letters are entered
+set incsearch
+
+" Case-insensitive search
+set ignorecase
+
+" Highlight search string
+set hlsearch
 set ruler
 set ls=2
 set nocompatible
-set hlsearch
 set wrap
 set autoindent
 set textwidth=0
