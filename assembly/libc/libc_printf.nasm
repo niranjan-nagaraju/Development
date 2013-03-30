@@ -25,4 +25,5 @@ main:
 
 section .data
 	message: db "Hello World", 0xA, 0x00  ; "Hello World\n" (Null terminated)
+	mlen	 equ  $-message
 
