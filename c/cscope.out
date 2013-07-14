@@ -1,4 +1,4 @@
-cscope 15 /Volumes/Storage/Development/c               0000439927
+cscope 15 /Volumes/Storage/Development/C -q 0000004767 0000440478
 	@Algorithms/pairs_array_sum/pairs_array_sum/main.c
 
 1 
@@ -12197,6 +12197,1938 @@ a
 	~<¡dio.h
 >
 
+	@frameworks/timer/poll_timer/test/test_multiple_timers.c
+
+1 
+	~<tim”.h
+>
+
+3 
+	sİ”ªds
+
+
+5 
+	ma
+;
+
+6 
+	mb
+;
+
+9 
+	$tim”_â1
+(*
+¬gs
+)
+
+11 
+İ”ªds
+ *
+İs
+ = (İ”ªd *)
+¬gs
+;
+
+12 
+i
+;
+
+13 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+14 
+times
+ = 1;
+
+16 
+i
+=0; i<4; i++) {
+
+17 
+İs
+[
+i
+].
+a
+ += ops[i].a;
+
+18 
+İs
+[
+i
+].
+b
+ += 2*(ops[i].b);
+
+21 
+	`´štf
+("Tim”1 %d -> %d\n", 
+cu¼time
+, 
+times
+++);
+
+22 
+i
+=0; i<4; i++)
+
+23 
+	`´štf
+("(%d, %dè", 
+İs
+[
+i
+].
+a
+, ops[i].
+b
+);
+
+24 
+	`´štf
+("\n");
+
+25 
+	}
+}
+
+27 
+	$tim”_â2
+(*
+¬gs
+)
+
+29 *
+num
+ = (*)
+¬gs
+;
+
+30 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+31 
+times
+ = 1;
+
+33 
+	`´štf
+("Tim”2 %d -> %d Numb” = %d\n", 
+cu¼time
+, 
+times
+++, *
+num
+);
+
+34 *
+num
+ += 10;
+
+35 
+	}
+}
+
+37 
+	$maš
+()
+
+39 
+İ”ªds
+ 
+İs
+[4] = {{1,2}, {2,3}, {3,4}, {4,5}};
+
+40 
+numb”
+ = 5;
+
+41 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+42 
+i
+;
+
+45 
+tim”_t
+ *
+tim”1
+ = 
+	`£t_tim”
+(10, 1, 10, 5, 
+tim”_â1
+, (*)
+İs
+);
+
+48 
+tim”_t
+ *
+tim”2
+ = 
+	`£t_tim”
+(60, 1, 2, 10, 
+tim”_â2
+, (*)(&
+numb”
+));
+
+50 
+	`´štf
+("S¹šgim” © %d\n", 
+cu¼time
+);
+
+52 
+	`¡¬t_tim”
+(
+tim”1
+);
+
+53 
+	`¡¬t_tim”
+(
+tim”2
+);
+
+55 
+	`±h»ad_još
+(
+tim”1
+->
+th»ad
+, 
+NULL
+);
+
+56 
+	`±h»ad_još
+(
+tim”2
+->
+th»ad
+, 
+NULL
+);
+
+58 
+	`´štf
+("Results ofimer 1: \n");
+
+59 
+i
+=0; i<4; i++)
+
+60 
+	`´štf
+("(%d, %dè", 
+İs
+[
+i
+].
+a
+, ops[i].
+b
+);
+
+62 
+	`´štf
+("\nResuÉ oàtim” 2: %d\n", 
+numb”
+);
+
+64 
+	`´štf
+("Exiting\n");
+
+67 
+	}
+}
+
+	@frameworks/timer/poll_timer/test/test_timer.c
+
+1 
+	~<tim”.h
+>
+
+3 
+	$tim”_â
+(*
+¬gs
+)
+
+5 
+i
+ = 1;
+
+7 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+8 
+	`´štf
+("%d Tim”: %d\n", 
+cu¼time
+, 
+i
+++);
+
+9 
+	}
+}
+
+11 
+	$maš
+()
+
+14 
+tim”_t
+ *
+tim”
+ = 
+	`£t_tim”
+(10, 1, 3, 5, 
+tim”_â
+, (*)1);
+
+16 
+	`¡¬t_tim”
+(
+tim”
+);
+
+18 
+	`±h»ad_još
+(
+tim”
+->
+th»ad
+, 
+NULL
+);
+
+20 
+	`´štf
+("Exiting\n");
+
+23 
+	}
+}
+
+	@frameworks/timer/poll_timer/timer.c
+
+1 
+	~<tim”.h
+>
+
+4 
+	$pŞl_tim”
+ (*
+t
+)
+
+6 
+tim”_t
+ *
+tim”
+ = (tim”_ˆ*)
+t
+;
+
+7 
+cu¼time
+;
+
+10 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+13 ià(!
+tim”
+)
+
+14  
+NULL
+;
+
+16 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+18 ià(
+cu¼time
+ >ğ
+tim”
+->
+time_expœes
+) {
+
+19 
+tim”
+->
+	`ÿÎback
+Ñim”->
+¬gs
+);
+
+21 
+tim”
+->
+time_expœes
+ +ğtim”->
+š‹rv®
+;
+
+23 (
+tim”
+->
+cu¼_times
+)++;
+
+26 ià((!
+tim”
+->
+»cu¼’t
+è|| (tim”->
+max_times
+ && (tim”->
+cu¼_times
+ ==imer->max_times))) {
+
+27 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+28  
+NULL
+;
+
+31 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+33 
+	`¦“p
+(
+tim”
+->
+pŞl_š‹rv®
+);
+
+36 
+	`d–‘e_tim”
+(
+tim”
+);
+
+37  
+NULL
+;
+
+38 
+	}
+}
+
+40 
+tim”_t
+ *
+
+41 
+	$£t_tim”
+(
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+)
+
+43 
+tim”_t
+ *
+tim”
+ = (tim”_ˆ*è
+	`m®loc
+((timer_t));
+
+44 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+46 ià(!
+tim”
+)
+
+47  
+NULL
+;
+
+49 ià(!
+š‹rv®
+ || !
+ÿÎback
+) {
+
+50 
+	`ä“
+(
+tim”
+);
+
+51  
+NULL
+;
+
+54 
+	`±h»ad_mu‹x_š™
+(&(
+tim”
+->
+mu‹x
+), 0);
+
+56 
+tim”
+->
+š‹rv®
+ = interval;
+
+57 
+tim”
+->
+time_expœes
+ = 
+cu¼time
+ + 
+š‹rv®
+;
+
+58 
+tim”
+->
+»cu¼’t
+ =„ecurrent;
+
+60 ià(!
+pŞl_š‹rv®
+)
+
+61 
+pŞl_š‹rv®
+ = 1;
+
+63 
+tim”
+->
+max_times
+ = max_times;
+
+64 
+tim”
+->
+pŞl_š‹rv®
+ =…oll_interval;
+
+65 
+tim”
+->
+ÿÎback
+ = callback;
+
+66 
+tim”
+->
+¬gs
+ =‡rgs;
+
+68  
+tim”
+;
+
+69 
+	}
+}
+
+72 
+	$»£t_tim”
+(
+tim”_t
+ *
+tim”
+, 
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+)
+
+74 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+76 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+77 ià(!
+tim”
+) {
+
+78 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+82 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+83 ià(
+š‹rv®
+)
+
+84 
+tim”
+->
+š‹rv®
+ = interval;
+
+86 
+tim”
+->
+time_expœes
+ = 
+cu¼time
+ + 
+š‹rv®
+;
+
+87 
+tim”
+->
+cu¼_times
+ = 0;
+
+90 ià(
+tim”
+->
+»cu¼’t
+ !=„ecurrent)
+
+91 
+tim”
+->
+»cu¼’t
+ =„ecurrent;
+
+93 ià(
+tim”
+->
+max_times
+ != max_times)
+
+94 
+tim”
+->
+max_times
+ = max_times;
+
+96 ià(
+tim”
+->
+pŞl_š‹rv®
+)
+
+97 
+tim”
+->
+pŞl_š‹rv®
+ =…oll_interval;
+
+99 ià(
+tim”
+->
+ÿÎback
+)
+
+100 
+tim”
+->
+ÿÎback
+ = callback;
+
+102 ià(
+tim”
+->
+¬gs
+)
+
+103 
+tim”
+->
+¬gs
+ =‡rgs;
+
+105 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+108 
+	}
+}
+
+111 
+	$d–‘e_tim”
+(
+tim”_t
+ *
+tim”
+)
+
+113 ià(
+tim”
+) {
+
+114 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+115 
+	`ä“
+(
+tim”
+);
+
+116 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+118 
+	}
+}
+
+121 
+	$¡¬t_tim”
+(
+tim”_t
+ *
+tim”
+)
+
+123 
+	`±h»ad_ü—‹
+(&(
+tim”
+->
+th»ad
+), 0, 
+pŞl_tim”
+,imer);
+
+124 
+	}
+}
+
+	@frameworks/timer/poll_timer/timer.h
+
+1 #iâdeà
+__TIMER_H__
+
+
+2 
+	#__TIMER_H__
+
+
+	)
+
+4 
+	~<¡dio.h
+>
+
+5 
+	~<¡dlib.h
+>
+
+6 
+	~<±h»ad.h
+>
+
+7 
+	~<uni¡d.h
+>
+
+9 (*
+	tÿÎback_t
+)(*);
+
+11 
+	stim”_s
+ {
+
+12 
+š‹rv®
+;
+
+13 
+time_expœes
+;
+
+14 
+»cu¼’t
+;
+
+15 
+max_times
+;
+
+16 
+cu¼_times
+;
+
+17 
+pŞl_š‹rv®
+;
+
+19 
+ÿÎback_t
+ 
+ÿÎback
+;
+
+20 *
+¬gs
+;
+
+22 
+±h»ad_mu‹x_t
+ 
+mu‹x
+;
+
+23 
+±h»ad_t
+ 
+th»ad
+;
+
+24 } 
+	ttim”_t
+;
+
+26 
+tim”_t
+ *
+	`£t_tim”
+(
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+);
+
+27 
+	`»£t_tim”
+(
+tim”_t
+ *
+tim”
+, 
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+);
+
+28 
+	`d–‘e_tim”
+(
+tim”_t
+ *
+tim”
+);
+
+30 
+	`¡¬t_tim”
+(
+tim”_t
+ *
+tim”
+);
+
+32 *
+	`pŞl_tim”
+ (*
+t
+);
+
+	@frameworks/timer/threaded_timer/test/test_multiple_timers.c
+
+1 
+	~<th»aded_tim”.h
+>
+
+3 
+	sİ”ªds
+
+
+5 
+	ma
+;
+
+6 
+	mb
+;
+
+9 
+	$tim”_â1
+(*
+¬gs
+)
+
+11 
+İ”ªds
+ *
+İs
+ = (İ”ªd *)
+¬gs
+;
+
+12 
+i
+;
+
+13 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+14 
+times
+ = 1;
+
+16 
+i
+=0; i<4; i++) {
+
+17 
+İs
+[
+i
+].
+a
+ += ops[i].a;
+
+18 
+İs
+[
+i
+].
+b
+ += 2*(ops[i].b);
+
+21 
+	`´štf
+("Tim”1 %d -> %d\n", 
+cu¼time
+, 
+times
+++);
+
+22 
+i
+=0; i<4; i++)
+
+23 
+	`´štf
+("(%d, %dè", 
+İs
+[
+i
+].
+a
+, ops[i].
+b
+);
+
+24 
+	`´štf
+("\n");
+
+25 
+	}
+}
+
+27 
+	$tim”_â2
+(*
+¬gs
+)
+
+29 *
+num
+ = (*)
+¬gs
+;
+
+30 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+31 
+times
+ = 1;
+
+33 
+	`´štf
+("Tim”2 %d -> %d Numb” = %d\n", 
+cu¼time
+, 
+times
+++, *
+num
+);
+
+34 *
+num
+ += 10;
+
+35 
+	}
+}
+
+37 
+	$maš
+()
+
+39 
+İ”ªds
+ 
+İs
+[4] = {{1,2}, {2,3}, {3,4}, {4,5}};
+
+40 
+numb”
+ = 5;
+
+41 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+42 
+i
+;
+
+45 
+tim”_t
+ *
+tim”1
+ = 
+	`£t_tim”
+(10, 1, 10, 5, 
+tim”_â1
+, (*)
+İs
+);
+
+48 
+tim”_t
+ *
+tim”2
+ = 
+	`£t_tim”
+(60, 1, 2, 10, 
+tim”_â2
+, (*)(&
+numb”
+));
+
+50 
+	`´štf
+("S¹šgim” © %d\n", 
+cu¼time
+);
+
+52 
+	`¡¬t_tim”
+(
+tim”1
+);
+
+53 
+	`¡¬t_tim”
+(
+tim”2
+);
+
+55 
+	`±h»ad_još
+(
+tim”1
+->
+th»ad
+, 
+NULL
+);
+
+56 
+	`±h»ad_još
+(
+tim”2
+->
+th»ad
+, 
+NULL
+);
+
+58 
+	`´štf
+("Results ofimer 1: \n");
+
+59 
+i
+=0; i<4; i++)
+
+60 
+	`´štf
+("(%d, %dè", 
+İs
+[
+i
+].
+a
+, ops[i].
+b
+);
+
+62 
+	`´štf
+("\nResuÉ oàtim” 2: %d\n", 
+numb”
+);
+
+64 
+	`´štf
+("Exiting\n");
+
+67 
+	}
+}
+
+	@frameworks/timer/threaded_timer/test/test_timer.c
+
+1 
+	~<th»aded_tim”.h
+>
+
+3 
+	$tim”_â
+(*
+¬gs
+)
+
+5 
+i
+ = 1;
+
+7 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+8 
+	`´štf
+("%d Tim”: %d\n", 
+cu¼time
+, 
+i
+++);
+
+9 
+	}
+}
+
+11 
+	$maš
+()
+
+14 
+tim”_t
+ *
+tim”
+ = 
+	`£t_tim”
+(10, 1, 3, 5, 
+tim”_â
+, (*)1);
+
+16 
+	`¡¬t_tim”
+(
+tim”
+);
+
+18 
+	`±h»ad_još
+(
+tim”
+->
+th»ad
+, 
+NULL
+);
+
+20 
+	`´štf
+("Exiting\n");
+
+23 
+	}
+}
+
+	@frameworks/timer/threaded_timer/threaded_timer.c
+
+1 
+	~<th»aded_tim”.h
+>
+
+4 
+	$pŞl_tim”
+ (*
+t
+)
+
+6 
+tim”_t
+ *
+tim”
+ = (tim”_ˆ*)
+t
+;
+
+7 
+cu¼time
+;
+
+10 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+13 ià(!
+tim”
+)
+
+14  
+NULL
+;
+
+16 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+18 ià(
+cu¼time
+ >ğ
+tim”
+->
+time_expœes
+) {
+
+19 
+tim”
+->
+	`ÿÎback
+Ñim”->
+¬gs
+);
+
+21 
+tim”
+->
+time_expœes
+ +ğtim”->
+š‹rv®
+;
+
+23 (
+tim”
+->
+cu¼_times
+)++;
+
+26 ià((!
+tim”
+->
+»cu¼’t
+è|| (tim”->
+max_times
+ && (tim”->
+cu¼_times
+ ==imer->max_times))) {
+
+27 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+28  
+NULL
+;
+
+31 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+33 
+	`¦“p
+(
+tim”
+->
+pŞl_š‹rv®
+);
+
+36 
+	`d–‘e_tim”
+(
+tim”
+);
+
+37  
+NULL
+;
+
+38 
+	}
+}
+
+40 
+tim”_t
+ *
+
+41 
+	$£t_tim”
+(
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+)
+
+43 
+tim”_t
+ *
+tim”
+ = (tim”_ˆ*è
+	`m®loc
+((timer_t));
+
+44 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+46 ià(!
+tim”
+)
+
+47  
+NULL
+;
+
+49 ià(!
+š‹rv®
+ || !
+ÿÎback
+) {
+
+50 
+	`ä“
+(
+tim”
+);
+
+51  
+NULL
+;
+
+54 
+	`±h»ad_mu‹x_š™
+(&(
+tim”
+->
+mu‹x
+), 0);
+
+56 
+tim”
+->
+š‹rv®
+ = interval;
+
+57 
+tim”
+->
+time_expœes
+ = 
+cu¼time
+ + 
+š‹rv®
+;
+
+58 
+tim”
+->
+»cu¼’t
+ =„ecurrent;
+
+60 ià(!
+pŞl_š‹rv®
+)
+
+61 
+pŞl_š‹rv®
+ = 1;
+
+63 
+tim”
+->
+max_times
+ = max_times;
+
+64 
+tim”
+->
+pŞl_š‹rv®
+ =…oll_interval;
+
+65 
+tim”
+->
+ÿÎback
+ = callback;
+
+66 
+tim”
+->
+¬gs
+ =‡rgs;
+
+68  
+tim”
+;
+
+69 
+	}
+}
+
+72 
+	$»£t_tim”
+(
+tim”_t
+ *
+tim”
+, 
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+)
+
+74 
+cu¼time
+ = 
+	`time
+(
+NULL
+);
+
+76 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+77 ià(!
+tim”
+) {
+
+78 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+82 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+83 ià(
+š‹rv®
+)
+
+84 
+tim”
+->
+š‹rv®
+ = interval;
+
+86 
+tim”
+->
+time_expœes
+ = 
+cu¼time
+ + 
+š‹rv®
+;
+
+87 
+tim”
+->
+cu¼_times
+ = 0;
+
+90 ià(
+tim”
+->
+»cu¼’t
+ !=„ecurrent)
+
+91 
+tim”
+->
+»cu¼’t
+ =„ecurrent;
+
+93 ià(
+tim”
+->
+max_times
+ != max_times)
+
+94 
+tim”
+->
+max_times
+ = max_times;
+
+96 ià(
+tim”
+->
+pŞl_š‹rv®
+)
+
+97 
+tim”
+->
+pŞl_š‹rv®
+ =…oll_interval;
+
+99 ià(
+tim”
+->
+ÿÎback
+)
+
+100 
+tim”
+->
+ÿÎback
+ = callback;
+
+102 ià(
+tim”
+->
+¬gs
+)
+
+103 
+tim”
+->
+¬gs
+ =‡rgs;
+
+105 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+108 
+	}
+}
+
+111 
+	$d–‘e_tim”
+(
+tim”_t
+ *
+tim”
+)
+
+113 ià(
+tim”
+) {
+
+114 
+	`±h»ad_mu‹x_lock
+(&(
+tim”
+->
+mu‹x
+));
+
+115 
+	`ä“
+(
+tim”
+);
+
+116 
+	`±h»ad_mu‹x_uÆock
+(&(
+tim”
+->
+mu‹x
+));
+
+118 
+	}
+}
+
+121 
+	$¡¬t_tim”
+(
+tim”_t
+ *
+tim”
+)
+
+123 
+	`±h»ad_ü—‹
+(&(
+tim”
+->
+th»ad
+), 0, 
+pŞl_tim”
+,imer);
+
+124 
+	}
+}
+
+	@frameworks/timer/threaded_timer/threaded_timer.h
+
+1 #iâdeà
+__TIMER_H__
+
+
+2 
+	#__TIMER_H__
+
+
+	)
+
+4 
+	~<¡dio.h
+>
+
+5 
+	~<¡dlib.h
+>
+
+6 
+	~<±h»ad.h
+>
+
+7 
+	~<uni¡d.h
+>
+
+9 (*
+	tÿÎback_t
+)(*);
+
+11 
+	stim”_s
+ {
+
+12 
+š‹rv®
+;
+
+13 
+time_expœes
+;
+
+14 
+»cu¼’t
+;
+
+15 
+max_times
+;
+
+16 
+cu¼_times
+;
+
+17 
+pŞl_š‹rv®
+;
+
+19 
+ÿÎback_t
+ 
+ÿÎback
+;
+
+20 *
+¬gs
+;
+
+22 
+±h»ad_mu‹x_t
+ 
+mu‹x
+;
+
+23 
+±h»ad_t
+ 
+th»ad
+;
+
+24 } 
+	ttim”_t
+;
+
+26 
+tim”_t
+ *
+	`£t_tim”
+(
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+);
+
+27 
+	`»£t_tim”
+(
+tim”_t
+ *
+tim”
+, 
+š‹rv®
+, 
+»cu¼’t
+, 
+max_times
+, 
+pŞl_š‹rv®
+, 
+ÿÎback_t
+ 
+ÿÎback
+, *
+¬gs
+);
+
+28 
+	`d–‘e_tim”
+(
+tim”_t
+ *
+tim”
+);
+
+30 
+	`¡¬t_tim”
+(
+tim”_t
+ *
+tim”
+);
+
+32 *
+	`pŞl_tim”
+ (*
+t
+);
+
 	@oops/private/private.c
 
 1 
@@ -13961,124 +15893,6 @@ EXIT_FAILURE
 	}
 }
 
-	@snippets/bin_str_pad.c
-
-1 
-	~<¡dio.h
->
-
-2 
-	~<¡dlib.h
->
-
-3 
-	~<¡ršg.h
->
-
-8 
-	$bš_¡r_·d
-(*
-bš_¡r
-, 
-bËn
-, *
-bš_¡r_·dded
-)
-
-10 
-num_z”Ûs
- = 4-
-bËn
- % 4;
-
-11 
-z”o_by‹s
-[ ] = {'0','0','0'};
-
-13 
-	`memıy
-(
-bš_¡r_·dded
-, 
-z”o_by‹s
-, 
-num_z”Ûs
-);
-
-14 
-	`memıy
-(
-bš_¡r_·dded
-+
-num_z”Ûs
-, 
-bš_¡r
-, 
-bËn
-+1);
-
-15 
-	}
-}
-
-17 
-	$maš
-()
-
-19 
-bš_¡r
-[] = "110010011";
-
-20 
-bš_·dded
-[(
-bš_¡r
-) + 3];
-
-22 
-	`bš_¡r_·d
-(
-bš_¡r
-, (bš_¡r)-1, 
-bš_·dded
-);
-
-23 
-	`´štf
-("·dded % ğ%s\n", 
-bš_¡r
-, 
-bš_·dded
-);
-
-25 
-	`bš_¡r_·d
-("101", 3, 
-bš_·dded
-);
-
-26 
-	`´štf
-("·dded % ğ%s\n", "101", 
-bš_·dded
-);
-
-28 
-	`bš_¡r_·d
-("11", 2, 
-bš_·dded
-);
-
-29 
-	`´štf
-("·dded % ğ%s\n", "11", 
-bš_·dded
-);
-
-32 
-	}
-}
-
 	@snippets/exec_cmd_get_results/exec_cmd_get_results.c
 
 7 
@@ -15149,6 +16963,224 @@ puts
 	~<sigÇl.h
 >
 
+	@snippets/static/static_vars_in_block_scopes.c
+
+1 
+	~<¡dio.h
+>
+
+3 
+	#‹¡
+(
+a
+, 
+b
+)\
+
+5 
+block
+; \
+
+6 
+block
+++; \
+
+7 
+	`__‹¡
+(
+a
+,
+b
+,&
+block
+); \
+
+8 
+	`´štf
+("%d: % ", 
+__LINE__
+, 
+__FUNCTION__
+); \
+
+9 })
+
+	)
+
+12 
+	$__‹¡
+(
+a
+, 
+b
+, *
+block
+)
+
+14 
+	`´štf
+("%d %d %°%d\n", 
+a
+, 
+b
+, 
+block
+, *block);
+
+15 
+	}
+}
+
+17 
+	$maš
+()
+
+19 
+i
+ = 0;
+
+22 
+i
+=0; i<10; i++) {
+
+23 
+	`‹¡
+(
+i
+, i+1);
+
+27 
+i
+=10; i<20; i++) {
+
+28 
+	`‹¡
+(
+i
+, i+1);
+
+32 
+	}
+}
+
+	@snippets/strings/bin_str_pad.c
+
+1 
+	~<¡dio.h
+>
+
+2 
+	~<¡dlib.h
+>
+
+3 
+	~<¡ršg.h
+>
+
+8 
+	$bš_¡r_·d
+(*
+bš_¡r
+, 
+bËn
+, *
+bš_¡r_·dded
+)
+
+10 
+num_z”Ûs
+ = 4-
+bËn
+ % 4;
+
+11 
+z”o_by‹s
+[ ] = {'0','0','0'};
+
+13 
+	`memıy
+(
+bš_¡r_·dded
+, 
+z”o_by‹s
+, 
+num_z”Ûs
+);
+
+14 
+	`memıy
+(
+bš_¡r_·dded
++
+num_z”Ûs
+, 
+bš_¡r
+, 
+bËn
++1);
+
+15 
+	}
+}
+
+17 
+	$maš
+()
+
+19 
+bš_¡r
+[] = "110010011";
+
+20 
+bš_·dded
+[(
+bš_¡r
+) + 3];
+
+22 
+	`bš_¡r_·d
+(
+bš_¡r
+, (bš_¡r)-1, 
+bš_·dded
+);
+
+23 
+	`´štf
+("·dded % ğ%s\n", 
+bš_¡r
+, 
+bš_·dded
+);
+
+25 
+	`bš_¡r_·d
+("101", 3, 
+bš_·dded
+);
+
+26 
+	`´štf
+("·dded % ğ%s\n", "101", 
+bš_·dded
+);
+
+28 
+	`bš_¡r_·d
+("11", 2, 
+bš_·dded
+);
+
+29 
+	`´štf
+("·dded % ğ%s\n", "11", 
+bš_·dded
+);
+
+32 
+	}
+}
+
 	@snippets/tests/malloc_0.c
 
 1 
@@ -15989,1938 +18021,6 @@ com·»SŒuù
 obj1
 , *
 obj2
-);
-
-	@timer/poll_timer/test/test_multiple_timers.c
-
-1 
-	~<tim”.h
->
-
-3 
-	sİ”ªds
-
-
-5 
-	ma
-;
-
-6 
-	mb
-;
-
-9 
-	$tim”_â1
-(*
-¬gs
-)
-
-11 
-İ”ªds
- *
-İs
- = (İ”ªd *)
-¬gs
-;
-
-12 
-i
-;
-
-13 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-14 
-times
- = 1;
-
-16 
-i
-=0; i<4; i++) {
-
-17 
-İs
-[
-i
-].
-a
- += ops[i].a;
-
-18 
-İs
-[
-i
-].
-b
- += 2*(ops[i].b);
-
-21 
-	`´štf
-("Tim”1 %d -> %d\n", 
-cu¼time
-, 
-times
-++);
-
-22 
-i
-=0; i<4; i++)
-
-23 
-	`´štf
-("(%d, %dè", 
-İs
-[
-i
-].
-a
-, ops[i].
-b
-);
-
-24 
-	`´štf
-("\n");
-
-25 
-	}
-}
-
-27 
-	$tim”_â2
-(*
-¬gs
-)
-
-29 *
-num
- = (*)
-¬gs
-;
-
-30 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-31 
-times
- = 1;
-
-33 
-	`´štf
-("Tim”2 %d -> %d Numb” = %d\n", 
-cu¼time
-, 
-times
-++, *
-num
-);
-
-34 *
-num
- += 10;
-
-35 
-	}
-}
-
-37 
-	$maš
-()
-
-39 
-İ”ªds
- 
-İs
-[4] = {{1,2}, {2,3}, {3,4}, {4,5}};
-
-40 
-numb”
- = 5;
-
-41 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-42 
-i
-;
-
-45 
-tim”_t
- *
-tim”1
- = 
-	`£t_tim”
-(10, 1, 10, 5, 
-tim”_â1
-, (*)
-İs
-);
-
-48 
-tim”_t
- *
-tim”2
- = 
-	`£t_tim”
-(60, 1, 2, 10, 
-tim”_â2
-, (*)(&
-numb”
-));
-
-50 
-	`´štf
-("S¹šgim” © %d\n", 
-cu¼time
-);
-
-52 
-	`¡¬t_tim”
-(
-tim”1
-);
-
-53 
-	`¡¬t_tim”
-(
-tim”2
-);
-
-55 
-	`±h»ad_još
-(
-tim”1
-->
-th»ad
-, 
-NULL
-);
-
-56 
-	`±h»ad_još
-(
-tim”2
-->
-th»ad
-, 
-NULL
-);
-
-58 
-	`´štf
-("Results ofimer 1: \n");
-
-59 
-i
-=0; i<4; i++)
-
-60 
-	`´štf
-("(%d, %dè", 
-İs
-[
-i
-].
-a
-, ops[i].
-b
-);
-
-62 
-	`´štf
-("\nResuÉ oàtim” 2: %d\n", 
-numb”
-);
-
-64 
-	`´štf
-("Exiting\n");
-
-67 
-	}
-}
-
-	@timer/poll_timer/test/test_timer.c
-
-1 
-	~<tim”.h
->
-
-3 
-	$tim”_â
-(*
-¬gs
-)
-
-5 
-i
- = 1;
-
-7 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-8 
-	`´štf
-("%d Tim”: %d\n", 
-cu¼time
-, 
-i
-++);
-
-9 
-	}
-}
-
-11 
-	$maš
-()
-
-14 
-tim”_t
- *
-tim”
- = 
-	`£t_tim”
-(10, 1, 3, 5, 
-tim”_â
-, (*)1);
-
-16 
-	`¡¬t_tim”
-(
-tim”
-);
-
-18 
-	`±h»ad_još
-(
-tim”
-->
-th»ad
-, 
-NULL
-);
-
-20 
-	`´štf
-("Exiting\n");
-
-23 
-	}
-}
-
-	@timer/poll_timer/timer.c
-
-1 
-	~<tim”.h
->
-
-4 
-	$pŞl_tim”
- (*
-t
-)
-
-6 
-tim”_t
- *
-tim”
- = (tim”_ˆ*)
-t
-;
-
-7 
-cu¼time
-;
-
-10 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-13 ià(!
-tim”
-)
-
-14  
-NULL
-;
-
-16 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-18 ià(
-cu¼time
- >ğ
-tim”
-->
-time_expœes
-) {
-
-19 
-tim”
-->
-	`ÿÎback
-Ñim”->
-¬gs
-);
-
-21 
-tim”
-->
-time_expœes
- +ğtim”->
-š‹rv®
-;
-
-23 (
-tim”
-->
-cu¼_times
-)++;
-
-26 ià((!
-tim”
-->
-»cu¼’t
-è|| (tim”->
-max_times
- && (tim”->
-cu¼_times
- ==imer->max_times))) {
-
-27 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-28  
-NULL
-;
-
-31 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-33 
-	`¦“p
-(
-tim”
-->
-pŞl_š‹rv®
-);
-
-36 
-	`d–‘e_tim”
-(
-tim”
-);
-
-37  
-NULL
-;
-
-38 
-	}
-}
-
-40 
-tim”_t
- *
-
-41 
-	$£t_tim”
-(
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-)
-
-43 
-tim”_t
- *
-tim”
- = (tim”_ˆ*è
-	`m®loc
-((timer_t));
-
-44 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-46 ià(!
-tim”
-)
-
-47  
-NULL
-;
-
-49 ià(!
-š‹rv®
- || !
-ÿÎback
-) {
-
-50 
-	`ä“
-(
-tim”
-);
-
-51  
-NULL
-;
-
-54 
-	`±h»ad_mu‹x_š™
-(&(
-tim”
-->
-mu‹x
-), 0);
-
-56 
-tim”
-->
-š‹rv®
- = interval;
-
-57 
-tim”
-->
-time_expœes
- = 
-cu¼time
- + 
-š‹rv®
-;
-
-58 
-tim”
-->
-»cu¼’t
- =„ecurrent;
-
-60 ià(!
-pŞl_š‹rv®
-)
-
-61 
-pŞl_š‹rv®
- = 1;
-
-63 
-tim”
-->
-max_times
- = max_times;
-
-64 
-tim”
-->
-pŞl_š‹rv®
- =…oll_interval;
-
-65 
-tim”
-->
-ÿÎback
- = callback;
-
-66 
-tim”
-->
-¬gs
- =‡rgs;
-
-68  
-tim”
-;
-
-69 
-	}
-}
-
-72 
-	$»£t_tim”
-(
-tim”_t
- *
-tim”
-, 
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-)
-
-74 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-76 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-77 ià(!
-tim”
-) {
-
-78 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-82 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-83 ià(
-š‹rv®
-)
-
-84 
-tim”
-->
-š‹rv®
- = interval;
-
-86 
-tim”
-->
-time_expœes
- = 
-cu¼time
- + 
-š‹rv®
-;
-
-87 
-tim”
-->
-cu¼_times
- = 0;
-
-90 ià(
-tim”
-->
-»cu¼’t
- !=„ecurrent)
-
-91 
-tim”
-->
-»cu¼’t
- =„ecurrent;
-
-93 ià(
-tim”
-->
-max_times
- != max_times)
-
-94 
-tim”
-->
-max_times
- = max_times;
-
-96 ià(
-tim”
-->
-pŞl_š‹rv®
-)
-
-97 
-tim”
-->
-pŞl_š‹rv®
- =…oll_interval;
-
-99 ià(
-tim”
-->
-ÿÎback
-)
-
-100 
-tim”
-->
-ÿÎback
- = callback;
-
-102 ià(
-tim”
-->
-¬gs
-)
-
-103 
-tim”
-->
-¬gs
- =‡rgs;
-
-105 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-108 
-	}
-}
-
-111 
-	$d–‘e_tim”
-(
-tim”_t
- *
-tim”
-)
-
-113 ià(
-tim”
-) {
-
-114 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-115 
-	`ä“
-(
-tim”
-);
-
-116 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-118 
-	}
-}
-
-121 
-	$¡¬t_tim”
-(
-tim”_t
- *
-tim”
-)
-
-123 
-	`±h»ad_ü—‹
-(&(
-tim”
-->
-th»ad
-), 0, 
-pŞl_tim”
-,imer);
-
-124 
-	}
-}
-
-	@timer/poll_timer/timer.h
-
-1 #iâdeà
-__TIMER_H__
-
-
-2 
-	#__TIMER_H__
-
-
-	)
-
-4 
-	~<¡dio.h
->
-
-5 
-	~<¡dlib.h
->
-
-6 
-	~<±h»ad.h
->
-
-7 
-	~<uni¡d.h
->
-
-9 (*
-	tÿÎback_t
-)(*);
-
-11 
-	stim”_s
- {
-
-12 
-š‹rv®
-;
-
-13 
-time_expœes
-;
-
-14 
-»cu¼’t
-;
-
-15 
-max_times
-;
-
-16 
-cu¼_times
-;
-
-17 
-pŞl_š‹rv®
-;
-
-19 
-ÿÎback_t
- 
-ÿÎback
-;
-
-20 *
-¬gs
-;
-
-22 
-±h»ad_mu‹x_t
- 
-mu‹x
-;
-
-23 
-±h»ad_t
- 
-th»ad
-;
-
-24 } 
-	ttim”_t
-;
-
-26 
-tim”_t
- *
-	`£t_tim”
-(
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-);
-
-27 
-	`»£t_tim”
-(
-tim”_t
- *
-tim”
-, 
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-);
-
-28 
-	`d–‘e_tim”
-(
-tim”_t
- *
-tim”
-);
-
-30 
-	`¡¬t_tim”
-(
-tim”_t
- *
-tim”
-);
-
-32 *
-	`pŞl_tim”
- (*
-t
-);
-
-	@timer/threaded_timer/test/test_multiple_timers.c
-
-1 
-	~<th»aded_tim”.h
->
-
-3 
-	sİ”ªds
-
-
-5 
-	ma
-;
-
-6 
-	mb
-;
-
-9 
-	$tim”_â1
-(*
-¬gs
-)
-
-11 
-İ”ªds
- *
-İs
- = (İ”ªd *)
-¬gs
-;
-
-12 
-i
-;
-
-13 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-14 
-times
- = 1;
-
-16 
-i
-=0; i<4; i++) {
-
-17 
-İs
-[
-i
-].
-a
- += ops[i].a;
-
-18 
-İs
-[
-i
-].
-b
- += 2*(ops[i].b);
-
-21 
-	`´štf
-("Tim”1 %d -> %d\n", 
-cu¼time
-, 
-times
-++);
-
-22 
-i
-=0; i<4; i++)
-
-23 
-	`´štf
-("(%d, %dè", 
-İs
-[
-i
-].
-a
-, ops[i].
-b
-);
-
-24 
-	`´štf
-("\n");
-
-25 
-	}
-}
-
-27 
-	$tim”_â2
-(*
-¬gs
-)
-
-29 *
-num
- = (*)
-¬gs
-;
-
-30 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-31 
-times
- = 1;
-
-33 
-	`´štf
-("Tim”2 %d -> %d Numb” = %d\n", 
-cu¼time
-, 
-times
-++, *
-num
-);
-
-34 *
-num
- += 10;
-
-35 
-	}
-}
-
-37 
-	$maš
-()
-
-39 
-İ”ªds
- 
-İs
-[4] = {{1,2}, {2,3}, {3,4}, {4,5}};
-
-40 
-numb”
- = 5;
-
-41 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-42 
-i
-;
-
-45 
-tim”_t
- *
-tim”1
- = 
-	`£t_tim”
-(10, 1, 10, 5, 
-tim”_â1
-, (*)
-İs
-);
-
-48 
-tim”_t
- *
-tim”2
- = 
-	`£t_tim”
-(60, 1, 2, 10, 
-tim”_â2
-, (*)(&
-numb”
-));
-
-50 
-	`´štf
-("S¹šgim” © %d\n", 
-cu¼time
-);
-
-52 
-	`¡¬t_tim”
-(
-tim”1
-);
-
-53 
-	`¡¬t_tim”
-(
-tim”2
-);
-
-55 
-	`±h»ad_još
-(
-tim”1
-->
-th»ad
-, 
-NULL
-);
-
-56 
-	`±h»ad_još
-(
-tim”2
-->
-th»ad
-, 
-NULL
-);
-
-58 
-	`´štf
-("Results ofimer 1: \n");
-
-59 
-i
-=0; i<4; i++)
-
-60 
-	`´štf
-("(%d, %dè", 
-İs
-[
-i
-].
-a
-, ops[i].
-b
-);
-
-62 
-	`´štf
-("\nResuÉ oàtim” 2: %d\n", 
-numb”
-);
-
-64 
-	`´štf
-("Exiting\n");
-
-67 
-	}
-}
-
-	@timer/threaded_timer/test/test_timer.c
-
-1 
-	~<th»aded_tim”.h
->
-
-3 
-	$tim”_â
-(*
-¬gs
-)
-
-5 
-i
- = 1;
-
-7 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-8 
-	`´štf
-("%d Tim”: %d\n", 
-cu¼time
-, 
-i
-++);
-
-9 
-	}
-}
-
-11 
-	$maš
-()
-
-14 
-tim”_t
- *
-tim”
- = 
-	`£t_tim”
-(10, 1, 3, 5, 
-tim”_â
-, (*)1);
-
-16 
-	`¡¬t_tim”
-(
-tim”
-);
-
-18 
-	`±h»ad_još
-(
-tim”
-->
-th»ad
-, 
-NULL
-);
-
-20 
-	`´štf
-("Exiting\n");
-
-23 
-	}
-}
-
-	@timer/threaded_timer/threaded_timer.c
-
-1 
-	~<th»aded_tim”.h
->
-
-4 
-	$pŞl_tim”
- (*
-t
-)
-
-6 
-tim”_t
- *
-tim”
- = (tim”_ˆ*)
-t
-;
-
-7 
-cu¼time
-;
-
-10 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-13 ià(!
-tim”
-)
-
-14  
-NULL
-;
-
-16 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-18 ià(
-cu¼time
- >ğ
-tim”
-->
-time_expœes
-) {
-
-19 
-tim”
-->
-	`ÿÎback
-Ñim”->
-¬gs
-);
-
-21 
-tim”
-->
-time_expœes
- +ğtim”->
-š‹rv®
-;
-
-23 (
-tim”
-->
-cu¼_times
-)++;
-
-26 ià((!
-tim”
-->
-»cu¼’t
-è|| (tim”->
-max_times
- && (tim”->
-cu¼_times
- ==imer->max_times))) {
-
-27 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-28  
-NULL
-;
-
-31 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-33 
-	`¦“p
-(
-tim”
-->
-pŞl_š‹rv®
-);
-
-36 
-	`d–‘e_tim”
-(
-tim”
-);
-
-37  
-NULL
-;
-
-38 
-	}
-}
-
-40 
-tim”_t
- *
-
-41 
-	$£t_tim”
-(
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-)
-
-43 
-tim”_t
- *
-tim”
- = (tim”_ˆ*è
-	`m®loc
-((timer_t));
-
-44 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-46 ià(!
-tim”
-)
-
-47  
-NULL
-;
-
-49 ià(!
-š‹rv®
- || !
-ÿÎback
-) {
-
-50 
-	`ä“
-(
-tim”
-);
-
-51  
-NULL
-;
-
-54 
-	`±h»ad_mu‹x_š™
-(&(
-tim”
-->
-mu‹x
-), 0);
-
-56 
-tim”
-->
-š‹rv®
- = interval;
-
-57 
-tim”
-->
-time_expœes
- = 
-cu¼time
- + 
-š‹rv®
-;
-
-58 
-tim”
-->
-»cu¼’t
- =„ecurrent;
-
-60 ià(!
-pŞl_š‹rv®
-)
-
-61 
-pŞl_š‹rv®
- = 1;
-
-63 
-tim”
-->
-max_times
- = max_times;
-
-64 
-tim”
-->
-pŞl_š‹rv®
- =…oll_interval;
-
-65 
-tim”
-->
-ÿÎback
- = callback;
-
-66 
-tim”
-->
-¬gs
- =‡rgs;
-
-68  
-tim”
-;
-
-69 
-	}
-}
-
-72 
-	$»£t_tim”
-(
-tim”_t
- *
-tim”
-, 
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-)
-
-74 
-cu¼time
- = 
-	`time
-(
-NULL
-);
-
-76 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-77 ià(!
-tim”
-) {
-
-78 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-82 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-83 ià(
-š‹rv®
-)
-
-84 
-tim”
-->
-š‹rv®
- = interval;
-
-86 
-tim”
-->
-time_expœes
- = 
-cu¼time
- + 
-š‹rv®
-;
-
-87 
-tim”
-->
-cu¼_times
- = 0;
-
-90 ià(
-tim”
-->
-»cu¼’t
- !=„ecurrent)
-
-91 
-tim”
-->
-»cu¼’t
- =„ecurrent;
-
-93 ià(
-tim”
-->
-max_times
- != max_times)
-
-94 
-tim”
-->
-max_times
- = max_times;
-
-96 ià(
-tim”
-->
-pŞl_š‹rv®
-)
-
-97 
-tim”
-->
-pŞl_š‹rv®
- =…oll_interval;
-
-99 ià(
-tim”
-->
-ÿÎback
-)
-
-100 
-tim”
-->
-ÿÎback
- = callback;
-
-102 ià(
-tim”
-->
-¬gs
-)
-
-103 
-tim”
-->
-¬gs
- =‡rgs;
-
-105 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-108 
-	}
-}
-
-111 
-	$d–‘e_tim”
-(
-tim”_t
- *
-tim”
-)
-
-113 ià(
-tim”
-) {
-
-114 
-	`±h»ad_mu‹x_lock
-(&(
-tim”
-->
-mu‹x
-));
-
-115 
-	`ä“
-(
-tim”
-);
-
-116 
-	`±h»ad_mu‹x_uÆock
-(&(
-tim”
-->
-mu‹x
-));
-
-118 
-	}
-}
-
-121 
-	$¡¬t_tim”
-(
-tim”_t
- *
-tim”
-)
-
-123 
-	`±h»ad_ü—‹
-(&(
-tim”
-->
-th»ad
-), 0, 
-pŞl_tim”
-,imer);
-
-124 
-	}
-}
-
-	@timer/threaded_timer/threaded_timer.h
-
-1 #iâdeà
-__TIMER_H__
-
-
-2 
-	#__TIMER_H__
-
-
-	)
-
-4 
-	~<¡dio.h
->
-
-5 
-	~<¡dlib.h
->
-
-6 
-	~<±h»ad.h
->
-
-7 
-	~<uni¡d.h
->
-
-9 (*
-	tÿÎback_t
-)(*);
-
-11 
-	stim”_s
- {
-
-12 
-š‹rv®
-;
-
-13 
-time_expœes
-;
-
-14 
-»cu¼’t
-;
-
-15 
-max_times
-;
-
-16 
-cu¼_times
-;
-
-17 
-pŞl_š‹rv®
-;
-
-19 
-ÿÎback_t
- 
-ÿÎback
-;
-
-20 *
-¬gs
-;
-
-22 
-±h»ad_mu‹x_t
- 
-mu‹x
-;
-
-23 
-±h»ad_t
- 
-th»ad
-;
-
-24 } 
-	ttim”_t
-;
-
-26 
-tim”_t
- *
-	`£t_tim”
-(
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-);
-
-27 
-	`»£t_tim”
-(
-tim”_t
- *
-tim”
-, 
-š‹rv®
-, 
-»cu¼’t
-, 
-max_times
-, 
-pŞl_š‹rv®
-, 
-ÿÎback_t
- 
-ÿÎback
-, *
-¬gs
-);
-
-28 
-	`d–‘e_tim”
-(
-tim”_t
- *
-tim”
-);
-
-30 
-	`¡¬t_tim”
-(
-tim”_t
- *
-tim”
-);
-
-32 *
-	`pŞl_tim”
- (*
-t
 );
 
 	@/usr/include/assert.h
@@ -67660,8 +67760,8 @@ __ušt64_t
 .
 1
 /usr/include
-194
-6707
+195
+6849
 Algorithms/pairs_array_sum/pairs_array_sum/main.c
 Algorithms/pairs_array_sum/pairs_array_sum/pairs_array_sum.c
 Algorithms/pairs_array_sum/pairs_array_sum/pairs_array_sum.h
@@ -67745,13 +67845,20 @@ cormen/Divide_and_Conquer/bottom_up_fibonacci.c
 cormen/Divide_and_Conquer/matrix_multiplication.c
 cormen/Divide_and_Conquer/powernx.c
 cormen/Divide_and_Conquer/recursive_squaring_fibonacci.c
+frameworks/timer/poll_timer/test/test_multiple_timers.c
+frameworks/timer/poll_timer/test/test_timer.c
+frameworks/timer/poll_timer/timer.c
+frameworks/timer/poll_timer/timer.h
+frameworks/timer/threaded_timer/test/test_multiple_timers.c
+frameworks/timer/threaded_timer/test/test_timer.c
+frameworks/timer/threaded_timer/threaded_timer.c
+frameworks/timer/threaded_timer/threaded_timer.h
 oops/private/private.c
 oops/private/private.h
 oops/private/test_private.c
 snippets/PrintDigitsPutChar/putchar_long.c
 snippets/Sockets/icmp_ping.c
 snippets/Sockets/select.c
-snippets/bin_str_pad.c
 snippets/exec_cmd_get_results/exec_cmd_get_results.c
 snippets/ip_address_range_validation/check_ip_range.c
 snippets/ip_address_range_validation/include/ip_utils.h
@@ -67763,6 +67870,8 @@ snippets/quine/Quine2.c
 snippets/quine/Quine3.c
 snippets/quine/self_print.c
 snippets/signals/signal_handler.c
+snippets/static/static_vars_in_block_scopes.c
+snippets/strings/bin_str_pad.c
 snippets/tests/malloc_0.c
 snippets/tests/while_do_while.c
 snippets/threads/write_to_term/write_to_term.c
@@ -67775,14 +67884,6 @@ test_common/rudimentary_mem_manager.h
 test_common/test_common.h
 test_common/test_struct.c
 test_common/test_struct.h
-timer/poll_timer/test/test_multiple_timers.c
-timer/poll_timer/test/test_timer.c
-timer/poll_timer/timer.c
-timer/poll_timer/timer.h
-timer/threaded_timer/test/test_multiple_timers.c
-timer/threaded_timer/test/test_timer.c
-timer/threaded_timer/threaded_timer.c
-timer/threaded_timer/threaded_timer.h
 /usr/include/assert.h
 /usr/include/ctype.h
 /usr/include/errno.h

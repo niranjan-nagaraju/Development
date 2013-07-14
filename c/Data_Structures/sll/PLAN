@@ -1,7 +1,7 @@
 SLL Node functions:
-	Create node
-	Delete node
-	Print node
+	[X] Create node
+	[X] Delete node
+	[X] Print node
 
 SLL functions:
 	Insert:
