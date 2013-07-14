@@ -4,7 +4,7 @@
 	[X] Print node
 
 * SLL functions:
-	Insert:
+	[-] Insert:
 		[X] AtFirst (data, node)
 		[X] AtEnd (data, node)
 		[X] AtPos (data, node)
