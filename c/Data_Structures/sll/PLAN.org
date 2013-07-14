@@ -1,27 +1,27 @@
-SLL Node functions:
+* SLL Node functions:
 	[X] Create node
 	[X] Delete node
 	[X] Print node
 
-SLL functions:
+* SLL functions:
 	Insert:
-		AtFirst (data, node)
-		AtEnd (data, node)
-		AtPos (data, node)
-		Atpos from end (data, node)
-		After (data, node) # Insert after matching data/node
+		[X] AtFirst (data, node)
+		[X] AtEnd (data, node)
+		[X] AtPos (data, node)
+		[X] Atpos from end (data, node)
+		[X] After (data, node) # Insert after matching data/node
 		Before (data, node) # Insert before matching data/node
 	Remove:
-		AtFirst (data, node)
-		AtEnd (data, node)
-		AtPos (data, node)
+		[X] AtFirst (data, node)
+		[X] AtEnd (data, node)
+		[X] AtPos (data, node)
 		Atpos from end (data, node)
 		data, node # find and remove matching node/data
 		After (data, node) 
 		Before (data, node)
 		Remove specified node # swap next.. works only if not last node
 	Find:
-		Find (node, data): return node containing key/data matching key
+		[X] Find (node, data): return node containing key/data matching key
 		Findpos (node, data): return position matching node containing key/key
 		Find node(node): Check if node exists in SLL
 		nth Element from the front
@@ -34,7 +34,7 @@ SLL functions:
 		find element next smaller than key in the SLL
 		find element next larger than key in the SLL
 	Print:
-		PrintSLL
+		[X] PrintSLL
 		PrintSLL reverse
 		printSLL recursive
 		printSLL reverse recursive
@@ -59,6 +59,6 @@ SLL functions:
 	Reverse:
 		reverse
 		reverse recursive
-	Destroy:
-		Destroy SLL completely
+	[X] Destroy:
+		[X] Destroy SLL completely
 	
