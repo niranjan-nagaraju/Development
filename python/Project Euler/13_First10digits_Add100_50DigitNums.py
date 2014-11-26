@@ -14,3 +14,9 @@ s = str(sum)[0:10]
 s = int(s)
 
 print s
+
+'''
+Solution:
+$ cat 13.data | python 13_First10digits_Add100_50DigitNums.py 
+5537376230
+'''
