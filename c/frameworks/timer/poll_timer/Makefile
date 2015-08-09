@@ -1,6 +1,6 @@
 CFLAGS += -I$(PWD) -g
 
-LIBNAME = timer
+LIBNAME = poll_timer
 TESTDIR = test
 CC = gcc
 

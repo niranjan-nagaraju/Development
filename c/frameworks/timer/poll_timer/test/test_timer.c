@@ -1,4 +1,4 @@
-#include <timer.h>
+#include <poll_timer.h>
 
 void timer_fn(void *args)
 {
