@@ -1,14 +1,17 @@
-{- Withdrawals should be multiple of 5 and no -ve balances -}
+{- 
+ - Withdrawals should be multiple of 5 and no -ve balances 
+ - https://www.codechef.com/problems/HS08TEST
+ -}
 
-import IO
+import System.IO
 
--- withdraw :: (Fractional t) -> (Fractional t) -> (Fractional t)
-withdraw amt balance = 
-	if (amt > balance) || ((truncate amt) `mod` 5 /= 0) || (amt+0.50 > balance)
-		then
-			return balance
-		else 
-			return (balance - amt - 0.50)
+
+withdraw amt balance 
+	| (amt < 0) || (balance < 0) = return balance
+	| (amt > balance) || ((truncate amt) `mod` 5 /= 0) || (amt+0.50 > balance) = return balance
+	| otherwise = return (balance - amt - 0.50)
+		
+			
 
 parseInput :: String -> [Double]
 parseInput str = map read.words $ str
