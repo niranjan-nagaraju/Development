@@ -19,8 +19,6 @@ parseInput str = map read.words $ str
 main = do
 	str <- (getLine::IO String)
 	let [amt, balance] = parseInput str
-	-- amt <- readLn
-	-- balance <- readLn
 
 	nBalance <- withdraw amt balance
 	putStrLn $ (show nBalance ++ "0")
