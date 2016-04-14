@@ -8,6 +8,21 @@ P = the principal investment amount (the initial deposit or loan amount)
 r = the annual interest rate (decimal)
 n = the number of times that interest is compounded per year
 t = the number of years the money is invested or borrowed for 
+
+Sample Usage:
+============	
+	$ python compound_interest.py -P 2,50,000 -t 7 -r 10  
+	4,87,179.275
+
+	$ python compound_interest.py -P 2,50,000 -t 7 -r 10  -v
+	Returns after 1 years: 2,75,000.0, Returns: 25,000.0
+	Returns after 2 years: 3,02,500.0, Returns: 52,500.0
+	Returns after 3 years: 3,32,750.0, Returns: 82,750.0
+	Returns after 4 years: 3,66,025.0, Returns: 1,16,025.0
+	Returns after 5 years: 4,02,627.5, Returns: 1,52,627.5
+	Returns after 6 years: 4,42,890.25, Returns: 1,92,890.25
+	Total Value after 7.0 years: 4,87,179.275, Returns: 2,37,179.275
+
 '''
 
 import sys, getopt
