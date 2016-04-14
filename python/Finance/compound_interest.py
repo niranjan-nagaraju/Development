@@ -43,7 +43,7 @@ def getInputs (argv):
 
 def calculate_compound_interest(P, r, n, t):
 	A = P * (( 1 + r/n) ** (n*t))
-	return A
+	return A, A-P
 
 # Add commas according to Hindu-Arabic system
 def formatIndianNumeral(n):
@@ -70,12 +70,17 @@ verbose = False
 
 def main():
 	getInputs(sys.argv[1:])
-	A = formatIndianNumeral(calculate_compound_interest(P, r, n, t))
+	A, returns = calculate_compound_interest(P, r, n, t)
+	A = formatIndianNumeral(A)
+	returns = formatIndianNumeral(returns)
 
 	if (verbose):
 		for i in range(1, int(t)):
-			print "Returns after {0} years:".format(i), formatIndianNumeral(calculate_compound_interest(P, r, n, i))
-		print "Total Returns after {0} years:".format(t),
+			Ai, retsi = calculate_compound_interest(P, r, n, i)
+			print "Returns after {0} years: {1}, Returns: {2}".format(i, formatIndianNumeral(Ai), 
+					formatIndianNumeral(retsi))
+		print "Total Value after {0} years: {1}, Returns: {2}".format(t, A, returns)
+		return
 
 	print A
 
