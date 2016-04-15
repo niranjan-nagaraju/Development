@@ -29,7 +29,7 @@ import sys, getopt
 
 def usage():
 	print '''{0} [-p] [-r] [-n] [-t] [-v] [-h]
-	Long form: [--principal=] [--rate=] [--frequency] [--time=] [--verbose] doesn't work yet
+	Long form: [--principal=] [--rate=] [--frequency] [--time=] [--verbose] [--help]
 	-h: print this message
 	-v: verbose mode
 
