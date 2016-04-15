@@ -27,6 +27,19 @@ Sample Usage:
 
 import sys, getopt
 
+def usage():
+	print '''{0} [-p] [-r] [-n] [-t] [-v] [-h]
+	Long form: [--principal=] [--rate=] [--frequency] [--time=] [--verbose] doesn't work yet
+	-h: print this message
+	-v: verbose mode
+
+	All parameters have defaults
+	p: Principal, default: 10,000
+	r: rate of interest, default: 10%
+	n: number of times interest is compounded per year, default: 1
+	t: number of years money is invested, default: 1
+
+	'''.format(sys.argv[0])
 
 # Strip commas, return an integer from a string
 def parseNumber (number):
@@ -34,30 +47,34 @@ def parseNumber (number):
 
 def getInputs (argv):
 	try:
-		opts, args = getopt.getopt(argv, "P:r:n:t:v", ["principal=", "rate=", "frequency=", "time=", "verbose"])
-	except getopt.GetOptError as err:
+		opts, args = getopt.getopt(argv, "p:r:n:t:vh", ["principal=", "rate=", "frequency=", "time=", "verbose", "help"])
+	except getopt.GetoptError as err:
 		print str(err)
 		sys.exit(2)
 
 	global P, r, n, t, verbose
 
 	for o, a in opts:
-		if o == "-P":
+		if o in ("-p", "--principal"):
 			P = parseNumber(a)
-		elif o == "-r":
+		elif o in ("-r", "--rate"):
 			r = parseNumber(a) / 100.0
-		elif o == "-n":
+		elif o in ("-n", "--frequency"):
 			n = parseNumber(a)
-		elif o == "-t":
+		elif o in ("-t", "--time"):
 			t = parseNumber(a)
-		elif o == "-v":
+		elif o in ("-v", "--verbose"):
 			verbose = True
+		elif o in ("-h", "--help"):
+			usage()
+			sys.exit(1)
 		else:
 			assert False, "Unknown option"
 
 
 def calculate_compound_interest(P, r, n, t):
 	A = P * (( 1 + r/n) ** (n*t))
+	A = round(A, 2) # round to 2 decimal places
 	return A, A-P
 
 # Add commas according to Hindu-Arabic system
