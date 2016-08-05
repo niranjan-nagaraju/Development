@@ -140,4 +140,4 @@ cleanobj: $(SUBDIRS)
 cleanall: $(SUBDIRS)
 	rm -rf $(OUTDIR)
 
-include $(BASE_DIR)/Makefile.test.inc
+include $(BASE_DIR)/build/Makefile.test.inc
