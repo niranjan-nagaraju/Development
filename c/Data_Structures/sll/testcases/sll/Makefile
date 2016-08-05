@@ -12,8 +12,8 @@ TEST_COMMON_SRCS += sll_test_common.c
 TEST_INCLUDE += -I./include
 TEST_INCLUDE += -I../../sll/include
 TEST_INCLUDE += -I../../node/include
-TEST_INCLUDE += -I$(BASE_DIR)/common
-TEST_INCLUDE += -I$(BASE_DIR)/test_common
+TEST_INCLUDE += -I$(BASE_DIR)/common/include
+TEST_INCLUDE += -I$(BASE_DIR)/test_common/include
 
 LIBS +=-L../../sll/out/linux/ -lsll
 LIBS +=-L../../node/out/linux/ -lsll_node

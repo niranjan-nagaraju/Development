@@ -6,8 +6,8 @@ TEST_SRCS += sll_node_create_test.c
 TEST_INCLUDE += -I./include
 TEST_INCLUDE += -I../../sll/include
 TEST_INCLUDE += -I../../node/include
-TEST_INCLUDE += -I$(BASE_DIR)/common
-TEST_INCLUDE += -I$(BASE_DIR)/test_common
+TEST_INCLUDE += -I$(BASE_DIR)/common/include
+TEST_INCLUDE += -I$(BASE_DIR)/test_common/include
 
 LIBS +=-L../../node/out/linux/ -lsll_node
 
