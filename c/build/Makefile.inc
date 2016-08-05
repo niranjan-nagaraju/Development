@@ -60,7 +60,7 @@ OBJS_MT = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%_mt.o, $(SRCS))
 # Else just build object files
 # NOTE: 'all' target has a :: so it can be 'overridden' in child makefiles - define all:: target in child makefiles to execute both targets
 #all:: $(OBJS) $(SUBDIRS) $(LIBNAME) $(LIBNAME_MT) tests
-all:: libs tests
+all:: libs 
 
 libs: $(OBJS) $(SUBDIRS) $(LIBNAME) $(LIBNAME_MT)
 
