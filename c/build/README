@@ -1,5 +1,8 @@
 HOWTO use this Makefile system
 
+
+############ GlobalMake is now **DEPRECATED**, Use Makefile.inc instead ###############
+
 *******
  USAGE 
 *******
@@ -26,20 +29,22 @@ LIBNAME = <library>
 # Multi-threaded library name
 LIBNAME_MT = <library_mt>
 
-5. Define directory where the testcases are located
-# Testcases directory
-TESTDIR = <testcases>
+5. Define (sub)directories where sources are located
+SUBDIRS += <testcases>
 
-6. Source files needed to compile the library 
-SRC = a.c b.c c.c
-SRC += d.c
+6. Place Source files (*.c) inside 'src' and include files (*.h) inside 'include' directories
 
 7. Define sourcefiles for testcases that need the single-threaded library 
-TEST_SRC = test_a/test_a.c
-TEST_SRC += test_b/test_b.c 
+TEST_SRCS += test_a.c
+TEST_SRCS += test_b.c 
 
 8. Define sourcefiles for testcases that need the multi-threaded library
-TEST_SRC_MT = test_a/test_a_mt.c 
+TEST_SRC_MT += test_a_mt.c 
+
+9. Test common files -- are files needed by all testcases
+TEST_COMMON_SRCS += test_common.c
+TEST_COMMON_SRCS_MT += test_common_mt.c
+
 
 9. Linker flags for dependent libraries to compile this library
 LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread
@@ -51,7 +56,7 @@ LIBS += -L$(OUTDIR) -l $(LIBNAME)
 LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT) [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
 
 12. Finally include the "GlobalMake" file to define all the targets
-include $(BASE_DIR)/build/GlobalMake
+include $(BASE_DIR)/build/Makefile.inc
 
 13. To build libraries, use
 	$ make libs
@@ -67,6 +72,10 @@ include $(BASE_DIR)/build/GlobalMake
 	  to compile both testcases and library with -O2
   PS: Just "make" without any targets will also build using "make opt"
 
+16. Build individual targets using debug/opt
+	$ make opt libs -- will build only libraries with 'opt' flags
+	$ make debug test -- Build only testcases with 'debug' flags
+
 
 ******************************************
 	II. Build a standalone program
@@ -74,7 +83,7 @@ include $(BASE_DIR)/build/GlobalMake
 
 0. cd <source_folder>; touch Makefile
 
-1. Define SRC, EXE, INCLUDE, CFLAGS, LDFLAGS
+1. Define SRC, INCLUDE, CFLAGS, LDFLAGS
 
 2. Use 
 	$ make
@@ -90,3 +99,5 @@ include $(BASE_DIR)/build/GlobalMake
 I. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake
 
 II. Won't compile under windows
+
+III. Object files for all 'subdirs' are always built for 'libs' target
