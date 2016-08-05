@@ -1,13 +1,10 @@
+BASE_DIR=..
+
 LIBNAME = common
 
-INCLUDE = -I$(PWD)
+INCLUDE = -I./include
 LIBS = -L$(OUTDIR) -lcommon
 
-SRC = common.c
+SUBDIRS = testcases
 
-TESTDIR = testcases
-
-TEST_SRC = test_common.c
-TEST_SRC += test_boolean.c
-
-include ../build/GlobalMake
+include $(BASE_DIR)/build/Makefile.inc
