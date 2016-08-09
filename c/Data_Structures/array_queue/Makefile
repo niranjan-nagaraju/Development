@@ -1,25 +1,12 @@
-CFLAGS += -g -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast 
-INCLUDE += -I. -I../../common/include 
-LIBS += -L../../common/out -lcommon
+BASE_DIR=../../
 
-LIBNAME = array_queue
-TESTDIR = tests
+# Include files
+INCLUDE +=-I./include -I$(BASE_DIR)/common/include
 
-all:
-	mkdir -p out
-	$(CC) $(LIBNAME).c $(CFLAGS) -c -fPIC -Wall -o out/$(LIBNAME).o
+# Library filenames, _MT for multi-threaded version
+LIBNAME=array_queue
+LIBNAME_MT=array_queue_mt
 
-dylib: all
-	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o out/lib$(LIBNAME).dylib out/$(LIBNAME).o -lgcc
+SUBDIRS = testcases
 
-so: all
-	$(CC) -shared -fPIC -o out/lib$(LIBNAME).so out/$(LIBNAME).o -lgcc
-
-testQueue:
-	$(CC) $(TESTDIR)/$@.c $(CFLAGS) -o out/$@ -L$(PWD)/out/ -l$(LIBNAME) $(INCLUDE) $(LIBS)
-
-testQMT: 
-	$(CC) $(TESTDIR)/$@.c $(CFLAGS) -o out/$@ -L$(PWD)/out/ -l$(LIBNAME) $(INCLUDE) $(LIBS)
-
-clean:
-	rm -rf out
+include $(BASE_DIR)/build/Makefile.inc
