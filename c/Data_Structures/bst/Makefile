@@ -1,30 +1,5 @@
-BASE_DIR=../..
+BASE_DIR=../../
 
-# Include files
-INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
+SUBDIRS = bst node testcases
 
-# Library filenames, _MT for multi-threaded version
-LIBNAME=bst
-LIBNAME_MT=bst_mt
-
-# Source directory for the library
-SRC = bst_node.c bst_node_insert.c
-SRC += bst.c bst_insert.c
-SRC += bst_print.c
-
-# Testcases directory
-TESTDIR = testcases
-
-# Testcases for single-threaded library
-TEST_SRC = node/bst_node_create_test.c
-TEST_SRC += node/bst_node_print_test.c
-TEST_SRC += bst/bst_insert_test.c
-TEST_SRC += bst/bst_print_test.c
-
-# Testcases for Multi-threaded library
-#TEST_SRC_MT += node/sll_node_print_test_mt.c
-
-# library flags
-LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
-
-include $(BASE_DIR)/build/GlobalMake
+include $(BASE_DIR)/build/Makefile.inc
