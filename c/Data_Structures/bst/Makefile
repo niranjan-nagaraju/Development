@@ -1,5 +1,5 @@
 BASE_DIR=../../
 
-SUBDIRS = bst node testcases
+SUBDIRS = bst node
 
 include $(BASE_DIR)/build/Makefile.inc

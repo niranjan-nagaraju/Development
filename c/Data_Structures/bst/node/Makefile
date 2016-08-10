@@ -1,5 +1,7 @@
 BASE_DIR=../../..
 
+SUBDIRS = testcases
+
 # Include files
 INCLUDE +=-I./include  -I$(BASE_DIR)/common/include
 
