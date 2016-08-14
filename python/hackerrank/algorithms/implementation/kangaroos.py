@@ -49,7 +49,7 @@ But if v2 > v1, then they'll never catch up
 
 
 x1,v1,x2,v2 = map(int, raw_input().strip().split(' '))
-if (v2 > v1) or (v2 == v1):
+if (v2 >= v1):
 	# x2 > x1 => if v1 == v2, they'll never meet, also % by 0 would be a runtime error.
 	print "NO"
 	exit(0)
