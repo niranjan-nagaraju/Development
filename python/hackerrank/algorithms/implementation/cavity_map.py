@@ -29,7 +29,6 @@ Sample Output
 
 '''
 
-from __future__ import print_function
 import sys
 
 def is_cavity(grid, i, j):
@@ -52,22 +51,22 @@ for i in xrange(n):
 
 # print first row
 for i in xrange(0, n):
-	print(grid[0][i], end="")
-print()
+	sys.stdout.write(str(grid[0][i]))
+print
 
 for i in xrange(1, n-1):
 	# print border cells
-	print(grid[i][0], end="")
+	sys.stdout.write(str(grid[i][0]))
 	for j in xrange(1, n-1):
-		print(grid[i][j], end="") if not is_cavity(grid, i, j) else print('X', end="")
+		sys.stdout.write(str(grid[i][j])) if not is_cavity(grid, i, j) else sys.stdout.write('X')
 
 	# print border cells to the right
-	print(grid[i][n-1])
+	print grid[i][n-1]
 
 # print last row (except when n==1, in which case this will be a duplicate)
 if (n == 1):
 	exit(0)
 
 for i in xrange(0, n):
-	print(grid[n-1][i], end="")
-print()
+	sys.stdout.write(str(grid[n-1][i]))
+print
