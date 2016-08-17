@@ -58,7 +58,7 @@ for i in xrange(1, n-1):
 	# print border cells
 	sys.stdout.write(str(grid[i][0]))
 	for j in xrange(1, n-1):
-		sys.stdout.write(str(grid[i][j])) if not is_cavity(grid, i, j) else sys.stdout.write('X')
+		sys.stdout.write( str(grid[i][j]) if not is_cavity(grid, i, j) else 'X')
 
 	# print border cells to the right
 	print grid[i][n-1]
