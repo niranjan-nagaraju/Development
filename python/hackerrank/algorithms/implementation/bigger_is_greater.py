@@ -78,7 +78,6 @@ def next_lexicographic_permutation(l, n):
 n = int(raw_input())
 for i in xrange(n):
 	l = map(ord, raw_input().strip())
-	orig_seq = l[:]
-	ln = len(orig_seq)
-	print ''.join(map(chr, l)) if (next_lexicographic_permutation(l, ln) and orig_seq != l) else 'no answer'
+	ln = len(l)
+	print ''.join(map(chr, l)) if next_lexicographic_permutation(l, ln) else 'no answer'
 
