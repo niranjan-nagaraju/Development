@@ -19,45 +19,68 @@ Sample Output
 
 '''
 
-# Check if s is a palindrome without s[idx]
-def is_palindrome(s, idx, n):
+# Make 's' a palindrome removing one character that breaks symmetry
+def make_palindrome(s, n):
+	'''
+	While checking for a palindrome, a[i] <-> a[j], i->0,1,2,..., j<-n-1,n-2,..,
+	One character breaks the symmetry (e.g. racBecar).
+	"Remove" that character when a[i] and a[j] doesn't match.
+	Essentially try a[i],a[i+1] vs a[j],a[j-1]
+	'''
 	i = 0
 	j = n-1
+	removed_char = False # We haven't removed a char yet
+	idx_to_remove = -1
 	while True:
-		# skip i,j if either of them == idx
-		if ( i == idx ):
-			i += 1
-		if ( j == idx ):
-			j -= 1
+		if (s[i] != s[j]):
+			if (removed_char == True):
+				# We have already removed a character to try and match
+				# A second mismatch is not expected
+				# => S is not going to be a palindrome even if we remove a character
+
+				return -1
+
+			if (s[i+1] == s[j]):
+				idx_to_remove = i
+				i += 1
+				removed_char == True
+			elif (s[j-1] == s[i]):
+				idx_to_remove = j
+				j -= 1
+				removed_char = True
+			else:
+				# None of (i,j), (i+1, j), (i, j-1) match 
+				# => cant be made into a palindrome removing just one character
+
+				print 'case 3', i, j, s[i], s[i+1], s[j-1], s[j]
+				return -1
 
 		if (i >= j):
 			break
 
-		if (s[i] != s[j]):
-			return False
-
 		i += 1
 		j -= 1
 
-	return True
-
-# remove 1 char at a time from S and check if its a palindrome
-def remove_char_and_test(s, n):
-	# check if the whole string is a palindrome already
-	if is_palindrome(s, -1, n):
-		return -1
-
-	for i in xrange(n):
-		if is_palindrome(s, i, n):
-			return i
-
-	return -1
-
+	return idx_to_remove
 
 
 t = int(raw_input())
 for i in xrange(t):
 	s = raw_input().strip()
+	print make_palindrome(s, len(s))
 
-	print remove_char_and_test(s, len(s))
 
+'''
+failure cases repro:
+	[01:29:40 nnagaraj strings]$ python palindrome_index.py 
+	1
+	cwnnwcw
+	case 3 2 5 n n w c
+	-1
+
+	[01:38:34 nnagaraj strings]$ python palindrome_index.py 
+	1
+	cwwcw
+	2
+
+'''
