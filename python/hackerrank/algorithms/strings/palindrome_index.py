@@ -22,7 +22,7 @@ Sample Output
 # Check if s is a palindrome without s[idx]
 def is_palindrome(s, idx, n):
 	i = 0
-	j = -1
+	j = n-1
 	while True:
 		# skip i,j if either of them == idx
 		if ( i == idx ):
