@@ -43,7 +43,7 @@ def make_palindrome(s, n):
 			if (s[i+1] == s[j]):
 				idx_to_remove = i
 				i += 1
-				removed_char == True
+				removed_char = True
 			elif (s[j-1] == s[i]):
 				idx_to_remove = j
 				j -= 1
@@ -81,6 +81,6 @@ failure cases repro:
 	[01:38:34 nnagaraj strings]$ python palindrome_index.py 
 	1
 	cwwcw
-	2
+	-1
 
 '''
