@@ -35,16 +35,24 @@ def make_palindrome(s, n):
 		if (s[i] != s[j]):
 			if (removed_char == True):
 				# We have already removed a character to try and match
-				# A second mismatch is not expected
-				# => S is not going to be a palindrome even if we remove a character
+				# A second mismatch means we probably have to backtrack
 
 				return -1
 
-			if (s[i+1] == s[j]):
+			# First mismatch here ..XabX..
+			# any of 'a' or 'b' can be removed to make it a palindrome
+			if (i + 1) == j:
+				return i
+
+			# check the next two elements as well so we don't assume
+			# removing leftmost or rightmost will automatically
+			# make it a palindrome
+			# e.g. cwwcw => removing c at index 0 wont make it a palindrome
+			if (s[i+1] == s[j]) and (s[i+2] == s[j-1]):
 				idx_to_remove = i
 				i += 1
 				removed_char = True
-			elif (s[j-1] == s[i]):
+			elif (s[j-1] == s[i]) and (s[j-2] == s[i+1]):
 				idx_to_remove = j
 				j -= 1
 				removed_char = True
@@ -52,7 +60,6 @@ def make_palindrome(s, n):
 				# None of (i,j), (i+1, j), (i, j-1) match 
 				# => cant be made into a palindrome removing just one character
 
-				print 'case 3', i, j, s[i], s[i+1], s[j-1], s[j]
 				return -1
 
 		if (i >= j):
@@ -71,16 +78,17 @@ for i in xrange(t):
 
 
 '''
-failure cases repro:
-	[01:29:40 nnagaraj strings]$ python palindrome_index.py 
-	1
-	cwnnwcw
-	case 3 2 5 n n w c
-	-1
-
-	[01:38:34 nnagaraj strings]$ python palindrome_index.py 
+failure cases pass now:
+	[22:30:52 nnagaraj strings]$ python palindrome_index.py 
 	1
 	cwwcw
-	-1
-
+	4
+	[22:37:13 nnagaraj strings]$ python palindrome_index.py 
+	1
+	cwnnwcw
+	6
+	[22:37:25 nnagaraj strings]$ python palindrome_index.py 
+	1
+	bacb
+	1
 '''
