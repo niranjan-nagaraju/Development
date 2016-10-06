@@ -17,8 +17,8 @@ convert_time' hours pm_or_am
 convert_time :: [Char] -> [Char] 
 convert_time timeStr =
 	let 
-		(hours,rest) = splitAt 2 timeStr
-		(mm_ss,pm_or_am) = splitAt 6 rest
+		(hours,mm_ss_period) = splitAt 2 timeStr
+		(mm_ss,pm_or_am) = splitAt 6 mm_ss_period
 	in (convert_time' hours pm_or_am) ++ mm_ss
 
 
