@@ -1,6 +1,6 @@
 BASE_DIR=../../..
 
-SUBDIRS = testcases
+TEST_SUBDIRS = testcases
 
 # Include files
 INCLUDE +=-I./include -I../node/include -I$(BASE_DIR)/common/include

@@ -1,5 +1,5 @@
 BASE_DIR=../../
 
-SUBDIRS = sll node 
+SUBDIRS = node sll
 
 include $(BASE_DIR)/build/Makefile.inc
