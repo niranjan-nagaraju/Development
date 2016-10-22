@@ -21,7 +21,16 @@ TEST_OBJS_MT = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(TEST_SRCS_MT))
 TEST_EXES_MT = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%, $(TEST_SRCS_MT))
 TEST_INCLUDE_MT +=
 
-tests:: $(OBJS) $(SUBDIRS) $(TEST_EXES) $(TEST_EXES_MT)
+$(TEST_SUBDIRS): 
+	@if [ -d `pwd`/$@ ] ; \
+    then \
+        $(MAKE) $(MKFLG) -C $@ MWD=$(MWD)$@/ $(MAKECMDGOALS); \
+    else \
+        echo "<$@>: No such directory!"; \
+		exit 1; \
+    fi
+
+tests:: $(OBJS) $(SUBDIRS) $(TEST_SUBDIRS) $(TEST_EXES) $(TEST_EXES_MT)
 
 $(TEST_EXES): | $(OBJDIR)
 ifdef TEST_SRCS

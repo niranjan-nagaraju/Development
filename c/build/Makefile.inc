@@ -52,15 +52,14 @@ SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRCS))
 OBJS_MT = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%_mt.o, $(SRCS))
 
-.PHONY: $(SUBDIRS) 
+.PHONY: $(SUBDIRS) $(TEST_SUBDIRS)
 
 
 # Recursively build object files from C source files in current directory and subdirectories defined earlier
 # if LIBNAME is defined, build an archive(static library)
 # Else just build object files
 # NOTE: 'all' target has a :: so it can be 'overridden' in child makefiles - define all:: target in child makefiles to execute both targets
-#all:: $(OBJS) $(SUBDIRS) $(LIBNAME) $(LIBNAME_MT) tests
-all:: libs 
+all:: libs tests
 
 libs: $(OBJS) $(SUBDIRS) $(LIBNAME) $(LIBNAME_MT)
 
@@ -123,21 +122,21 @@ $(OBJDIR):
 	mkdir -p $@
 
 debug: CFLAGS+=$(CFLAGS_DEBUG)
-debug: $(SUBDIRS) $(filter-out debug,$(MAKECMDGOALS))
+debug: all
 
 # 'opt' CFLAGS are on by default if debug isn't defined
-opt: $(SUBDIRS) $(filter-out opt,$(MAKECMDGOALS))
+opt: all
 
 # find all 'linux_x86' folders created and delete them
-clean: $(SUBDIRS)
+clean: $(SUBDIRS) $(TEST_SUBDIRS) 
 	rm -rf $(OBJDIR)
 
 # Clean the object files generated for this system
-cleanobj: $(SUBDIRS)
+cleanobj: $(SUBDIRS) $(TEST_SUBDIRS)
 	rm -rf $(OBJDIR)/*.o
 
 # Clean everything ever compiled.
-cleanall: $(SUBDIRS)
+cleanall: $(SUBDIRS) $(TEST_SUBDIRS)
 	rm -rf $(OUTDIR)
 
 include $(BASE_DIR)/build/Makefile.test.inc
