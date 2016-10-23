@@ -1,39 +1,42 @@
 #ifndef __ARRAY_QUEUE_H__
 #define __ARRAY_QUEUE_H__
 
+#ifdef _MULTI_THREADED_
 #include <pthread.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
-typedef struct array_queue{
-	int head, tail;
+#include "boolean.h"
+
+typedef struct array_queue_s {
+	int head; /** front of the queue */
+	int tail; /** rear of the queue */
 	void **objects;
 	int size;
 	int curr_size;
-
-	int threadsafe;
+	/** circular Queues help store 'size' number of elements at all times, default True */
+	boolean circular; 
+#ifdef _MULTI_THREADED_
 	pthread_mutex_t lock;
-
-	int (*enqueue)(struct array_queue *this, void *object);
-	void *(*dequeue)(struct array_queue *this);
-	int (*resize)(struct array_queue *this, int newsize);
-	int (*length)(struct array_queue *this);
-	void *(*peek)(struct array_queue *this);
-	void (*erase)(struct array_queue *this);
-	int (*isThreadSafe) (struct array_queue *this);
-	void (*setThreadSafe) (struct array_queue *this);
-	void (*print) (struct array_queue *this, void (*printfn)(void *object));
+#endif
 }array_queue_t;
 
-int initArrayQueue(array_queue_t *this, int size);
-int addToArrayQueue(array_queue_t *this, void *object);
-void *removeFromArrayQueue(array_queue_t *this);
-int resizeArrayQueue(array_queue_t *this, int newsize);
-int lengthOfArrayQueue(array_queue_t *this);
-void *peekArrayQueue(array_queue_t *this);
-void eraseArrayQueue(array_queue_t *this);
-int isThreadSafeArrayQueue(array_queue_t *this);
-void setThreadSafeArrayQueue(array_queue_t *this);
-void printArrayQueue(struct array_queue *this, void (*printfn)(void *object));
+/** The public interface */
+int arrayQ_init(array_queue_t *this, int size);
+int arrayQ_enqueue(array_queue_t *this, void *object);
+void *arrayQ_dequeue(array_queue_t *this);
+int arrayQ_len(array_queue_t *this);
+boolean arrayQ_isCircular(array_queue_t *this);
+boolean arrayQ_isFull(array_queue_t *this);
+boolean arrayQ_isEmpty(array_queue_t *this);
+int arrayQ_resize(array_queue_t *this, int newsize);
+void *arrayQ_peekFront(array_queue_t *this);
+void *arrayQ_peekRear(array_queue_t *this);
+void *arrayQ_peekAt(array_queue_t *this, int idx);
+boolean arrayQ_isThreadSafe(array_queue_t *this);
+void arrayQ_destroy(array_queue_t *this);
+void arrayQ_print(array_queue_t *this, void (*printfn)(void *object));
 
 #endif /** __ARRAY_QUEUE_H__ */

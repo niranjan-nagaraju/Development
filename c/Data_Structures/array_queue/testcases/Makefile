@@ -3,8 +3,8 @@ BASE_DIR=../../..
 #TEST_SRCS += testErase.c
 #TEST_SRCS += testLength.c
 #TEST_SRCS += testPeek.c
-TEST_SRCS += testQMT.c
-TEST_SRCS += testQueue.c
+#TEST_SRCS += testQMT.c
+TEST_SRCS += testQueueInt.c
 #TEST_SRCS += testResize.c
 
 
