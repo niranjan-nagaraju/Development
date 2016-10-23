@@ -122,10 +122,19 @@ $(OBJDIR):
 	mkdir -p $@
 
 debug: CFLAGS+=$(CFLAGS_DEBUG)
+ifeq "$(filter-out debug, $(MAKECMDGOALS))" ""
 debug: all
+else
+debug: $(filter-out debug, $(MAKECMDGOALS))
+endif
 
 # 'opt' CFLAGS are on by default if debug isn't defined
+ifeq "$(filter-out opt, $(MAKECMDGOALS))" ""
 opt: all
+else
+opt: $(filter-out opt, $(MAKECMDGOALS))
+endif
+
 
 # find all 'linux_x86' folders created and delete them
 clean: $(SUBDIRS) $(TEST_SUBDIRS) 

@@ -84,6 +84,13 @@ include $(BASE_DIR)/build/Makefile.inc
 	  to compile both testcases and library with -O2
   PS: Just "make" without any targets will also build using "make opt"
 
+16. Build specific targets with debug/opt
+	$ make debug libs 
+		- builds libraries with debug symbols
+	Similarly,
+	$ make opt tests
+		- builds testcases without debug enabled
+
 ******************************************
 	II. Build a standalone program
 ******************************************

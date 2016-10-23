@@ -30,9 +30,9 @@ $(TEST_SUBDIRS):
 		exit 1; \
     fi
 
-tests:: $(OBJS) $(SUBDIRS) $(TEST_SUBDIRS) $(TEST_EXES) $(TEST_EXES_MT)
+tests:: $(SUBDIRS) $(TEST_SUBDIRS) $(TEST_EXES) $(TEST_EXES_MT)
 
-$(TEST_EXES): | $(OBJDIR)
+$(TEST_EXES): %:%.o | $(OBJDIR) 
 ifdef TEST_SRCS
 	$(CC) $@.o -o $@ $(LIBS) $(LDFLAGS) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS)
 endif
