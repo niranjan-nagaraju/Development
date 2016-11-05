@@ -92,7 +92,7 @@ TC: 2
 [0, 1, 2, 3, 4, 5] 0
 
 
-FAILED TC: 3 TODO: Take care of loops, FTR, even [X, 2, 1] will fail
+*FAILED* TC: 3 TODO: Take care of loops, FTR, even [X, 2, 1] will fail
 [20:27:03 nnagaraj Algorithms]$ python parking-slots.py 
 5          
 3 2 x 1 5 4
