@@ -5,7 +5,12 @@ Reorder the cars so that car #1 is in spot #1, car #2 is in spot #2 and so on.
 Spot #0 will remain empty. The only allowed operation is to take a car and move it to the free spot.
 '''
 
-def move_car(slots, cars, empty_slot):
+def move_car(slots, cars, empty_slot, num_done):
+	# We have reached full circle back to empty-slot at slot 0
+	# There are perhaps more cars to be sorted
+	if empty_slot == 0:
+		return empty_slot, num_done
+
 	car_at_slot = cars[empty_slot]
 
 	print car_at_slot
@@ -13,7 +18,8 @@ def move_car(slots, cars, empty_slot):
 	slots[empty_slot] = empty_slot # Move right-numbered car into the empty-slot
 	empty_slot = car_at_slot # new empty slot is where we moved from
 
-	return slots, empty_slot
+	print slots, empty_slot
+	return move_car(slots, cars, empty_slot, (num_done+1))
 
 # Create a reverse lookup of cars -> slots
 # so we can lookup in O(1) which slot[i], car[j] currently is
@@ -52,16 +58,25 @@ cars = create_reverse_lookup(slots, n)
 #print slots, empty_slot
 #print cars
 
-for i in range(n):
-	slots, empty_slot = move_car(slots, cars, empty_slot)
-	print slots, empty_slot
+num_cars_done = 0
+while num_cars_done != n:
+	# returns when empty_slot is back to 0, 
+	# we still might have more cars to be put back in their right slots
+	empty_slot, num_cars_done = move_car(slots, cars, empty_slot, num_cars_done)
+	print num_cars_done
+
+	# TODO: Scan L->R for the first slot{i} with incorrectly parked car{j}
+	# Move car{j} at slot{i} to 'empty slot' (0 in this case)
+	# update reverse lookup - O(1) operation just update that car{j} is now at slot{0}
+	# Repeat move_car
+
 
 assert(slots == range(n+1))
 
 
 '''
 TC: 1
-[20:30:17 nnagaraj Algorithms]$ python parking-slots.py 
+[20:30:17 Algorithms]$ python parking-slots.py 
 5
 2 x 3 5 1 4
 4
@@ -77,7 +92,7 @@ TC: 1
 
 
 TC: 2
-[20:31:01 nnagaraj Algorithms]$ python parking-slots.py 
+[20:31:01 Algorithms]$ python parking-slots.py 
 5
 5 4 x 3 2 1
 4
@@ -93,7 +108,7 @@ TC: 2
 
 
 *FAILED* TC: 3 TODO: Take care of loops, FTR, even [X, 2, 1] will fail
-[20:27:03 nnagaraj Algorithms]$ python parking-slots.py 
+[20:27:03 Algorithms]$ python parking-slots.py 
 5          
 3 2 x 1 5 4
 1
