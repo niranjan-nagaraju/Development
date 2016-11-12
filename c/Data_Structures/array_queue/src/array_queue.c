@@ -26,13 +26,17 @@ arrayQ_init(array_queue_t *this, int size)
 void
 arrayQ_setCircular(array_queue_t *this)
 {
+	LOCK_QUEUE(this);
 	this->circular = TRUE;
+	UNLOCK_QUEUE(this);
 }
 
 void
 arrayQ_unsetCircular(array_queue_t *this)
 {
+	LOCK_QUEUE(this);
 	this->circular = FALSE;
+	UNLOCK_QUEUE(this);
 }
 
 
@@ -92,12 +96,16 @@ arrayQ_enqueue(array_queue_t *this, void *object)
 	LOCK_QUEUE(this);
 
 	/** Queue overflow */
-	if (this->tail == this->size-1) {
+	if (_arrayQ_isFull(this)) {
 		UNLOCK_QUEUE(this);
 		return -EINVAL;
 	}
 
 	(this->tail)++;
+	if (this->circular) { /** Circular Queue */
+		(this->tail) = (this->tail) % (this->size);
+	}
+
 	this->objects[this->tail] = object;
 	if (this->head == -1)	/** First element in the queue */
 		this->head = 0;
@@ -263,9 +271,20 @@ arrayQ_print(array_queue_t *this, void (*printfn)(void *object))
 	LOCK_QUEUE(this);
 	printf("Q(sz: %d, cap: %d, head: %d, tail: %d): \n", this->curr_size, 
 			this->size, this->head, this->tail);
-	for (i=this->head; i<=(this->tail); i++) {
-		printfn(this->objects[i]);
+
+	if (_arrayQ_isEmpty(this)) {
+		UNLOCK_QUEUE(this);
+		return;
+	}
+
+	for ( i=0; i< this->curr_size; i++) {
+		int idx = this->head + i;
+		if (this->circular) 
+			idx = (idx % this->size);
+
+		printfn(this->objects[idx]);
 		printf(" ");
+
 	}
 
 	UNLOCK_QUEUE(this);

@@ -22,7 +22,10 @@ _arrayQ_isCircular(array_queue_t *this)
 static boolean 
 _arrayQ_isFull(array_queue_t *this)
 {
-	return (this->curr_size == this->size);
+	if (this->circular)
+		return (this->curr_size == this->size);
+	else 
+		return (this->tail == (this->size-1));
 }
 
 
