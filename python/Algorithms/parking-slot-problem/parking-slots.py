@@ -5,124 +5,182 @@ Reorder the cars so that car #1 is in spot #1, car #2 is in spot #2 and so on.
 Spot #0 will remain empty. The only allowed operation is to take a car and move it to the free spot.
 '''
 
-def move_car(slots, cars, empty_slot, num_done):
+'''
+Solution:
+	0. A reverse lookup table, to easily 'find' which slot a car is at.
+	1. Identify car slot, 'e'.
+	2. Find where car{e} is and move it to slot{e}, car{e} is now in its rightful position
+	3. slot{x}, where car{e} originally was is now empty.
+	4. slot{x} is now the new empty slot 'e', repeat [1] until all n cars are moved.
+
+	5. Problems arise when there's a loop (e.g. cars[1,2] are at slots[2,1] etc and/or
+  	     (i) when '0' is the empty slot to begin with or 
+	     (ii) becomes the 'new' empty slot while we are still not done moving 'n'cars 
+		     [This happens when there exists 'x' | car{x} is at slots{0}, so when we move car{x} to slot{x}, new empty slot is '0']
+
+	6. Handle problems at [5] by going L-R, finding the first car{i}, slot{j} that's not in its rightful position and moving it to slot '0'. New empty slot is 'j' [Needs reverse lookup table to be updated for the move from j->0]
+'''
+
+import parking_slots_common	as c
+
+# Recursively move cars from one empty slot to another
+# Returns when all cars have been moved to their rightful position.
+def move_car(slots, cars, empty_slot, num_cars_done, n):
+	global total_moves
+	# Moved all cars, return
+	if num_cars_done == n:
+		return
+
 	# We have reached full circle back to empty-slot at slot 0
 	# There are perhaps more cars to be sorted
+	# At this point, if we have moved all 'n' cars, it means there's nothing else to do
+	# Otherwise, we have prematurely hit slot 0 due to a 'loop'
 	if empty_slot == 0:
-		return empty_slot, num_done
+		# Scan L->R for the first slot{i} with incorrectly parked car{j}
+		# Move car{j} at slot{i} to 'empty slot' (0 in this case)
+		# update reverse lookup - O(1) operation just update that car{j} is now at slot{0}
+		# Repeat move_car
+		for i in range(1,n+1):
+			if slots[i] != i:
+				break
+
+		# All cars are already ordered
+		if (i == n):
+			print 'All cars are in order!'
+			return
+
+		slots[0] = cars[i] # Move car at slot{i} to 0
+		slots[i] = 0 # slot{i} is now empty
+		c.update_cars_at_slots(cars, slots, empty_slot)
+		empty_slot = i # new empty slot
+
+		total_moves += 1
+		print ' ->', slots
+		return move_car(slots, cars, empty_slot, num_cars_done, n)
+
 
 	car_at_slot = cars[empty_slot]
 
-	print car_at_slot
 	slots[car_at_slot] = 0 # Remove car from slot
 	slots[empty_slot] = empty_slot # Move right-numbered car into the empty-slot
+
+	# This is strictly not needed, as when a car has been moved to its
+	# rightful position, we wont ever need to query it again
+	# However, for the sake of completeness /AND/ the fact that the reverse lookup
+	# looks confusing while debugging (plus it's an O(1) operation anyway), 
+	# Update that car{i} has been moved to slot{i}
+	c.update_cars_at_slots(cars, slots, empty_slot) 
+
 	empty_slot = car_at_slot # new empty slot is where we moved from
 
-	print slots, empty_slot
-	return move_car(slots, cars, empty_slot, (num_done+1))
-
-# Create a reverse lookup of cars -> slots
-# so we can lookup in O(1) which slot[i], car[j] currently is
-# Return reverse lookup table 
-def create_reverse_lookup(slots, n):
-	cars_at_slots = [0] * (n+1)
-	i = 0 
-	while i<=n:
-		cars_at_slots[slots[i]] = i
-		i = i + 1
-
-	cars_at_slots[0] = 0 # There's no car numbered 0
-
-	return cars_at_slots
+	total_moves += 1
+	print slots
+	return move_car(slots, cars, empty_slot, (num_cars_done+1), n)
 
 
-def get_input_slots(n):
-	i = 0
-	current_slots_str = raw_input().split()
-	slots = [0] * (n+1)
-	while i <= n:
-		try:
-			slots[i] = int(current_slots_str[i])
-		except ValueError:
-			slots[i] = 0
-			empty_slot = i
-			pass
-		i = i + 1
+n, slots, empty_slot =  c.get_input_slots()
+cars = c.create_reverse_lookup(slots, n)
 
-	return slots, empty_slot
+print slots
 
-n = int(raw_input()) # 'n+1' slots
-slots, empty_slot =  get_input_slots(n)
-cars = create_reverse_lookup(slots, n)
-
-#print slots, empty_slot
-#print cars
-
-num_cars_done = 0
-while num_cars_done != n:
-	# returns when empty_slot is back to 0, 
-	# we still might have more cars to be put back in their right slots
-	empty_slot, num_cars_done = move_car(slots, cars, empty_slot, num_cars_done)
-	print num_cars_done
-
-	# TODO: Scan L->R for the first slot{i} with incorrectly parked car{j}
-	# Move car{j} at slot{i} to 'empty slot' (0 in this case)
-	# update reverse lookup - O(1) operation just update that car{j} is now at slot{0}
-	# Repeat move_car
-
+total_moves = 0	  
+move_car(slots, cars, empty_slot, 0, n)
+print 'Total moves:', total_moves
 
 assert(slots == range(n+1))
 
-
 '''
 TC: 1
-[20:30:17 Algorithms]$ python parking-slots.py 
+[17:20:54 parking-slot-problem]$ python parking-slots.py 
 5
-2 x 3 5 1 4
-4
-[2, 1, 3, 5, 0, 4] 4
-5
-[2, 1, 3, 5, 4, 0] 5
-3
-[2, 1, 3, 0, 4, 5] 3
-2
-[2, 1, 0, 3, 4, 5] 2
-0
-[0, 1, 2, 3, 4, 5] 0
-
+5 1 2 3 x 4
+[5, 1, 2, 3, 0, 4]
+[5, 1, 2, 3, 4, 0]
+[0, 1, 2, 3, 4, 5]
+All cars are in order!
+Total moves: 2
 
 TC: 2
-[20:31:01 Algorithms]$ python parking-slots.py 
+[17:21:51 parking-slot-problem]$ python parking-slots.py 
+5
+2 x 3 5 1 4
+[2, 0, 3, 5, 1, 4]
+[2, 1, 3, 5, 0, 4]
+[2, 1, 3, 5, 4, 0]
+[2, 1, 3, 0, 4, 5]
+[2, 1, 0, 3, 4, 5]
+[0, 1, 2, 3, 4, 5]
+Total moves: 5
+
+TC: 3
+[17:25:00 parking-slot-problem]$ python parking-slots.py 
 5
 5 4 x 3 2 1
-4
-[5, 4, 2, 3, 0, 1] 4
-1
-[5, 0, 2, 3, 4, 1] 1
+[5, 4, 0, 3, 2, 1]
+[5, 4, 2, 3, 0, 1]
+[5, 0, 2, 3, 4, 1]
+[5, 1, 2, 3, 4, 0]
+[0, 1, 2, 3, 4, 5]
+All cars are in order!
+Total moves: 4
+
+TC: 4
+[17:26:13 parking-slot-problem]$ python parking-slots.py 
 5
-[5, 1, 2, 3, 4, 0] 5
-0
-[0, 1, 2, 3, 4, 5] 0
-0
-[0, 1, 2, 3, 4, 5] 0
-
-
-*FAILED* TC: 3 TODO: Take care of loops, FTR, even [X, 2, 1] will fail
-[20:27:03 Algorithms]$ python parking-slots.py 
-5          
 3 2 x 1 5 4
-1
-[3, 0, 2, 1, 5, 4] 1
-3
-[3, 1, 2, 0, 5, 4] 3
-0
-[0, 1, 2, 3, 5, 4] 0
-0
-[0, 1, 2, 3, 5, 4] 0
-0
-[0, 1, 2, 3, 5, 4] 0
-Traceback (most recent call last):
-	  File "parking-slots.py", line 59, in <module>
-	      assert(slots == range(n+1))
-		  AssertionError
+[3, 2, 0, 1, 5, 4]
+[3, 0, 2, 1, 5, 4]
+[3, 1, 2, 0, 5, 4]
+[0, 1, 2, 3, 5, 4]
+ -> [5, 1, 2, 3, 0, 4]
+[5, 1, 2, 3, 4, 0]
+[0, 1, 2, 3, 4, 5]
+Total moves: 6
+
+TC: 5
+[17:26:51 parking-slot-problem]$ python parking-slots.py 
+5          
+x 1 2 3 4 5
+[0, 1, 2, 3, 4, 5]
+All cars are in order!
+Total moves: 0
+
+TC: 6
+[17:27:20 parking-slot-problem]$ python parking-slots.py 
+5     
+x 5 4 3 2 1 
+[0, 5, 4, 3, 2, 1]
+ -> [5, 0, 4, 3, 2, 1]
+[5, 1, 4, 3, 2, 0]
+[0, 1, 4, 3, 2, 5]
+ -> [4, 1, 0, 3, 2, 5]
+[4, 1, 2, 3, 0, 5]
+[0, 1, 2, 3, 4, 5]
+All cars are in order!
+Total moves: 6
+
+
+TC: 7
+[17:34:14 parking-slot-problem]$ python parking-slots.py 
+5
+3 2 x 4 5 1
+[3, 2, 0, 4, 5, 1]
+[3, 0, 2, 4, 5, 1]
+[3, 1, 2, 4, 5, 0]
+[3, 1, 2, 4, 0, 5]
+[3, 1, 2, 0, 4, 5]
+[0, 1, 2, 3, 4, 5]
+Total moves: 5
+
+TC: 8
+[18:04:11 parking-slot-problem]$ python parking-slots.py 
+5
+5 4 x 1 2 3
+[5, 4, 0, 1, 2, 3]
+[5, 4, 2, 1, 0, 3]
+[5, 0, 2, 1, 4, 3]
+[5, 1, 2, 0, 4, 3]
+[5, 1, 2, 3, 4, 0]
+[0, 1, 2, 3, 4, 5]
+Total moves: 5
 '''
