@@ -12,6 +12,9 @@ int main (void)
 
 	assert(arrayQ_isEmpty(&myqueue) == TRUE);
 
+	arrayQ_setCircular(&myqueue);
+	assert(arrayQ_isCircular(&myqueue) == TRUE);
+
 	for(i=0; i<10; i++) {
 		assert(arrayQ_enqueue(&myqueue, (void *)(i+1)) == 0);
 	

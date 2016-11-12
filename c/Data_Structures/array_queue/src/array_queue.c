@@ -14,14 +14,25 @@ arrayQ_init(array_queue_t *this, int size)
 
 	this->head = this-> tail = -1;
 
-	/** Use linear/non-circular for now */
-	this->circular = FALSE;
+	this->circular = TRUE;
 	this->size = size;
 	this->curr_size = 0;
 
 	LOCK_INIT(this);
 
 	return 0;
+}
+
+void
+arrayQ_setCircular(array_queue_t *this)
+{
+	this->circular = TRUE;
+}
+
+void
+arrayQ_unsetCircular(array_queue_t *this)
+{
+	this->circular = FALSE;
 }
 
 

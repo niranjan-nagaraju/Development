@@ -25,6 +25,7 @@ typedef struct array_queue_s {
 
 /** The public interface */
 int arrayQ_init(array_queue_t *this, int size);
+void arrayQ_setCircular(array_queue_t *this);
 int arrayQ_enqueue(array_queue_t *this, void *object);
 void *arrayQ_dequeue(array_queue_t *this);
 int arrayQ_len(array_queue_t *this);
