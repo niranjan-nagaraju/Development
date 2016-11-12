@@ -37,9 +37,9 @@ ifdef TEST_SRCS
 	$(CC) $@.o -o $@ $(LIBS) $(LDFLAGS) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS)
 endif
 
-$(TEST_EXES_MT): | $(OBJDIR)
+$(TEST_EXES_MT): %:%.o | $(OBJDIR)
 ifdef TEST_SRCS_MT
-	$(CC) $@.o -o $@ $(LIBS_MT) $(LDFLAGS_MT) $(TEST_LDFLAGS_MT) $(TEST_COMMON_OBJS_MT)
+	$(CC) $@_mt.o -o $@ $(LIBS_MT) $(LDFLAGS_MT) $(TEST_LDFLAGS_MT) $(TEST_COMMON_OBJS_MT)
 endif
 
 
