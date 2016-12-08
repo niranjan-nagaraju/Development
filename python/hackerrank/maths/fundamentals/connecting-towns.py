@@ -22,4 +22,4 @@ T = int(input()) # Testcases
 for i in range(T):
     n = int(input())
     ni = map(int, raw_input().split())
-    print reduce(lambda x, y: x*y, ni)
+    print reduce(lambda x, y: x*y, ni) % 1234567
