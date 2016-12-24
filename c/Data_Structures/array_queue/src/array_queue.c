@@ -127,18 +127,22 @@ arrayQ_dequeue(array_queue_t *this)
 	LOCK_QUEUE(this);
 
 	/** Queue underflow */
-	if (this->head == -1) {
+	if (_arrayQ_isEmpty(this)) {
 		UNLOCK_QUEUE(this);
 		return NULL;
 	}
 
 	object = this->objects[(this->head)];
+
 	(this->head)++;
+	if (_arrayQ_isCircular(this)) {
+		(this->head) = (this->head) % (this->size);
+	}
 	
 	(this->curr_size)--;
 
 	/** This was the last element in the queue, Queue is now empty */
-	if(this->head == this->size)
+	if(_arrayQ_isEmpty(this))
 		this->head = this->tail = -1;
 
 	UNLOCK_QUEUE(this);
