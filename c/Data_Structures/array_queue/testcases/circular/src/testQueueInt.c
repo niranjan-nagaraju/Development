@@ -48,6 +48,7 @@ int main (void)
 	assert(arrayQ_isFull(&myqueue) == FALSE);
 	assert(arrayQ_enqueue(&myqueue, (void *)(12)) == 0);
 
+	arrayQ_print(&myqueue, printAsInt);
 	//arrayQ_destroy(&myqueue);
 	//assert(arrayQ_isEmpty(&myqueue) == TRUE);
 
