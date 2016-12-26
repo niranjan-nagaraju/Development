@@ -80,11 +80,6 @@ check_parantheses_match(const char *expr)
 int
 main(void) 
 {
-	const char expr1[] = "(A+B)";
-	const char expr2[] = "{(A+B)}";
-	const char expr3[] = "{(A+B)[]}";
-	const char expr4[] = "{(A+B)[}]";
-
 	assert(check_parantheses_match("(A+B)")== TRUE);
 	assert(check_parantheses_match("{(A+B)}") == TRUE);
 	assert(check_parantheses_match("{[B](A+B)}") == TRUE);
