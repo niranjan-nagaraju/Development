@@ -71,6 +71,7 @@ ifeq ($(OS), Darwin)
 else
 ifeq ($(OS), Linux)
 	$(CC) -shared -o $(OBJDIR)/lib$(LIBNAME).so $(LDFLAGS) -Wl,--whole-archive $(OBJDIR)/lib$(LIBNAME).a -Wl,--no-whole-archive
+	cp -f $(OBJDIR)/lib$(LIBNAME).so $(BASE_DIR)/$(OBJDIR)/lib$(LIBNAME).so
 else
 	@echo 'Unknown Operating System'
 	exit 1;
