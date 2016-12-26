@@ -87,6 +87,7 @@ ifeq ($(OS), Darwin)
 else
 ifeq ($(OS), Linux)
 	$(CC) -shared -o $(OBJDIR)/lib$(LIBNAME_MT).so $(LDFLAGS) $(LDFLAGS_MT) -Wl,--whole-archive $(OBJDIR)/lib$(LIBNAME_MT).a -Wl,--no-whole-archive
+	cp -f $(OBJDIR)/lib$(LIBNAME_MT).so $(BASE_DIR)/$(OBJDIR)/lib$(LIBNAME_MT).so
 else
 	@echo 'Unknown Operating System'
 	exit 1;
