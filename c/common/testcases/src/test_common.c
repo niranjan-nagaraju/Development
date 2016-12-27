@@ -1,11 +1,7 @@
 #include <common.h>
 
-#define TEST_SWAP_INT
-#define TEST_SWAP_PTR
-
 int main(void)
 {
-#ifdef TEST_SWAP_INT
 	{
 		int a = 10;
 		int b = -20;
@@ -14,9 +10,7 @@ int main(void)
 
 		printf("SwapInt: %d %d\n", a, b);
 	}
-#endif
 
-#ifdef TEST_SWAP_PTR
 	{
 		int a = 10;
 		int b = -20;
@@ -27,7 +21,6 @@ int main(void)
 		swapPtr ((void **)&pa, (void **)&pb);
 		printf("SwapPtr: %d %d\n", *pa, *pb);
 	}
-#endif
 
 	return 0;
 }

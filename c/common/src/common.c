@@ -1,20 +1,5 @@
 #include <common.h>
 
-int comparePtrs (void *p, void *q)
-{
-	return (p == q);
-}
-
-int compareInts (void *p, void *q)
-{
-	return ((int)p - (int)q);
-}
-
-int compareChars (void *p, void *q)
-{
-	return ((char)p - (char)q);
-}
-
 void swapInt(int *p, int *q)
 {
 	/** NOTE: if the same pointers are passed, the numbers become zero right after the first xor */

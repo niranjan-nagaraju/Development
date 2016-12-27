@@ -5,7 +5,7 @@
 #include <boolean.h>
 
 /** define function pointer types for common operations */
-typedef int (*comparefn) (void *data1, void *data2); /** Compare function pointer */
+typedef int (*comparefn) (void *data1, int idx1, void *data2, int idx2); /** Compare function pointer */
 typedef void (*printfn) (void *data);	/** Print function pointer */
 
 /** Function pointer for memory allocators and deallocators */
@@ -13,9 +13,9 @@ typedef void *(*allocatorfn) (int size);
 typedef void (*deallocatorfn) (void *ptr);
 typedef void (*reallocatorfn) (void *ptr, int size);
 
-int comparePtrs (void *p, void *q);
-int compareInts (void *p, void *q);
-int compareChars (void *p, void *q);
+int comparePtrs (void *p, int idx1, void *q, int idx2);
+int compareInts (void *p, int idx1, void *q, int idx2);
+int compareChars (void *p, int idx1, void *q, int idx2);
 
 void swapInt(int *p, int *q);
 void swapChar(char *p, char *q);
