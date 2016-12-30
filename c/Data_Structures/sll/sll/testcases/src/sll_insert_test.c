@@ -85,16 +85,16 @@ test_struct_sll_inserts(void)
 	sll.insert_at_end (&sll, (void *) &c);
 	sll.insert_at_position (&sll, (void *)&b, 1);
 
-	assert (compareStruct (sll.head->data, &a) == 0);
-	assert (compareStruct (sll.tail->data, &c) == 0);
+	assert (compareStruct (sll.head->data, -1, &a, -1) == 0);
+	assert (compareStruct (sll.tail->data, -1, &c, -1) == 0);
 
 	assert (sll.length(&sll) == 3);
 	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareStruct);
 
 	sll.insert_after (&sll, (void *)&d, (void *)'C', compareCharKey);
 	assert (sll.length(&sll) == 4);
-	assert (compareStruct (sll.head->data, &a) == 0);
-	assert (compareStruct (sll.tail->data, &d) == 0);
+	assert (compareStruct (sll.head->data, -1, &a, -1) == 0);
+	assert (compareStruct (sll.tail->data, -1, &d, -1) == 0);
 }
 
 
