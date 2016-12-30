@@ -6,7 +6,7 @@ static int
 bst_insert_node_helper_R(bst_node_t *parent, bst_node_t *node, comparefn compare)
 {
 	/** node's data > parent's data; Insert to the right */
-	if (compare(node->data, parent->data) > 0) {
+	if (compare(node->data, -1, parent->data, -1) > 0) {
 		/** 
 		 * parent's node has an empty slot to the right; 
 		 * Place new node there and return

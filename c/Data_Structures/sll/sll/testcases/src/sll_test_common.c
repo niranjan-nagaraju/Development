@@ -10,7 +10,7 @@ verify_list_against_sll (sll_t *sll, void *test_list[], int test_list_len, compa
 	sll_node_t *node = sll->head;
 
 	for ( i=0; i < test_list_len; i++ ) {
-		assert (compare(test_list[i], node->data) == 0);
+		assert (compare(test_list[i], -1, node->data, -1) == 0);
 		node = node->next;
 	}
 }

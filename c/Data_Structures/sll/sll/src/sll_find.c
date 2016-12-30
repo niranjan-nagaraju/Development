@@ -13,7 +13,7 @@ sll_find_containing_node (sll_t *sll, void *key, comparefn compare)
 
 	tmp = sll->head;
 
-	while (tmp != NULL && compare(tmp->data, key) != 0) {
+	while (tmp != NULL && compare(tmp->data, -1, key, -1) != 0) {
 		tmp = tmp->next;
 	}
 

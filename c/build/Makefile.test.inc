@@ -32,12 +32,12 @@ $(TEST_SUBDIRS):
 
 tests:: $(SUBDIRS) $(TEST_SUBDIRS) $(TEST_EXES) $(TEST_EXES_MT)
 
-$(TEST_EXES): %:%.o | $(OBJDIR) 
+$(TEST_EXES): %:%.o | $(OBJDIR) $(TEST_COMMON_OBJS)
 ifdef TEST_SRCS
 	$(CC) $@.o -o $@ $(LIBS) $(LDFLAGS) $(TEST_LDFLAGS) $(TEST_COMMON_OBJS)
 endif
 
-$(TEST_EXES_MT): %:%.o | $(OBJDIR)
+$(TEST_EXES_MT): %:%.o | $(OBJDIR) $(TEST_COMMON_OBJS_MT)
 ifdef TEST_SRCS_MT
 	$(CC) $@_mt.o -o $@ $(LIBS_MT) $(LDFLAGS_MT) $(TEST_LDFLAGS_MT) $(TEST_COMMON_OBJS_MT)
 endif
