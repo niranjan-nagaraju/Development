@@ -3,6 +3,7 @@
 
 #include <sll_node.h>
 #include <common.h>
+#include <errno.h>
 
 typedef struct sll_s sll_t;
 
@@ -10,38 +11,6 @@ struct sll_s {
 	sll_node_t *head;
 	sll_node_t *tail;
 	int _size;
-
-	/** SLL member functions */
-
-	/** Core functions */
-	int (*length)(sll_t *sll);
-	void (*destroy)(sll_t *sll, deallocatorfn deallocate);
-
-	/** Insert functions */
-	int (*insert_at_front) (sll_t *sll, void *data);
-	int (*insert_at_end) (sll_t *sll, void *data);
-	int (*insert_at_position) (sll_t *sll, void *data, int pos);
-	int (*insert_after) (sll_t *sll, void *data, void *key, comparefn compare);
-	int (*insert_node_at_front) (sll_t *sll, sll_node_t *node);
-	int (*insert_node_at_end) (sll_t *sll, sll_node_t *node);
-	int (*insert_node_at_position) (sll_t *sll, sll_node_t *node, int pos);
-	void (*insert_after_node) (sll_t *sll, sll_node_t *node, sll_node_t *new_node);
-
-	/** Remove functions */
-	void *(*remove_at_front) (sll_t *sll);
-	void *(*remove_at_end) (sll_t *sll);
-	void *(*remove_at_position) (sll_t *sll, int pos);
-	sll_node_t *(*remove_node_at_front) (sll_t *sll);
-	sll_node_t *(*remove_node_at_end) (sll_t *sll);
-	sll_node_t *(*remove_node_at_position) (sll_t *sll, int pos);
-
-	/** Find operations */
-	sll_node_t *(*find_containing_node) (sll_t *sll, void *key, comparefn compare);
-	void *(*find) (sll_t *sll, void *key, comparefn compare);
-	boolean (*find_node) (sll_t *sll, sll_node_t *node);
-
-	/** Print operations */
-	void (*print) (sll_t *sll, void(*printfn)(void *));
 };
 
 /** The only public interface that can be called outside of sll object */
@@ -61,5 +30,46 @@ sll_t _sll_lib_initialized_sll_object;
  *  Not worth the effort :)
  */
 #define SLL_INITIALIZER sll_lib_initialized_object();
+
+/** Core operations */
+int sll_length (sll_t *sll);
+void sll_destroy (sll_t *sll, deallocatorfn deallocate);
+
+/** Insert operations */
+int sll_insert_at_front (sll_t *sll, void *data);
+int sll_insert_at_end (sll_t *sll, void *data);
+int sll_insert_at_position (sll_t *sll, void *data, int pos);
+int sll_insert_after (sll_t *sll, void *data, void *key, comparefn compare);
+
+/** 
+ * Insert node operations
+ *   separated so that an user of SLL doesnt need to be aware of nodes,
+ *   and merely use an SLL as an abstract list storage.
+ *
+ * Node operations need a data encapsulated node and often times don't 
+ * check for various corner conditions as it is assumed the caller will perform such checks.
+ */
+int sll_insert_node_at_front (sll_t *sll, sll_node_t *node);
+int sll_insert_node_at_end (sll_t *sll, sll_node_t *node);
+int sll_insert_node_at_position (sll_t *sll, sll_node_t *node, int pos);
+void sll_insert_after_node (sll_t *sll, sll_node_t *node, sll_node_t *new_node);
+
+/** Remove operations */
+void *sll_remove_at_front (sll_t *sll);
+void *sll_remove_at_end (sll_t *sll);
+void *sll_remove_at_position (sll_t *sll, int pos);
+
+sll_node_t *sll_remove_node_at_front (sll_t *sll);
+sll_node_t *sll_remove_node_at_end (sll_t *sll);
+sll_node_t *sll_remove_node_at_position (sll_t *sll, int pos);
+
+/** Find operations */
+sll_node_t *sll_find_containing_node (sll_t *sll, void *key, comparefn compare);
+void *sll_find (sll_t *sll, void *key, comparefn compare);
+boolean sll_find_node (sll_t *sll, sll_node_t *node);
+
+/** Print operations */
+void sll_print (sll_t *sll, void(*printfn)(void *));
+
 
 #endif // _SLL_H_

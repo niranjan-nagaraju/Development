@@ -13,17 +13,17 @@ int main (void)
 	for (i=0; i<10; i++) {
 		int *tmp = allocator(sizeof(int));
 		*tmp = i;
-		sll.insert_at_front (&sll, (void *)tmp);
+		sll_insert_at_front (&sll, (void *)tmp);
 	}
 
-	assert(sll.length(&sll) == 10);
+	assert(sll_length(&sll) == 10);
 
 	/** verify what the memory allocator says about allocated blocks */
 	assert(mem_blocks_counter == 10);
 
-	sll.destroy(&sll, deallocator);
+	sll_destroy(&sll, deallocator);
 
-	assert(sll.length(&sll) == 0);
+	assert(sll_length(&sll) == 0);
 	assert(sll.head == NULL);
 	assert(sll.tail == NULL);
 

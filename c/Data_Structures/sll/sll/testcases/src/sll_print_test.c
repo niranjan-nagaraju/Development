@@ -18,10 +18,10 @@ int main(void)
 
 	struct test_struct test_obj = {42, 'Z'}, test_obj2 = {120, 'a'};
 	
-	sll.insert_at_front(&sll, (void *)&test_obj);
-	sll.insert_at_front(&sll, (void *)&test_obj2);
+	sll_insert_at_front(&sll, (void *)&test_obj);
+	sll_insert_at_front(&sll, (void *)&test_obj2);
 
-	sll.print(&sll, printStruct);
+	sll_print(&sll, printStruct);
 
 	return 0;
 }

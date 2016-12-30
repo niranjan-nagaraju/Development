@@ -12,31 +12,31 @@ test_int_sll_find(void)
 	sll_node_t *node;
 
 	for (i=1; i<11; i++) {
-		sll.insert_at_front (&sll, (void *)i);
+		sll_insert_at_front (&sll, (void *)i);
 	}
 
-	node = sll.find_containing_node (&sll, (void *)5, compareInts);
+	node = sll_find_containing_node (&sll, (void *)5, compareInts);
 	assert (node != NULL);
 	assert ((int)(node->data) == 5);
 
-	node = sll.find_containing_node (&sll, (void *)1, compareInts);
+	node = sll_find_containing_node (&sll, (void *)1, compareInts);
 	assert (node != NULL);
 	assert ((int)(node->data) == 1);
 
-	node = sll.find_containing_node (&sll, (void *)10, compareInts);
+	node = sll_find_containing_node (&sll, (void *)10, compareInts);
 	assert (node != NULL);
 	assert ((int)(node->data) == 10);
 
-	node = sll.find_containing_node (&sll, (void *)11, compareInts);
+	node = sll_find_containing_node (&sll, (void *)11, compareInts);
 	assert (node == NULL);
 
 
-	assert((int)(sll.find (&sll, (void *)5, compareInts)) == 5);
-	assert((int)(sll.find (&sll, (void *)1, compareInts)) == 1);
-	assert((int)(sll.find (&sll, (void *)10, compareInts)) == 10);
-	assert((int)(sll.find (&sll, (void *)11, compareInts)) == 0);
+	assert((int)(sll_find (&sll, (void *)5, compareInts)) == 5);
+	assert((int)(sll_find (&sll, (void *)1, compareInts)) == 1);
+	assert((int)(sll_find (&sll, (void *)10, compareInts)) == 10);
+	assert((int)(sll_find (&sll, (void *)11, compareInts)) == 0);
 
-	sll.destroy(&sll, NULL);
+	sll_destroy(&sll, NULL);
 }
 
 
@@ -54,44 +54,44 @@ test_keys_find_in_sll (void)
 	for (i=1; i<11; i++) {
 		objs[i-1].tsi = i*i; // 1, 4, 9, 16, 25, 36, 49, 64, 81, 100
 		objs[i-1].tsc = (char)('A' + i+i); // 'C', 'E', 'G', 'I', 'K', 'M', 'O', 'Q', 'S', 'U'
-		sll.insert_at_front (&sll, (void *)(objs+i));
+		sll_insert_at_front (&sll, (void *)(objs+i));
 	}
 	
-	node = sll.find_containing_node (&sll, (void *)4, compareIntKey);
+	node = sll_find_containing_node (&sll, (void *)4, compareIntKey);
 	assert (node != NULL);
 	ptr = node->data;
 	assert (ptr->tsi == 4);
 	assert (ptr->tsc == 'E');
 
-	node = sll.find_containing_node (&sll, (void *)11, compareIntKey);
+	node = sll_find_containing_node (&sll, (void *)11, compareIntKey);
 	assert (node == NULL);
 
-	node = sll.find_containing_node (&sll, (void *)'G', compareCharKey);
+	node = sll_find_containing_node (&sll, (void *)'G', compareCharKey);
 	assert (node != NULL);
 	ptr = node->data;
 	assert (ptr->tsi == 9);
 	assert (ptr->tsc == 'G');
 
-	node = sll.find_containing_node (&sll, (void *)'Z', compareCharKey);
+	node = sll_find_containing_node (&sll, (void *)'Z', compareCharKey);
 	assert (node == NULL);
 
-	ptr = sll.find(&sll, (void *)36, compareIntKey);
+	ptr = sll_find(&sll, (void *)36, compareIntKey);
 	assert (ptr != NULL);
 	assert (ptr->tsi == 36);
 	assert (ptr->tsc == 'M');
 
-	ptr = sll.find(&sll, (void *)26, compareIntKey);
+	ptr = sll_find(&sll, (void *)26, compareIntKey);
 	assert (ptr == NULL);
 
-	ptr = sll.find(&sll, (void *)'I', compareCharKey);
+	ptr = sll_find(&sll, (void *)'I', compareCharKey);
 	assert (ptr != NULL);
 	assert (ptr->tsi == 16);
 	assert (ptr->tsc == 'I');
 
-	ptr = sll.find(&sll, (void *)'Z', compareCharKey);
+	ptr = sll_find(&sll, (void *)'Z', compareCharKey);
 	assert (ptr == NULL);
 
-	sll.destroy(&sll, NULL);
+	sll_destroy(&sll, NULL);
 }
 
 int 

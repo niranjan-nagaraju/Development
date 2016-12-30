@@ -1,6 +1,4 @@
 #include <sll.h>
-#include <sll_print.h>
-#include <stdio.h>
 
 /** Print the SLL, what else? ;) */
 void 

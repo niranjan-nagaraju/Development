@@ -11,7 +11,7 @@ void test_initialization(sll_t *sll)
 	assert(sll->tail == NULL);
 	assert(sll->_size == 0);
 
-	assert(sll->length(sll) == 0);
+	assert(sll_length(sll) == 0);
 }
 
 /** Initialized explicitly through sll_init() calls */
