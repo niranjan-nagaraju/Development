@@ -1,0 +1,5 @@
++ Heap functions
+	+ [ ] up_heap
+	+ [ ] down_heap
+	+ insert -> uses up_heap
+	+ delete -> uses down_heap
