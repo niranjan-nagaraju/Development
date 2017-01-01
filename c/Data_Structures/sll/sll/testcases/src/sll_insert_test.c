@@ -58,8 +58,8 @@ test_int_sll_inserts(void)
 
 	verify_list_against_sll (&sll, (void **)test_list, sizeof(test_list)/sizeof(void *), compareInts);
 
-	/** Test destory too, while at it */
-	sll_destroy(&sll, NULL);
+	/** Test delete too, while at it */
+	sll_delete(&sll, NULL);
 
 	assert(sll.head == NULL);
 	assert(sll.tail == NULL);

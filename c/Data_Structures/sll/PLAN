@@ -4,6 +4,13 @@
 	[X] Print node
 
 * SLL functions:
+	[ ] Allocator and Deallocator functions
+		[ ] set_allocator(allocatefn)
+			- Will be used for all allocations within the SLL,
+			- in the absence of an allocatorfn, malloc()/own memory manager's allocate will be used
+		[ ] set_deallocator(deallocatefn)
+			- Will be used for all de-allocations within the SLL,
+			- in the absence of an deallocatorfn, free()/own memory manager's deallocate will be used
 	[-] Insert:
 		[X] AtFirst (data, node)
 		[X] AtEnd (data, node)
@@ -60,5 +67,6 @@
 		reverse
 		reverse recursive
 	[X] Destroy:
+		[X] Delete SLL internal state (nodes, data, etc)
 		[X] Destroy SLL completely
 	

@@ -33,7 +33,6 @@ sll_t _sll_lib_initialized_sll_object;
 
 /** Core operations */
 int sll_length (sll_t *sll);
-void sll_destroy (sll_t *sll, deallocatorfn deallocate);
 
 /** Insert operations */
 int sll_insert_at_front (sll_t *sll, void *data);
@@ -71,5 +70,8 @@ boolean sll_find_node (sll_t *sll, sll_node_t *node);
 /** Print operations */
 void sll_print (sll_t *sll, void(*printfn)(void *));
 
+/** Deallocate operations */
+void sll_delete (sll_t *sll, deallocatorfn deallocate);
+void sll_destroy (sll_t *sll, deallocatorfn deallocate);
 
 #endif // _SLL_H_
