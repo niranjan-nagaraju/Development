@@ -26,6 +26,25 @@ compareInts (void *p, int idx1, void *q, int idx2)
 	return a-b;
 }
 
+/** 
+ * Compare two int arrays 
+ * p[pi...pi+n] vs q[qi..qi+n]
+ * Return TRUE if both are equal, else FALSE
+ */ 
+boolean
+compareIntArrays(void *p, int pi, void *q, int qi, int n)
+{
+	int *l=p, *m=q;
+	int i;
+
+	for(i=0; i<n; i++) {
+		if (l[pi+i] != m[qi+i]) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
 
 int
 compareChars (void *p, int idx1, void *q, int idx2)

@@ -17,6 +17,8 @@ int comparePtrs (void *p, int idx1, void *q, int idx2);
 int compareInts (void *p, int idx1, void *q, int idx2);
 int compareChars (void *p, int idx1, void *q, int idx2);
 
+boolean compareIntArrays(void *p, int pi, void *q, int qi, int n);
+
 void swapInt(int *p, int *q);
 void swapChar(char *p, char *q);
 void swapPtr(void **p, void **q);

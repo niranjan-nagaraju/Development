@@ -20,5 +20,14 @@ int main(void)
 		assert(compareChars(la, 4, lb[0], -1) > 0);
 	}
 
+	/** Test Int array comparator */
+	{
+		int a[] = {1,2,3,4,5,6};
+		int b[] = {2,3,4,5,6,7,8};
+
+		assert(compareIntArrays(a, 1, b, 0, 5) == TRUE);
+		assert(compareIntArrays(a, 0, b, 0, 5) == FALSE);
+	}
+
 	return 0;
 }
