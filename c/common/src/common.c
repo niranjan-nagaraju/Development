@@ -50,6 +50,17 @@ void printAsInt(void *object)
 	printf("%d ", (int)object);
 }
 
+void printIntArray(void *objects, int n)
+{
+	int i = 0;
+	int *l = (int *)objects;
+
+	for (i=0; i<n; i++) {
+		printf("%d ", l[i]);
+	}
+	printNL();
+}
+
 void printAsUInt(void *object)
 {
 	printf("%u ", (unsigned int)object);
