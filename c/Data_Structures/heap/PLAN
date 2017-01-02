@@ -1,9 +1,17 @@
 + Heap functions
-	+ [X] max-heapify (down_heap)
-	+ [ ] increase_key (up_heap)
+	+ [X] heapify_down
+	+ [X] heapify_up
+	+ [X] increase_key -> uses heapify_up
 	+ [X] Build heap -> uses max-heapify
 	+ insert_key -> uses increase_key
 	+ extract_max -> uses max-heapify(root)
 
+	+ is_heap(), verify heap property
+	+ hasLeft(), hasRight(), getLeftChild(), getRightChild(), getParent()
+    + heapsort = extract_max, n times
 	+ Merge: Merge two heaps into one
 	+ Min to Max and Max to Min
+
++ TODO: Recursive and iterative versions of heapify_up and heapify_down	
+
+	

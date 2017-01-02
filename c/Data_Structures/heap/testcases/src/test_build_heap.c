@@ -13,7 +13,7 @@ int main(void)
 	}
 	heap._size = 10;
 
-	build_heap(&heap);
+	heap_build(&heap);
 
 	{
 		int built_heap[] = {10, 9, 7, 8, 5, 6, 3, 1, 4, 2};

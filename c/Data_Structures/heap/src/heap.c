@@ -1,10 +1,18 @@
 #include <heap.h>
+#include <common.h>
+#include <errno.h>
 
-/** Make a heap starting at 'i', all the way up
+void
+heap_init(heap_t *heap)
+{
+	heap->_size = 0;
+}
+
+/** Make a heap starting at node 'i', all the way down
  *  Assumes left and right subtrees are already heaps
  */  
 void
-max_heapify (heap_t *heap, int i)
+heapify_down (heap_t *heap, int i)
 {
 	int l, r;
 	int largest;
@@ -22,35 +30,46 @@ max_heapify (heap_t *heap, int i)
 	
 	if (largest != i) {
 		swapInt(&heap->elements[i], &heap->elements[largest]);
-		max_heapify(heap, largest);
+		heapify_down(heap, largest);
 	}
 }
 
+/** 
+ * Heapify all the nodes up, starting at node, 'i'
+ */ 
+void
+heapify_up(heap_t *heap, int i)
+{
+	while( (i > 0) && (heap->elements[PARENT(i)] < heap->elements[i]) ) {
+		swapInt(&heap->elements[i], &heap->elements[PARENT(i)]);
+		i = PARENT(i);
+	}
+}
 
 /**
  * Increase key value of node at {i} to 'key' 
  * and percolate up if the heap property is violated
  */
 int
-increase_key(heap_t *heap, int i, int key)
+heap_increase_key(heap_t *heap, int i, int key)
 {
 	/** New key is smaller than current key */
 	if (key < heap->elements[i])
 		return -EINVAL;
 
 	heap->elements[i] = key;
-	while( (i > 0) and (heap->elements[PARENT(i)] < heap->elements[i]) ) {
-		swapInt(&heap->elements[i], &heap->elements[PARENT(i)]);
-		i = PARENT(i);
-	}
+	heapify_up(heap, i);
 
 	return 0;
 }
 
 
-/** Uses up_heap to build heap */
+/** 
+ * Uses heapify_down to build heap starting from 
+ * first non-leaf node from the bottom 
+ */
 void
-build_heap (heap_t *heap)
+heap_build (heap_t *heap)
 {
 	int i;
 
@@ -65,7 +84,7 @@ build_heap (heap_t *heap)
 	 */            
 
 	for (i=(heap->_size-1)/2; i>=0; i--) {
-		max_heapify(heap, i);
+		heapify_down(heap, i);
 	}
 
 }
@@ -79,7 +98,7 @@ heap_insert (heap_t *heap, int key)
 		return;
 	}
 
-	i = heap->size;
+	i = heap->_size;
 
 	heap->_size++;
 
@@ -89,17 +108,20 @@ heap_insert (heap_t *heap, int key)
 	heap->elements[i] = -1;
 
 	/** Increase it's value to 'key' and percolate up */
-	increase_key(heap, i, key);
+	heap_increase_key(heap, i, key);
 }
 
 int
-find_max (heap_t *heap)
+heap_find_max (heap_t *heap)
 {
+	if (heap->_size == 0)
+		return -EINVAL;
+
 	return heap->elements[0];
 }
 
 int
-extract_max (heap_t *heap)
+heap_extract_max (heap_t *heap)
 {
 	int max;
 
@@ -113,7 +135,7 @@ extract_max (heap_t *heap)
 	heap->_size--;
 
 	/** Heapify everything down below root */
-	max_heapify(heap, 0);
+	heapify_down(heap, 0);
 
 	return max;
 }
