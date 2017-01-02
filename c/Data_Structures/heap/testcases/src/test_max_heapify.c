@@ -16,7 +16,7 @@ int main(void)
 	printf("Before up heap\n");
 	printIntArray(heap.elements, 10);
 
-	up_heap(&heap, 1);
+	max_heapify(&heap, 1);
 
 	printf("After up heap\n");
 	printIntArray(heap.elements, 10);

@@ -18,11 +18,10 @@ typedef struct heap_s {
 	int _size;
 } heap_t;
 
-void up_heap (heap_t *heap, int i);
-void down_heap (heap_t *heap, int i);
+void max_heapify (heap_t *heap, int i);
+int increase_key(heap_t *heap, int i, int key);
 
 void heap_insert (heap_t *heap, int key);
-int heap_remove (heap_t *heap);
 
 int find_max (heap_t *heap);
 int extract_max (heap_t *heap);

@@ -1,7 +1,7 @@
 BASE_DIR=../../..
 
 TEST_SRCS += test_heap_indexes.c
-TEST_SRCS += test_up_heap.c
+TEST_SRCS += test_max_heapify.c
 TEST_SRCS += test_build_heap.c
 
 

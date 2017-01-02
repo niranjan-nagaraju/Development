@@ -1,6 +1,9 @@
 + Heap functions
-	+ [X] up_heap
-	+ [ ] down_heap
-	+ [X] Build heap -> uses up_heap  
-	+ insert -> uses up_heap
-	+ delete -> uses down_heap
+	+ [X] max-heapify (down_heap)
+	+ [ ] increase_key (up_heap)
+	+ [X] Build heap -> uses max-heapify
+	+ insert_key -> uses increase_key
+	+ extract_max -> uses max-heapify(root)
+
+	+ Merge: Merge two heaps into one
+	+ Min to Max and Max to Min
