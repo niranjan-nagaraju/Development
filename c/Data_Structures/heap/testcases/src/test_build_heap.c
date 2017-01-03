@@ -8,6 +8,8 @@ int main(void)
 	int i = 0;
 	int l[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
+	heap_init(&heap);
+
 	for (i=0; i<10; i++) {
 		heap.elements[i] = l[i];
 	}

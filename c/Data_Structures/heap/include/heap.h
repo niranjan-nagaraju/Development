@@ -14,11 +14,12 @@
 /** Max-heap, static array to begin with */
 typedef struct heap_s {
 #define MAX_HEAP_SIZE 100
-	int elements[MAX_HEAP_SIZE];
-	int _size;
+	int *elements;
+	int _size; /** heap size */
+	int _len;  /** Number of elements in the array (_size <= _len) */
 } heap_t;
 
-void heap_init(heap_t *heap);
+int heap_init(heap_t *heap);
 void heapify_down (heap_t *heap, int i);
 void heapify_up (heap_t *heap, int i);
 

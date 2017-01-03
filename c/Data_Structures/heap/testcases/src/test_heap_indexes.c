@@ -7,6 +7,8 @@ int main(void)
 	int i = 0;
 	int *l = heap.elements;
 
+	heap_init(&heap);
+
 	for (i=0; i<8; i++) {
 		heap.elements[i] = (i+1);
 	}

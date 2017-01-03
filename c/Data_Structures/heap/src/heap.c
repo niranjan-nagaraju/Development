@@ -1,11 +1,19 @@
 #include <heap.h>
 #include <common.h>
 #include <errno.h>
+#include <stdlib.h>
 
-void
+int
 heap_init(heap_t *heap)
 {
+	heap->elements = calloc(MAX_HEAP_SIZE, sizeof(int));
+	if (!heap->elements) 
+		return -ENOMEM;
+
 	heap->_size = 0;
+	heap->_len = 0;
+
+	return 0;
 }
 
 /** Make a heap starting at node 'i', all the way down
@@ -53,7 +61,7 @@ heapify_up(heap_t *heap, int i)
 int
 heap_increase_key(heap_t *heap, int i, int key)
 {
-	/** New key is smaller than current key */
+	/** New key should be larger than current key in a max heap */
 	if (key < heap->elements[i])
 		return -EINVAL;
 
@@ -101,14 +109,15 @@ heap_insert (heap_t *heap, int key)
 	i = heap->_size;
 
 	heap->_size++;
+	heap->_len++;
 
 	/** 
-	 * Insert a smaller element at the bottom of the heap 
+	 * Insert the element at the bottom of the heap 
 	 */
-	heap->elements[i] = -1;
+	heap->elements[i] = key;
 
-	/** Increase it's value to 'key' and percolate up */
-	heap_increase_key(heap, i, key);
+	/** percolate up if new key violates heap property */
+	heapify_up(heap, i);
 }
 
 int
@@ -120,6 +129,13 @@ heap_find_max (heap_t *heap)
 	return heap->elements[0];
 }
 
+/**
+ * Extract max element from the heap
+ * The max element is still present in the array, however,
+ * The heap will be shrunk so as not to include the 'extracted' max element
+ * '_len' keeps track of the actual number of elements in the array.
+ * while '_size' tracks current heap size and is <= _len at any given time.
+ */ 
 int
 heap_extract_max (heap_t *heap)
 {
@@ -132,6 +148,10 @@ heap_extract_max (heap_t *heap)
 
 	/** Move bottom most node to root */
 	heap->elements[0] = heap->elements[heap->_size-1];
+
+	/** Optionally, Move max to end of heap */
+	heap->elements[heap->_size-1] = max;
+
 	heap->_size--;
 
 	/** Heapify everything down below root */
@@ -140,4 +160,32 @@ heap_extract_max (heap_t *heap)
 	return max;
 }
 
+
+/** Sort the elements in the heap by repeatedly calling extract_max */
+void
+heap_sort_(heap_t *heap)
+{
+	int i;
+
+	for(i=0; i<heap->_len; i++) {
+		(void)heap_extract_max(heap);
+	}
+}
+
+/** Sort an array of integers using heap sort */
+void
+heap_sort(int *l, int n)
+{
+	heap_t heap;
+
+	heap.elements = l;
+	heap._size = heap._len = n;
+	
+	/** Build a heap out of the array of integers */
+	heap_build(&heap);
+
+	printIntArray(heap.elements, heap._len);
+
+	heap_sort_(&heap);
+}
 
