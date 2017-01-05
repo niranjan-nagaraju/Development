@@ -1,0 +1,2 @@
+Trie implementation using an array
+TODO: switch to a Map for child nodes

@@ -1,0 +1,6 @@
+trie:
+ + Add word
+ + find if word exists
+ + find number of words that match prefix
+ + return number of words that match prefix
+ + Delete word
