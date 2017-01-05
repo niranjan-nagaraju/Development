@@ -4,3 +4,4 @@ trie:
  + find number of words that match prefix
  + return number of words that match prefix
  + Delete word
+ + Recursive versions of trie operations
