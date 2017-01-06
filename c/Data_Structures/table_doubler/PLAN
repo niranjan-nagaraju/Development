@@ -1,0 +1,7 @@
++ Table doubling for array-based data structures
+	+ Extend table size to 2*n when it reaches n elements
+	+ Shrink table size to n/2 when it reaches n/4 (or any n/k, k>2) elements
+		- Why n/k, k>2?
+		  + because if done at n/2, 
+			size doubled at n+1, remove, back to n, shrink
+			Add, size double, ...
