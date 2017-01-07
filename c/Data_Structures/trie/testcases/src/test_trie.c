@@ -14,5 +14,14 @@ main(void)
 	assert(trie_findPrefixesCount(&trie, "hac") == 2);
 	assert(trie_findPrefixesCount(&trie, "hak")==0);
 
+
+	assert(trie_hasWord(&trie, "hac") == TRUE);
+	assert(trie_hasWord(&trie, "hack") == FALSE);
+	assert(trie_hasWord(&trie, "hak") == FALSE);
+
+	assert(trie_hasPrefix(&trie, "hac") == TRUE);
+	assert(trie_hasPrefix(&trie, "hack") == TRUE);
+	assert(trie_hasPrefix(&trie, "hak") == FALSE);
+
 	return 0;
 }

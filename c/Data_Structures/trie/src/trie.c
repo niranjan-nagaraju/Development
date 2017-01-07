@@ -62,7 +62,7 @@ trie_addWord(trie_t *trie, const char *word)
 
 
 boolean
-trie_findWord(trie_t *trie, const char *word)
+trie_hasWord(trie_t *trie, const char *word)
 {
 	int i;
 	trie_node_t *trav;
@@ -93,9 +93,8 @@ trie_findPrefixesCount(trie_t *trie, const char *prefix)
 	if (!trie || !trie->root)
 		return 0;
 
-	n = strlen(prefix);
 	trav = trie->root;
-	for(i=0; i<n; i++) {
+	for(i=0; prefix[i]; i++) {
 		int c = charToInt(prefix[i]);
 
 		if (!trav->children[c]) 
@@ -107,3 +106,31 @@ trie_findPrefixesCount(trie_t *trie, const char *prefix)
 	return (trav ? trav->prefix_count : 0);
 }
 
+
+boolean
+trie_hasPrefix(trie_t *trie, const char *prefix)
+{
+	int i;
+	trie_node_t *trav;
+
+	if (!trie || !trie->root)
+		return 0;
+
+	trav = trie->root;
+	for(i=0; prefix[i]; i++) {
+		int c = charToInt(prefix[i]);
+
+		if (!trav->children[c]) 
+			return FALSE;
+
+		trav = trav->children[c];
+	}
+
+	return (trav != NULL);
+}
+
+int
+trie_findPrefixMatches(trie_t *trie, const char *prefix, char **matches)
+{
+	return 0;
+}

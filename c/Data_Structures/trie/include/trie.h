@@ -31,7 +31,11 @@ typedef struct trie_s {
 trie_node_t *createNode(void);
 
 int trie_addWord(trie_t *trie, const char *word);
-boolean trie_findWord(trie_t *trie, const char *word);
+boolean trie_hasWord(trie_t *trie, const char *word);
+boolean trie_hasPrefix(trie_t *trie, const char *prefix);
 int trie_findPrefixesCount(trie_t *trie, const char *prefix);
+
+/** Return words that begin with the specified prefix */
+int trie_findPrefixMatches(trie_t *trie, const char *prefix, char **matches);
 
 #endif /** __TRIE_H__ */

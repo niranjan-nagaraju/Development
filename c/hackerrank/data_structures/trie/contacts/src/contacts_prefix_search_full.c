@@ -110,9 +110,8 @@ trie_findPrefixesCount(trie_t *trie, const char *prefix)
     if (!trie || !trie->root)
         return 0;
 
-    n = strlen(prefix);
     trav = trie->root;
-    for(i=0; i<n; i++) {
+    for(i=0; prefix[i]; i++) {
         int c = charToInt(prefix[i]);
 
         if (!trav->children[c]) 
