@@ -30,10 +30,14 @@ class DLL:
 			self.tail = node
 
 
-	# Append to the rear
+	# Append to the rear		
 	def append(self, value):
 		node = Node(value)
+		self.appendNode(node)
 
+
+	# Append a node to the rear
+	def appendNode(self, node):
 		self.size += 1
 
 		node.prev = self.tail
@@ -60,6 +64,7 @@ class DLL:
 		else:
 			self.tail = None
 
+		tmp.next = tmp.prev = None
 		return tmp
 
 	def removeEnd(self):
@@ -75,6 +80,7 @@ class DLL:
 		else:
 			self.head = None
 
+		tmp.next = tmp.prev = None
 		return tmp
 
 
@@ -88,6 +94,8 @@ class DLL:
 		
 		node.prev.next = node.next
 		node.next.prev = node.prev
+
+		node.next = node.prev = None
 
 		return node
 
