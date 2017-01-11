@@ -1,4 +1,4 @@
-class Stack:
+class Stack(object):
 	def __init__(self, capacity=0):
 		self.capacity = capacity # 0 capacity => no checks for limits
 		self.size = 0
