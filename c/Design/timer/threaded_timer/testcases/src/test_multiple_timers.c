@@ -1,4 +1,4 @@
-#include <poll_timer.h>
+#include <threaded_timer.h>
 
 struct operands
 {
@@ -6,7 +6,7 @@ struct operands
 	int b;
 };
 
-void timer_fn1(void *args)
+void threaded_timer_fn1(void *args)
 {
 	struct operands *ops = (struct operands *)args;
 	int i;
@@ -24,7 +24,7 @@ void timer_fn1(void *args)
 	printf("\n");
 }
 
-void timer_fn2(void *args)
+void threaded_timer_fn2(void *args)
 {
 	int *num = (int *)args;
 	int currtime = time(NULL);
@@ -42,10 +42,10 @@ int main(void)
 	int i;
 
 	/** Recur 10 times at 10 seconds interval */
-	timer_t *timer1 = set_timer(10, 1, 10, 5, timer_fn1, (void *)ops);
+	threaded_timer_t *timer1 = set_timer(10, 1, 10, 5, threaded_timer_fn1, (void *)ops);
 
 	/** Recur twice at 1 mins interval */
-	timer_t *timer2 = set_timer(60, 1, 2, 10, timer_fn2, (void *)(&number));
+	threaded_timer_t *timer2 = set_timer(60, 1, 2, 10, threaded_timer_fn2, (void *)(&number));
 
 	printf("Starting timers at %d\n", currtime);
 

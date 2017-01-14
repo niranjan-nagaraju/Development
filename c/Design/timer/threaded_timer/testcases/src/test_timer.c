@@ -1,6 +1,6 @@
 #include <threaded_timer.h>
 
-void timer_fn(void *args)
+void threaded_timer_fn(void *args)
 {
 	static int i = 1;
 
@@ -11,7 +11,7 @@ void timer_fn(void *args)
 int main(void)
 {
 	/** Recur thrice at intervals of 10s */
-	timer_t *timer = set_timer(10, 1, 3, 5, timer_fn, (void *)1);
+	threaded_timer_t *timer = set_timer(10, 1, 3, 5, threaded_timer_fn, (void *)1);
 
 	start_timer(timer);
 

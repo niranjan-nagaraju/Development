@@ -3,7 +3,7 @@
 void *
 poll_timer (void *t)
 {
-	timer_t *timer = (timer_t *)t;
+	poll_timer_t *timer = (poll_timer_t *)t;
 	int currtime;
 
 	while (1) {
@@ -37,10 +37,10 @@ poll_timer (void *t)
 	return NULL;
 }
 
-timer_t *
+poll_timer_t *
 set_timer(unsigned int interval, unsigned int recurrent, unsigned int max_times, unsigned int poll_interval, callback_t callback, void *args)
 {
-	timer_t *timer = (timer_t *) malloc(sizeof(timer_t));
+	poll_timer_t *timer = (poll_timer_t *) malloc(sizeof(poll_timer_t));
 	int currtime = time(NULL);
 
 	if (!timer)
@@ -69,7 +69,7 @@ set_timer(unsigned int interval, unsigned int recurrent, unsigned int max_times,
 }
 
 int
-reset_timer(timer_t *timer, int interval, unsigned int recurrent, unsigned int max_times, unsigned int poll_interval, callback_t callback, void *args)
+reset_timer(poll_timer_t *timer, int interval, unsigned int recurrent, unsigned int max_times, unsigned int poll_interval, callback_t callback, void *args)
 {
 	int currtime = time(NULL);
 
@@ -108,7 +108,7 @@ reset_timer(timer_t *timer, int interval, unsigned int recurrent, unsigned int m
 }
 
 void 
-delete_timer(timer_t *timer)
+delete_timer(poll_timer_t *timer)
 {
 	if (timer) {
 		pthread_mutex_lock(&(timer->mutex));
@@ -118,7 +118,7 @@ delete_timer(timer_t *timer)
 }
 
 void 
-start_timer(timer_t *timer)
+start_timer(poll_timer_t *timer)
 {
 	pthread_create(&(timer->thread), 0, poll_timer, timer);
 }
