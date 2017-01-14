@@ -1,4 +1,4 @@
-BASE_DIR=../..
+BASE_DIR=../../..
 
 # Include files
 INCLUDE +=-I./include -I$(BASE_DIR)/common/include

@@ -1,4 +1,4 @@
-BASE_DIR=../../..
+BASE_DIR=../../../..
 
 TEST_SRCS_MT += testQMT.c
 
