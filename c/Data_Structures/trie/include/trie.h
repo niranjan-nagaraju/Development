@@ -2,22 +2,9 @@
 #define __TRIE_H__
 
 #include <boolean.h>
+#include <trie_node.h>
 
-#define MAX_CHARS_IN_UNIVERSE 26
-
-typedef struct trie_node_s {
-	struct trie_node_s *children[MAX_CHARS_IN_UNIVERSE];
-
-	/** Is there a word that ends in char at current node */
-	boolean isEndOfWord; 
-
-	/** 
-	 * Running count of the number of words 
-	 * that begin with the chars at current node 
-	 */ 
-	int prefix_count; 
-} trie_node_t;
-
+#include <queue.h>
 
 typedef struct trie_s {
 	trie_node_t *root;
@@ -27,15 +14,24 @@ typedef struct trie_s {
 }trie_t;
 
 
-/** Create a new node */
-trie_node_t *createNode(void);
-
 int trie_addWord(trie_t *trie, const char *word);
+boolean trie_removeWord(trie_t *trie, const char *word);
+void trie_destroy(trie_t *trie);
+
+/** -- Trie find functions -- */
+
+/** Query if trie has a specified word */
 boolean trie_hasWord(trie_t *trie, const char *word);
+
+/** Query if trie has a specified word */
 boolean trie_hasPrefix(trie_t *trie, const char *prefix);
+
+/** Query if trie has words starting with the specified prefix */
 int trie_findPrefixesCount(trie_t *trie, const char *prefix);
 
 /** Return words that begin with the specified prefix */
-int trie_findPrefixMatches(trie_t *trie, const char *prefix, char **matches);
+int trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *queue);
+
+/** -- Trie find functions -- */
 
 #endif /** __TRIE_H__ */

@@ -13,6 +13,7 @@ main(void)
 
 	assert(trie_findPrefixesCount(&trie, "hac") == 2);
 	assert(trie_findPrefixesCount(&trie, "hak")==0);
+	assert(trie_findPrefixesCount(&trie, "h")==2);
 
 
 	assert(trie_hasWord(&trie, "hac") == TRUE);
