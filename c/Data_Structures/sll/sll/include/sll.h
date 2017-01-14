@@ -5,13 +5,12 @@
 #include <common.h>
 #include <errno.h>
 
-typedef struct sll_s sll_t;
 
-struct sll_s {
+typedef struct sll_s {
 	sll_node_t *head;
 	sll_node_t *tail;
 	int _size;
-};
+}sll_t;
 
 /** The only public interface that can be called outside of sll object */
 void sll_init (sll_t *sll);

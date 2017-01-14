@@ -28,8 +28,10 @@ _sll_delete (sll_t *sll, deallocatorfn deallocate)
 	{
 		tmp = trav;
 		trav = trav->next;
-
-		deallocate (tmp->data);
+	
+		if (deallocate) {
+			deallocate (tmp->data);
+		}
 		free(tmp);
 	}
 
@@ -46,7 +48,7 @@ _sll_deallocate (sll_t *sll, deallocatorfn deallocate, boolean destroy)
 	_sll_delete(sll, deallocate);
 
 	/** Destroy the 'sll' allocation as well if the flag is set */
-	if (destroy)
+	if (destroy && deallocate)
 		deallocate(sll);
 }
 
