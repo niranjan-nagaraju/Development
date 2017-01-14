@@ -17,6 +17,15 @@ int main(void)
 	bst_insert(&bst, (void *)5, compareInts);
 	bst_insert(&bst, (void *)7, compareInts);
 
+	/** 
+	 *      3
+	 *    /   \
+	 *   2     6
+	 *  /     / \
+	 * 1     5   7  
+	 *
+	 */
+
 
 	bst_print_preorder(&bst, printAsInt);
 	bst_print_inorder(&bst, printAsInt);
@@ -27,6 +36,10 @@ int main(void)
 	 * 1 2 3 5 6 7 
 	 * 1 2 5 7 6 3 
 	 */
+
+	bst_print_level_order(&bst,printAsInt);
+
+	/* 3 2 6 1 5 7 */
 
 	return 0;
 }

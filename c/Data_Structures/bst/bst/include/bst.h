@@ -24,6 +24,5 @@ void bst_print_preorder (bst_t *bst, printfn print);
 void bst_print_inorder (bst_t *bst, printfn print);
 void bst_print_postorder (bst_t *bst, printfn print);
 void bst_print_level_order (bst_t *bst, printfn print);
-void bst_print_depth_order (bst_t *bst, printfn print);
 
 #endif /* _BINARY_SEARCH_TREE_H_ */

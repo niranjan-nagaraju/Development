@@ -1,4 +1,5 @@
 #include <bst.h>
+#include <array_queue.h>
 
 
 /**
@@ -50,21 +51,24 @@ _bst_print_postorder (bst_node_t *root, printfn print)
 
 /** Level order (Breadth first) print helper */
 static void
-_bst_print_level_order (bst_node_t *root, printfn print)
+_bst_print_level_order (bst_node_t *root, printfn print, array_queue_t *queue)
 {
+	bst_node_t *tmp;
+
 	if (! root)
 		return;
 
-}
+	print(root->data);
 
+	if (root->left)
+		arrayQ_enqueue(queue, (void *)root->left);
 
-/** Depth order (Depth first) print helper */
-static void
-_bst_print_depth_order (bst_node_t *root, printfn print)
-{
-	if (! root)
-		return;
+	if (root->right)
+		arrayQ_enqueue(queue, (void *)root->right);
 
+	tmp = arrayQ_dequeue(queue);
+
+	_bst_print_level_order(tmp, print, queue);
 }
 
 
@@ -108,23 +112,16 @@ bst_print_postorder (bst_t *bst, printfn print)
 void
 bst_print_level_order (bst_t *bst, printfn print)
 {
+	array_queue_t queue;
 	if (!bst)
 		return;
 
-	_bst_print_level_order(bst->root, print);
+	arrayQ_init(&queue, 100);
+
+	_bst_print_level_order(bst->root, print, &queue);
 	printNL();
 }
 
 
-/** Main Depth order (Depth first) print routine */
-void
-bst_print_depth_order (bst_t *bst, printfn print)
-{
-	if (!bst)
-		return;
-
-	_bst_print_depth_order(bst->root, print);
-	printNL();
-}
 
 
