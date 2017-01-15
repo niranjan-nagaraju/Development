@@ -53,6 +53,14 @@ trie_findPrefixNode(trie_t *trie, const char *prefix)
 	if (!trie || !trie->root)
 		return 0;
 
+	/** 
+	 * Technically, a null-prefix matches everything
+	 * in the trie ;)
+	 */
+	if (!prefix || prefix[0] == 0)
+		return trie->root;
+
+
 	trav = trie->root;
 	for(i=0; prefix[i]; i++) {
 		int c = charToInt(prefix[i]);
@@ -109,9 +117,12 @@ duplicate_string(char *suffix)
 	return dup;
 }
 
-
+/** 
+ * DFS search from the matching prefix node 
+ * Return a queue of suffixes and the number of matching words.
+ */ 
 static void
-dfs_search(trie_node_t *node, queue_t *queue, const char *prefix, char *suffix, int suffixlen)
+dfs_search(trie_node_t *node, queue_t *suffix_queue, char *suffix, int suffixlen)
 {
 	int i;
 	char *s;
@@ -119,24 +130,29 @@ dfs_search(trie_node_t *node, queue_t *queue, const char *prefix, char *suffix, 
 	if (!node)
 		return;
 
-	printf("End of word: %d\n", node->isEndOfWord);
+	/** We have found a full-word, 
+	 * Pull a copy of it and store it as a result 
+	 */
 	if (node->isEndOfWord) {
-		s = duplicate_string(suffix);
-		printf("Found word: %s%s, suffixlen: %d, Numprefixes: %d\n", prefix, s, suffixlen, node->prefix_count);
+		s = strdup(suffix);
+		/** 
+		 * Close the string for good measure 
+		 * Some of the higher depth chars might be attached to it
+		 *
+		 * 'suffixlen' tells us what depth we are at and therefore our
+		 * word's suffix-part cannot be bigger than that
+		 */
+		s[suffixlen] = 0; 
 
-		//if(node->prefix_count == 1) 
-			suffixlen--;
-	} else {
-		s = suffix;
+		enqueue(suffix_queue, (void *)s);
 	}
+
 	for (i=0; i< MAX_CHARS_IN_UNIVERSE; i++) {
 		int first = 0;
 		if (node->children[i]) {
 			suffix[suffixlen] = i + 'a';
 
-			printf("Char: %c\n", i+'a');
-
-			dfs_search(node->children[i], queue, prefix, s, suffixlen+1);
+			dfs_search(node->children[i], suffix_queue, suffix, suffixlen+1);
 		}
 	}
 	
@@ -144,10 +160,11 @@ dfs_search(trie_node_t *node, queue_t *queue, const char *prefix, char *suffix, 
 }
 
 int
-trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *queue)
+trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *suffix_queue)
 {
-	char *suffix = malloc(100);
-	
+	#define MAX_WORDLEN 100
+	char *suffix = malloc(MAX_WORDLEN);
+
 	trie_node_t *node = trie_findPrefixNode(trie, prefix);
 
 	/** prefix does not exist */
@@ -155,10 +172,9 @@ trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *queue)
 		return 0;
 	}
 
-	printNL();
+	memset(suffix, 0, MAX_WORDLEN);
 
-	memset(suffix, 0, 100);
+	dfs_search(node, suffix_queue, suffix, 0);
 
-	dfs_search(node, queue, prefix, suffix, 0);
-	return 0;
+	return queue_length(suffix_queue);
 }

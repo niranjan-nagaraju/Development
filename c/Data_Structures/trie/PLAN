@@ -1,7 +1,8 @@
 trie:
- + Add word
- + find if word exists
- + find number of words that match prefix
- + return number of words that match prefix
+ + [X] Add word
+ + [X] find if word exists
+ + [X] find number of words that match prefix
+ + [X] return number of words that match prefix
+ + [X] Return list of words that match prefix
  + Delete word
  + Recursive versions of trie operations
