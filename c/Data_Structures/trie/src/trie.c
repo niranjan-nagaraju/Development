@@ -134,13 +134,15 @@ dfs_search(trie_node_t *node, queue_t *suffix_queue, char *suffix, int suffixlen
 	 * Pull a copy of it and store it as a result 
 	 */
 	if (node->isEndOfWord) {
-		s = strdup(suffix);
+		s = strndup(suffix, suffixlen);
 		/** 
-		 * Close the string for good measure 
+		 * Copy only 'suffixlen' chars and close the string for good measure.
 		 * Some of the higher depth chars might be attached to it
 		 *
 		 * 'suffixlen' tells us what depth we are at and therefore our
 		 * word's suffix-part cannot be bigger than that
+		 *
+		 * 'strndup' does this for us anyways, but we can't be too sure.
 		 */
 		s[suffixlen] = 0; 
 
