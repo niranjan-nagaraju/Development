@@ -104,18 +104,7 @@ trie_hasPrefix(trie_t *trie, const char *prefix)
 	return (trav != NULL);
 }
 
-char *
-duplicate_string(char *suffix)
-{
-	char *dup = malloc(100);
-	char *tmp = dup;
 
-	memset(dup, 0, 100);
-
-	while (*tmp++ = *suffix++);
-
-	return dup;
-}
 
 /** 
  * DFS search from the matching prefix node 
