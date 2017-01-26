@@ -31,8 +31,15 @@ class SLL:
 
 		self.size += 1
 
+		# No elements in the list
+		if not self.tail:
+			self.tail = node
+			self.head = node
+			return
+
 		self.tail.next = node
 		self.tail = node
+
 
 	def __str__(self):
 		sll_str = '[' + str(self.size) + ']: '
@@ -44,13 +51,44 @@ class SLL:
 		return sll_str
 
 
+	# Reverse an SLL(iterative version)
+	def reverse(self):
+		if not self.head:
+			return None
+
+		first = self.head
+		second = first.next
+		while second:
+			third = second.next
+
+			print first, second, third
+
+			# Make second->first link
+			second.next = first
+
+			first = second
+			second = third
+
+		# Mark erstwhile  head.next to None, so the SLL chain ends
+		self.head.next = None 
+
+		# When all's done, 'first' is pointing to the 'tail'
+		# of the SLL
+		# Since we have now reversed, point 'head' to 'first',
+		# but before that, Update 'tail' to erstwhile 'head'
+		self.tail = self.head
+		self.head = first
+
+
 sll = SLL()
-sll.insert(1)
-sll.insert(3)
-sll.insert(4)
-sll.insert(2)
 sll.append(1)
 sll.append(2)
 sll.append(3)
+sll.append(4)
 
 print sll
+print sll.head, sll.tail
+
+sll.reverse()
+print sll
+print sll.head, sll.tail
