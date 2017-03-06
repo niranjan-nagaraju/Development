@@ -25,11 +25,9 @@ class Direction(object):
 	LEFT = 3
 	UP = 4
 
-def move(arr, r, c, steps, direction):
-	if steps <= 0:
-		return None
-
-	numbersList = []
+def move(arr, r, c, steps, direction, numbersList):
+	if steps == 0:
+		return False
 
 	if direction == Direction.RIGHT:
 		for i in range(steps):
@@ -48,24 +46,24 @@ def move(arr, r, c, steps, direction):
 			#print arr[r-i][c],
 			numbersList.append(arr[r-i][c])
 
-	return numbersList
+	return True
 
 
-def moveRight(a, r, c, steps):
+def moveRight(a, r, c, steps, numbersList):
 	#print 'Right',
-	return move(a, r, c, steps, Direction.RIGHT)
+	return move(a, r, c, steps, Direction.RIGHT, numbersList)
 
-def moveDown(a, r, c, steps):
+def moveDown(a, r, c, steps, numbersList):
 	#print 'Down',
-	return move(a, r, c, steps, Direction.DOWN)
+	return move(a, r, c, steps, Direction.DOWN, numbersList)
 
-def moveLeft(a, r, c, steps):
+def moveLeft(a, r, c, steps, numbersList):
 	#print 'Left',
-	return move(a, r, c, steps, Direction.LEFT)
+	return move(a, r, c, steps, Direction.LEFT, numbersList)
 
-def moveUp(a, r, c, steps):
+def moveUp(a, r, c, steps, numbersList):
 	#print 'Up',
-	return move(a, r, c, steps, Direction.UP)
+	return move(a, r, c, steps, Direction.UP, numbersList)
 
 
 def spiral_print(a, r, c):
@@ -74,29 +72,22 @@ def spiral_print(a, r, c):
 # level indicates how deep we are in the spiral from the outside
 # Goes rect starting at (0,0) -> (1,1), ...
 def spiral_print_helper(a, m, n, numbersList, level=0):
-	nums = moveRight(a, level, level, n-(2*level))
-	if not nums:
-		return numbersList
+	if not  moveRight(a, level, level, n-(2*level), numbersList):
+		return 
 
-	numbersList += nums
+	if not moveDown(a, level+1, n-1-level, m-1-(2*level), numbersList):
+		return
 
-	nums = moveDown(a, level+1, n-1-level, m-1-(2*level))
-	if not nums:
-		return numbersList
-	numbersList += nums
+	if not moveLeft(a, m-1-level, n-2-level, n-1-(2*level), numbersList):
+		return
 
-	nums = moveLeft(a, m-1-level, n-2-level, n-1-(2*level))
-	if not nums:
-		return numbersList
-	numbersList += nums
-
-	nums = moveUp(a, m-2-level, 0+level, m-2-(2*level))
-	if not nums:
-		return numbersList
-	numbersList += nums
+	if not moveUp(a, m-2-level, 0+level, m-2-(2*level), numbersList):
+		return
 
 	# Go one level inner
-	return spiral_print_helper(a, m, n, numbersList, level+1)
+	spiral_print_helper(a, m, n, numbersList, level+1)
+	return numbersList
+
 
 a = [
 		[1, 2, 3],
@@ -104,8 +95,6 @@ a = [
 		[9, 10, 11],
 		[13, 14, 15],
 	]
-
-
 assert(spiral_print(a, len(a), len(a[0]))  == [1, 2, 3, 7, 11, 15, 14, 13, 9, 5, 6, 10])
 
 a = [
@@ -113,7 +102,6 @@ a = [
 		[4, 5, 6],
 		[7, 8, 9],
 	]
-
 assert(spiral_print(a, 3, 3) == [1,2,3,6,9,8,7,4,5])
 
 assert(spiral_print(
