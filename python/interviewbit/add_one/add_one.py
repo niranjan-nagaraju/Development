@@ -23,3 +23,15 @@ def add_one(numbers, n):
 nList = map(int, raw_input().split())
 n = nList[0]
 print add_one(nList[1:], n)
+
+
+''' 
+Trial runs
+
+4 0 1 2 3
+[1, 2, 4]
+
+
+4 9 9 9 9
+[1, 0, 0, 0, 0]
+'''
