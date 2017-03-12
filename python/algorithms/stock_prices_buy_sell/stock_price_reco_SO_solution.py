@@ -1,8 +1,7 @@
 # Given last month's day-to-day prices of a stock
 # and that this month's statistics will exactly follow last month's
 # Suggest when to buy and when to sell (obviously with profit maximized)
-# Source: Oracle
-
+# sell and buy ONCE
 
 # Stackoverflow solution to maximize profit
 # http://stackoverflow.com/questions/1663545/find-buy-sell-prices-in-array-of-stock-values-to-maximize-positive-difference
@@ -41,7 +40,7 @@ def find_optimal_buy_and_sell (priceList):
 	print "buy at ", (max-maxDiff), "Sell at", max
 
 
-priceList = eval(raw_input()) # [3,4,5,8,7,1]
+priceList = map(int, raw_input().split()) # [3,4,5,8,7,1]
 print priceList
 
 find_optimal_buy_and_sell(priceList)
