@@ -1,3 +1,5 @@
+/** Test macros to verify lock and unlock */
+
 #include <stdio.h>
 
 #define LOCK_OBJ
