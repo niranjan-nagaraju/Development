@@ -1,6 +1,9 @@
 #include <iostream>
 using namespace std;
 
+/** 
+ * Implement a singleton pattern using pointers
+ */
 class Singleton
 {
 	private:
@@ -12,6 +15,10 @@ class Singleton
 			this->a  = 1;
 			this->b = 2;
 		}
+
+		/* Hide copy constructor and '=' */
+		Singleton (const Singleton&);
+		Singleton operator=(const Singleton&);
 
 	public:
 		static Singleton* make_object(void)
