@@ -1,4 +1,5 @@
 # C Build system
+# This is now *DEPRECATED* - Use Makefile.inc instead
 
 CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
 OS = $(shell uname)
