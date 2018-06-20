@@ -66,8 +66,9 @@ libs: $(OBJS) $(SUBDIRS) $(LIBNAME) $(LIBNAME_MT)
 $(LIBNAME): | $(OBJDIR) 
 ifneq "$(LIBNAME)" ""
 	$(AR) rcs $(OBJDIR)/lib$(LIBNAME).a $(OBJS)
-ifeq ($(OS), Darwin) 
-	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME).dylib $(OBJS) -lgcc $(LDFLAGS)
+ifeq ($(OS), Darwin)  # Mac OS El capitan and higher use clang by default - switch to clang command line
+	#$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME).dylib $(OBJS) -lgcc $(LDFLAGS)
+	$(CC) -shared -fPIC -dynamiclib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME).dylib $(OBJS) $(LDFLAGS)
 else
 ifeq ($(OS), Linux)
 	$(CC) -shared -o $(OBJDIR)/lib$(LIBNAME).so $(LDFLAGS) -Wl,--whole-archive $(OBJDIR)/lib$(LIBNAME).a -Wl,--no-whole-archive
