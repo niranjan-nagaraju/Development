@@ -9,7 +9,7 @@ TEST_INCLUDE += -I../../node/include
 TEST_INCLUDE += -I$(BASE_DIR)/common/include
 TEST_INCLUDE += -I$(BASE_DIR)/test_common/include
 
-LIBS +=-L../../node/out/linux/ -lsll_node
+LIBS +=-L../../node/$(OBJDIR) -lsll_node
 
 # library flags
 LDFLAGS += -L$(BASE_DIR)/common/$(OBJDIR) -lcommon
