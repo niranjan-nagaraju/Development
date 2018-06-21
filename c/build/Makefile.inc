@@ -84,7 +84,8 @@ $(LIBNAME_MT): | $(OBJDIR)
 ifneq "$(LIBNAME_MT)" ""
 	$(AR) rcs $(OBJDIR)/lib$(LIBNAME_MT).a $(OBJS_MT)
 ifeq ($(OS), Darwin) 
-	$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME_MT).dylib $(OBJS_MT) -lgcc $(LDFLAGS) $(LDFLAGS_MT)
+	#$(CC) -shared -fPIC -dylib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME_MT).dylib $(OBJS_MT) -lgcc $(LDFLAGS) $(LDFLAGS_MT)
+	$(CC) -shared -fPIC -dynamiclib -flat_namespace -undefined suppress -o $(OBJDIR)/lib$(LIBNAME_MT).dylib $(OBJS_MT) $(LDFLAGS) $(LDFLAGS_MT)
 else
 ifeq ($(OS), Linux)
 	$(CC) -shared -o $(OBJDIR)/lib$(LIBNAME_MT).so $(LDFLAGS) $(LDFLAGS_MT) -Wl,--whole-archive $(OBJDIR)/lib$(LIBNAME_MT).a -Wl,--no-whole-archive
