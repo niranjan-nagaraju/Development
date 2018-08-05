@@ -27,7 +27,7 @@ class SLLWithRandom(object):
 		x = self.head
 		sll_str = "[%d]" %(self.len) 
 		while x is not None:
-			sll_str += "(%d--%d)-> " %(x.value, x.random.value) 
+			sll_str += "(%s--%s)-> " %(x.value, x.random.value if x.random else None)
 			x = x.next
 
 		return sll_str
@@ -142,7 +142,7 @@ def TC2():
 	b.random = c
 	c.random = e
 	d.random = a
-	e.random = f
+	#e.random = f
 	f.random = b
 
 	sll = SLLWithRandom()
