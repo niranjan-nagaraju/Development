@@ -25,7 +25,7 @@ class SLLWithRandom(object):
 
 	def __str__(self):
 		x = self.head
-		sll_str = "[%d]" %(self.len) 
+		sll_str = "[%d]: " %(self.len)
 		while x is not None:
 			sll_str += "(%s--%s)-> " %(x.value, x.random.value if x.random else None)
 			x = x.next
