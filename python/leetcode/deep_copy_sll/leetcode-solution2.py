@@ -14,8 +14,6 @@ class Solution(object):
 		if not head:
 			return None
 
-		# Create copy of all the nodes
-		# while keeping a table of original -> copy nodes associations
 		x = head
 		while x:
 			x_ = RandomListNode(x.label)
