@@ -32,7 +32,7 @@ Approach:
 	a->a'->b->b'-> ...
 	With such an arrangement, if a->random = b, a'->random == a->next->random = b->next
 	Once all the necessary links are setup for every (a'->next, a->random),
-	remove every second node to form its own SLL -> the copy
+	Untangle the consolidated list by plucking every second node into a second list -> the deep-copy
 
 
 
