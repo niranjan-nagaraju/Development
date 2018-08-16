@@ -1,12 +1,4 @@
-
-class Node:
-	def __init__(self, value):
-		self.value = value
-		self.next = None
-
-	def __str__(self):
-		return str(self.value)
-
+import node
 
 class SLL:
 	def __init__(self):
@@ -80,15 +72,21 @@ class SLL:
 		self.head = first
 
 
-sll = SLL()
-sll.append(1)
-sll.append(2)
-sll.append(3)
-sll.append(4)
+def TC1():
+	sll = SLL()
+	sll.append(1)
+	sll.append(2)
+	sll.append(3)
+	sll.append(4)
 
-print sll
-print sll.head, sll.tail
+	print sll
+	print sll.head, sll.tail
 
-sll.reverse()
-print sll
-print sll.head, sll.tail
+	sll.reverse()
+	print sll
+	print sll.head, sll.tail
+
+
+
+if __name__ == "__main__":
+	TC1()
