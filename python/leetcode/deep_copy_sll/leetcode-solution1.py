@@ -18,6 +18,9 @@ class Solution(object):
 
 		# Create copy of all the nodes
 		# while keeping a table of original -> copy nodes associations
+
+		# PS: Can't combine the two loops into one, for the random links might be pointing to
+		# a node that's way ahead and we wouldnt have created a copy of it just yet.
 		x = head
 		while x:
 			x_ = RandomListNode(x.label)
