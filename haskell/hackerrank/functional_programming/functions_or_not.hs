@@ -24,17 +24,22 @@
  -
  -}
 
-readSingleTestCase = do
+import Control.Monad
+
+readPair :: IO (Int, Int)
+readPair = do
+	pairStr <- getLine
+	let pairs =  ( (read.words $ pairStr !! 0) :: Int,  (read.words $ pairStr !! 1) :: Int )
+	return pairs
 	
 
-readTestCases :: IO Int -> IO [Int, Int]
+readTestCases :: IO Int -> IO [(Int, Int)]
 readTestCases nCases = do
-	let n <- readLn :: IO Int
-	let cases <- readSingleTestCase
+	nLines <- readLn :: IO Int
+	let cases = forM [1..nLines] readPair
 	return cases
 
 main = do
-	let	nCases <- readLn :: IO Int
-	readTestCases nCases
-    print $ numbers
+	nCases <- readLn :: IO Int
+	print $ readTestCases nCases
 
