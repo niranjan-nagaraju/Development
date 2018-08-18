@@ -26,20 +26,28 @@
 
 import Control.Monad
 
+{-
+ - readPair works
+ - *Main> readPair
+ - 1 2
+ - (1,2)
+ -}
 readPair :: IO (Int, Int)
 readPair = do
 	pairStr <- getLine
-	let pairs =  ( (read.words $ pairStr !! 0) :: Int,  (read.words $ pairStr !! 1) :: Int )
+	let pairs =  ( read $ (words pairStr) !! 0 :: Int,  read $ (words pairStr) !! 1 :: Int )
 	return pairs
 	
 
-readTestCases :: IO Int -> IO [(Int, Int)]
-readTestCases nCases = do
+readTestCases :: IO [(Int, Int)]
+readTestCases = do
 	nLines <- readLn :: IO Int
-	let cases = forM [1..nLines] readPair
+	let cases = forM_ [1..nLines] readPair
 	return cases
 
+{--
 main = do
 	nCases <- readLn :: IO Int
-	print $ readTestCases nCases
+	print $ forM_ [1..nCases] readTestCases 
 
+--}
