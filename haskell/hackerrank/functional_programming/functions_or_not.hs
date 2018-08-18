@@ -26,8 +26,8 @@
 
 import Control.Monad
 
-{-
- - readPair works
+{- Test execution:
+ -
  - *Main> readPair
  - 1 2
  - (1,2)
@@ -39,15 +39,62 @@ readPair = do
 	return pairs
 	
 
-readTestCases :: IO [(Int, Int)]
-readTestCases = do
+{- Test execution:
+ -
+ - *Main> replicateM 5 readPair 
+ - 1 2
+ - 3 4
+ - 5 6
+ - 7 8
+ - 9 1
+ - [(1,2),(3,4),(5,6),(7,8),(9,1)]
+ -
+ - *Main> readTestCase
+ - 5
+ - 1 2
+ - 3 4
+ - 5 6
+ - 7 8
+ - 9 10
+ - [(1,2),(3,4),(5,6),(7,8),(9,10)]
+ -
+ -}
+readTestCase :: IO [(Int, Int)]
+readTestCase = do
 	nLines <- readLn :: IO Int
-	let cases = forM_ [1..nLines] readPair
-	return cases
+	replicateM nLines readPair
 
-{--
+
+{- Test execution
+ - *Main> processTestCase 
+ - 3
+ - 1 2
+ - 4 5
+ - 6 7
+ - "YES"
+ -}
+processTestCase :: IO String
+processTestCase = do
+	-- Read testcase input
+	inputPairs <- readTestCase	
+	-- return ("YES", inputPairs) -- return YES and inputpairs for debug
+	return "YES" -- Return "YES" for now 
+
+{- Test execution when both string and input list is returned 
+ - *Main> main
+ - 2
+ - 2
+ - 1 1
+ - 2 2
+ - 3
+ -  4 1
+ -  5 1
+ -  6 1
+ -  [("YES",[(1,1),(2,2)]),("YES",[(4,1),(5,1),(6,1)])]
+ -}  
 main = do
 	nCases <- readLn :: IO Int
-	print $ forM_ [1..nCases] readTestCases 
+	results <- replicateM nCases processTestCase
+	print results
 
---}
+
