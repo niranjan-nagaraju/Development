@@ -161,7 +161,7 @@ main = do
 	 - forM [1..n] 
 	 -    tc <- readTestCase
 	 -    result = isFunction tc
-	 -    print list
+	 -    print result
 	 -}    
 	results <- replicateM nCases isFunction
 	mapM_ putStrLn results
