@@ -32,7 +32,9 @@ import Data.List
 readPair :: IO (Int, Int)
 readPair = do
 	pairStr <- getLine
-	let pairs =  ( read $ (words pairStr) !! 0 :: Int,  read $ (words pairStr) !! 1 :: Int )
+	--let pairs =  ( read $ (words pairStr) !! 0 :: Int,  read $ (words pairStr) !! 1 :: Int )
+	let pair' = words pairStr 
+	let pairs =  ( (read (head pair') :: Int),  (read $ (last pair') :: Int) )
 	return pairs
 
 {- Test execution:
@@ -47,6 +49,16 @@ readPair = do
 readTestCase :: IO [(Int, Int)]
 readTestCase = do
 	nLines <- readLn :: IO Int
+	{-
+	 -   NOTE: replicateM repeats an IO operation n times, and collects the results in a list
+	 -      *Main Data.List> replicateM 5 readPair 
+	 -      1 2
+	 -      3 4
+	 -      5 6
+	 -      7 8
+	 -      9 10
+	 -      [(1,2),(3,4),(5,6),(7,8),(9,10)]
+	 -}
 	replicateM nLines readPair
 
 {- Test execution:
@@ -77,12 +89,20 @@ isFunction = do
 	-- Read testcase input
 	inputPairs <- readTestCase
 
+	{-
 	-- Get only the function keys,
 	-- If there are two same keys that map to different outputs, then it's not a valid function,
 	-- However, the mapping from same key to a same output could be repeated in the input
 	--  e.g. f(1) = 2, f(2) = 3, f(1) = 2 [This is still a valid function as f(1) is always 2]
 	--  Weed such duplicate f(x) = y mapping first, then look to see if the remaining function mappings
 	--  do not have two differents for a given x.
+	--
+	--  NOTE: nub returns unique elements from a list
+	--     *Main Data.List> nub [(1,2), (1,2), (4,3)]
+	--     [(1,2),(4,3)]
+	--     *Main Data.List> nub [1,2,1,3]
+	--     [1,2,3]
+	-}     
 	let uniq_func_pairs = nub inputPairs
 	let	uniq_func_keys = fst (unzip uniq_func_pairs)
 
