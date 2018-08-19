@@ -164,7 +164,7 @@ main = do
 	 -    print list
 	 -}    
 	results <- replicateM nCases isFunction
-	print results
+	mapM_ putStrLn results
 
 {-
  - Test Program execution:
@@ -191,5 +191,10 @@ main = do
  - 1
  - 1 2
  - [13:33:21 functions_or_not]$ cat test_input |  runghc functions_or_not.hs 
- - ["NO","YES","NO","YES","YES"]
+ - NO
+ - YES
+ - NO
+ - YES
+ - YES
+ -
  -}
