@@ -34,7 +34,7 @@ readPair = do
 	pairStr <- getLine
 	--let pairs =  ( read $ (words pairStr) !! 0 :: Int,  read $ (words pairStr) !! 1 :: Int )
 	let pair' = words pairStr 
-	let pairs =  ( (read (head pair') :: Int),  (read $ (last pair') :: Int) )
+	let pairs =  ( (read (head pair') :: Int),  (read (last pair') :: Int) )
 	return pairs
 
 {- Test execution:
