@@ -1,5 +1,8 @@
 HOWTO use this Makefile system
 
+
+############ GlobalMake is now **DEPRECATED**, Use Makefile.inc instead ###############
+
 *******
  USAGE 
 *******
@@ -11,12 +14,13 @@ HOWTO use this Makefile system
 0. cd <library_folder>; touch Makefile
 
 1. Start with defining the C++ Development root relative to the current directory
-# C Development root
+# C++ Development root
 BASE_DIR=../..
 
 2. Define directories where the header files are located
 # include flags for the compiler
 INCLUDE += -I$(PWD) -I../include -I$(BASE_DIR)/common/include 
+TEST_INCLUDE too for testcases
 
 3. Define Library name
 # Library name
@@ -26,32 +30,45 @@ LIBNAME = <library>
 # Multi-threaded library name
 LIBNAME_MT = <library_mt>
 
-5. Define directory where the testcases are located
-# Testcases directory
-TESTDIR = <testcases>
+5. Define (sub)directories where sources are located
+SUBDIRS += a b c
 
-6. Source files needed to compile the library 
-SRC = a.cpp b.cpp c.cpp
-SRC += d.cpp
+6. Define (sub)directories where test sources are located
+TEST_SUBDIRS = testcases testcases_mt
+
+6. Place Source files (*.cpp) inside 'src' and include files (*.h) inside 'include' directories
+e.g:
+a/src a/include
+b/src b/include
+a/testcases/src a/testcases/include
+a/testcases_mt/src a/testcases_mt/include
 
 7. Define sourcefiles for testcases that need the single-threaded library 
-TEST_SRC = test_a/test_a.cpp
-TEST_SRC += test_b/test_b.cpp
+TEST_SRCS += test_a.cpp
+TEST_SRCS += test_b.cpp 
 
 8. Define sourcefiles for testcases that need the multi-threaded library
-TEST_SRC_MT = test_a_mt/test_a_mt.cpp
+TEST_SRC_MT += test_a_mt.cpp 
 
-9. Linker flags for dependent libraries to compile this library
-LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon -lpthread
+9. Test common files -- are files needed by all testcases
+TEST_COMMON_SRCS += test_common.cpp
+TEST_COMMON_SRCS_MT += test_common_mt.cpp
 
-10. Add reference to this library to be used in the testcases [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
+
+10. Linker flags for dependent libraries to compile this library
+LDFLAGS += -L$(BASE_DIR)/common/$(OUTDIR) -lcommon 
+
+11. Add reference to this library to be used in the testcases [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
 LIBS += -L$(OUTDIR) -l $(LIBNAME)
+Use LIBS_MT to link with multi-threaded libraries
 
-11. Add referece to the mult-thread version of this library to be used in the testcases
-LIBS_MT += -L$(OUTDIR) -l $(LIBNAME_MT) [WARNING: Do not add this to $(LDFLAGS); then the library won't compile.]
+Define LDFLAGS(_MT) and additionally TEST_LDFLAGS(_MT) if needed.
+TEST_LDFLAGS(_MT) are not considered when building libs, 
+whereas both LDFLAGS(_MT) and TEST_LDFLAGS(_MT) are used in the commandline for 'tests' target
 
-12. Finally include the "GlobalMake" file to define all the targets
-include $(BASE_DIR)/build/GlobalMake
+
+12. Finally include the "Makefile.inc" file to define all the targets
+include $(BASE_DIR)/build/Makefile.inc
 
 13. To build libraries, use
 	$ make libs
@@ -63,9 +80,16 @@ include $(BASE_DIR)/build/GlobalMake
 	$ make debug
 	  to compile both testcases and library with gdb flags
 	*OR*
-	$ make opt
+	$ make opt  
 	  to compile both testcases and library with -O2
+  PS: Just "make" without any targets will also build using "make opt"
 
+16. Build specific targets with debug/opt
+	$ make debug libs 
+		- builds libraries with debug symbols
+	Similarly,
+	$ make opt tests
+		- builds testcases without debug enabled
 
 ******************************************
 	II. Build a standalone program
@@ -73,14 +97,20 @@ include $(BASE_DIR)/build/GlobalMake
 
 0. cd <source_folder>; touch Makefile
 
-1. Define SRC, EXE, INCLUDE, CFLAGS, LDFLAGS
+1. Define SRC, INCLUDE, CXXFLAGS, LDFLAGS
+
+2. Use 
+	$ make
+	  which is equivalent to "make opt"
+	*OR*
+	$ make debug
+	  to compile with debug symbols
 
 *********************
  CURRENT LIMITATIONS
 *********************
 
-I. The variables cannot be changed w/o manually editing the GlobalMake
+I. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake
 
-II. The output folders cannot be changed (out/mac/... for mac, out/linux/... for linux systems) w/o manually editing the GlobalMake
+II. Won't compile under windows
 
-III. Won't compile under windows
