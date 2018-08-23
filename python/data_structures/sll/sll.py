@@ -1,4 +1,4 @@
-import node
+from node import *
 
 class SLL:
 	def __init__(self):

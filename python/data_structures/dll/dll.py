@@ -1,12 +1,4 @@
-class Node:
-	def __init__(self, value):
-		self.value = value
-		self.prev = None
-		self.next = None
-
-	def __str__(self):
-		return str(self.value)
-
+from node import *
 
 class DLL:
 	def __init__(self):
@@ -51,6 +43,7 @@ class DLL:
 			self.head = node
 
 
+	# remove front node and return it
 	def removeFront(self):
 		if (self.size == 0):
 			return None
@@ -67,6 +60,7 @@ class DLL:
 		tmp.next = tmp.prev = None
 		return tmp
 
+	# remove last node in the DLL and return it
 	def removeEnd(self):
 		if (self.size == 0):
 			return None
@@ -84,6 +78,7 @@ class DLL:
 		return tmp
 
 
+	# Cull the node from a DLL and return it 'sanitized'
 	def removeNode(self, node):
 		if node == self.head:
 			return self.removeFront()
