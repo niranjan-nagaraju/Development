@@ -1,9 +1,9 @@
 # DLL Node
 class Node:
-	def __init__(self, value):
+	def __init__(self, value=None, prev=None, next=None):
 		self.value = value
-		self.prev = None
-		self.next = None
+		self.prev = prev
+		self.next = next
 
 	def __str__(self):
 		return str(self.value)
