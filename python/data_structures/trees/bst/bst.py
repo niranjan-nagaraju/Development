@@ -1,102 +1,16 @@
-# A Binary Search Tree
+# A Binary Search Tree implementation
 
 import sys
 sys.path.append("../binary_tree/")
 from node import *
+from binary_tree import *
 
-class BST:
-	def __init__(self, root=None, size=0):
-		self.root = root
-		self.size = size
-
-	# helper function to traverse a BST in preorder
-	@staticmethod
-	def _preorder_traversal(root, aggregate_fn=None, **kwargs):
-		if not root:
-			return
-
-		aggregate_fn(kwargs, root)
-
-		BST._preorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._preorder_traversal(root.right, aggregate_fn, **kwargs)
-
-
-
-	# preorder traversal (R,l,r, l:left, r:right, R:Root)
-	def preorder_traversal(self, aggregate_fn=None, **kwargs):
-		if not self.root:
-			return
-
-		# if no aggregate function callback is specified,
-		# just print the current node's contents
-		if aggregate_fn is None:
-			aggregate_fn = lambda x,y : sys.stdout.write(str(y))
-
-		self._preorder_traversal(self.root, aggregate_fn, **kwargs)
-
-
-
-	# helper function to traverse a BST in preorder
-	@staticmethod
-	def _postorder_traversal(root, aggregate_fn=None, **kwargs):
-		if not root:
-			return
-
-		BST._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._postorder_traversal(root.right, aggregate_fn, **kwargs)
-		aggregate_fn(kwargs, root)
-
-
-	# post-order traversal (l,r,R, l:left, r:right, R:Root)
-	def postorder_traversal(self, aggregate_fn=None, **kwargs):
-		if not self.root:
-			return
-
-		# if no aggregate function callback is specified,
-		# just print the current node's contents
-		if aggregate_fn is None:
-			aggregate_fn = lambda x,y : sys.stdout.write(str(y))
-
-		self._postorder_traversal(self.root, aggregate_fn, **kwargs)
-
-
-	# helper function to traverse a BST in preorder
-	@staticmethod
-	def _postorder_traversal(root, aggregate_fn=None, **kwargs):
-		if not root:
-			return
-
-		BST._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._postorder_traversal(root.right, aggregate_fn, **kwargs)
-		aggregate_fn(kwargs, root)
-
-
-
-	# helper function to traverse a BST in preorder
-	@staticmethod
-	def _inorder_traversal(root, aggregate_fn=None, **kwargs):
-		if not root:
-			return
-
-		BST._inorder_traversal(root.left, aggregate_fn, **kwargs) 
-		aggregate_fn(kwargs, root)
-		BST._inorder_traversal(root.right, aggregate_fn, **kwargs)
-
-
-
-	# In-order traversal (l,r,R, l:left, r:right, R:Root)
-	def inorder_traversal(self, aggregate_fn=None, **kwargs):
-		if not self.root:
-			return
-
-		# if no aggregate function callback is specified,
-		# just print the current node's contents
-		if aggregate_fn is None:
-			aggregate_fn = lambda x,y : sys.stdout.write(str(y))
-
-		self._inorder_traversal(self.root, aggregate_fn, **kwargs)
-
-
+# BST inherits Binary Tree features
+#   traversal functions - pre/post/in order, level order
+#   views - top/front/left/bottom views
+#
+# Adds its own insert and search functions using the binary search tree properties
+class BST(BinaryTree):
 	# A helper insert function that tries to recursively find a 
 	# position for the specfied node in the BST to insert into the subtree
 	# NOTE: The BST should have atleast one node in it when the helper is called.
