@@ -1,15 +1,14 @@
-# A Binary Search Tree
+# A Binary Tree
 
 import sys
-sys.path.append("../binary_tree/")
 from node import *
 
-class BST:
+class BinaryTree:
 	def __init__(self, root=None, size=0):
 		self.root = root
 		self.size = size
 
-	# helper function to traverse a BST in preorder
+	# helper function to traverse a BinaryTree in preorder
 	@staticmethod
 	def _preorder_traversal(root, aggregate_fn=None, **kwargs):
 		if not root:
@@ -17,8 +16,8 @@ class BST:
 
 		aggregate_fn(kwargs, root)
 
-		BST._preorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._preorder_traversal(root.right, aggregate_fn, **kwargs)
+		BinaryTree._preorder_traversal(root.left, aggregate_fn, **kwargs) 
+		BinaryTree._preorder_traversal(root.right, aggregate_fn, **kwargs)
 
 
 
@@ -36,14 +35,14 @@ class BST:
 
 
 
-	# helper function to traverse a BST in preorder
+	# helper function to traverse a BinaryTree in preorder
 	@staticmethod
 	def _postorder_traversal(root, aggregate_fn=None, **kwargs):
 		if not root:
 			return
 
-		BST._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._postorder_traversal(root.right, aggregate_fn, **kwargs)
+		BinaryTree._postorder_traversal(root.left, aggregate_fn, **kwargs) 
+		BinaryTree._postorder_traversal(root.right, aggregate_fn, **kwargs)
 		aggregate_fn(kwargs, root)
 
 
@@ -60,27 +59,27 @@ class BST:
 		self._postorder_traversal(self.root, aggregate_fn, **kwargs)
 
 
-	# helper function to traverse a BST in preorder
+	# helper function to traverse a BinaryTree in preorder
 	@staticmethod
 	def _postorder_traversal(root, aggregate_fn=None, **kwargs):
 		if not root:
 			return
 
-		BST._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BST._postorder_traversal(root.right, aggregate_fn, **kwargs)
+		BinaryTree._postorder_traversal(root.left, aggregate_fn, **kwargs) 
+		BinaryTree._postorder_traversal(root.right, aggregate_fn, **kwargs)
 		aggregate_fn(kwargs, root)
 
 
 
-	# helper function to traverse a BST in preorder
+	# helper function to traverse a BinaryTree in preorder
 	@staticmethod
 	def _inorder_traversal(root, aggregate_fn=None, **kwargs):
 		if not root:
 			return
 
-		BST._inorder_traversal(root.left, aggregate_fn, **kwargs) 
+		BinaryTree._inorder_traversal(root.left, aggregate_fn, **kwargs) 
 		aggregate_fn(kwargs, root)
-		BST._inorder_traversal(root.right, aggregate_fn, **kwargs)
+		BinaryTree._inorder_traversal(root.right, aggregate_fn, **kwargs)
 
 
 
@@ -98,25 +97,25 @@ class BST:
 
 
 	# A helper insert function that tries to recursively find a 
-	# position for the specfied node in the BST to insert into the subtree
-	# NOTE: The BST should have atleast one node in it when the helper is called.
+	# position for the specfied node in the BinaryTree to insert into the subtree
+	# NOTE: The BinaryTree should have atleast one node in it when the helper is called.
 	@staticmethod
 	def _insert(root, node):
 		if node.value < root.value:
 			if not root.left:
 				root.left = node
 			else:
-				BST._insert(root.left, node)
+				BinaryTree._insert(root.left, node)
 		else: # node >= root
 			if not root.right:
 				root.right = node
 			else:
-				BST._insert(root.right, node)
+				BinaryTree._insert(root.right, node)
 
 
-	# Insert a node into a BST
+	# Insert a node into a BinaryTree
 	def insertNode(self, node):
-		# The BST is empty, Initialize tree's root with this node and return
+		# The BinaryTree is empty, Initialize tree's root with this node and return
 		if not self.root:
 			self.root = node
 			return
@@ -124,7 +123,7 @@ class BST:
 		self._insert(self.root, node)
 
 
-	# Insert into a BST
+	# Insert into a BinaryTree
 	# TODO: accept a comparator callback for complex values
 	def insert(self, value):
 		node = Node(value)
@@ -136,84 +135,44 @@ class BST:
 
 
 def test_traversals():
-	'''
-		Manually construct the below tree:
-			4
-		  /	  \
-		1      6
-		      / \
-		     5   7
-
-	'''
-	root = Node(4)
-	lnode = Node(1)
-	rnode = Node(6)
+	# prefix equation tree : "+a*bc"
+	root = Node("+")
+	lnode = Node("a")
+	rnode = Node("*")
 	root.setChildren(lnode, rnode)
 
-	rlnode = Node(5)
-	rrnode = Node(7)
+	rlnode = Node("b")
+	rrnode = Node("c")
 	rnode.setChildren(rlnode, rrnode)
 
-	bst = BST(root)
+	btree = BinaryTree(root)
 	print 'Preorder: ',
-	bst.preorder_traversal()
+	btree.preorder_traversal()
 	print
 
 	l = []
 	# define a lambda function that collates individual node values into a list
 	collate_fn = lambda kwargs, data : kwargs['lst'].append(data.value)
-	bst.preorder_traversal(collate_fn, lst=l)
-	assert (l == [4, 1, 6, 5, 7])
+	btree.preorder_traversal(collate_fn, lst=l)
+	assert (l == ['+', 'a', '*', 'b', 'c'])
 
 	print 'Postorder: ',
-	bst.postorder_traversal()
+	btree.postorder_traversal()
 	print
 
 	l = []
-	bst.postorder_traversal(collate_fn, lst=l)
-	assert (l == [1, 5, 7, 6, 4])
+	btree.postorder_traversal(collate_fn, lst=l)
+	assert (l == ['a',  'b', 'c', '*', '+'])
 
 	print 'Inorder: ',
-	bst.inorder_traversal()
+	btree.inorder_traversal()
 	print
 
 	l = []
-	bst.inorder_traversal(collate_fn, lst=l)
-	assert (l == [1, 4, 5, 6, 7])
-
-
-
-def test_insert():
-	bst = BST()
-	l = [2,1,4,5,3,8]
-	'''
-	  Resulting tree:
-	          2
-			/   \
-		   1	  4
-		        /  \
-			   3    5
-			         \
-					  8	
-	
-	   Inorder: 1 2 3 4 5 8
-	'''
-	for x in l:
-		bst.insert(x)
-
-	assert(bst.size == len(l))
-	assert(bst.root.value == 2)
-
-	l2 = []
-	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data.value)
-	bst.inorder_traversal(collate_fn, lst=l2)
-
-	# NOTE: sorted(list): returns a new list with sorted order without modifying the input list unlike list.sort()
-	assert (l2 == sorted(l))
+	btree.inorder_traversal(collate_fn, lst=l)
+	assert (l == ['a', '+', 'b', '*', 'c'])
 
 
 if __name__ == "__main__":
 	test_traversals()
-	test_insert()
 
