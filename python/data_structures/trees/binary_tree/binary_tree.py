@@ -96,43 +96,6 @@ class BinaryTree:
 		self._inorder_traversal(self.root, aggregate_fn, **kwargs)
 
 
-	# A helper insert function that tries to recursively find a 
-	# position for the specfied node in the BinaryTree to insert into the subtree
-	# NOTE: The BinaryTree should have atleast one node in it when the helper is called.
-	@staticmethod
-	def _insert(root, node):
-		if node.value < root.value:
-			if not root.left:
-				root.left = node
-			else:
-				BinaryTree._insert(root.left, node)
-		else: # node >= root
-			if not root.right:
-				root.right = node
-			else:
-				BinaryTree._insert(root.right, node)
-
-
-	# Insert a node into a BinaryTree
-	def insertNode(self, node):
-		# The BinaryTree is empty, Initialize tree's root with this node and return
-		if not self.root:
-			self.root = node
-			return
-
-		self._insert(self.root, node)
-
-
-	# Insert into a BinaryTree
-	# TODO: accept a comparator callback for complex values
-	def insert(self, value):
-		node = Node(value)
-		self.size += 1
-		
-		self.insertNode(node)
-
-
-
 
 def test_traversals():
 	# prefix equation tree : "+a*bc"
