@@ -1,10 +1,12 @@
-#ifndef _SLL_CPP_H_
-#define _SLL_CPP_H_
+#ifndef _SLL_HPP_
+#define _SLL_HPP_
 
 extern "C" {
-	#include "../../../c/Data_Structures/sll/sll/include/sll.h"
-	#include "../../../c/Data_Structures/sll/sll/include/sll_internal.h"
+	#include "sll.h"
+	#include "sll_internal.h"
 }
+
+#include <sll_node.hpp>
 
 class sll{
 private:
@@ -13,8 +15,11 @@ public:
 	sll();
 	~sll();
 
-	int length(void); 
+	int length(void);
+	sll_node head(void);
+	sll_node tail(void);
 
+#if 0	
 	/** Insert Operations */
 	int insert_at_front (void *data);
     int insert_at_end (void *data);
@@ -24,6 +29,7 @@ public:
     int insert_node_at_end (sll_node_t *node);
     int insert_node_at_position (sll_node_t *node, int pos);
     void insert_after_node (sll_node_t *node, sll_node_t *new_node);
+#endif
 };
 
-#endif // _SLL_CPP_H_
+#endif // _SLL_HPP_
