@@ -1,5 +1,4 @@
 #include <sll.h>
-using namespace std;
 
 sll::sll()
 {

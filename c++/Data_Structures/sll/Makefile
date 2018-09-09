@@ -3,7 +3,8 @@ C_BASE_DIR = ../../../c
 C_LIB_DIR = $(C_BASE_DIR)/Data_Structures/sll/
 
 # Include files
-INCLUDE += -I$(PWD)/sll -I$(C_LIB_DIR)/node -I$(C_LIB_DIR)/sll -I$(C_BASE_DIR)/common
+INCLUDE += -I$(PWD)/sll -I$(C_LIB_DIR)/node/include
+INCLUDE += -I$(C_LIB_DIR)/sll/include -I$(C_BASE_DIR)/common/include
 
 # Library filenames, _MT for multi-threaded version
 LIBNAME=sll+

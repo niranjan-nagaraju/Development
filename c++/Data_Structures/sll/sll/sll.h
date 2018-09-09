@@ -2,8 +2,8 @@
 #define _SLL_CPP_H_
 
 extern "C" {
-	#include "../../../../c/Data_Structures/sll/sll/sll.h"
-	#include "../../../../c/Data_Structures/sll/sll/sll_internal.h"
+	#include "../../../c/Data_Structures/sll/sll/include/sll.h"
+	#include "../../../c/Data_Structures/sll/sll/include/sll_internal.h"
 }
 
 class sll{
@@ -26,4 +26,4 @@ public:
     void insert_after_node (sll_node_t *node, sll_node_t *new_node);
 };
 
-#endif // _SLL_H_
+#endif // _SLL_CPP_H_
