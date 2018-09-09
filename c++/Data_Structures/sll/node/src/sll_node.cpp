@@ -1,6 +1,4 @@
 #include <sll_node.hpp>
-#include <iostream>
-using namespace std;
 
 sll_node::sll_node(void *data) 
 {
