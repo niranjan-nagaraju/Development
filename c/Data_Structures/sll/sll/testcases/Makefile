@@ -15,8 +15,8 @@ TEST_INCLUDE += -I../../node/include
 TEST_INCLUDE += -I$(BASE_DIR)/common/include
 TEST_INCLUDE += -I$(BASE_DIR)/test_common/include
 
-LIBS +=-L../../sll/out/linux/ -lsll
-LIBS +=-L../../node/out/linux/ -lsll_node
+LIBS +=-L../../sll/$(OBJDIR) -lsll
+LIBS +=-L../../node/$(OBJDIR) -lsll_node
 
 # library flags
 LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OBJDIR) -lcommon

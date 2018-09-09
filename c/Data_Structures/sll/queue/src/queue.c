@@ -42,16 +42,19 @@ void *
 queue_peekFront(queue_t *this)
 {
 	//return this->
+	return NULL;
 }
 
 void *
 queue_peekRear(queue_t *this)
 {
+	return NULL;
 }
 
 boolean
 queue_isThreadSafe(queue_t *this)
 {
+	return FALSE;
 }
 
 void

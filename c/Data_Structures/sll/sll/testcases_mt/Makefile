@@ -8,8 +8,8 @@ TEST_INCLUDE += -I../../node/include
 TEST_INCLUDE += -I$(BASE_DIR)/common/include
 TEST_INCLUDE += -I$(BASE_DIR)/test_common/include
 
-LIBS_MT +=-L../../sll/out/linux/ -lsll_mt
-LIBS_MT +=-L../../node/out/linux/ -lsll_node
+LIBS_MT +=-L../../sll/$(OBJDIR) -lsll_mt
+LIBS_MT +=-L../../node/$(OBJDIR) -lsll_node
 
 # library flags
 LDFLAGS_MT += -L$(BASE_DIR)/common/$(OBJDIR) -lcommon
