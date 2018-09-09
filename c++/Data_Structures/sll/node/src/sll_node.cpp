@@ -1,4 +1,6 @@
 #include <sll_node.hpp>
+#include <iostream>
+using namespace std;
 
 sll_node::sll_node(void *data) 
 {
@@ -9,6 +11,7 @@ sll_node::sll_node(void *data)
 sll_node::~sll_node()
 {
 	(void)sll_node_delete(this->_node);
+	this->_node = NULL;
 }
 
 void *
