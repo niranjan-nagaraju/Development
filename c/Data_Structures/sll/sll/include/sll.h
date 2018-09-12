@@ -18,7 +18,7 @@ void sll_init (sll_t *sll);
 sll_t sll_lib_initialized_object (void);
 
 /** An initialized SLL object so the user doesn't have to call sll_init() */
-sll_t _sll_lib_initialized_sll_object;
+extern sll_t _sll_lib_initialized_sll_object;
 
 /** Although, this trick won't work on global SLL objects
  *  Wonder how PTHREAD_MUTEX_INITIALIZER works
