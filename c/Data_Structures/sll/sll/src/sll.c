@@ -12,7 +12,7 @@ sll_lib_initialized_object(void)
 
 	/** 
 	 * Perform initialization only on the first run
-	 * Subsequent runs, just run the already initialized object 
+	 * Subsequent runs, just return a copy of the already initialized object 
 	 */
 	if (!_initialized) {
 		_initialized = 1;
