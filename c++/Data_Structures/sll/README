@@ -1,0 +1,7 @@
+SLL+:
+  A C++ wrapper around a C-based implementation of an SLL
+
+
+
+TODO:
+  Use namespace to cover sll and node classes under a single umbrella _and_ avoid having to use sll_ prefix everywhere 

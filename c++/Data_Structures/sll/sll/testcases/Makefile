@@ -5,7 +5,7 @@ C_LIB_DIR = $(C_BASE_DIR)/Data_Structures/sll/
 #TEST_SRCS += sll_destroy_test.c  
 #TEST_SRCS += sll_find_test.c 
 TEST_SRCS += sll_init_test.cpp
-#TEST_SRCS += sll_insert_test.c 
+TEST_SRCS += sll_insert_test.cpp
 #TEST_SRCS += sll_print_test.c
 #TEST_SRCS += sll_remove_test.c 
 
