@@ -24,6 +24,7 @@ NodeUT::test_node_operations(void)
 
 	sll_node s1;
 	assert(NULL == s1.get());
+	s1.destroy();
 
 	struct test_struct test_obj = {42, 'Z', 4.24};
 	struct test_struct *tsptr;
@@ -31,9 +32,11 @@ NodeUT::test_node_operations(void)
 	sll_node test_node((void *)i);
 	i = (int)(size_t)test_node.get();
 	assert(10 == i);
+	test_node.destroy();
 
 	sll_node test_node2 = sll_node((void *) c);
 	assert('a' == (char)(size_t)test_node2.get());
+	test_node2.destroy();
 
 	sll_node test_node3 = sll_node((void *) &test_obj);
 	tsptr = (struct test_struct *) test_node3.get();
@@ -44,6 +47,7 @@ NodeUT::test_node_operations(void)
 	sll_node next = test_node3.next(); /** this will be an empty node */
 	next.set((void *)20);
 	assert(20 == (int)(size_t)next.get());
+	test_node3.destroy();
 
 	/** Test private setNode() */	
 	sll_node_t *x = sll_node_create((void *)10);
@@ -51,6 +55,7 @@ NodeUT::test_node_operations(void)
 	w.setNode(x);
 	
 	assert(10 == (int)(size_t)w.get());
+	w.destroy(); //destroys x as well
 
 	cout << "SLL Node create tests successful" << endl;
 }

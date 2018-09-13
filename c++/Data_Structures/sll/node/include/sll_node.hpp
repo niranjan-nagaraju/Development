@@ -18,6 +18,7 @@ class sll_node {
 		void *get();
 		void set(void *data);
 		sll_node next();
+		void *destroy();
 		//void print(printfn *printer);
 
 		// Friend classes
