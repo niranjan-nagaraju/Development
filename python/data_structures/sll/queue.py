@@ -1,6 +1,6 @@
 from sll import *
 
-# Queue using a DLL
+# Queue using a SLL
 class Queue:
 	def __init__(self):
 		self.sll = SLL()

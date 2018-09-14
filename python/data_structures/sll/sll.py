@@ -1,4 +1,4 @@
-from node import *
+import node as snode
 
 # Exceptions for the SLL class
 class OverFlowError(Exception):
@@ -26,7 +26,7 @@ class SLL:
 
 	# Insert at front
 	def push_front(self, value):
-		node = Node(value)
+		node = snode.Node(value)
 		self.size += 1
 
 		node.next = self.head
@@ -38,7 +38,7 @@ class SLL:
 
 	# Insert to the rear
 	def push_back(self, value):
-		node = Node(value)
+		node = snode.Node(value)
 
 		self.size += 1
 
