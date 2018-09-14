@@ -5,7 +5,7 @@ class Node:
 		self.next = None
 
 	def __str__(self):
-		return "%d" %(self.value)
+		return "%s" %(self.value)
 
 	def __repr__(self):
 		return "%r" %(self.value)

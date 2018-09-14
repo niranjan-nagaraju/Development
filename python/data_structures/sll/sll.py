@@ -1,4 +1,4 @@
-import node as snode
+from node import Node
 
 # Exceptions for the SLL class
 class OverFlowError(Exception):
@@ -26,7 +26,7 @@ class SLL:
 
 	# Insert at front
 	def push_front(self, value):
-		node = snode.Node(value)
+		node = Node(value)
 		self.size += 1
 
 		node.next = self.head
@@ -38,7 +38,7 @@ class SLL:
 
 	# Insert to the rear
 	def push_back(self, value):
-		node = snode.Node(value)
+		node = Node(value)
 
 		self.size += 1
 
@@ -61,6 +61,12 @@ class SLL:
 		self.size -= 1
 		value = self.head.value
 		self.head = self.head.next
+
+		# We just popped the last element in the SLL,
+		# Update tail
+		if self.size == 0:
+			self.tail = None
+
 		return value
 
 
@@ -79,7 +85,6 @@ class SLL:
 			return value
 
 		trav = self.head
-
 		# traverse until we reach the penultimate node in the SLL
 		while trav.next != self.tail:
 			trav = trav.next
