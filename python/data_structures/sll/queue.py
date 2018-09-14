@@ -8,12 +8,12 @@ class Queue:
 	def size(self):
 		return self.sll.size
 
-	# enqueue and return DLL node (will be the tail)
+	# enqueue element into the back of the queue
 	def enqueue(self, value):
 		self.sll.enqueue(value)
 
 
-	# dequeue and return the DLL node (will be the previous head)
+	# dequeue element from the front of the queue and return it
 	def dequeue(self):
 		return self.sll.dequeue()
 
