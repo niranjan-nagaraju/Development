@@ -1,7 +1,10 @@
 # A Binary Tree
 
 import sys
-from node import *
+
+sys.path.append("../../../data_structures/")
+from sll.queue import Queue # import just the Queue, as sll.Node will conflict with binary_tree.node
+from node import Node
 
 class BinaryTree:
 	def __init__(self, root=None, size=0):
@@ -96,9 +99,37 @@ class BinaryTree:
 		self._inorder_traversal(self.root, aggregate_fn, **kwargs)
 
 
+	# Level-order traversal
+	def levelorder_traversal(self, aggregate_fn=None, **kwargs):
+		if not self.root:
+			return
+
+		# if no aggregate function callback is specified,
+		# just print the current node's contents
+		if aggregate_fn is None:
+			aggregate_fn = lambda x,y : sys.stdout.write(str(y))
+
+		q = Queue()
+		q.enqueue(self.root)
+		while q.size() != 0:
+			tmp = q.dequeue()
+			aggregate_fn(kwargs, tmp)
+
+			q.enqueue(tmp.left)  if tmp.left else None
+			q.enqueue(tmp.right) if tmp.right else None
+
+
 
 def test_traversals():
 	# prefix equation tree : "+a*bc"
+	'''
+	     +
+	   /   \	
+      a     *
+	      /   \
+	     b     c
+	'''		 
+
 	root = Node("+")
 	lnode = Node("a")
 	rnode = Node("*")
@@ -134,6 +165,14 @@ def test_traversals():
 	l = []
 	btree.inorder_traversal(collate_fn, lst=l)
 	assert (l == ['a', '+', 'b', '*', 'c'])
+
+	print 'Level order: ',
+	btree.levelorder_traversal()
+	print
+
+	l = []
+	btree.levelorder_traversal(collate_fn, lst=l)
+	assert (l == ['+', 'a', '*', 'b', 'c'])
 
 
 if __name__ == "__main__":
