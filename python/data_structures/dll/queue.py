@@ -1,4 +1,4 @@
-from dll import *
+from dll import DLL
 
 # Queue using a DLL
 class Queue:
@@ -10,16 +10,16 @@ class Queue:
 
 	# enqueue and return DLL node (will be the tail)
 	def enqueue(self, value):
-		self.dll.append(value)
+		self.dll.push_back(value)
 		return self.dll.tail
 
 	def enqueueNode(self, node):
-		self.dll.appendNode(node)
+		self.dll.push_back_node(node)
 		return self.dll.tail
 
 	# dequeue and return the DLL node (will be the previous head)
 	def dequeue(self):
-		return self.dll.removeFront()
+		return self.dll.pop_front_node()
 
 	def reEnqueueNode(self, node):
 		# if the node is already at the 
@@ -50,4 +50,3 @@ if __name__ == "__main__":
 	trav = queue.dll[0]
 	queue.reEnqueueNode(trav)
 	print queue
-		

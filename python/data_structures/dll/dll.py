@@ -7,7 +7,7 @@ class DLL:
 		self.size = 0
 
 	# Insert at front
-	def prepend(self, value):
+	def push_front(self, value):
 		node = Node(value)
 		self.size += 1
 
@@ -23,13 +23,13 @@ class DLL:
 
 
 	# Append to the rear		
-	def append(self, value):
+	def push_back(self, value):
 		node = Node(value)
-		self.appendNode(node)
+		self.push_back_node(node)
 
 
 	# Append a node to the rear
-	def appendNode(self, node):
+	def push_back_node(self, node):
 		self.size += 1
 
 		node.prev = self.tail
@@ -44,7 +44,7 @@ class DLL:
 
 
 	# remove front node and return it
-	def removeFront(self):
+	def pop_front_node(self):
 		if (self.size == 0):
 			return None
 
@@ -61,7 +61,7 @@ class DLL:
 		return tmp
 
 	# remove last node in the DLL and return it
-	def removeEnd(self):
+	def pop_back_node(self):
 		if (self.size == 0):
 			return None
 
@@ -81,9 +81,9 @@ class DLL:
 	# Cull the node from a DLL and return it 'sanitized'
 	def removeNode(self, node):
 		if node == self.head:
-			return self.removeFront()
+			return self.pop_front_node()
 		elif node == self.tail:
-			return self.removeEnd()
+			return self.pop_back_node()
 		
 		self.size -= 1
 		
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 	dll = DLL()
 
 	for i in range(5, 0, -1):
-		dll.prepend(i)
+		dll.push_front(i)
 		print dll
 
 	print 'By Index:', dll[0], dll[1], dll[2], dll[3], dll[4]
@@ -144,14 +144,14 @@ if __name__ == "__main__":
 
 '''
 	for i in range(5, 0, -1):
-		print dll.removeFront()
+		print dll.pop_front()
 		print dll
 
 	for i in range(1, 6):
-		dll.append(i)
+		dll.push_back(i)
 		print dll
 
 	for i in range(1, 6):
-		print dll.removeEnd()
+		print dll.pop_back()
 		print dll
 '''
