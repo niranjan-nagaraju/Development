@@ -6,20 +6,34 @@ class DLL:
 		self.tail = None
 		self.size = 0
 
-	# Insert at front
-	def push_front(self, value):
-		node = Node(value)
+	# utility function to push a node to the front of a DLL
+	def _push_front_node(self, node):
 		self.size += 1
-
 		node.next = self.head
 
 		if self.head:
 			self.head.prev = node
 
 		self.head = node
-
 		if (not self.tail):
 			self.tail = node
+
+	# utility function to wrap data in a node, and push to the front of a DLL
+	def _push_front_data(self, value):
+		node = Node(value)
+		self._push_front_node(node)
+
+	# Insert at front
+	# if a node is sent as a parameter, it is enqueued as-is
+	# otherwise, data is wrapped around in a node and enqueued.
+	# if a node needs enqueued wrapped around in another node (for whatever reason), 
+	#  use _push_front_data() instead
+	def push_front(self, data):
+		if isinstance(data, Node):
+			self._push_front_node(data)
+		else:
+			self._push_front_data(data)
+
 
 
 	# Append to the rear		

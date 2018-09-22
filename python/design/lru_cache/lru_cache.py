@@ -1,4 +1,7 @@
-from data_structures.dll.queue import *
+import sys
+sys.path.append("../../")
+from data_structures.dll.queue import Queue
+
 
 class LRUCache(object):
 
@@ -37,13 +40,13 @@ class LRUCache(object):
 		:rtype: nothing
 		"""
 
-        # if key already exists, 
-        # update with new value and return
-        if (self.table.has_key(key)):
-            node = self.table[key]
-            node.value = (key, value)
-            self.get(key)
-            return
+		# if key already exists, 
+		# update with new value and return
+		if (self.table.has_key(key)):
+			node = self.table[key]
+			node.value = (key, value)
+			self.get(key)
+			return
 
 		if (self.queue.size() == self.capacity):
 			# Dequeue least recently used item from the queue

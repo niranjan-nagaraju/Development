@@ -1,4 +1,6 @@
-from design.lru_cache.lru_cache import *
+import sys
+sys.path.append("../../../")
+from design.lru_cache.lru_cache import LRUCache
 
 cache = LRUCache(2)
 cache.set(1,2)
