@@ -1,27 +1,9 @@
 from sll import SLL
 
 # Queue using a SLL
-class Queue:
-	def __init__(self):
-		self.sll = SLL()
-
-	def size(self):
-		return self.sll.size
-
-	# enqueue element into the back of the queue
-	def enqueue(self, value):
-		self.sll.enqueue(value)
-
-
-	# dequeue element from the front of the queue and return it
-	def dequeue(self):
-		return self.sll.dequeue()
-
-
-	def __str__(self):
-		return self.sll.__str__()
-
-
+class Queue(SLL):
+	def length(self):
+		return self.size
 
 
 if __name__ == "__main__":
@@ -30,13 +12,13 @@ if __name__ == "__main__":
 	for i in range(1, 6):
 		queue.enqueue(i)
 
-	assert(queue.size() == 5)
+	assert(queue.length() == 5)
 
 	print 'Queue after enqueues', queue
 
 	for i in range(1, 6):
 		assert(i == queue.dequeue())
-		assert(queue.size() == (5-i))
+		assert(queue.length() == (5-i))
 
 
 	q2 = Queue()

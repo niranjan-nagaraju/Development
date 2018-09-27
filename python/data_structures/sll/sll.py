@@ -18,6 +18,9 @@ class SLL:
 		self.size = 0
 
 		# function aliases for better readability
+		# enqueue() and dequeue():
+		#  Can be push_front/pop_back too, but usually u join at the back of q queue,
+		#  and get processed at the front
 		self.enqueue = self.push_back
 		self.dequeue = self.pop_front
 		self.push = self.push_back
