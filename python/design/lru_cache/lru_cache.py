@@ -1,6 +1,7 @@
 import sys
 sys.path.append("../../")
 from data_structures.dll.queue import Queue
+from data_structures.dll.node import Node
 
 
 class LRUCache(object):
@@ -48,7 +49,7 @@ class LRUCache(object):
 			self.get(key)
 			return
 
-		if (self.queue.size() == self.capacity):
+		if (self.queue.length() == self.capacity):
 			# Dequeue least recently used item from the queue
 			# Remove it from the table as well
 			node = self.queue.dequeue()
@@ -59,6 +60,6 @@ class LRUCache(object):
 		# Add to the end of the queue
 		# Add a reference of the DLL node (encapsulating the item)
 		# into the hash table
-		node = self.queue.enqueue(item)
-		self.table[key] = node
+		self.queue.enqueue(item)
+		self.table[key] = self.queue.tail
         
