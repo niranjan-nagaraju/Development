@@ -9,3 +9,5 @@ class Node:
 		return str(self.value)
 
 
+	def __repr__(self):
+		return repr(self.value)

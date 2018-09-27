@@ -6,6 +6,16 @@ class DLL:
 		self.tail = None
 		self.size = 0
 
+		# function aliases for better readability
+		# enqueue() and dequeue():
+		#  Can be push_front/pop_back too, but usually u join at the back of q queue, 
+		#  and get processed at the front
+		self.enqueue = self.push_back 
+		self.dequeue = self.pop_front
+		self.push = self.push_back
+		self.pop = self.pop_back
+
+
 	# utility function to push a node to the front of a DLL
 	def _push_front_node(self, node):
 		self.size += 1
@@ -17,6 +27,7 @@ class DLL:
 		self.head = node
 		if (not self.tail):
 			self.tail = node
+
 
 	# utility function to wrap data in a node, and push to the front of a DLL
 	def _push_front_data(self, value):
@@ -35,15 +46,8 @@ class DLL:
 			self._push_front_data(data)
 
 
-
-	# Append to the rear		
-	def push_back(self, value):
-		node = Node(value)
-		self.push_back_node(node)
-
-
-	# Append a node to the rear
-	def push_back_node(self, node):
+	# utility function to push a node to the back of a DLL
+	def _push_back_node(self, node):
 		self.size += 1
 
 		node.prev = self.tail
@@ -52,9 +56,33 @@ class DLL:
 			self.tail.next = node
 
 		self.tail = node
-
 		if not self.head:
 			self.head = node
+
+
+	# utility function to wrap data in a node, and push to the back of a DLL
+	def _push_back_data(self, value):
+		node = Node(value)
+		self._push_back_node(node)
+
+
+	# Append to the rear
+	# if a node is sent as a parameter, it is enqueued as-is
+	# otherwise, data is wrapped around in a node and enqueued.
+	# if a node needs enqueued wrapped around in another node (for whatever reason), 
+	#  use _push_back_data() instead
+	def push_back(self, data):
+		if isinstance(data, Node):
+			self._push_back_node(data)
+		else:
+			self._push_back_data(data)
+
+
+
+	# remove front node and return its data
+	def pop_front(self):
+		node = self.pop_front_node()
+		return node.data
 
 
 	# remove front node and return it
@@ -74,6 +102,13 @@ class DLL:
 		tmp.next = tmp.prev = None
 		return tmp
 
+
+	# remove last node and return its data
+	def pop_back(self):
+		node = self.pop_back_node()
+		return node.data
+
+
 	# remove last node in the DLL and return it
 	def pop_back_node(self):
 		if (self.size == 0):
@@ -92,6 +127,17 @@ class DLL:
 		return tmp
 
 
+	# Remove node matching 'data' from the DLL
+	def remove(self, data):
+		trav = self.head
+		while trav:
+			if trav.data == data:
+				return self.removeNode(trav)
+			trav = trav.next
+
+		return None
+
+
 	# Cull the node from a DLL and return it 'sanitized'
 	def removeNode(self, node):
 		if node == self.head:
@@ -108,7 +154,9 @@ class DLL:
 
 		return node
 
+
 	#[]
+	# FIXME: should be returning data, not a reference to a node
 	def __getitem__(self, index):
 		# for now
 		if index < 0:
@@ -124,6 +172,7 @@ class DLL:
 			i += 1
 
 		return trav
+
 
 	def __str__(self):
 		dll_str = '[' + str(self.size) + ']: '
