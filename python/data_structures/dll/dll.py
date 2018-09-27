@@ -6,15 +6,6 @@ class DLL:
 		self.tail = None
 		self.size = 0
 
-		# function aliases for better readability
-		# enqueue() and dequeue():
-		#  Can be push_front/pop_back too, but usually u join at the back of q queue, 
-		#  and get processed at the front
-		self.enqueue = self.push_back 
-		self.dequeue = self.pop_front
-		self.push = self.push_back
-		self.pop = self.pop_back
-
 
 	# utility function to push a node to the front of a DLL
 	def _push_front_node(self, node):
@@ -82,7 +73,7 @@ class DLL:
 	# remove front node and return its data
 	def pop_front(self):
 		node = self.pop_front_node()
-		return node.data
+		return node.value
 
 
 	# remove front node and return it
@@ -106,7 +97,7 @@ class DLL:
 	# remove last node and return its data
 	def pop_back(self):
 		node = self.pop_back_node()
-		return node.data
+		return node.value
 
 
 	# remove last node in the DLL and return it
@@ -131,7 +122,7 @@ class DLL:
 	def remove(self, data):
 		trav = self.head
 		while trav:
-			if trav.data == data:
+			if trav.value == data:
 				return self.removeNode(trav)
 			trav = trav.next
 

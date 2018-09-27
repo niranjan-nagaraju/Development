@@ -1,41 +1,42 @@
 from dll import DLL
 
+
 # Queue using a DLL
-class Queue:
-	def __init__(self):
-		self.dll = DLL()
+class Queue(DLL):
+	def length(self):
+		return self.size
 
-	def size(self):
-		return self.dll.size
+	# return the node at the front of the Queue
+	def frontNode(self):
+		return self.head
 
-	# enqueue and return DLL node (will be the tail)
+	def front(self):
+		return self.head.value
+
+	# Override enqueue and return DLL node (will be the tail)
 	def enqueue(self, value):
-		self.dll.push_back(value)
-		return self.dll.tail
+		self.push_back(value)
+		return self.tail
+
 
 	def enqueueNode(self, node):
-		self.dll.push_back_node(node)
-		return self.dll.tail
+		self.push_back(node)
+		return self.tail
 
 	# dequeue and return the DLL node (will be the previous head)
 	def dequeue(self):
-		return self.dll.pop_front_node()
+		return self.pop_front_node()
 
 	def reEnqueueNode(self, node):
 		# if the node is already at the 
 		# back of the queue, 
 		# removing it and adding back to the same place
 		# is wasteful
-		if self.dll.tail == node:
+		if self.tail == node:
 			return
 
-		tmp = self.dll.removeNode(node)
+		tmp = self.removeNode(node)
 		self.enqueueNode(node)
-
-
-	def __str__(self):
-		return self.dll.__str__()
-
 
 
 
@@ -47,6 +48,6 @@ if __name__ == "__main__":
 
 	print queue
 
-	trav = queue.dll[0]
+	trav = queue[0]
 	queue.reEnqueueNode(trav)
 	print queue
