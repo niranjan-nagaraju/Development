@@ -90,7 +90,7 @@ class BinaryTree:
 
 		q = Queue()
 		q.enqueue(self.root)
-		while q.size() != 0:
+		while q.length() != 0:
 			tmp = q.dequeue()
 			aggregate_fn(kwargs, tmp)
 
@@ -127,6 +127,31 @@ class BinaryTree:
 	# Return the nodes that would be seen from the bottom side of the binary tree
 	def bottom_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
 		pass
+
+
+	def zigzag_levelorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+		pass
+
+
+	def height(self):
+		# helper function to calculate height of a subtree rooted at 'root'
+		def _height(root):
+			if (not root) or root.isLeaf():
+				return 0
+
+			return (1 + max(_height(root.left), _height(root.right)))
+
+		# call helper function to calculate height of the entire tree
+		return _height(self.root)
+
+
+	def width(self):
+		pass
+
+
+	def lowest_common_ancestor(self, node1, node2):
+		pass
+
 
 def test_traversals():
 	# prefix equation tree : "+a*bc"
@@ -181,6 +206,8 @@ def test_traversals():
 	l = []
 	btree.levelorder_traversal(collate_fn, lst=l)
 	assert (l == ['+', 'a', '*', 'b', 'c'])
+
+	assert(btree.height() == 2)
 
 
 if __name__ == "__main__":

@@ -9,6 +9,9 @@ class Node:
 		self.left = left
 		self.right = right
 
+	def isLeaf(self):
+		return (self.left is None and self.right is None)
+
 	def __str__(self):
 		return str(self.value)
 
