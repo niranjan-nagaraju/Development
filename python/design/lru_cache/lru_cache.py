@@ -52,9 +52,10 @@ class LRUCache(object):
 		if (self.queue.length() == self.capacity):
 			# Dequeue least recently used item from the queue
 			# Remove it from the table as well
-			node = self.queue.dequeue()
-			self.table.pop(node.value[0])
+			item = self.queue.dequeue()
+			self.table.pop(item[0]) # remove key from the table
 
+		# Cache has enough capacity to accomodate the new entry
 		item = (key, value)
 
 		# Add to the end of the queue

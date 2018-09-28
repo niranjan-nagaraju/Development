@@ -19,3 +19,4 @@ cache2 = LRUCache(2)
 cache2.set(2,1)
 cache2.set(2,2)
 assert(cache2.get(2) == 2)
+print 'LRU testcases passed!'
