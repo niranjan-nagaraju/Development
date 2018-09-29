@@ -68,9 +68,11 @@ def test_traversals():
 	rrnode = Node(7)
 	rnode.setChildren(rlnode, rrnode)
 
+	print_fn = lambda x,y : sys.stdout.write(str(y) + ' ')
+
 	bst = BST(root)
 	print 'Preorder: ',
-	bst.preorder_traversal()
+	bst.preorder_traversal(print_fn)
 	print
 
 	l = []
@@ -80,7 +82,7 @@ def test_traversals():
 	assert (l == [4, 1, 6, 5, 7])
 
 	print 'Postorder: ',
-	bst.postorder_traversal()
+	bst.postorder_traversal(print_fn)
 	print
 
 	l = []
@@ -88,7 +90,7 @@ def test_traversals():
 	assert (l == [1, 5, 7, 6, 4])
 
 	print 'Inorder: ',
-	bst.inorder_traversal()
+	bst.inorder_traversal(print_fn)
 	print
 
 	l = []
