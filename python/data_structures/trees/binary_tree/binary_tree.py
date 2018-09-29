@@ -11,66 +11,42 @@ class BinaryTree:
 		self.root = root
 		self.size = size
 
-	# helper function to traverse a BinaryTree in preorder
-	@staticmethod
-	def _preorder_traversal(root, aggregate_fn, **kwargs):
-		if not root:
-			return
 
-		aggregate_fn(kwargs, root)
-
-		BinaryTree._preorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BinaryTree._preorder_traversal(root.right, aggregate_fn, **kwargs)
-
-
-
-	# preorder traversal (R,l,r, l:left, r:right, R:Root)
+	# preorder traversal: (R,l,r, l:left, r:right, R:Root)
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
 	def preorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
-		self._preorder_traversal(self.root, aggregate_fn, **kwargs)
+		# helper function to traverse a Binary subtree rooted at 'root', in preorder
+		def _preorder_traversal(root, aggregate_fn, **kwargs):
+			if not root:
+				return
 
+			aggregate_fn(kwargs, root)
+			_preorder_traversal(root.left, aggregate_fn, **kwargs) 
+			_preorder_traversal(root.right, aggregate_fn, **kwargs)
 
+		# Call the helper function to do the actual traversal
+		_preorder_traversal(self.root, aggregate_fn, **kwargs)
 
-	# helper function to traverse a BinaryTree in preorder
-	@staticmethod
-	def _postorder_traversal(root, aggregate_fn, **kwargs):
-		if not root:
-			return
-
-		BinaryTree._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BinaryTree._postorder_traversal(root.right, aggregate_fn, **kwargs)
-		aggregate_fn(kwargs, root)
 
 
 	# post-order traversal (l,r,R, l:left, r:right, R:Root)
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
 	def postorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
-		self._postorder_traversal(self.root, aggregate_fn, **kwargs)
+		# helper function to traverse a Binary subtree rooted at 'root', in postorder
+		def _postorder_traversal(root, aggregate_fn, **kwargs):
+			if not root:
+				return
+
+			_postorder_traversal(root.left, aggregate_fn, **kwargs) 
+			_postorder_traversal(root.right, aggregate_fn, **kwargs)
+			aggregate_fn(kwargs, root)
+
+		# Call the helper function to do the actual traversal
+		_postorder_traversal(self.root, aggregate_fn, **kwargs)
 
 
-	# helper function to traverse a BinaryTree in preorder
-	@staticmethod
-	def _postorder_traversal(root, aggregate_fn, **kwargs):
-		if not root:
-			return
-
-		BinaryTree._postorder_traversal(root.left, aggregate_fn, **kwargs) 
-		BinaryTree._postorder_traversal(root.right, aggregate_fn, **kwargs)
-		aggregate_fn(kwargs, root)
-
-
-
-	# helper function to traverse a BinaryTree in preorder
-	@staticmethod
-	def _inorder_traversal(root, aggregate_fn, **kwargs):
-		if not root:
-			return
-
-		BinaryTree._inorder_traversal(root.left, aggregate_fn, **kwargs) 
-		aggregate_fn(kwargs, root)
-		BinaryTree._inorder_traversal(root.right, aggregate_fn, **kwargs)
 
 
 
@@ -78,7 +54,18 @@ class BinaryTree:
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
 	def inorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
-		self._inorder_traversal(self.root, aggregate_fn, **kwargs)
+		# helper function to traverse a Binary subtree rooted at 'root', in In-order
+		def _inorder_traversal(root, aggregate_fn, **kwargs):
+			if not root:
+				return
+
+			_inorder_traversal(root.left, aggregate_fn, **kwargs) 
+			aggregate_fn(kwargs, root)
+			_inorder_traversal(root.right, aggregate_fn, **kwargs)
+
+		# Call the helper function to do the actual traversal
+		_inorder_traversal(self.root, aggregate_fn, **kwargs)
+
 
 
 	# Level-order traversal
@@ -110,6 +97,7 @@ class BinaryTree:
 	def right_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
 		pass
 
+
 	# Top-view of a binary tree
 	# Return the nodes that would be seen from the top of the binary tree
 	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
@@ -122,6 +110,7 @@ class BinaryTree:
 	# Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
 	def top_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
 		pass
+
 
 	# Bottom-view of a binary tree
 	# Return the nodes that would be seen from the bottom side of the binary tree
