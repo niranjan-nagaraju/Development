@@ -77,7 +77,7 @@ def test_traversals():
 
 	l = []
 	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data.value)
+	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
 	bst.preorder_traversal(collate_fn, lst=l)
 	assert (l == [4, 1, 6, 5, 7])
 
@@ -118,11 +118,13 @@ def test_insert():
 		bst.insert(x)
 
 	assert(bst.size == len(l))
+	assert(bst.height() == 3)
+
 	assert(bst.root.value == 2)
 
 	l2 = []
 	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data.value)
+	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
 	bst.inorder_traversal(collate_fn, lst=l2)
 
 	# NOTE: sorted(list): returns a new list with sorted order without modifying the input list unlike list.sort()
