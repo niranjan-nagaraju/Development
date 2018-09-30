@@ -157,7 +157,7 @@ class BinaryTree:
 
 
 	# Top-view of a binary tree
-	# Return the nodes that would be seen from the top of the binary tree
+	# Return the node items that would be seen from the top of the binary tree
 	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
 	# e.g.
 	#     a
@@ -166,7 +166,58 @@ class BinaryTree:
 	#  /  \/ \
 	# d   ef  g
 	# Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
+	#
+	# Vizualize the algorithm as an cone increasing in diameter, and printing all the nodes on the edge of the cone,
+	# (assume the tree is completely full), and ignoring everything within the cone itself as they would be masked by
+	# the outer nodes when viewed from the top.
 	def top_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+		if not self.root:
+			return
+
+		q = Queue()
+		max_left_width = 0
+		max_right_width = 0
+		q.enqueue((0, self.root))
+		while q.length() != 0:
+			width, node = q.dequeue()
+
+			if width < 0:
+				if width < max_left_width:
+					max_left_width = width
+					aggregate_fn(kwargs, node.value)
+			elif width > 0:
+				if width > max_left_width:
+					max_right_width = width
+					aggregate_fn(kwargs, node.value)
+			else: # width == 0, print only if we are at level 0
+				if max_left_width == 0 and max_right_width == 0:
+					# if max_left_width and max_right_width haven't changed since we initialized
+					# it either means we are still at level 0,
+					# or the tree only has one node in it,
+					# Either case, we'll be here only for 'root'
+					aggregate_fn(kwargs, node.value)
+
+
+			q.enqueue((width-1, node.left))  if node.left else None
+			q.enqueue((width+1, node.right)) if node.right else None
+
+
+	# Top-view of a binary tree, but ordered from Left->Right
+	# Return the node items that would be seen from the top of the binary tree, but after ordering them from left->right
+	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
+	# e.g.
+	#     a
+	#    / \
+    #   b   c
+	#  /  \/ \
+	# d   ef  g
+	# Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
+	# In the sample tree above,
+	# traditional top-view (level by level) would be
+	#   a b c d g
+	# whereas, a L-R top-view would yield
+	#  d b a c g
+	def top_view_LR(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
 		pass
 
 
@@ -257,6 +308,14 @@ def TC1():
 	l = []
 	btree.right_view(collate_fn, lst=l)
 	assert (l == ['+', '*',  'c'])
+
+	print 'Top View: ',
+	btree.top_view()
+	print
+
+	l = []
+	btree.top_view(collate_fn, lst=l)
+	assert (l == ['+', 'a',  '*', 'c'])
 
 	print 'Testcase TC1 passed!'
 
