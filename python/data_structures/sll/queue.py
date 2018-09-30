@@ -5,6 +5,21 @@ class Queue(SLL):
 	def length(self):
 		return self.size
 
+	# return the item at the front of the Queue
+	def front(self):
+		if self.head:
+			return self.head.value
+
+		return None
+
+
+	# return the item at the end of the Queue
+	def last(self):
+		if self.tail:
+			return self.tail.value
+
+		return None
+
 
 if __name__ == "__main__":
 	queue = Queue()
