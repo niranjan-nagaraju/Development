@@ -27,6 +27,21 @@ class SLL:
 		self.pop = self.pop_back
 
 
+	def __str__(self):
+		sll_str = '[' + str(self.size) + ']: '
+		trav = self.head
+		while (trav):
+			sll_str += str(trav) + ' '
+			trav = trav.next
+
+		return sll_str
+
+
+
+	def __repr__(self):
+		return self.__str__()
+
+
 	# Insert at front
 	def push_front(self, value):
 		node = Node(value)
@@ -100,43 +115,80 @@ class SLL:
 
 
 
+	# Keep the SLL sorted, every insert places the item at the right place in order to keep the list sorted
+	# NOTE: assumes the list is sorted - if all inserts are done using place() it actually would be
+	#       A mixture of random push_xxx and place() will not ensure the list is sorted after place()
+	#       When in doubt, sort the list first before calling place() for the new item.
+	#
+	# NOTE: the place() operation _is_ stable
+	#    so if (a == b), and place(a) happened before place(b), then index(a) < index(b) in the list
+	def place(self, item, comparatorfn=None):
+		# if comparatorfn is not specified, try to use the item's __cmp__ method,
+		# or the default __cmp__ if the item's class hasn't implemented one
+		if not comparatorfn:
+			comparatorfn = cmp
 
+		# This is the first item to be 'placed' *OR* 
+		# item < head.value => item is less than all elements in the current list,
+		# Just add it to the list and return
+		if not self.head or comparatorfn(item, self.head.value) < 0:
+			self.push_front(item)
+			return
 
-	def __str__(self):
-		sll_str = '[' + str(self.size) + ']: '
+		# if (item >= tail.value), append to the end and return
+		# Will save traversing all the way to the end, 
+		# if 'item' is bigger than all the elements in the current list
+		if comparatorfn(item, self.tail.value) >= 0:
+			self.push_back(item)
+			return
+
 		trav = self.head
-		while (trav):
-			sll_str += str(trav) + ' '
+		prev = None
+		# Keep traversing until item < trav.value
+		while trav and (comparatorfn(item, trav.value) >= 0):
+			prev = trav
 			trav = trav.next
 
-		return sll_str
+		# At this point, we have found node trav, s.t
+		# prev.value <= item < trav.value
+		# Insert item between prev and trav
+		node = Node(item)
+		node.next = trav
+		prev.next = node
+
+		# Can't forget to update size
+		self.size += 1
 
 
 	# Reverse an SLL(iterative version)
+	# Consider 3 nodes, x->y->z
+	# a,b,c = x,y,z
+	# Star with reversing a->b to a<-b,
+	# then hop onto y,z,..., with a=y,b=z,... and repeat
 	def reverse(self):
 		if not self.head:
 			return None
 
-		first = self.head
-		second = first.next
-		while second:
-			third = second.next
+		a = self.head
+		b = a.next
+		while b:
+			c = b.next
 
-			# Make second->first link
-			second.next = first
+			# Make b->a link
+			b.next = a
 
-			first = second
-			second = third
+			a = b
+			b = c
 
 		# Mark erstwhile  head.next to None, so the SLL chain ends
 		self.head.next = None 
 
-		# When all's done, 'first' is pointing to the 'tail'
+		# When all's done, 'a' is pointing to the 'tail'
 		# of the SLL
-		# Since we have now reversed, point 'head' to 'first',
+		# Since we have now reversed, point 'head' to 'a',
 		# but before that, Update 'tail' to erstwhile 'head'
 		self.tail = self.head
-		self.head = first
+		self.head = a
 
 
 
@@ -150,6 +202,20 @@ def test_reverse():
 	print "Before reversing: sll", sll
 	sll.reverse()
 	print "After reversing: sll", sll
+
+
+	s2 = SLL()
+	s2.push_back('a')
+	s2.reverse()
+	assert(s2.size == 1)
+	assert(s2.head.value == 'a')
+	assert(s2.tail.value == 'a')
+
+	s2.push_back('b')
+	s2.reverse()
+	assert(s2.size == 2)
+	assert(s2.head.value == 'b')
+	assert(s2.tail.value == 'a')
 
 
 def TC1():
@@ -209,7 +275,20 @@ def TC1():
 	print 'TC1 passed'
 
 
+def test_place():
+	s = SLL()
+	for x in [6,4,2]:
+		s.place(x)
+
+	for x in [5, 3, 1]:
+		s.place(x)
+
+	s.place(0)
+	s.place(7)
+	print 'Place test: ', s
+
 if __name__ == "__main__":
 	TC1()
 	test_reverse()
+	test_place()
 
