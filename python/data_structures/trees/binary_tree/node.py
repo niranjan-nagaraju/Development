@@ -2,8 +2,8 @@
 class Node:
 	def __init__(self, value=None, left=None, right=None):
 		self.value = value
-		self.left = None
-		self.right = None
+		self.left = left
+		self.right = right
 
 	def setChildren(self, left=None, right=None):
 		self.left = left
