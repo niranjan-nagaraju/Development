@@ -42,6 +42,15 @@ class SLL:
 		return self.__str__()
 
 
+	# Traverse and print/aggregate SLL items using the aggregator function specified
+	def traverse(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+		trav = self.head
+		while (trav):
+			aggregate_fn(kwargs, trav.value)
+			trav = trav.next
+
+
+
 	# Insert at front
 	def push_front(self, value):
 		node = Node(value)
@@ -285,7 +294,24 @@ def test_place():
 
 	s.place(0)
 	s.place(7)
-	print 'Place test: ', s
+
+	l = []
+	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
+	s.traverse(collate_fn, lst=l)
+	assert(l == range(8))
+
+	# Test custom comparator
+	s2 = SLL()
+	test_list = [(2,1), (1, 'a'), (2, 3), (0, 'c'), (4,1), (3,0)]
+	for x in test_list:
+		s2.place(x, lambda a,b: cmp(a[0],b[0]))
+
+	l = []
+	collate_fn = lambda xargs, data : xargs['lst'].append(data)
+	s2.traverse(collate_fn, lst=l)
+	assert(l == [(0, 'c'), (1, 'a'), (2, 1), (2, 3), (3, 0), (4, 1)])
+
+
 
 if __name__ == "__main__":
 	TC1()
