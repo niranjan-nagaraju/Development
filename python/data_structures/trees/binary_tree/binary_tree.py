@@ -4,6 +4,7 @@ import sys
 
 sys.path.append("../../../data_structures/")
 from sll.queue import Queue # import just the Queue, as sll.Node will conflict with binary_tree.node
+from sll.sll import SLL
 from node import Node
 
 class BinaryTree:
@@ -218,7 +219,57 @@ class BinaryTree:
 	# whereas, a L-R top-view would yield
 	#  d b a c g
 	def top_view_LR(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
-		pass
+		if not self.root:
+			return
+
+		# Queue to help with level-order traversal
+		q = Queue()
+
+		# Store L/R width of a node and its value if it is visible in the top-view, in a sorted list
+		# ordered by the width
+		# at the end of the level-order traversal the list would contain
+		# [(-max_left_width, node value), ...., (0, root.value), ... (max_right_width, node value)]
+		slist = SLL()
+
+		# pairs a(w1, node_val1) vs b(w2, node_val2) are valued against each other
+		# depending on w1 vs w2 (where w1 and w2 are widths, so slist is kept sorted by the nodes' L/R widths)
+		pair_comparator = lambda (w1, node_val1), (w2, node_val2): cmp(w1, w2)
+
+		max_left_width = 0
+		max_right_width = 0
+		q.enqueue((0, self.root))
+		while q.length() != 0:
+			width, node = q.dequeue()
+
+			if width < 0:
+				if width < max_left_width:
+					max_left_width = width
+					slist.place((width, node.value))
+			elif width > 0:
+				if width > max_left_width:
+					max_right_width = width
+					slist.place((width, node.value))
+			else: # width == 0, print only if we are at level 0
+				if max_left_width == 0 and max_right_width == 0:
+					# if max_left_width and max_right_width haven't changed since we initialized
+					# it either means we are still at level 0,
+					# or the tree only has one node in it,
+					# Either case, we'll be here only for 'root'
+					slist.place((0, node.value))
+
+
+			q.enqueue((width-1, node.left))  if node.left else None
+			q.enqueue((width+1, node.right)) if node.right else None
+
+
+		# At the end of the level-order traversal,
+		# slist is ordered by width, so
+		# (-max_left_width, ..., 0, ..., max_right_width)
+		# Just retrieve the SLL L-R for the top view (L-R)
+		while slist.size!= 0:
+			width, item = slist.pop_front()
+			aggregate_fn(kwargs, item)
+
 
 
 	# Bottom-view of a binary tree
@@ -316,6 +367,14 @@ def TC1():
 	l = []
 	btree.top_view(collate_fn, lst=l)
 	assert (l == ['+', 'a',  '*', 'c'])
+
+	print 'Top View L-R: ',
+	btree.top_view_LR()
+	print
+
+	l = []
+	btree.top_view_LR(collate_fn, lst=l)
+	assert (l == ['a', '+',  '*', 'c'])
 
 	print 'Testcase TC1 passed!'
 
