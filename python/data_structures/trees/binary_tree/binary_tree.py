@@ -179,6 +179,9 @@ class BinaryTree:
 		max_left_width = 0
 		max_right_width = 0
 		q.enqueue((0, self.root))
+
+		# Top-view begins with the root node
+		aggregate_fn(kwargs, self.root.value)
 		while q.length() != 0:
 			width, node = q.dequeue()
 
@@ -187,17 +190,12 @@ class BinaryTree:
 					max_left_width = width
 					aggregate_fn(kwargs, node.value)
 			elif width > 0:
-				if width > max_left_width:
+				if width > max_right_width:
 					max_right_width = width
 					aggregate_fn(kwargs, node.value)
-			else: # width == 0, print only if we are at level 0
-				if max_left_width == 0 and max_right_width == 0:
-					# if max_left_width and max_right_width haven't changed since we initialized
-					# it either means we are still at level 0,
-					# or the tree only has one node in it,
-					# Either case, we'll be here only for 'root'
-					aggregate_fn(kwargs, node.value)
 
+			# NOTE: width 0, is root, would already be filled in at root,
+			# and in a top-view is not going to replaced
 
 			q.enqueue((width-1, node.left))  if node.left else None
 			q.enqueue((width+1, node.right)) if node.right else None
@@ -238,6 +236,9 @@ class BinaryTree:
 		max_left_width = 0
 		max_right_width = 0
 		q.enqueue((0, self.root))
+
+		# Top-view begins with the root node
+		slist.place((0, self.root.value))
 		while q.length() != 0:
 			width, node = q.dequeue()
 
@@ -246,17 +247,12 @@ class BinaryTree:
 					max_left_width = width
 					slist.place((width, node.value))
 			elif width > 0:
-				if width > max_left_width:
+				if width > max_right_width:
 					max_right_width = width
 					slist.place((width, node.value))
-			else: # width == 0, print only if we are at level 0
-				if max_left_width == 0 and max_right_width == 0:
-					# if max_left_width and max_right_width haven't changed since we initialized
-					# it either means we are still at level 0,
-					# or the tree only has one node in it,
-					# Either case, we'll be here only for 'root'
-					slist.place((0, node.value))
 
+			# NOTE: width 0, is root, would already be filled in at root,
+			# and in a top-view is not going to replaced
 
 			q.enqueue((width-1, node.left))  if node.left else None
 			q.enqueue((width+1, node.right)) if node.right else None
@@ -275,7 +271,48 @@ class BinaryTree:
 	# Bottom-view of a binary tree
 	# Return the nodes that would be seen from the bottom side of the binary tree
 	def bottom_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
-		pass
+		if not self.root:
+			return
+
+		q = Queue()
+
+		# A hash table that stores a map of L/R width to a node's item
+		# We traverse the tree in level-order, and keep replacing slist[width] if we find a new node with the same width
+		# At the end of the traversal, every slist[width] from {-max_left_width, ...,  0, ..., max_right_width} will contain the
+		# node items that would be visible from a bottom view of the binary tree
+		slist = {}
+
+		max_left_width = 0
+		max_right_width = 0
+		q.enqueue((0, self.root))
+
+		# Star with placing root at width 0
+		slist[0] = self.root.value
+		while q.length() != 0:
+			width, node = q.dequeue()
+
+			# As we traverse level-by-level, keep replacing
+			# item at L/R width
+			slist[width] = node.value
+
+			# Track max_left_width, max_right_width
+			# so we don't need to sort the hash table slist,
+			# Just retrieve slist[{-max_left_width, ...,  0, ..., max_right_width}]
+			if width < 0:
+				if width < max_left_width:
+					max_left_width = width
+			elif width > 0:
+				if width > max_right_width:
+					max_right_width = width
+
+			q.enqueue((width-1, node.left))  if node.left else None
+			q.enqueue((width+1, node.right)) if node.right else None
+
+		# At the end of the level-order traversal,
+		# Just 'aggregate' slist[{-max_left_width, ...,  0, ..., max_right_width}]
+		for i in range(max_left_width, max_right_width+1):
+			aggregate_fn(kwargs, slist[i])
+
 
 
 	def zigzag_levelorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
@@ -375,6 +412,15 @@ def TC1():
 	l = []
 	btree.top_view_LR(collate_fn, lst=l)
 	assert (l == ['a', '+',  '*', 'c'])
+
+
+	print 'Bottom View: ',
+	btree.bottom_view()
+	print
+
+	l = []
+	btree.bottom_view(collate_fn, lst=l)
+	assert (l == ['a', 'b',  '*', 'c'])
 
 	print 'Testcase TC1 passed!'
 
