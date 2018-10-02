@@ -304,7 +304,7 @@ def test_place():
 	s2 = SLL()
 	test_list = [(2,1), (1, 'a'), (2, 3), (0, 'c'), (4,1), (3,0)]
 	for x in test_list:
-		s2.place(x, lambda a,b: cmp(a[0],b[0]))
+		s2.place(x, lambda (a,b),(c,d): cmp(a, c))
 
 	l = []
 	collate_fn = lambda xargs, data : xargs['lst'].append(data)
