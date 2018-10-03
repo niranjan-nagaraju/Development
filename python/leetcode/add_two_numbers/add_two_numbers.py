@@ -51,6 +51,8 @@ class Solution(object):
 		carry = 0
 		s = None
 		tmp = None
+
+		# Add last 'x' digits of l1 and l2 until either of them run out of digits
 		while l1 and l2:
 			added = (carry + l1.val + l2.val) % 10
 			carry = (carry + l1.val + l2.val) / 10
@@ -66,6 +68,8 @@ class Solution(object):
 			l2 = l2.next
 
 
+		# if l2 has run out of digits, then l2's leading digits are zeroes,
+		# just that they are not explicity stored in the list l2
 		while l1:
 			added = (carry + l1.val) % 10
 			carry = (carry + l1.val) / 10
@@ -80,6 +84,8 @@ class Solution(object):
 				tmp = tmp.next
 			l1 = l1.next
 
+		# if l1 has run out of digits, then l1's leading digits are zeroes,
+		# just that they are not explicity stored in the list l1
 		while l2:
 			added = (carry + l2.val) % 10
 			carry = (carry + l2.val) / 10
@@ -94,8 +100,10 @@ class Solution(object):
 				tmp = next_digit
 			l2 = l2.next
 
+		# At the end of adding all digits, if there is a carry
+		# Add a new  node for the carry 
 		if carry:
-			tmp.next = ListNode(carry)
+			tmp.next = ListNode(1) # if carry exists, it'd be 1
 
 		return s
 
