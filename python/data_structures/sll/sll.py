@@ -10,7 +10,26 @@ class UnderFlowError(Exception):
 	pass
 
 
+# Iterator helper for SLL
+class SLLIterator:
+	def __init__(self, node=None):
+		self.node = node
 
+	def __iter__(self):
+		return self
+
+
+	def next(self):
+		if not self.node:
+			raise StopIteration
+		else:
+			tmp = self.node
+			# Move iterator to next node for next iteration
+			self.node = tmp.next
+			return tmp.value
+
+
+# The SLL class
 class SLL:
 	def __init__(self):
 		self.head = None
@@ -41,6 +60,9 @@ class SLL:
 	def __repr__(self):
 		return self.__str__()
 
+
+	def __iter__(self):
+		return SLLIterator(self.head)
 
 	# Traverse and print/aggregate SLL items using the aggregator function specified
 	def traverse(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
@@ -201,32 +223,6 @@ class SLL:
 
 
 
-def test_reverse():
-	sll = SLL()
-	sll.push_back(1)
-	sll.push_back(2)
-	sll.push_back(3)
-	sll.push_back(4)
-
-	print "Before reversing: sll", sll
-	sll.reverse()
-	print "After reversing: sll", sll
-
-
-	s2 = SLL()
-	s2.push_back('a')
-	s2.reverse()
-	assert(s2.size == 1)
-	assert(s2.head.value == 'a')
-	assert(s2.tail.value == 'a')
-
-	s2.push_back('b')
-	s2.reverse()
-	assert(s2.size == 2)
-	assert(s2.head.value == 'b')
-	assert(s2.tail.value == 'a')
-
-
 def TC1():
 	sll = SLL()
 	sll.push_back(1)
@@ -281,7 +277,6 @@ def TC1():
 	assert(sll.head == None) 
 	assert(sll.tail == None) 
 
-	print 'TC1 passed'
 
 
 def test_place():
@@ -313,8 +308,70 @@ def test_place():
 
 
 
+def test_iterator():
+	s = SLL()
+	for i in range(10):
+		s.push_back(i+1)
+
+	it = iter(s)
+	i = 1
+	for x in it:
+		assert(x == i)
+		i = i + 1
+
+	it = iter(s)
+	i = 1
+	while it:
+		try:
+			assert(it.next() == i)
+		except StopIteration:
+			break
+		i = i + 1
+
+
+	it = iter(s)
+	i = 1
+	while it:
+		try:
+			assert(next(it) == i)
+		except StopIteration:
+			break
+		i = i + 1
+
+
+def test_reverse():
+	sll = SLL()
+	sll.push_back(1)
+	sll.push_back(2)
+	sll.push_back(3)
+	sll.push_back(4)
+
+	sll.reverse()
+
+	it = iter(sll)
+	i = 4
+	for x in it:
+		assert(x == i)
+		i -= 1
+
+	s2 = SLL()
+	s2.push_back('a')
+	s2.reverse()
+	assert(s2.size == 1)
+	assert(s2.head.value == 'a')
+	assert(s2.tail.value == 'a')
+
+	s2.push_back('b')
+	s2.reverse()
+	assert(s2.size == 2)
+	assert(s2.head.value == 'b')
+	assert(s2.tail.value == 'a')
+
+
 if __name__ == "__main__":
 	TC1()
-	test_reverse()
 	test_place()
+	test_iterator()
+	test_reverse()
+	print 'Testcases passed'
 
