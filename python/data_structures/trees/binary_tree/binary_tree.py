@@ -8,6 +8,10 @@ from sll.sll import SLL
 from node import Node
 
 class BinaryTree:
+	# A default print function if no aggregator is provided
+	# for traversal functions
+	_default_printfn = lambda x,y : sys.stdout.write(str(y))
+
 	def __init__(self, root=None, size=0):
 		self.root = root
 		self.size = size
@@ -36,7 +40,7 @@ class BinaryTree:
 	# Traverse binary tree nodes in pre-order and return their values
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
-	def preorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def preorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in preorder
 		def _preorder_traversal(root, aggregate_fn, **kwargs):
 			if not root:
@@ -55,7 +59,7 @@ class BinaryTree:
 	# Traverse binary tree nodes in post-order and return their values
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
-	def postorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def postorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in postorder
 		def _postorder_traversal(root, aggregate_fn, **kwargs):
 			if not root:
@@ -74,7 +78,7 @@ class BinaryTree:
 	# Traverse binary tree nodes in in-order and return their values
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
-	def inorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def inorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in In-order
 		def _inorder_traversal(root, aggregate_fn, **kwargs):
 			if not root:
@@ -93,7 +97,7 @@ class BinaryTree:
 	# Traverse binary tree nodes level by level, and return their values
 	# if no aggregate function callback is specified,
 	# just print the current node's contents
-	def levelorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -110,7 +114,7 @@ class BinaryTree:
 
 	# Left-view of a binary tree
 	# Return tree items that would be seen from the left side of the binary tree
-	def left_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def left_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -133,7 +137,7 @@ class BinaryTree:
 
 	# Right-view of a binary tree
 	# Return tree items that would be seen from the right side of the binary tree
-	def right_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def right_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -171,7 +175,7 @@ class BinaryTree:
 	# Vizualize the algorithm as an cone increasing in diameter, and printing all the nodes on the edge of the cone,
 	# (assume the tree is completely full), and ignoring everything within the cone itself as they would be masked by
 	# the outer nodes when viewed from the top.
-	def top_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def top_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -216,7 +220,7 @@ class BinaryTree:
 	#   a b c d g
 	# whereas, a L-R top-view would yield
 	#  d b a c g
-	def top_view_LR(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def top_view_LR(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -270,7 +274,7 @@ class BinaryTree:
 
 	# Bottom-view of a binary tree
 	# Return the nodes that would be seen from the bottom side of the binary tree
-	def bottom_view(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def bottom_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
 
@@ -315,7 +319,7 @@ class BinaryTree:
 
 
 
-	def zigzag_levelorder_traversal(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def zigzag_levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		pass
 
 	def lowest_common_ancestor(self, node1, node2):
@@ -351,7 +355,6 @@ def TC1():
 
 	l = []
 	# define a lambda function that collates individual node values into a list
-	#collate_fn = lambda kwargs, data : kwargs['lst'].append(data.value)
 	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
 	btree.preorder_traversal(collate_fn, lst=l)
 	assert (l == ['+', 'a', '*', 'b', 'c'])
