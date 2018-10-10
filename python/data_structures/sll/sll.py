@@ -354,6 +354,14 @@ def test_reverse():
 		assert(x == i)
 		i -= 1
 
+
+	# sll itself returns an SLLIterator, so we needn't get an iterator to
+	# traverse the sll
+	i = 4
+	for x in sll:
+		assert(x == i)
+		i -= 1
+
 	s2 = SLL()
 	s2.push_back('a')
 	s2.reverse()
