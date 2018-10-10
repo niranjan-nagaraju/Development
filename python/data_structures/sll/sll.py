@@ -31,6 +31,10 @@ class SLLIterator:
 
 # The SLL class
 class SLL:
+	# A default print function if no aggregator is provided
+	# for traversal functions
+	_default_printfn = lambda x,y : sys.stdout.write(str(y))
+
 	def __init__(self):
 		self.head = None
 		self.tail = None
@@ -87,7 +91,7 @@ class SLL:
 
 
 	# Traverse and print/aggregate SLL items using the aggregator function specified
-	def traverse(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
+	def traverse(self, aggregate_fn=_default_printfn, **kwargs):
 		trav = self.head
 		while (trav):
 			aggregate_fn(kwargs, trav.value)
