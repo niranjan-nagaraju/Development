@@ -64,6 +64,28 @@ class SLL:
 	def __iter__(self):
 		return SLLIterator(self.head)
 
+
+	# Create a SLL from a list
+	@staticmethod
+	def fromList(lst):
+		s = SLL()
+		for x in lst:
+			s.push_back(x)
+
+		return s
+
+
+	# Return a List constructed from SLL items
+	@staticmethod
+	def toList(sll):
+		l = []
+		for x in sll:
+			l.append(x)
+
+		return l
+
+
+
 	# Traverse and print/aggregate SLL items using the aggregator function specified
 	def traverse(self, aggregate_fn=lambda x,y : sys.stdout.write(str(y)), **kwargs):
 		trav = self.head
@@ -276,6 +298,10 @@ def TC1():
 	assert(sll.size == 0)
 	assert(sll.head == None) 
 	assert(sll.tail == None) 
+
+
+	# fromList and toList
+	assert(SLL.toList(SLL.fromList(range(9, 0, -2))) == range(9, 0, -2))
 
 
 
