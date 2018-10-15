@@ -322,6 +322,49 @@ class BinaryTree:
 	def zigzag_levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		pass
 
+	# Return a path, as a list of nodes, from root to the specified node in the binary tree
+	def path(self, data):
+		# Find path to 'node' from the subtree rooted at 'root'
+		# and append each node in the path to the list
+		# Steps:
+		#   1. Start a post-order traversal
+		#   2. Find path to node in left subtree, if not found, find in the right subtree
+		#   3. If either of the left subtree/ right subtree returns True, indicating subtree contains the node,
+		#        add current root node to list and return True to higher level calls
+		#   4. If a subtree's root matches node, we have hit the node we were looking for, start constructing
+		#	     path from here -> add node to list. return True
+		def path_helper(root, node, path_nodes):
+			if not root:
+				return False
+			
+			# Found node in the subtree
+			# add it to the path and return true
+			# else, recursively look for it in the left/right subtree
+			if root.value == node.value:
+				path_nodes.insert(0, root)
+				return True
+			elif path_helper(root.left, node, path_nodes):
+				path_nodes.insert(0, root)
+				return True
+			elif path_helper(root.right, node, path_nodes):
+				path_nodes.insert(0, root)
+				return True
+
+				
+		if not data:
+			return []
+
+		# Find path to a node with value mentioned in 'data'
+		if not isinstance(data, Node):
+			node = Node(data)
+		else:
+			node = data
+
+		paths = []
+		path_helper(self.root, node, paths)
+		return paths
+
+
 	def lowest_common_ancestor(self, node1, node2):
 		pass
 
@@ -429,6 +472,39 @@ def TC1():
 
 
 
+def test_path():
+	'''
+		 1
+	   /   \    
+	  2     3
+	 /  \  /  \
+	4    5 6   7
+	'''      
+
+	root = Node(1)
+	lnode = Node(2)
+	rnode = Node(3)
+	root.setChildren(lnode, rnode)
+
+	lnode.setChildren(Node(4), Node(5))
+	rnode.setChildren(Node(6), Node(7))
+	btree = BinaryTree(root)
+
+	assert(btree.height() == 2)
+
+	nodes =  btree.path(7)
+	assert(len(nodes) == 3)
+	for n in nodes:
+		print n.value
+
+	# find path using a node reference
+	nodes =  btree.path(rnode)
+	for n in nodes:
+		print n.value
+
+	assert(btree.path(8) == [])
+
+
 if __name__ == "__main__":
 	TC1()
-
+	test_path()
