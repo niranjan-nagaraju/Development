@@ -17,7 +17,7 @@ class Node:
 
 	# return lisp-cons style node value as 'value: (l, r)'
 	def __repr__(self):
-		return "%s: (%r, %r)" %(self, self.left, self.right)
+		return "%s: (%s, %s)" %(self, self.left, self.right)
 
 
 if __name__ == "__main__":
