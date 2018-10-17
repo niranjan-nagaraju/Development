@@ -39,14 +39,14 @@ class Stack(object):
 
 	def __str__(self):
 		stack_str = '[' + str(self.size) + ']: '
-		for i in range(self.size):
+		for i in range(self.tos, -1, -1):
 			stack_str += str(self.items[i]) + ' '
 
 		return stack_str
 
 
 	def __repr__(self):
-		return "[%d]: %r" %(self.size, self.items[:self.size])
+		return "[%d]: %r" %(self.size, self.items[self.tos::-1])
 
 
 def TC():
