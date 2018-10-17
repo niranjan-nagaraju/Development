@@ -61,9 +61,6 @@ class StackMin(Stack):
 		return item
 
 	def min(self):
-		if self.size == 0:
-			return -1
-
 		return self.min
 
 	def __str__(self):
