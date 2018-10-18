@@ -1,5 +1,5 @@
 '''
-A stack which supports min() in O(1) 
+An array-based stack which supports min() in O(1) 
 in addition to the exisitng push() and pop() in O(1)
 
 min(): returns the current minimum in the stack
@@ -40,19 +40,26 @@ class StackMin(Stack):
 		self.min = None
 		Stack.__init__(self, capacity)
 
+
+	# Override parent stack class' push() to update min
 	def push(self, item):
 		if (self.size == 0):
 			self.min = item
 
+		# Update current stack min
 		self.min = min(item, self.min)
 
 		# TODO: This is assuming push always succeeds
 		# revise
 		super(StackMin, self).push((item, self.min))
 
+
+	# Override parent stack class' pop() to update min
 	def pop(self):
 		item, m = super(StackMin, self).pop()
 
+		# Update min from current stack TOS
+		# reset to None if we just popped the last item off the stack
 		if self.size != 0:
 			self.min = self.items[self.tos][1]
 		else:
@@ -60,20 +67,27 @@ class StackMin(Stack):
 
 		return item
 
-	def min(self):
+
+	# O(1) Min operation
+	def minimum(self):
 		return self.min
+
 
 	def __str__(self):
 		return super(StackMin, self).__str__() + ' Min: ' + str(self.min)
 
 
+
+# Basic UT
 if __name__ == '__main__':
 	stack = StackMin(10)
 
 	for i in range(5, 0, -1):
-		print 'Pushing', i
 		stack.push(i)
-		print stack
+		assert(stack.size == 5-i+1)
+		assert(stack.minimum() == i)
+
+	print stack
 
 	for i in range(1, 6, 1):
 		print 'Pushing', i
