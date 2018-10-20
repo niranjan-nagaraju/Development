@@ -80,20 +80,26 @@ class StackMin(Stack):
 
 # Basic UT
 if __name__ == '__main__':
-	stack = StackMin(10)
+	s = StackMin(10)
 
 	for i in range(5, 0, -1):
-		stack.push(i)
-		assert(stack.size == 5-i+1)
-		assert(stack.minimum() == i)
-
-	print stack
+		s.push(i)
+		assert(s.size == 5-i+1)
+		assert(s.minimum() == i)
 
 	for i in range(1, 6, 1):
-		print 'Pushing', i
-		stack.push(i)
-		print stack
+		s.push(i)
+		assert(s.size == 5+i)
+		assert(s.minimum() == 1)
 
-	for i in range(10):
-		print 'Popped', stack.pop()
-		print stack
+	print 'Stack after pushing 10 items: ', s
+
+	for i in range(5, 0, -1):
+		assert(s.minimum() == 1)
+		assert(s.pop() == i)
+
+	for i in range(1, 6):
+		assert(s.minimum() == i)
+		assert(s.pop() == i)
+
+	print 'Stack with Min testcases passed!'

@@ -74,7 +74,7 @@ class StackMin(Stack):
 
 
 if __name__ == '__main__':
-	s= StackMin()
+	s = StackMin()
 
 	for i in range(5, 0, -1):
 		s.push(i)
@@ -95,4 +95,6 @@ if __name__ == '__main__':
 	for i in range(1, 6):
 		assert(s.minimum() == i)
 		assert(s.pop() == i)
+
+	print 'Stack with Min testcases passed!'
 
