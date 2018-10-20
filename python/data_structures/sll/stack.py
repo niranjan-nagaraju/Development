@@ -2,8 +2,24 @@ from sll import SLL
 
 # Stack using a SLL
 class Stack(SLL):
+	def __init__(self):
+		SLL.__init__(self)
+
+		# Meaningful aliases for push and pop
+		# for stack operations
+		self.push = self.push_front
+		self.pop = self.pop_front
+
+
 	def length(self):
 		return self.size
+
+
+	def top(self):
+		if not self.head:
+			raise UnderFlowError
+		return self.head.value
+
 
 
 if __name__ == "__main__":
@@ -11,6 +27,7 @@ if __name__ == "__main__":
 
 	for i in range(1, 6):
 		stack.push(i)
+		assert(stack.top() == i)
 
 	assert(stack.length() == 5)
 

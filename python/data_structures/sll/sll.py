@@ -40,15 +40,6 @@ class SLL:
 		self.tail = None
 		self.size = 0
 
-		# function aliases for better readability
-		# enqueue() and dequeue():
-		#  Can be push_front/pop_back too, but usually u join at the back of q queue,
-		#  and get processed at the front
-		self.enqueue = self.push_back
-		self.dequeue = self.pop_front
-		self.push = self.push_back
-		self.pop = self.pop_back
-
 
 	def __str__(self):
 		sll_str = '[' + str(self.size) + ']: '
@@ -267,12 +258,12 @@ def TC1():
 	assert(sll.head.value == 0) 
 	assert(sll.tail.value == 2) 
 
-	sll.enqueue(3)
+	sll.push_back(3)
 	assert(sll.size == 4)
 	assert(sll.head.value == 0) 
 	assert(sll.tail.value == 3) 
 
-	sll.push(4)
+	sll.push_back(4)
 	assert(sll.size == 5)
 	assert(sll.head.value == 0) 
 	assert(sll.tail.value == 4) 
@@ -287,12 +278,12 @@ def TC1():
 	assert(sll.head.value == 1) 
 	assert(sll.tail.value == 3) 
 
-	assert(1 == sll.dequeue())
+	assert(1 == sll.pop_front())
 	assert(sll.size == 2)
 	assert(sll.head.value == 2) 
 	assert(sll.tail.value == 3) 
 
-	assert(3 == sll.pop())
+	assert(3 == sll.pop_back())
 	assert(sll.size == 1)
 	assert(sll.head.value == 2) 
 	assert(sll.tail.value == 2) 

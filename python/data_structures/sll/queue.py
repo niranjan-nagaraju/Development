@@ -2,23 +2,32 @@ from sll import SLL
 
 # Queue using a SLL
 class Queue(SLL):
+	def __init__(self):
+		SLL.__init__(self)
+
+		# Meaningful aliases for enqueue and dequeue
+		# for queue operations
+		self.enqueue = self.push_back
+		self.dequeue = self.pop_front
+
+
 	def length(self):
 		return self.size
 
+
 	# return the item at the front of the Queue
 	def front(self):
-		if self.head:
-			return self.head.value
-
-		return None
+		if not self.head:
+			raise UnderFlowError
+		return self.head.value
 
 
 	# return the item at the end of the Queue
-	def last(self):
-		if self.tail:
-			return self.tail.value
+	def back(self):
+		if not self.tail:
+			raise UnderFlowError
+		return self.tail.value
 
-		return None
 
 
 if __name__ == "__main__":
@@ -26,6 +35,8 @@ if __name__ == "__main__":
 
 	for i in range(1, 6):
 		queue.enqueue(i)
+		assert(queue.front() == 1)
+		assert(queue.back() == i)
 
 	assert(queue.length() == 5)
 
