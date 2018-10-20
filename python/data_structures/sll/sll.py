@@ -30,7 +30,7 @@ class SLLIterator:
 
 
 # The SLL class
-class SLL:
+class SLL(object):
 	# A default print function if no aggregator is provided
 	# for traversal functions
 	_default_printfn = lambda x,y : sys.stdout.write(str(y))

@@ -1,7 +1,4 @@
 '''
-
-PLACEHOLDER  --- TODO: Implement
-
 An SLL-based stack which supports min() in O(1) 
 in addition to the exisitng push() and pop() in O(1)
 
@@ -34,57 +31,68 @@ Approach:
 	push(1)
 		stack: (5,5), (4,4) (1,1)
 	min() -> return min from tos -> 1
+'''
 
-from data_structures.array.stack.stack import Stack
+from data_structures.sll.stack import Stack
 
 class StackMin(Stack):
-	def __init__(self, capacity=0):
+	def __init__(self):
+		Stack.__init__(self)
 		self.min = None
-		Stack.__init__(self, capacity)
 
-	def push(self, item):
+
+	# Override parent stack class' push_front() to update min
+	# NOTE: This should mean the push() alias is updated to the overridden version
+	def push_front(self, item):
 		if (self.size == 0):
 			self.min = item
 
+		# Update current stack min
 		self.min = min(item, self.min)
+		super(StackMin, self).push_front((item, self.min))
 
-		# TODO: This is assuming push always succeeds
-		# revise
-		super(StackMin, self).push((item, self.min))
 
-	def pop(self):
-		item, m = super(StackMin, self).pop()
-
+	# Override parent stack class' pop_front() to update min
+	# NOTE: This should mean the pop_front() alias is updated to the overridden version
+	def pop_front(self):
+		item, m = super(StackMin, self).pop_front()
 		if self.size != 0:
-			self.min = self.items[self.tos][1]
+			self.min = self.top()[1]
 		else:
 			self.min = None
-
 		return item
 
-	def min(self):
+
+	# O(1) Min operation
+	def minimum(self):
 		return self.min
+
 
 	def __str__(self):
 		return super(StackMin, self).__str__() + ' Min: ' + str(self.min)
 
 
+
 if __name__ == '__main__':
-	stack = StackMin(10)
+	s= StackMin()
 
 	for i in range(5, 0, -1):
-		print 'Pushing', i
-		stack.push(i)
-		print stack
+		s.push(i)
+		assert(s.size == 5-i+1)
+		assert(s.minimum() == i)
 
 	for i in range(1, 6, 1):
-		print 'Pushing', i
-		stack.push(i)
-		print stack
+		s.push(i)
+		assert(s.size == 5+i)
+		assert(s.minimum() == 1)
 
-	for i in range(10):
-		print 'Popped', stack.pop()
-		print stack
+	print 'Stack after pushing 10 items: ', s
 
-'''
+	for i in range(5, 0, -1):
+		assert(s.minimum() == 1)
+		assert(s.pop() == i)
+
+	for i in range(1, 6):
+		assert(s.minimum() == i)
+		assert(s.pop() == i)
 
