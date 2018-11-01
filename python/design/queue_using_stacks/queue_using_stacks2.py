@@ -127,7 +127,7 @@ class Queue(object):
 	def dequeue(self):
 		# Helper function to move all items from stack a to stack b
 		def move(a, b):
-			while a.length():
+			while a:
 				b.push(a.pop())
 
 		# s2 is empty, move everything from s1 to s2 so everything in s1 now

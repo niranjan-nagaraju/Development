@@ -111,7 +111,7 @@ class Queue(object):
 	def enqueue(self, x):
 		# Helper function to move all items from stack a to stack b
 		def move(a, b):
-			while a.length():
+			while a:
 				b.push(a.pop())
 
 		# Use S2 to reverse S1's order
