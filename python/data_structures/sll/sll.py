@@ -29,6 +29,7 @@ class SLLIterator:
 			return tmp.value
 
 
+
 # The SLL class
 class SLL(object):
 	# A default print function if no aggregator is provided
@@ -39,6 +40,16 @@ class SLL(object):
 		self.head = None
 		self.tail = None
 		self.size = 0
+
+
+	# for len(sll)
+	def __len__(self):
+		return self.size
+
+
+	# for if sll: / if not sll: checks
+	def __nonzero__(self):
+		return self.head != None
 
 
 	def __str__(self):
@@ -240,6 +251,20 @@ class SLL(object):
 
 
 
+
+def test_len():
+	sll = SLL()
+
+	assert(not sll == True)
+	if not sll:
+		assert(len(sll) == 0)
+
+	sll.push_back(1)
+
+	if sll:
+		assert(len(sll) == 1)
+
+
 def TC1():
 	sll = SLL()
 	sll.push_back(1)
@@ -402,5 +427,6 @@ if __name__ == "__main__":
 	test_place()
 	test_iterator()
 	test_reverse()
+	test_len()
 	print 'Testcases passed'
 
