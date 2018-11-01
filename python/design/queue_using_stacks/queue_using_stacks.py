@@ -100,6 +100,10 @@ class Queue(object):
 		return x
 
 
+	def __len__(self):
+		return self.s1.size
+
+
 	def length(self):
 		return self.s1.length()
 
@@ -150,11 +154,11 @@ if __name__ == "__main__":
 	queue.enqueue(5)
 
 	print 'Queue after enqueues & dequeues', queue
-	print 'Queue repr %r' %(queue)
+	#print 'Queue repr %r' %(queue)
 
 	for i in range(2, 6):
 		assert(i == queue.dequeue())
-		assert(queue.length() == (5-i))
+		assert(len(queue)== (5-i))
 
 
 	q2 = Queue()
