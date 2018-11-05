@@ -134,7 +134,7 @@ class Queue(object):
 
 
 	def __repr__(self):
-		return "%r %r" %(self.s1, self.s2)
+		return "{%r , %r}" %(self.s1, self.s2)
 
 
 
@@ -153,8 +153,8 @@ if __name__ == "__main__":
 	queue.enqueue(4)
 	queue.enqueue(5)
 
-	print 'Queue after enqueues & dequeues', queue
-	#print 'Queue repr %r' %(queue)
+	assert(str(queue) == "[4]: 2 3 4 5")
+	assert("%r" %(queue) == "{[4]: 2 3 4 5 , [0]:}")	
 
 	for i in range(2, 6):
 		assert(i == queue.dequeue())

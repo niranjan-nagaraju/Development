@@ -156,7 +156,7 @@ class Queue(object):
 
 
 	def __repr__(self):
-		return "{%r, %r}" %(self.s1, self.s2)
+		return "{%r , %r}" %(self.s1, self.s2)
 
 
 
@@ -166,24 +166,20 @@ if __name__ == "__main__":
 
 	for i in range(1, 4):
 		queue.enqueue(i)
-		#print 'Queue insert %d  -- repr %r' %(i, queue)
 		assert(queue.front() == 1)
 		assert(queue.back() == i)
 
 	assert(queue.length() == 3)
 	assert(queue.dequeue() == 1)
-	#print 'Queue dequeuing %d -- repr %r' %(1, queue)
 
 	queue.enqueue(4)
-	#print 'Queue insert %d -- repr %r' %(4, queue)
 	queue.enqueue(5)
-	#print 'Queue insert %d -- repr %r' %(5, queue)
 
-	print 'Queue after enqueues & dequeues', queue
+	assert(str(queue) == "[4]: 2 3 4 5")
+	assert("%r" %(queue) == "{[2]: 5 4 , [2]: 2 3}")
 
 	for i in range(2, 6):
 		assert(i == queue.dequeue())
-		#print 'Queue dequeuing %d -- repr %r' %(i, queue)
 		assert(len(queue) == (5-i))
 
 
@@ -192,7 +188,6 @@ if __name__ == "__main__":
 	q2.enqueue('a')
 	assert('+' == q2.dequeue())
 	q2.enqueue('b')
-	#print 'Queue2 repr %r' %(q2)
 	assert('a' == q2.dequeue())
 	assert('b' == q2.dequeue())
 
@@ -202,7 +197,6 @@ if __name__ == "__main__":
 	q3.enqueue(('b', 2))
 	assert(q3.dequeue() == ('a',1))
 	q3.enqueue(('c', 3))
-	#print 'Q3 repr: %r' %(q3)
 
 	print 'Queue testcases passed'
 
