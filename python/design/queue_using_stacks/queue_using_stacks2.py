@@ -146,8 +146,7 @@ class Queue(object):
 	def __str__(self):
 		s1_contents = []
 		for x in self.s1:
-			s1_contents.append(str(x))
-		s1_contents.reverse()
+			s1_contents.insert(0, str(x))
 
 		s2_contents = []
 		for x in self.s2:
