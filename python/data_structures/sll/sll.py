@@ -59,7 +59,7 @@ class SLL(object):
 			sll_str += str(trav) + ' '
 			trav = trav.next
 
-		return sll_str
+		return sll_str.strip()
 
 
 
