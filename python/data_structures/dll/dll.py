@@ -7,6 +7,11 @@ class DLL:
 		self.size = 0
 
 
+	# Length of the DLL, aliases to len(DLL)
+	def __len__(self):
+		return self.size
+
+
 	# utility function to push a node to the front of a DLL
 	def _push_front_node(self, node):
 		self.size += 1
@@ -40,9 +45,7 @@ class DLL:
 	# utility function to push a node to the back of a DLL
 	def _push_back_node(self, node):
 		self.size += 1
-
 		node.prev = self.tail
-
 		if self.tail:
 			self.tail.next = node
 

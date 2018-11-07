@@ -19,7 +19,7 @@ class Queue(DLL):
 		return self.tail
 
 	# return the item at the end of the Queue
-	def last(self):
+	def back(self):
 		return self.tail.value
 
 	# Enqueue item at the back of the queue 
