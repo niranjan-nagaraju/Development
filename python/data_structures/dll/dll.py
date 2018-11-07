@@ -1,6 +1,6 @@
 from node import *
 
-class DLL:
+class DLL(object):
 	def __init__(self):
 		self.head = None
 		self.tail = None
