@@ -41,6 +41,12 @@ class StackMin(Stack):
 		self.min = None
 
 
+	# Override stack top to return just the item, 
+	# not the (item, minimum) pair stored underneath
+	def top(self):
+		return super(StackMin, self).top()[0]
+
+
 	# Override parent stack class' push_front() to update min
 	# NOTE: This should mean the push() alias is updated to the overridden version
 	def push_front(self, item):
@@ -57,7 +63,7 @@ class StackMin(Stack):
 	def pop_front(self):
 		item, m = super(StackMin, self).pop_front()
 		if self.size != 0:
-			self.min = self.top()[1]
+			self.min = super(StackMin, self).top()[1]
 		else:
 			self.min = None
 		return item
@@ -69,7 +75,16 @@ class StackMin(Stack):
 
 
 	def __str__(self):
-		return super(StackMin, self).__str__() + ' Min: ' + str(self.min)
+		sstr = "[%d]: " %(self.size)
+		for x in self:
+			sstr += "%s " %(x[0])
+
+		sstr += "/Min: %s" %(self.min)
+		return sstr
+
+
+	def __repr__(self):
+		return super(StackMin, self).__str__() + '/Min: ' + str(self.min)
 
 
 
@@ -78,17 +93,22 @@ if __name__ == '__main__':
 
 	for i in range(5, 0, -1):
 		s.push(i)
+		assert(s.top() == i)
 		assert(s.size == 5-i+1)
 		assert(s.minimum() == i)
 
+	assert(s.pop() == 1)
+	assert(s.minimum() == 2)
+
 	for i in range(1, 6, 1):
 		s.push(i)
-		assert(s.size == 5+i)
+		assert(s.size == 4+i)
 		assert(s.minimum() == 1)
 
-	print 'Stack after pushing 10 items: ', s
+	print 'Current Stack: ', s
+	print 'Stack repr: %r' %(s)
 
-	for i in range(5, 0, -1):
+	for i in range(5, 1, -1):
 		assert(s.minimum() == 1)
 		assert(s.pop() == i)
 
