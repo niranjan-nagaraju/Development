@@ -178,6 +178,7 @@ Approach:
 '''
 
 from design.stack_with_min.sll.stack_with_min import StackMin as StackWithMin
+from data_structures.sll.sll import UnderFlowError
 
 
 class QueueMin(object):
@@ -324,6 +325,12 @@ if __name__ == '__main__':
 
 	assert(len(qm) == 0)
 	assert(qm.minimum() == None)
+	try:
+		assert(qm.dequeue() == None)
+	except UnderFlowError:
+		print "Queue Underflow"
+
 	print "Queue %r\n%s" %(qm, qm)
 
 	print 'Queue with min testcases succeeded!'
+
