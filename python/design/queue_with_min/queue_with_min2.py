@@ -10,30 +10,30 @@ PLACEHOLDER:
   minimum(): == minima
 
 	  + Enqueue(1)
-	    Q1: 1
-	    min: 1
-	    Q2:
+		Q1: 1
+		min: 1
+		Q2:
 
 	  + Enqueue(2)
-	    Q1: 1 2
-	    min: 1
-	    Q2:
+		Q1: 1 2
+		min: 1
+		Q2:
 
 	  + Enqueue(3)
-	    Q1: 1 2 3
-	    min: 1
-	    Q2:
+		Q1: 1 2 3
+		min: 1
+		Q2:
 
 	  + minimum(): 1
 
 	  + Dequeue() -> should return 1
-	    Q1: 1 2 3 -> dequeue(Q1) returns 1 == min,
-	    min: 1
-	    Q2:
-	    => move everything else from Q1 to Q2 while updating min 
-	    Q1: 
-	    min: 2
-	    *Q2: 2 3
+		Q1: 1 2 3 -> dequeue(Q1) returns 1 == min,
+		min: 1
+		Q2:
+		=> move everything else from Q1 to Q2 while updating min 
+		Q1: 
+		min: 2
+		*Q2: 2 3
 		=> swap
 		Q1: 2 3
 		min: 2
@@ -42,23 +42,23 @@ PLACEHOLDER:
 	  + minimum(): 2
 
 	  + Enqueue(4)
-	    Q1: 2 3 4
-	    min: 2
-	    Q2: 
+		Q1: 2 3 4
+		min: 2
+		Q2: 
 
 	  + minimum(): 2
 
 
 	  + Dequeue() -> should return 2
-	    Q1: 2 3 4
-	    min: 2
+		Q1: 2 3 4
+		min: 2
 		Q2:
-	    Q1: 2 3 4 -> dequeue() returns 2 == min => move everything else from Q1 to Q2, 
-		    (update min while enqueuing one by one into Q2)
-	    =>
-	    Q2: 3 4
-	    min: 3
-	    Q1: 
+		Q1: 2 3 4 -> dequeue() returns 2 == min => move everything else from Q1 to Q2, 
+			(update min while enqueuing one by one into Q2)
+		=>
+		Q2: 3 4
+		min: 3
+		Q1: 
 		=> swap Q1, Q2
 		Q1: 3 4
 		min: 3
@@ -68,14 +68,14 @@ PLACEHOLDER:
 
 
 	  + Dequeue() -> should return 3
-	    Q1: 3 4 -> dequeue() returns 3 == min => move everything else from Q1 to Q2, 
-		    (update min while enqueuing one by one into Q2)
-	    min: 3
-	    Q2: 
-	    =>
-	    Q1: 
-	    min: 4
-	    Q2: 4
+		Q1: 3 4 -> dequeue() returns 3 == min => move everything else from Q1 to Q2, 
+			(update min while enqueuing one by one into Q2)
+		min: 3
+		Q2: 
+		=>
+		Q1: 
+		min: 4
+		Q2: 4
 		=> swap Q1, Q2
 		Q1: 4
 		min: 4
@@ -84,15 +84,15 @@ PLACEHOLDER:
 	  + minimum(): 4
 
 	  + Dequeue() -> should return 4
-	    Q1: 4
-	    min: 4
-	    Q2: 
+		Q1: 4
+		min: 4
+		Q2: 
 		-> dequeue() returns 4 == min => move everything else from Q1 to Q2, 
 		   (update min while enqueuing one by one into Q2)
-	    =>
-	    Q1:
-	    min: 
-	    Q2: 
+		=>
+		Q1:
+		min: 
+		Q2: 
 '''
 
 from data_structures.sll.queue import Queue
