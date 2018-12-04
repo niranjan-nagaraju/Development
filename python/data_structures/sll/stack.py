@@ -1,4 +1,4 @@
-from sll import SLL
+from sll import SLL, UnderFlowError
 
 # Stack using a SLL
 class Stack(SLL):
@@ -49,6 +49,12 @@ if __name__ == "__main__":
 	s2.push('b')
 	assert('b' == s2.pop())
 	assert('a' == s2.pop())
+
+	try:
+		assert(s2.pop() == None)
+	except UnderFlowError:
+		print 'Underflow'
+
 
 	print 'Stack testcases passed'
 

@@ -1,4 +1,5 @@
 from sll import SLL
+from data_structures.sll.sll import UnderFlowError
 
 # Queue using a SLL
 class Queue(SLL):
@@ -54,5 +55,11 @@ if __name__ == "__main__":
 	q2.enqueue('b')
 	assert('a' == q2.dequeue())
 	assert('b' == q2.dequeue())
+
+	try:
+		assert(q2.dequeue() == None)
+	except:
+		# Underflow error
+		print 'Underflow error'
 
 	print 'Queue testcases passed'
