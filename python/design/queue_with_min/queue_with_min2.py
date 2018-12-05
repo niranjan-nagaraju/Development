@@ -129,10 +129,8 @@ class QueueMin(object):
 		self.q1.enqueue(x)
 
 		# update min
-		if not self.min: # min is None => this is the first item to be enqueued
-			self.min = x
-		else:
-			self.min = min(x, self.min)
+		# if min is None => this is the first item to be enqueued
+		self.min = min(x, self.min) if self.min else x
 
 
 	# Dequeue() from Q2 

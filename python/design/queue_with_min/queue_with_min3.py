@@ -156,12 +156,8 @@ class QueueMin(object):
 		self.q1.enqueue(x)
 
 		# update min
-		if not self.min: 
-			# min is None => this is the first item to be enqueued
-			self.min = x
-		else:
-			self.min = min(x, self.min)
-
+		# if min is None => this is the first item to be enqueued
+		self.min = min(x, self.min) if self.min else x
 
 		# Update DQ2 to maintain the order of minimas, 
 		# so when a minima is removed, the next minima can be immediately retrieved
@@ -183,10 +179,10 @@ class QueueMin(object):
 
 		# item removed was the current minima, remove it from DQ2 as well
 		# item would be found in the head of DQ2
-		# Also, update new min which would be the new head of DQ2 after removing the current minima
-		# NOTE: self.min will be None, if dq2 is empty
 		if item == self.min:
 			self.dq2.pop_front()
+			# Also, update new min which would be the new head of DQ2 after removing the current minima
+			# NOTE: self.min should be None, if dq2 is empty - ie, we just removed the last item in the Queue
 			self.min = self.dq2.front() if self.dq2 else None
 
 		return item

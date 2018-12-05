@@ -223,16 +223,15 @@ class QueueMin(object):
 	def enqueue(self, x):
 		self.s1.push(x)
 
-		# update min
-		# we are pushing into S1, 
-		# Current min is min(S1.min, S2.min)
-		# New min would be updated to current item being pushed
-		# if x < current min
-		if not self.min: # min is None => this is the first item to be enqueued
-			self.min = x
-		else: # 'min' is not None, so compare it against x  
-			self.min = min(x, self.min)
-
+		'''
+		update min
+		we are pushing into S1, 
+		Current min is min(S1.min, S2.min)
+		New min would be updated to current item being pushed
+		if x < current min
+		'''
+		# if min is None => this is the first item to be enqueued
+		self.min = min(x, self.min) if self.min else x
 
 	# pop() from S2 if its not empty,
 	# else, move items from S1 into S2, and then pop() from S2
