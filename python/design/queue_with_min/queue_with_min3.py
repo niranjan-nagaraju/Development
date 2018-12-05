@@ -1,6 +1,4 @@
 '''
-PLACEHOLDER:
-
   Use two queues, 1 regular queue Q1 and another deque DQ2 (which will be kept sorted but will discard all elements greater than a much smaller element that comes later in time)
   WHY?
     e.g. 3 2 1, 1 is the last minima noticed, and will be the last one to be dequeued (so 3 and 2 will never be relevant as minima as soon as 1 is brought in.

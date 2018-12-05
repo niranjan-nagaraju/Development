@@ -1,5 +1,4 @@
 '''
-PLACEHOLDER:
   Use two queues, track current minima, and move from one queue to another when the current minima is dequeued from either queues.
   Enqueue(): Enqueue into current queue whichever it is, update minima.
 	=> In practice, Enqueue into Q1, update minima
