@@ -275,9 +275,12 @@ class QueueMin(object):
 		if self.s2:
 			return self.s2.top()
 		else:
-			for x in self.s1:
-				pass
-			return x[0]
+			try:
+				for x in self.s1:
+					pass
+				return x[0]
+			except:
+				raise UnderFlowError
 
 
 	#NOTE: back() cannot be implemented efficiently
@@ -286,9 +289,12 @@ class QueueMin(object):
 	# back of the queue is in S1.top() as that would be where the last item was enqueued
 	def back(self):
 		if not self.s1:
-			for x in self.s2:
-				pass
-			return x[0]
+			try:
+				for x in self.s2:
+					pass
+				return x[0] 
+			except:
+				raise UnderFlowError
 		else:
 			return self.s1.top()
 
