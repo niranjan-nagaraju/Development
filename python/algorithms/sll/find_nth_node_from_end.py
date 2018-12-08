@@ -47,9 +47,13 @@ def find_last_nth(sll, n):
 		if n == 0:
 			return trav.value
 
+		# Start 'trav' with a headstart of 'n' nodes
 		for i in range(n):
 			trav = trav.next
 
+		# Have 'trail' follow 'trav' until
+		# trav 'falls off' end of the SLL
+		# placing 'trav' at nth node from the end
 		trail = sll.head
 		while trav:
 			trail = trail.next
