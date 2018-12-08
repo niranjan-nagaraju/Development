@@ -110,9 +110,34 @@ def test_reverse():
 	assert(s2.tail.value == 'a')
 
 
+'''
+Index [] operator test
+'''
+def test_indexing():
+	sll = SLL.fromList(range(1,11))
+
+	for i in range(10):
+		assert(sll[i] == i+1)
+		
+	try:
+		assert(sll[10] == None)
+	except IndexError:
+		print "sll[10] index error on sll, SLL has only %d elements" %(len(sll))
+
+	for i in range(1,11):
+		assert(sll[-i] == 10-i+1)
+
+	try:
+		assert(sll[-11] == None)
+	except IndexError:
+		print "sll[-11] index error on sll, SLL has only %d elements" %(len(sll))
+
+
+
 if __name__ == "__main__":
 	test_place()
 	test_iterator()
 	test_reverse()
+	test_indexing()
 	print 'SLL Testcases passed'
 

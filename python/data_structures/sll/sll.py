@@ -81,6 +81,39 @@ class SLL(object):
 		return SLLIterator(self.head)
 
 
+	#[]
+	def __getitem__(self, index):
+		if index < 0:
+			# Helper function to return nth item 
+			# from the end of the SLL
+			def _find_last_nth(sll, n):
+				trav = sll.head
+				try:
+					for i in range(n):
+						trav = trav.next
+				
+					trail = sll.head
+					while trav:
+						trail = trail.next
+						trav = trav.next
+
+					return trail.value
+				except: # SLL has <n items
+						raise IndexError
+
+			return _find_last_nth(self, -index)
+		else: # index: >=0, -0 == +0
+			trav = self.head
+			try:
+				for i in range(index):
+					trav = trav.next
+
+				return trav.value
+			except:
+				raise IndexError
+
+
+
 	# Create a SLL from a list
 	@staticmethod
 	def fromList(lst):
