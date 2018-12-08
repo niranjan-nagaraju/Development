@@ -99,7 +99,7 @@ class SLL(object):
 
 					return trail.value
 				except: # SLL has <n items
-						raise IndexError
+					raise IndexError
 
 			return _find_last_nth(self, -index)
 		else: # index: >=0, -0 == +0
