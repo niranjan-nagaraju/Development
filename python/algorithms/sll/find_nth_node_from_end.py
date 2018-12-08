@@ -48,7 +48,7 @@ def find_last_nth(sll, n):
 			return trav.value
 
 		for i in range(n):
-				trav = trav.next
+			trav = trav.next
 
 		trail = sll.head
 		while trav:
