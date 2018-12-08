@@ -2,13 +2,21 @@ from node import Node
 
 # Exceptions for the SLL class
 class OverFlowError(Exception):
-	''' List Overflow '''
-	pass
+	def __init__(self):
+		self.message = 'Overflow error!'
+
+	def __str__(self):
+		return self.message
+
 
 class UnderFlowError(Exception):
-	''' List Underflow '''
-	pass
+	def __init__(self):
+		self.message = 'Underflow error!'
 
+	def __str__(self):
+		return self.message
+
+# Exceptions for the SLL class
 
 # Iterator helper for SLL
 class SLLIterator:
@@ -28,6 +36,7 @@ class SLLIterator:
 			self.node = tmp.next
 			return tmp.value
 
+# Iterator helper for SLL
 
 
 # The SLL class
@@ -267,6 +276,12 @@ def test_len():
 
 def TC1():
 	sll = SLL()
+
+	try:
+		sll.pop_back()
+	except UnderFlowError as e:
+		print "Tried popping from an empty SLL. Error:", e
+
 	sll.push_back(1)
 	assert(sll.size == 1)
 	assert(sll.head.value == 1) 
