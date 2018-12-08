@@ -89,9 +89,13 @@ class SLL(object):
 			def _find_last_nth(sll, n):
 				trav = sll.head
 				try:
+					# Start 'trav' with a headstart of 'n' nodes
 					for i in range(n):
 						trav = trav.next
 				
+					# Have 'trail' follow 'trav' until
+					# trav 'falls off' end of the SLL
+					# placing 'trav' at nth node from the end
 					trail = sll.head
 					while trav:
 						trail = trail.next
@@ -101,6 +105,7 @@ class SLL(object):
 				except: # SLL has <n items
 					raise IndexError
 
+			# Call helper to return item at 'index' from the right end of the SLL
 			return _find_last_nth(self, -index)
 		else: # index: >=0, -0 == +0
 			trav = self.head
