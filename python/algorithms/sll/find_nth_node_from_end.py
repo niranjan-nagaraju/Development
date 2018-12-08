@@ -21,6 +21,13 @@ from data_structures.sll.sll import UnderFlowError
 Use length of SLL to count len(sll)-n nodes
 '''
 def find_last_nth_size_known(sll, n):
+	try:
+		# sll[-0] == sll[0]
+		if n == 0:
+			return sll.head.value
+	except:
+		raise UnderFlowError
+
 	r = len(sll) - n
 
 	if r < 0:
@@ -35,24 +42,29 @@ def find_last_nth_size_known(sll, n):
 
 def find_last_nth(sll, n):
 	trav = sll.head
-	for i in range(n):
-		try:
+	try:
+		# sll[-0] == sll[0]
+		if n == 0:
+			return trav.value
+
+		for i in range(n):
+				trav = trav.next
+
+		trail = sll.head
+		while trav:
+			trail = trail.next
 			trav = trav.next
-		except: # SLL has <n items
-			raise UnderFlowError
 
-
-	trail = sll.head
-	while trav:
-		trail = trail.next
-		trav = trav.next
-
-	return trail.value
-
+		return trail.value
+	except: # SLL has <n items
+		raise UnderFlowError
 
 
 if __name__ == "__main__":
 	sll1 = SLL.fromList([1,2,3,4,5,6,7,8,9,10])
+	assert(find_last_nth(sll1, 0) == 1)
+	assert(find_last_nth_size_known(sll1, 0) == 1)
+
 	assert(find_last_nth(sll1, 3) == 8)
 	assert(find_last_nth_size_known(sll1, 3) == 8)
 	assert(find_last_nth(sll1, 1) == 10)
