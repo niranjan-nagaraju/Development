@@ -2,7 +2,8 @@
 There are N+1 parking spots, numbered from 0 to N. 
 There are N cars numbered from 1 to N parked in various parking spots with one left empty. 
 Reorder the cars so that car #1 is in spot #1, car #2 is in spot #2 and so on. 
-Spot #0 will remain empty. The only allowed operation is to take a car and move it to the free spot.
+Spot #0 will remain empty => There is no car #0. 
+The only allowed operation is to take a car and move it to the free spot.
 '''
 
 '''
@@ -91,7 +92,7 @@ assert(slots == range(n+1))
 
 '''
 TC: 1
-[17:20:54 parking-slot-problem]$ python parking-slots.py 
+[17:20:54]$ python parking_slots_optimized_0.py 
 5
 5 1 2 3 x 4
 [5, 1, 2, 3, 0, 4]
@@ -101,7 +102,7 @@ All cars are in order!
 Total moves: 2
 
 TC: 2
-[17:21:51 parking-slot-problem]$ python parking-slots.py 
+[17:21:51]$ python parking_slots_optimized_0.py 
 5
 2 x 3 5 1 4
 [2, 0, 3, 5, 1, 4]
@@ -113,7 +114,7 @@ TC: 2
 Total moves: 5
 
 TC: 3
-[17:25:00 parking-slot-problem]$ python parking-slots.py 
+[17:25:00]$ python parking_slots_optimized_0.py 
 5
 5 4 x 3 2 1
 [5, 4, 0, 3, 2, 1]
@@ -125,7 +126,7 @@ All cars are in order!
 Total moves: 4
 
 TC: 4
-[17:26:13 parking-slot-problem]$ python parking-slots.py 
+[17:26:13]$ python parking_slots_optimized_0.py 
 5
 3 2 x 1 5 4
 [3, 2, 0, 1, 5, 4]
@@ -138,7 +139,7 @@ TC: 4
 Total moves: 6
 
 TC: 5
-[17:26:51 parking-slot-problem]$ python parking-slots.py 
+[17:26:51]$ python parking_slots_optimized_0.py 
 5          
 x 1 2 3 4 5
 [0, 1, 2, 3, 4, 5]
@@ -146,7 +147,7 @@ All cars are in order!
 Total moves: 0
 
 TC: 6
-[17:27:20 parking-slot-problem]$ python parking-slots.py 
+[17:27:20]$ python parking_slots_optimized_0.py 
 5     
 x 5 4 3 2 1 
 [0, 5, 4, 3, 2, 1]
@@ -161,7 +162,7 @@ Total moves: 6
 
 
 TC: 7
-[17:34:14 parking-slot-problem]$ python parking-slots.py 
+[17:34:14]$ python parking_slots_optimized_0.py 
 5
 3 2 x 4 5 1
 [3, 2, 0, 4, 5, 1]
@@ -173,7 +174,7 @@ TC: 7
 Total moves: 5
 
 TC: 8
-[18:04:11 parking-slot-problem]$ python parking-slots.py 
+[18:04:11]$ python parking_slots_optimized_0.py 
 5
 5 4 x 1 2 3
 [5, 4, 0, 1, 2, 3]
