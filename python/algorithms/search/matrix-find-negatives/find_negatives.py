@@ -8,6 +8,15 @@ Input:
 [-2,  2,  3,  4]
 [4,   5,  7,  8]
 Output : 4
+
+
+Solution:
+	Start with the rightmost column, row 0,
+	if the number at that index, is -ve, 
+	  => everything to the left is -ve
+	  Update count to (column + 1), move to next row
+	else, 
+	  try moving to the left in the same row, check if its -ve and repeat
 '''
 
 # Find number of negatives in a m x n sorted matrix
