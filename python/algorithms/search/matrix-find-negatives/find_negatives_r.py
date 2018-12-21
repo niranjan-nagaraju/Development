@@ -14,7 +14,7 @@ Solution: (recursive version)
 	Start with the full matrix, rightmost column, row 0,
 	if the number at that index, is -ve, 
 		=> everything to the left is -ve
-		Update count to (column + 1), recursively work on the rest of the matrix sans current row, and every row above
+		Add column number to count, recursively work on the rest of the matrix sans current row, and every row above
 	else, 
 		skip current column, recursively work on the rest of the matrix sans current column, and every column to the right
 '''
@@ -29,6 +29,7 @@ def find_negatives(matrix, rows, columns):
 	if matrix[0][columns-1] < 0:
 		'''
 		Found a -ve element
+		Add column number to count
 		skip current row
 
 		e.g.
