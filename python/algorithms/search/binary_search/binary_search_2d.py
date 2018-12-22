@@ -33,7 +33,7 @@ def binary_search_2d(matrix, rows, columns, item):
 		elif (x < item):
 			# skip current row
 			i += 1
-		else: # item > matrix[i][j]
+		else: # matrix[i][j] > item
 			# skip current column
 			j -= 1
 
@@ -61,7 +61,7 @@ def binary_search_2d_r(matrix, rows, columns, item, skipped_rows=0):
 	elif  x < item:
 		# skip current row
 		return binary_search_2d_r(matrix[1:], rows-1, columns, item, skipped_rows+1)
-	else: # item > matrix[i][j]
+	else: # matrix[i][j] > item
 		# skip current column
 		return binary_search_2d_r(map((lambda m2d: m2d[:-1]), matrix), rows, columns-1, item, skipped_rows)
 
@@ -81,7 +81,7 @@ def binary_search_2d_r2(matrix, rows, columns, item, skiprows=0, skipcolumns=0):
 	elif  x < item:
 		# skip current row
 		return binary_search_2d_r2(matrix, rows, columns, item, skiprows+1, skipcolumns)
-	else: # item > matrix[i][j]
+	else: # matrix[i][j] > item
 		# skip current column
 		return binary_search_2d_r2(matrix, rows, columns, item, skiprows, skipcolumns+1)
 
