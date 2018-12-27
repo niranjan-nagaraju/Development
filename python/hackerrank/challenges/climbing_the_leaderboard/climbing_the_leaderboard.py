@@ -205,7 +205,7 @@ if __name__ == '__main__':
 	assert(climbingLeaderboard([100, 90, 90, 80, 75, 60], [50, 65, 77, 90, 102]) == [6,5,4,2,1])
 
 	'''
-    #fptr = open(os.environ['OUTPUT_PATH'], 'w')
+	#fptr = open(os.environ['OUTPUT_PATH'], 'w')
 	fptr = sys.stdout
 
 	scores_count = int(raw_input())
