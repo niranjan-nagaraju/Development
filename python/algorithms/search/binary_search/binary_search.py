@@ -4,17 +4,18 @@ Binary search on a sorted list
 
 
 # A Recursive binary search implementation
+# Return the index where the item 'x' was found on the list
 def binary_search_r(lst, x):
 	# Find x in lst[l:h]
 	def binary_search_helper(lst, x, l, h):
 		# List's low and high indices have criss-crossed
 		# => x could not be found
 		if l > h:
-			return False
+			return -1
 
 		mid = (l+h)/2
 		if lst[mid] == x:
-			return True
+			return mid
 		elif x > lst[mid]:
 			# search in second half of the sub-array
 			return binary_search_helper(lst, x, mid+1, h)
@@ -28,13 +29,13 @@ def binary_search_r(lst, x):
 
 
 
-# Iterative implementation for binary search
+# Iterative implementation of the binary search
 def binary_search_i(lst, x):
 	l, h = 0, len(lst)-1
 	while l <= h:
 		mid = (l+h)/2
 		if lst[mid] == x:
-			return True
+			return mid
 		elif x > lst[mid]:
 			# search in second half of the sub-array
 			l = mid+1
@@ -43,7 +44,7 @@ def binary_search_i(lst, x):
 			h = mid-1
 
 	# Couldn't find 'x'
-	return False
+	return -1
 
 
 
@@ -51,47 +52,33 @@ def binary_search_i(lst, x):
 binary_search = binary_search_r
 
 
-def test_recursive_version():
-	assert(binary_search([1,2,3,4,5], 2) == True)
-	assert(binary_search([1,2,3,4,5], 1) == True)
-	assert(binary_search([1,2,3,4,5], 5) == True)
-	assert(binary_search([1,2,3,4,5], 0) == False)
+def test_binary_search(search_f):
+	assert(search_f([1,2,3,4,5], 2) == 1)
+	assert(search_f([1,2,3,4,5], 1) == 0)
+	assert(search_f([1,2,3,4,5], 5) == 4)
+	assert(search_f([1,2,3,4,5], 0) == -1)
 
-	assert(binary_search((1,2,3,4,5), 5) == True)
-	assert(binary_search((1,2,3,4,5), 0) == False)
+	assert(search_f((1,2,3,4), 5) == -1)
+	assert(search_f((1,2,3,4), 0) == -1)
+	assert(search_f((1,2,3,4), 1) == 0)
+	assert(search_f((1,2,3,4), 2) == 1)
+	assert(search_f((1,2,3,4), 3) == 2)
+	assert(search_f((1,2,3,4), 4) == 3)
 
-	assert(binary_search([2,4,6, 8], 2) == True)
-	assert(binary_search([2,4,6, 8], 4) == True)
-	assert(binary_search([2,4,6, 8], 6) == True)
-	assert(binary_search([2,4,6, 8], 8) == True)
-	assert(binary_search([2,4,6, 8], 1) == False)
-	assert(binary_search([2,4,6, 8], 3) == False)
-	assert(binary_search([2,4,6, 8], 5) == False)
-	assert(binary_search([2,4,6, 8], 7) == False)
+	assert(search_f([2,4,6, 8], 2) == 0)
+	assert(search_f([2,4,6, 8], 4) == 1)
+	assert(search_f([2,4,6, 8], 6) == 2)
+	assert(search_f([2,4,6, 8], 8) == 3)
+	assert(search_f([2,4,6, 8], 1) == -1)
+	assert(search_f([2,4,6, 8], 3) == -1)
+	assert(search_f([2,4,6, 8], 5) == -1)
+	assert(search_f([2,4,6, 8], 7) == -1)
 
-
-def test_iterative_version():
-	assert(binary_search_i([1,2,3,4,5], 2) == True)
-	assert(binary_search_i([1,2,3,4,5], 1) == True)
-	assert(binary_search_i([1,2,3,4,5], 5) == True)
-	assert(binary_search_i([1,2,3,4,5], 0) == False)
-
-	assert(binary_search_i((1,2,3,4,5), 5) == True)
-	assert(binary_search_i((1,2,3,4,5), 0) == False)
-
-	assert(binary_search_i([2,4,6, 8], 2) == True)
-	assert(binary_search_i([2,4,6, 8], 4) == True)
-	assert(binary_search_i([2,4,6, 8], 6) == True)
-	assert(binary_search_i([2,4,6, 8], 8) == True)
-	assert(binary_search_i([2,4,6, 8], 1) == False)
-	assert(binary_search_i([2,4,6, 8], 3) == False)
-	assert(binary_search_i([2,4,6, 8], 5) == False)
-	assert(binary_search_i([2,4,6, 8], 7) == False)
 
 
 
 # basic testcases
 if __name__ == "__main__":
-	test_recursive_version()
-	test_iterative_version()
+	test_binary_search(binary_search)
+	test_binary_search(binary_search_i)
 
