@@ -14,7 +14,7 @@ Solution:
 	The top-level DLL is ordered by frequency.
 
 	e.g. (3 frequency lists, list #1 represents 0 frequency,  list #2 represents frequency 1, list #2 represents frequency 3
-	     NOTE: there cane be gaps in frequencies, in the example, no entries exist with a used-frequency of 2,
+	     NOTE: there can be gaps in frequencies, in the example, no entries exist with a used-frequency of 2,
 		 Each frequency list in turn contains entries with the corresponding used-frequency)
 	[3:
 	 0, [3: (a,1), (b,2), (c,3)]
@@ -43,7 +43,8 @@ Solution:
 
 
 	+ set(key, value):
-	  New entries added to the cache start with 0 frequency, and as such can be the ripe candidate for culling the next time we need to remove an entry.
+	  New entries added to the cache start with 0 frequency, 
+	  and as such can be the ripe candidate for culling the next time we need to remove an entry.
       if the cache has not reached capacity,
 	    add node(key,value) into the frequency list at node 0.
 		if the first node does not represent frequency 0 (cache.head.value.frequency is not 0)
