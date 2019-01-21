@@ -71,6 +71,13 @@ Test runs:
 		hashtable[b] <- node1
 		queue[node1] <- (b,2) == 2
 		updated Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(d,4), (c,3), (b,2)]
+	+ set(d,5):
+		Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(d,4), (c,3), (b,2)]
+		-> key 'd' already exists, update new value
+		hashtable[d] <- node3,
+		node3.value (d,5)
+		-> move 'd' to the end of the queue as it is no longer the LRU entry
+		updated Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(c,3), (b,2), (d,4)]
 '''
 
 import sys
