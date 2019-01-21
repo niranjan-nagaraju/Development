@@ -39,6 +39,38 @@ Solution:
          |                         |
          +-------------------------+
 
+
+Test runs:
+	+ Initial state: 
+		Cache: hashtable: {}, queue:[], capacity: 3
+	+ set(a,1):
+		Cache: hashtable: {a: node0}, queue: {1: [(a,1)]}
+	+ set(b,2):
+		Cache: hashtable: {a: node0, b: node1}, queue: {2: [(a,1), (b,2)]}
+	+ set(c,3):
+		Cache: hashtable: {a: node0, b: node1, c: node2}, queue: {3: [(a,1), (b,2), (c,3)]}
+	+ get(b):
+		hashtable[b] <- node1
+		queue[node1] <- (b,2) == 2
+		updated Cache: hashtable: {a: node0, b: node1, c: node2}, queue: {3: [(a,1), (c,3), (b,2)]}
+	+ set(d,4):
+		Cache: hashtable: {a: node0, b: node1, c: node2}, queue: {3: [(a,1), (c,3), (b,2)]}
+		-> remove (a,1) from queue, and hashtable
+		Cache: hashtable: {b: node1, c: node2}, queue: {2: [(c,3), (b,2)]}
+		-> Insert (d,4) at end
+		Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(c,3), (b,2), (d,4)]
+	+ get(a):
+		-1
+	+ get(c):
+		Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(c,3), (b,2), (d,4)]
+		hashtable[c] <- node2
+		queue[node2] <- (c,3) == 1
+		updated Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(b,2), (d,4), (c,3)]
+	+ get(b):
+		Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(b,2), (d,4), (c,3)]
+		hashtable[b] <- node1
+		queue[node1] <- (b,2) == 2
+		updated Cache: hashtable: {b: node1, c: node2, d: node3}, queue: {3: [(d,4), (c,3), (b,2)]
 '''
 
 import sys
