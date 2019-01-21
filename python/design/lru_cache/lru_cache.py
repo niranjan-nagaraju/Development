@@ -145,4 +145,94 @@ class LRUCache(object):
 		# into the hash table
 		self.queue.enqueue(item)
 		self.table[key] = self.queue.tail
-        
+
+
+	# [] operator for read
+	# a = cache['x']
+	def __getitem__(self, key):
+		return self.get(key)
+
+	# [] operator for write
+	# cache['x'] = 'blah'
+	def __setitem__(self, key, value):
+		return self.set(key, value)
+
+
+
+def testcase1():
+	cache1 = LRUCache(2)
+	cache1.set(2,1)
+	cache1.set(2,2)
+	assert(str(cache1.queue) == "[1]: (2, 2) ")
+
+	cache = LRUCache(2)
+	cache.set(1,2)
+	cache.set(2,3)
+	assert(cache.get(1) == 2)
+	cache.set(3,4) # Invalidates (2,3)
+	assert(cache.get(2) == -1)
+	assert(cache.get(3) == 4)
+	cache.set(4,5) # Invalidates (1,2)
+	assert(cache.get(1) == -1)
+	assert(cache.get(4) == 5)
+	assert(cache.get(3) == 4)
+	assert(str(cache.queue) == "[2]: (4, 5) (3, 4) ")
+
+
+# Test example from test run in solution description
+def testcase2():
+	cache = LRUCache(3)
+	assert(len(cache.table) == len(cache.queue) == 0)
+
+	cache.set('a', 1)
+	assert(len(cache.table) == len(cache.queue) == 1)
+	node0 = cache.queue.frontNode()
+	assert(cache.table['a'] == node0)
+	assert(node0.value == ('a', 1))
+
+	cache['b'] = 2 # same as cache.set('b', 2)
+	assert(len(cache.table) == len(cache.queue) == 2)
+	node1 = node0.next
+	assert(cache.table['b'] == node1)
+	assert(node1.value == ('b', 2))
+
+	cache['c'] = 3 # same as cache.set('c', 3)
+	assert(len(cache.table) == len(cache.queue) == 3)
+	node2 = node1.next
+	assert(cache.table['c'] == node2)
+	assert(node2.value == ('c', 3))
+
+	assert(cache.get('b') == 2)
+	assert(cache.table['b'] == node1)
+	assert(node1.value == ('b', 2))
+	assert(cache.queue.back() == ('b', 2))
+	assert(str(cache.queue) == "[3]: ('a', 1) ('c', 3) ('b', 2) ")
+
+	cache['d'] = 4 # same as cache.set('d', 4) -> invalidates (a,1)
+	assert(len(cache.table) == len(cache.queue) == 3)
+	node3 = cache.queue.lastNode()
+	assert(cache.table['d'] == node3)
+	assert(node3.value == ('d', 4))
+	assert(cache.table.has_key('a') == False)
+	assert(str(cache.queue) == "[3]: ('c', 3) ('b', 2) ('d', 4) ")
+
+	assert(cache['a'] == -1)
+
+	assert(cache['c'] == 3)
+	assert(len(cache.table) == len(cache.queue) == 3)
+	assert(str(cache.queue) == "[3]: ('b', 2) ('d', 4) ('c', 3) ")
+
+	assert(cache['b'] == 2)
+	assert(len(cache.table) == len(cache.queue) == 3)
+	assert(str(cache.queue) == "[3]: ('d', 4) ('c', 3) ('b', 2) ")
+
+	cache['d'] = 5 # same as cache.set('d', 5) -> overwrite 'd', and update its recency
+	assert(len(cache.table) == len(cache.queue) == 3)
+	assert(str(cache.queue) == "[3]: ('c', 3) ('b', 2) ('d', 5) ")
+
+
+
+if __name__ == '__main__':
+	testcase1()
+	testcase2()
+
