@@ -128,7 +128,8 @@ class LRUCache(object):
 		if (self.table.has_key(key)):
 			node = self.table[key]
 			node.value = (key, value)
-			self.get(key)
+			# mark current node as MRU by moving it to the back of the queue
+			self.queue.reEnqueueNode(node)
 			return
 
 		if (self.queue.length() == self.capacity):
