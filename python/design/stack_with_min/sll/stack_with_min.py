@@ -44,7 +44,7 @@ class StackMin(Stack):
 	# Override stack top to return just the item, 
 	# not the (item, minimum) pair stored underneath
 	def top(self):
-		return super(StackMin, self).top()[0]
+		return Stack.top(self)[0]
 
 
 	# Override parent stack class' push_front() to update min
@@ -55,15 +55,15 @@ class StackMin(Stack):
 
 		# Update current stack min
 		self.min = min(item, self.min)
-		super(StackMin, self).push_front((item, self.min))
+		Stack.push_front(self, (item, self.min))
 
 
 	# Override parent stack class' pop_front() to update min
 	# NOTE: This should mean the pop_front() alias is updated to the overridden version
 	def pop_front(self):
-		item, m = super(StackMin, self).pop_front()
+		item, m = Stack.pop_front(self)
 		if self.size != 0:
-			self.min = super(StackMin, self).top()[1]
+			self.min = Stack.top(self)[1]
 		else:
 			self.min = None
 		return item
@@ -84,7 +84,7 @@ class StackMin(Stack):
 
 
 	def __repr__(self):
-		return super(StackMin, self).__str__() + '/Min: ' + str(self.min)
+		return Stack.__str__(self) + '/Min: ' + str(self.min)
 
 
 

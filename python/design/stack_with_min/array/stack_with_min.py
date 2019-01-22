@@ -51,12 +51,12 @@ class StackMin(Stack):
 
 		# TODO: This is assuming push always succeeds
 		# revise
-		super(StackMin, self).push((item, self.min))
+		Stack.push(self, (item, self.min))
 
 
 	# Override parent stack class' pop() to update min
 	def pop(self):
-		item, m = super(StackMin, self).pop()
+		item, m = Stack.pop(self)
 
 		# Update min from current stack TOS
 		# reset to None if we just popped the last item off the stack
@@ -74,7 +74,7 @@ class StackMin(Stack):
 
 
 	def __str__(self):
-		return super(StackMin, self).__str__() + ' Min: ' + str(self.min)
+		return Stack.__str__(self) + ' Min: ' + str(self.min)
 
 
 
