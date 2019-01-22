@@ -18,7 +18,7 @@ Solution:
 	  NOTE: The queue is based on a DLL instead of a SLL, so re-enqueues are efficient.
 
 	+ set(key, value):
-      if the cache has not reached capacity,
+	  if the cache has not reached capacity,
 	  add node(key,value) into the queue at the end. 
 	  map key to node in the hash-table.
 	  Otherwise, 
