@@ -30,16 +30,16 @@ class DLL(object):
 		node = Node(value)
 		self._push_front_node(node)
 
+
 	# Insert at front
 	# if a node is sent as a parameter, it is enqueued as-is
 	# otherwise, data is wrapped around in a node and enqueued.
 	# if a node needs enqueued wrapped around in another node (for whatever reason), 
 	#  use _push_front_data() instead
 	def push_front(self, data):
-		if isinstance(data, Node):
-			self._push_front_node(data)
-		else:
-			self._push_front_data(data)
+		if not isinstance(data, Node):
+			node = Node(data)
+		self._push_front_node(node)
 
 
 	# utility function to push a node to the back of a DLL
@@ -66,10 +66,9 @@ class DLL(object):
 	# if a node needs enqueued wrapped around in another node (for whatever reason), 
 	#  use _push_back_data() instead
 	def push_back(self, data):
-		if isinstance(data, Node):
-			self._push_back_node(data)
-		else:
-			self._push_back_data(data)
+		if not isinstance(data, Node):
+			node = Node(data)
+		self._push_back_node(node)
 
 
 
@@ -119,6 +118,24 @@ class DLL(object):
 
 		tmp.next = tmp.prev = None
 		return tmp
+
+
+	# Add a new item, next to the specified 'node' in the DLL
+	def add_next_to(self, node, item):
+		new_node = Node(value=item)
+		self.size += 1
+
+		# 'node' is currently the tail
+		# Just update node's next and the new node's prev links, and return
+		if not node.next:
+			new_node.prev = node
+			node.next = new_node
+			return
+
+		new_node.next = node.next
+		node.next.prev = new_node
+		new_node.prev = node
+		node.next = new_node
 
 
 	# Remove node matching 'data' from the DLL
@@ -185,7 +202,14 @@ if __name__ == "__main__":
 		dll.push_front(i)
 		print dll
 
-	print 'By Index:', dll[0], dll[1], dll[2], dll[3], dll[4]
+	print 'By Index:', dll[0], dll[1], dll[2], dll[3], dll[4]  # [1,2,3,4,5]
+
+	node = dll[2]
+	dll.add_next_to(node, 'n')  # [1,2,3,'n', 4,5]
+	print dll
+	dll.removeNode(node.next) # back to [1,2,3,4,5]
+	print dll
+	
 
 	# Remove node @2
 	print 'Removed: from Index 2', dll.removeNode(dll[2])
