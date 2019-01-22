@@ -37,6 +37,7 @@ class DLL(object):
 	# if a node needs enqueued wrapped around in another node (for whatever reason), 
 	#  use _push_front_data() instead
 	def push_front(self, data):
+		node = Node(data)
 		if not isinstance(data, Node):
 			node = Node(data)
 		self._push_front_node(node)
@@ -66,6 +67,7 @@ class DLL(object):
 	# if a node needs enqueued wrapped around in another node (for whatever reason), 
 	#  use _push_back_data() instead
 	def push_back(self, data):
+		node = data
 		if not isinstance(data, Node):
 			node = Node(data)
 		self._push_back_node(node)
