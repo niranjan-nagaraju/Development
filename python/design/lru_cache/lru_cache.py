@@ -87,7 +87,6 @@ from data_structures.dll.node import Node
 
 
 class LRUCache(object):
-
 	def __init__(self, capacity):
 		"""
 		:type capacity: int
@@ -95,6 +94,10 @@ class LRUCache(object):
 		self.queue = Queue()
 		self.table = {}
 		self.capacity = capacity
+
+		# shortcuts to get (key,value) from a pair item
+		self.key = lambda item: item[0]
+		self.value = lambda item: item[1]
 
 
 	def get(self, key):
@@ -113,7 +116,7 @@ class LRUCache(object):
 		# as MRU
 		self.queue.reEnqueueNode(node)
 
-		return node.value[1]
+		return self.value(node.value)
 
 
 	def set(self, key, value):
@@ -136,7 +139,7 @@ class LRUCache(object):
 			# Dequeue least recently used item from the queue
 			# Remove it from the table as well
 			item = self.queue.dequeue()
-			self.table.pop(item[0]) # remove key from the table
+			self.table.pop(self.key(item)) # remove key from the table
 
 		# Cache has enough capacity to accomodate the new entry
 		item = (key, value)
