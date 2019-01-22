@@ -130,6 +130,9 @@ class DLL(object):
 		if not node.next:
 			new_node.prev = node
 			node.next = new_node
+
+			#update tail
+			self.tail = new_node
 			return
 
 		new_node.next = node.next
@@ -150,6 +153,7 @@ class DLL(object):
 
 
 	# Cull the node from a DLL and return it 'sanitized'
+	# TODO: Merge into remove() based on isinstance
 	def removeNode(self, node):
 		if node == self.head:
 			return self.pop_front_node()
@@ -209,6 +213,12 @@ if __name__ == "__main__":
 	print dll
 	dll.removeNode(node.next) # back to [1,2,3,4,5]
 	print dll
+
+	dll.add_next_to(dll.tail, 'tail') # [1,2,3,4,5, 'tail']
+	assert(dll.tail.value == 'tail')
+	dll.removeNode(dll.tail) # back to [1,2,3,4,5]
+	assert(str(dll) == "[5]: 1 2 3 4 5 ")
+	
 	
 
 	# Remove node @2
