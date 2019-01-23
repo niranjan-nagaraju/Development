@@ -46,7 +46,7 @@ Solution:
 	+ set(key, value):
 	  New entries added to the cache start with 0 frequency, 
 	  and as such can be the ripe candidate for culling the next time we need to remove an entry.
-      if the cache has not reached capacity,
+	  if the cache has not reached capacity,
 	    enqueue node(key,value) into the frequency queue at node 0.
 		if the first node does not represent frequency 0 (cache.head.value.frequency is not 0)
 		  then make a new node with freq 0, and an empty queue first
@@ -102,11 +102,16 @@ and adding methods assuming items are specific to the FrequencyQueue type
 '''
 class FrequencyQueuesList(DLL):
 	def __init__(self):
+		# Call base class DLL's constructor
 		DLL.__init__(self)
 
-		# Helper functions to fetch queue given a FrequencyQueuesList node
-		self.queue = lambda fql_node: fql_node.value
+		# Helper functions to fetch queue and frequency 
+		# given a FrequencyQueuesList node
+		self.fqueue = lambda fql_node: fql_node.value
+		self.frequency = lambda fql_node: fql_node.value.frequency
 
+
+	# return a multi-line string containing each frequency queue per line in the list
 	def __str__(self):
 		lstr = "[%d:\n" %(self.size)
 		trav = self.head
@@ -116,9 +121,12 @@ class FrequencyQueuesList(DLL):
 		return lstr + ']'
 
 
+	# LFU queue of items in the list
 	def front(self):
 		return self.head.value
 
+
+	# MFU queue of items in the list
 	def back(self):
 		return self.tail.value
 
@@ -129,12 +137,14 @@ class FrequencyQueuesList(DLL):
 	# with frequency 0 (if it exists),
 	# if it doesn't, create a new FrequencyQueue with frequency 0, and add the entry to that frequency queue
 	def add(self, key, value):
-		fqueue = self.front()
+		fqueue = self.fqueue(self.head) if self.head else None
 
+		# The list of queues is empty 
+		# *OR*
 		# The lowest usage frequency is not 0,
 		# Create a new queue with frequency of 0
 		# and prepend it to the list
-		if fqueue.frequency != 0:
+		if (fqueue is None) or fqueue.frequency != 0:
 			fqueue = FrequencyQueue()
 			self.push_front(fqueue)
 
@@ -154,9 +164,9 @@ class FrequencyQueuesList(DLL):
 	# returns a new node in the top-level list of freq-queues where the entry now resides
 	def promote(self, fqlist_node, fq_node):
 		next_fqlist_node = fqlist_node.next
-		current_frequency = fqlist_node.value.frequency
+		current_frequency = self.frequency(fqlist_node)
 
-		if not next_fqlist_node or next_fqlist_node.value.frequency != (current_frequency + 1):
+		if not next_fqlist_node or self.frequency(next_fqlist_node) != (current_frequency + 1):
 			# This queue has only 1 item and,
 			# either it's currently the last queue in the list
 			# or the next queue's frequency is not (f+1)
@@ -165,8 +175,8 @@ class FrequencyQueuesList(DLL):
 			#    to the next queue (f+1), and delete the 'f' queue
 			# 2. just update current queue's frequency to (f+1) and return
 			#    -> this is functionally identical to 1. and more efficient
-			if len(self.queue(fqlist_node)) == 1:
-				self.queue(fqlist_node).frequency += 1
+			if len(self.fqueue(fqlist_node)) == 1:
+				self.fqueue(fqlist_node).frequency += 1
 				return fqlist_node
 
 			# Create a new frequency queue with (current freq + 1)
@@ -177,12 +187,12 @@ class FrequencyQueuesList(DLL):
 			next_fqlist_node = fqlist_node.next
 
 		# At this point, we have a queue with frequency (f+1) where we can move our entry into
-		self.queue(fqlist_node).removeNode(fq_node)
-		self.queue(next_fqlist_node).enqueue(fq_node)
+		self.fqueue(fqlist_node).removeNode(fq_node)
+		self.fqueue(next_fqlist_node).enqueue(fq_node)
 
-		# frequency queue where entry was moved from is now empty
+		# if frequency queue where entry was moved from is now empty
 		# remove it from the top-list
-		if not self.queue(fqlist_node):
+		if not self.fqueue(fqlist_node):
 			self.removeNode(fqlist_node)
 
 		return next_fqlist_node
@@ -192,84 +202,197 @@ class FrequencyQueuesList(DLL):
 
 	# invalidate LFU entry from the list,
 	# and make room for a new entry
-	def invalidate(self):
-		pass
+	#
+	# returns which 'key' got invalidated so it can be removed 
+	# from the lookup table as well
+	def invalidateLFU(self):
+		lfu_fq = self.front()
+
+		# Entries in the same frequency queue are ordered by LRU
+		# so, incase of a tie (multiple entries with the lowest frequency 'f'),
+		# we remove the LRU entry from the lowest frequency queue
+		(key, value) = lfu_fq.dequeue()
+
+		# If removing the LFU entry from the LFU queue rendered the queue empty
+		# remove the queue as well from the list
+		# unless, the LFU queue had a frequency of 0
+		# in which case, *don't*
+		# WHY? 
+		#  Because a new item that gets added to the cache, gets added with a 
+		#  frequency of 0, removing it now would mean re-creating another 
+		#  frequency queue of freq 0 immediately after, 
+		#  (invalidateLFU is expected to be called when we run out of capacity 
+		#   while adding a new item to the cache)
+		if (not lfu_fq) and lfu_fq.frequency != 0:
+			self.removeNode(self.head)
+
+		return key
 
 
 
 
-
-#TODO: Implement
 '''
 LFU Cache implementation
+'''
 class LFUCache(object):
 	def __init__(self, capacity):
 		"""
 		:type capacity: int
 		"""
-		self.flist_queues = DLL()
-		self.table = {}
 		self.capacity = capacity
+		# List of frequency queues
+		self.fqueues_list = FrequencyQueuesList()
+		# A hash-table that maps a key to a (node in the fqueues_list, node in the fqueue)
+		self.table = {}
+		# shortcuts to get (key,value) from a frequency queue node
+		self.key = lambda fqnode: fqnode.value[0]
+		self.value = lambda fqnode: fqnode.value[1]
 
 
-	def get(self, key):
-		"""
-		:rtype: int
-		"""
 
+	def __len__(self):
+		return len(self.table)
+
+
+	# str() returns just the key, value pairs
+	def __str__(self):
+		cache_str = "[%d: {" %(len(self))
+		if not self:
+			return cache_str + "}]"
+
+		for (key, value) in self.table.items():
+			fql_node, fq_node = value
+			cache_str += "%s: %s, " %(fq_node.value)
+		return cache_str[:-2] + "}]"
+
+
+	# repr(): returns the hash-table entries in line 1
+	# followed by multiple lines, one each for the frequency queues
+	def __repr__(self):
+		return "Hashtable: %s\nFqueues: %s" %(self, self.fqueues_list) 
+
+
+	# Query the usage-frequency of a specified key
+	def frequency(self, key):
 		try:
-			# Lookup key in the table
-			node = self.table[key]
+			fql_node, fq_node = self.table[key]
+			return fql_node.value.frequency
 		except KeyError:
 			return -1
 
-		# Remove the node from the queue and 
-		# enqueue it back to the queue to mark it
-		# as MRU
-		self.queue.reEnqueueNode(node)
 
-		return node.value[1]
+	# Invalidate LFU entry from the cache
+	def invalidateLFU(self):
+		# Dequeue least frequently used item from the queue
+		# Remove it from the table as well
+		invalidated_key = self.fqueues_list.invalidateLFU()
+		self.table.pop(invalidated_key)
 
 
-	# TODO: Placeholder: implement later
+	# Lookup hash-table to get the frequency queue, 
+	# and the node within the frequency queue where (key, value) is stored
+	def get(self, key):
+		try:
+			# Lookup key in the table
+			(fql_node, fq_node) = self.table[key]
+		except KeyError:
+			return -1
+
+		# Remove the node from the current frequency queue and 
+		# 'promote' to the next one with (current frequency + 1)
+		new_fql_node = self.fqueues_list.promote(fql_node, fq_node)
+		
+		# update hash-table key with the new frequency queue where it has now been moved to
+		self.table[key] = (new_fql_node, fq_node)
+		return self.value(fq_node)
+
+
+
+	# Add a new entry to the cache, or update an existing key to a new value
 	def set(self, key, value):
-		"""
-		:type key: int
-		:type value: int
-		:rtype: nothing
-		"""
-
 		# if key already exists, 
 		# update with new value and return
 		if (self.table.has_key(key)):
-			fl_node, node = self.table[key]
-			node.value = (key, value)
+			fql_node, fq_node = self.table[key]
+			fq_node.value = (key, value)
 
 			# Move 'key' to the back of the queue
 			# corresponding to its current frequency
 			# so it becomes MRU in its queue
-			fl_node.value.queue.reEnqueueNode(node)
+			# NOTE: We re-enqueue it to the back of the same queue
+			# instead of treating this as another 'get()', so the usage-frequency
+			# of 'key' remains unchanged
+			self.fqueues_list.fqueue(fql_node).reEnqueueNode(fq_node)
 			return
 
-		if (self.queue.length() == self.capacity):
-			# Dequeue least frequently used item from the queue
-			# Remove it from the table as well
-			fqueue = self.flist_queues.head.value[1]
-			key_ = fqueue.dequeue()[0]
-			self.table.pop(key_) # remove key from the table
+		# Evict LFU entry from the cache
+		if (len(self) == self.capacity):
+			self.invalidateLFU()
 
 		# Cache has enough capacity to accomodate the new entry
-		item = (key, value)
-		freq, fqueue = self.flist_queues.head.value
-		if freq != 0:
-			fqItem = FrequencyQueue(0)
-			self.flist_queues.push_front(fqItem)
-			fqueue = fqNode.Item
+		# or an entry was just invalidated to make room for this entry
+		self.fqueues_list.add(key, value)
 
-		# Add to the end of the queue
-		# Add a reference of the DLL node (encapsulating the item)
-		# into the hash table
-		fqueue.enqueue(item)
-		self.table[key] = self.flist_queues.head, fqueue.tail
-        
-'''
+		# this entry would be added to the back of the first frequency queue
+		# in the list 
+		# update hash-table about where the entry can be found
+		self.table[key] = (self.fqueues_list.head, self.fqueues_list.fqueue(self.fqueues_list.head).tail)
+
+
+
+def basic_testcases():
+	cache = LFUCache(2)
+	assert(len(cache) == 0)
+	assert(cache.capacity == 2)
+
+	cache.set(1, 1)
+	assert(len(cache) == 1)
+
+	cache.set(2, 2)
+	assert(len(cache) == 2)
+	assert(cache.frequency(1) == 0)
+	assert(cache.frequency(2) == 0)
+
+	assert(cache.get(1) == 1)
+	assert(len(cache) == 2)
+	assert(cache.frequency(1) == 1)
+	assert(cache.frequency(2) == 0)
+	
+	cache.set(3, 3) # invalidates 2
+	assert(len(cache) == 2)
+	assert(cache.frequency(1) == 1)
+	assert(cache.frequency(2) == -1)
+	assert(cache.frequency(3) == 0)
+
+	assert(cache.get(2) == -1)
+	assert(len(cache) == 2)
+
+	assert(cache.get(3) == 3)
+	assert(len(cache) == 2)
+	assert(cache.frequency(1) == 1)
+	assert(cache.frequency(3) == 1)
+
+	cache.set(4, 4) # invalidates 1
+	assert(len(cache) == 2)
+	assert(cache.frequency(1) ==- 1)
+	assert(cache.frequency(3) == 1)
+	assert(cache.frequency(4) == 0)
+
+	assert(cache.get(1) == -1)
+	assert(len(cache) == 2)
+
+	assert(cache.get(3) == 3)
+	assert(len(cache) == 2)
+	assert(cache.frequency(3) == 2)
+	assert(cache.frequency(4) == 0)
+
+	assert(cache.get(4) == 4)
+	assert(len(cache) == 2)
+	assert(cache.frequency(3) == 2)
+	assert(cache.frequency(4) == 1)
+	
+
+
+if __name__ == '__main__':
+	basic_testcases()
+
