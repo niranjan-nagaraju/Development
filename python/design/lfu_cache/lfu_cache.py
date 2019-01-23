@@ -316,13 +316,10 @@ class LFUCache(object):
 			fql_node, fq_node = self.table[key]
 			fq_node.value = (key, value)
 
-			# Move 'key' to the back of the queue
-			# corresponding to its current frequency
-			# so it becomes MRU in its queue
-			# NOTE: We re-enqueue it to the back of the same queue
-			# instead of treating this as another 'get()', so the usage-frequency
-			# of 'key' remains unchanged
-			self.fqueues_list.fqueue(fql_node).reEnqueueNode(fq_node)
+			# promote 'key' to (frequency + 1), treating this as a get() in essence
+			new_fql_node = self.fqueues_list.promote(fql_node, fq_node)
+			# update hash-table key with the new frequency queue where it has now been moved to
+			self.table[key] = (new_fql_node, fq_node)
 			return
 
 		# Evict LFU entry from the cache
