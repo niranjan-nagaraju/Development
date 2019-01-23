@@ -101,10 +101,6 @@ class LRUCache(object):
 
 
 	def get(self, key):
-		"""
-		:rtype: int
-		"""
-
 		try:
 			# Lookup key in the table
 			node = self.table[key]
@@ -120,12 +116,6 @@ class LRUCache(object):
 
 
 	def set(self, key, value):
-		"""
-		:type key: int
-		:type value: int
-		:rtype: nothing
-		"""
-
 		# if key already exists, 
 		# update with new value and return
 		if (self.table.has_key(key)):
