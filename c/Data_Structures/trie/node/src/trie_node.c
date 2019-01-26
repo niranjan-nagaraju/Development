@@ -115,9 +115,6 @@ trie_node_delete (trie_node_t *node)
 	if (!node)
 		return;
 
-	for(i=0; i<MAX_CHARS_IN_UNIVERSE; i++)
-		free(node->items[i]);
-
 	free(node);
 }
 
