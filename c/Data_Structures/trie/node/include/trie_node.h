@@ -11,7 +11,6 @@ typedef struct trie_node_s trie_node_t;
 
 /**
  * What goes into a trie node
- *   key - Indicates whether the character exists in the current node items/not
  *   children - A trie node pointer for the next level in the trie,
  *         for words starting with the prefix at current item
  *   isEndOfWord - end of word status/just a prefix
@@ -21,13 +20,6 @@ typedef struct trie_node_s trie_node_t;
 typedef struct trie_node_item_s {
 	/** child nodes for the characters following prefix at current node */
 	trie_node_t *children;
-
-	/** 
-	 * presence of a character with ascii x at [x]
-	 * we have a word/prefix with that character in the current level
-	 * represented by the node
-	 */
-	char key;
 
 	/** Is there a word that ends in char at current node */
 	boolean isEndOfWord;
@@ -55,10 +47,16 @@ typedef struct trie_node_item_s {
 #define MAX_CHARS_IN_UNIVERSE 128 /** Printable ascii characters */
 struct trie_node_s {
 	trie_node_item_t *items[MAX_CHARS_IN_UNIVERSE];
+	int num_items; // number of valid characters in this particular trie node
 };
 
 
 trie_node_t *trie_node_create(void);
 void trie_node_delete (trie_node_t *node);
-void trie_node_set(trie_node_t *node, int key, boolean eow, int frequency);
+
+int trie_node_add(trie_node_t *node, char key);
+void trie_node_remove(trie_node_t *node, char key);
+void trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow);
+void trie_node_setFrequency(trie_node_t *node, char key, int frequency);
+void trie_node_setPrefix_count(trie_node_t *node, char key, int prefix_count);
 #endif //__TRIE_NODE_H__

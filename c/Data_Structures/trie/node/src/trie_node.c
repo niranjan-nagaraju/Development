@@ -2,12 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-/** 
- * Trie Node helper functions
- * No Error checking is performed here
- *  for 
- *   a) The functions are not expected to be called directly
- *   b) Trie is assumed to check for the boundary conditions, et, al.
+
+/**
+ * Create an empty trie node and return
  */
 trie_node_t *
 trie_node_create(void)
@@ -20,43 +17,90 @@ trie_node_create(void)
 
 	memset(tmp, 0, sizeof(trie_node_t));
 
-	for(i=0; i<MAX_CHARS_IN_UNIVERSE; i++) {
-		tmp->items[i] = malloc(sizeof(trie_node_item_t));
-		if (!tmp->items[i]) {
-			/** 
-			 * memory allocation failed mid-way
-			 * free earlier allocations and return
-			 */ 
-			for(j=0; j<i; j++)
-				free(tmp->items[i]);
-
-			free(tmp);
-			return 0;
-		}
-		memset(tmp->items[i], 0, sizeof(trie_node_item_t));
-	}
-
 	return tmp;
 }
 
 
 
 /**
- * Set values in trie node
+ * Add a specified character into the trie node
  */
-void
-trie_node_set(trie_node_t *node, int key, boolean eow, int frequency)
+int
+trie_node_add(trie_node_t *node, char key)
 {
+	/** 
+	 * key is supposed to be between 1-127, 0 is the NUL character, 
+	 * 127 is DELETE in ascii
+	 *
+	 * If key already 'exists' in the node, return without doing anything
+	 */
+	if( !(key > 0) )
+		return -EINVAL;
+
 	trie_node_item_t *item = node->items[key];
 
-	item->key = key;
+	/** node item already exists for character-key */
+	if (item)
+		return 0;
+	
+	node->items[key] = malloc(sizeof(trie_node_item_t));
+	if (!node->items[key])
+		return -ENOMEM; /** malloc() failed */
 
-	item->isEndOfWord = eow;
-	item->frequency = frequency;
+	memset(node->items[key], 0, sizeof(trie_node_item_t));
+	node->num_items++; // new character added to the trie node
 
-	item->prefix_count = 10;
+	return 0;
 }
 
+
+
+/**
+ * Set EoW status in trie node for a specific 'key' in the node 
+ */
+void
+trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow)
+{
+	trie_node_item_t *item = node->items[key];
+	item->isEndOfWord = eow;
+}
+
+
+/**
+ * Set frequency status in trie node for a specific 'key' in the node 
+ */
+void
+trie_node_setFrequency(trie_node_t *node, char key, int frequency)
+{
+	trie_node_item_t *item = node->items[key];
+	item->frequency = frequency;
+}
+
+/**
+ * Set prefix count in trie node for a specific 'key' in the node 
+ */
+void
+trie_node_setPrefix_count(trie_node_t *node, char key, int prefix_count)
+{
+	trie_node_item_t *item = node->items[key];
+	item->prefix_count = prefix_count;
+}
+
+
+/**
+ * remove a character/key from a node
+ */ 
+void
+trie_node_remove(trie_node_t *node, char key)
+{
+	/** Nothing to do */
+	if(!node->items[key])
+		return;
+
+	free(node->items[key]);
+	node->items[key] = 0;
+	node->num_items--;
+}
 
 
 /** Deallocate specifed trie node, return data */
