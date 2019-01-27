@@ -31,6 +31,21 @@ trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child)
 }
 
 
+/**
+ * Get a child node for parent node with character 'key'
+ */
+trie_node_t * 
+trie_getChildNode(trie_node_t *parent, char key)
+{
+	if (!parent || key < 1)
+		return 0;
+
+	if(!parent->items[key])
+		return 0;
+
+	return parent->items[key]->children;
+}
+
 
 /**
  * Add a specified character into the trie node
@@ -75,6 +90,16 @@ trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow)
 	item->isEndOfWord = eow;
 }
 
+/**
+ * Get EoW status in trie node for a specific 'key' in the node 
+ */
+boolean
+trie_node_getEndOfWord(trie_node_t *node, char key)
+{
+	trie_node_item_t *item = node->items[key];
+	return item->isEndOfWord;
+}
+
 
 /**
  * Set frequency status in trie node for a specific 'key' in the node 
@@ -87,6 +112,18 @@ trie_node_setFrequency(trie_node_t *node, char key, int frequency)
 }
 
 /**
+ * Get frequency status in trie node for a specific 'key' in the node 
+ */
+int
+trie_node_getFrequency(trie_node_t *node, char key)
+{
+	trie_node_item_t *item = node->items[key];
+
+	return item->frequency;
+}
+
+
+/**
  * Set prefix count in trie node for a specific 'key' in the node 
  */
 void
@@ -94,6 +131,16 @@ trie_node_setPrefix_count(trie_node_t *node, char key, int prefix_count)
 {
 	trie_node_item_t *item = node->items[key];
 	item->prefix_count = prefix_count;
+}
+
+/**
+ * Get prefix count in trie node for a specific 'key' in the node 
+ */
+int
+trie_node_getPrefix_count(trie_node_t *node, char key)
+{
+	trie_node_item_t *item = node->items[key];
+	return item->prefix_count;
 }
 
 

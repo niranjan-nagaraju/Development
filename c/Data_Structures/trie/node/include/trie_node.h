@@ -55,9 +55,14 @@ trie_node_t *trie_node_create(void);
 void trie_node_delete (trie_node_t *node);
 
 void trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child);
+trie_node_t * trie_getChildNode(trie_node_t *parent, char key);
+
 int trie_node_add(trie_node_t *node, char key);
 void trie_node_remove(trie_node_t *node, char key);
 void trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow);
+boolean trie_node_getEndOfWord(trie_node_t *node, char key);
 void trie_node_setFrequency(trie_node_t *node, char key, int frequency);
+int trie_node_getFrequency(trie_node_t *node, char key);
 void trie_node_setPrefix_count(trie_node_t *node, char key, int prefix_count);
+int trie_node_getPrefix_count(trie_node_t *node, char key);
 #endif //__TRIE_NODE_H__
