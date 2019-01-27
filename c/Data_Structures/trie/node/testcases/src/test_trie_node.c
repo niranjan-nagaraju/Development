@@ -26,10 +26,10 @@ main(void)
 
 
 	tnode2 = trie_node_create();
-	trie_setChildNode(tnode, 'a', tnode2); //'ab'
+	trie_node_setChildNode(tnode, 'a', tnode2); //'ab'
 	assert(tnode->items['a']->children == tnode2);
-	assert(trie_getChildNode(tnode, 'a') == tnode2);
-	assert(trie_getChildNode(tnode, 'b') == 0); // we have no words starting with 'b' as yet
+	assert(trie_node_getChildNode(tnode, 'a') == tnode2);
+	assert(trie_node_getChildNode(tnode, 'b') == 0); // we have no words starting with 'b' as yet
 	trie_node_add(tnode2, 'b');
 	trie_node_setPrefix_count(tnode2, 'b', 1);
 	assert(trie_node_getPrefix_count(tnode2, 'b') == 1);

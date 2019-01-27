@@ -25,7 +25,7 @@ trie_node_create(void)
  * set 'child' as child node of parent[key]
  */ 
 void
-trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child)
+trie_node_setChildNode(trie_node_t *parent, char key, trie_node_t *child)
 {
 	parent->items[key]->children = child;
 }
@@ -35,7 +35,7 @@ trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child)
  * Get a child node for parent node with character 'key'
  */
 trie_node_t * 
-trie_getChildNode(trie_node_t *parent, char key)
+trie_node_getChildNode(trie_node_t *parent, char key)
 {
 	if (!parent || key < 1)
 		return 0;

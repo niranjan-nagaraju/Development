@@ -54,8 +54,8 @@ struct trie_node_s {
 trie_node_t *trie_node_create(void);
 void trie_node_delete (trie_node_t *node);
 
-void trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child);
-trie_node_t * trie_getChildNode(trie_node_t *parent, char key);
+void trie_node_setChildNode(trie_node_t *parent, char key, trie_node_t *child);
+trie_node_t * trie_node_getChildNode(trie_node_t *parent, char key);
 
 int trie_node_add(trie_node_t *node, char key);
 void trie_node_remove(trie_node_t *node, char key);
