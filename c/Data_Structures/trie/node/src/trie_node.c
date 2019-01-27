@@ -21,6 +21,16 @@ trie_node_create(void)
 }
 
 
+/**
+ * set 'child' as child node of parent[key]
+ */ 
+void
+trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child)
+{
+	parent->items[key]->children = child;
+}
+
+
 
 /**
  * Add a specified character into the trie node

@@ -54,6 +54,7 @@ struct trie_node_s {
 trie_node_t *trie_node_create(void);
 void trie_node_delete (trie_node_t *node);
 
+void trie_setChildNode(trie_node_t *parent, char key, trie_node_t *child);
 int trie_node_add(trie_node_t *node, char key);
 void trie_node_remove(trie_node_t *node, char key);
 void trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow);

@@ -21,7 +21,10 @@ main(void)
 	assert(item->isEndOfWord == FALSE);
 	assert(item->frequency == 0);
 
+
 	tnode2 = trie_node_create();
+	trie_setChildNode(tnode, 'a', tnode2); //'ab'
+	assert(tnode->items['a']->children == tnode2);
 	trie_node_add(tnode2, 'b');
 	trie_node_setPrefix_count(tnode2, 'b', 1);
 	trie_node_setEndOfWord(tnode2, 'b', TRUE);
