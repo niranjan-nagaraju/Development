@@ -14,8 +14,8 @@ main(void)
 	trie_node_setEndOfWord(tnode, 'a', FALSE);
 	trie_node_setFrequency(tnode, 'a', 0);
 	assert(trie_node_getPrefix_count(tnode, 'a') == 2);
-	assert(trie_node_getEndOfWord(tnode2, 'a') == FALSE);
-	assert(trie_node_getFrequency(tnode2, 'a') == 0);
+	assert(trie_node_getEndOfWord(tnode, 'a') == FALSE);
+	assert(trie_node_getFrequency(tnode, 'a') == 0);
 
 	item = tnode->items['a'];
 	assert(item != 0);
