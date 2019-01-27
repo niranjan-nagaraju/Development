@@ -13,6 +13,8 @@ INCLUDE += -I$(BASE_DIR)/Data_Structures/sll/node/include
 LIBNAME=trie
 #LIBNAME_MT=trie_mt
 
+
+LDFLAGS += -L$(BASE_DIR)/Data_Structures/sll/sll/$(OBJDIR)/ -L$(BASE_DIR)/Data_Structures/sll/node/$(OBJDIR)/
 LDFLAGS += -L$(BASE_DIR)/Data_Structures/sll/queue/$(OBJDIR)/ -lsll_queue
 
 TEST_SUBDIRS = testcases #testcases_mt

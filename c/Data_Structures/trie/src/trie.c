@@ -7,46 +7,11 @@
 #include <errno.h>
 
 
-void
-trie_init(trie_t * trie)
-{
-	trie->root = trie_node_create();
-	trie->numWords = 0;
-}
-
-int
-trie_addWord(trie_t *trie, const char *word)
-{
-	int i;
-	trie_node_t *trav;
-
-	if (!trie || !trie->root)
-		return -EINVAL;
-
-	trav = trie->root;
-	for(i=0; word[i]; i++) {
-		int c = charToInt(word[i]);
-
-		if (!trav->children[c]) {
-			trav->children[c] = trie_node_create();
-		}
-		trav->children[c]->prefix_count++;
-
-		trav = trav->children[c];
-	}
-
-	trav->isEndOfWord = TRUE;
-
-	trie->numWords ++;
-
-	return 0;
-}
-
-
 /** Return node following the 'prefix' if found, else null */
 static trie_node_t *
 trie_findPrefixNode(trie_t *trie, const char *prefix)
 {
+#if 0
 	int i, n;
 	trie_node_t *trav;
 
@@ -72,38 +37,17 @@ trie_findPrefixNode(trie_t *trie, const char *prefix)
 	}
 
 	return trav;
+#endif
+	return 0;
 }
 
-boolean
-trie_hasWord(trie_t *trie, const char *word)
+
+static void
+trie_updateFrequency(trie_t *trie, const char *word)
 {
-	trie_node_t *trav;
-
-	trav = trie_findPrefixNode(trie, word);
-	return (trav && trav->isEndOfWord);
+	trie_node_t *node = trie_findPrefixNode(trie, word);
+	node->items[word[strlen(word)-1]]->frequency += 1; 
 }
-
-
-
-int
-trie_findPrefixesCount(trie_t *trie, const char *prefix)
-{
-	trie_node_t *trav = trie_findPrefixNode(trie, prefix);
-
-	return trav ? trav->prefix_count : 0;
-}
-
-
-boolean
-trie_hasPrefix(trie_t *trie, const char *prefix)
-{
-	trie_node_t *trav;
-
-	trav = trie_findPrefixNode(trie, prefix);
-
-	return (trav != NULL);
-}
-
 
 
 /** 
@@ -113,6 +57,7 @@ trie_hasPrefix(trie_t *trie, const char *prefix)
 static void
 dfs_search(trie_node_t *node, queue_t *suffix_queue, char *suffix, int suffixlen)
 {
+#if 0
 	int i;
 	char *s;
 
@@ -146,13 +91,122 @@ dfs_search(trie_node_t *node, queue_t *suffix_queue, char *suffix, int suffixlen
 			dfs_search(node->children[i], suffix_queue, suffix, suffixlen+1);
 		}
 	}
+#endif
 	
 	return;
 }
 
+
+
+
+void
+trie_init(trie_t * trie)
+{
+	trie->root = 0;
+	trie->numWords = 0;
+}
+
+
+int
+trie_addWord(trie_t *trie, const char *word)
+{
+	int i, err;
+	trie_node_t *trav;
+
+	if (!trie)
+		return -EINVAL;
+
+	if (!trie->root)
+		trie->root = trie_node_create();
+
+	/** 
+	 * If the word already exists in the trie, just 
+	 * update frequency and return
+	 */
+	if(trie_hasWord(trie, word)) {
+		trie_updateFrequency(trie, word);
+		return 0;
+	}
+
+	trie_node_add(trie->root, word[0]);
+	trav = trie->root;
+	for(i=1; word[i]; i++) {
+		trie_node_t *child;
+		/**
+		 * there's no child corresponding to word[i] from word[i-1]
+		 * create a new node, and assign it as a child-node of word[i-1]
+		 */
+		if ( !(child = trie_node_getChildNode(trav, word[i-1]))) {
+			child = trie_node_create();
+
+			/** memory allocation failed */
+			if (!child)
+				return -ENOMEM;
+
+			trie_node_setChildNode(trav, word[i-1], child);
+		}
+
+		if ( (err = trie_node_add(child, word[i])) < 0 )
+			return err;
+
+		trav = child;
+	}
+
+	trie_node_setEndOfWord(trav, word[i-1], TRUE);
+
+	/** First time, this 'word' as a whole was seen */
+	if (trie_node_getFrequency(trav, word[i-1]) == 1)
+		trie->numWords ++;
+
+	return 0;
+}
+
+
+boolean
+trie_hasWord(trie_t *trie, const char *word)
+{
+#if 0
+	trie_node_t *trav;
+
+	trav = trie_findPrefixNode(trie, word);
+	return (trav && trav->isEndOfWord);
+#endif
+	return 0;
+}
+
+
+
+int
+trie_findPrefixesCount(trie_t *trie, const char *prefix)
+{
+#if 0
+	trie_node_t *trav = trie_findPrefixNode(trie, prefix);
+
+	return trav ? trav->prefix_count : 0;
+#endif
+	return 0;
+}
+
+
+boolean
+trie_hasPrefix(trie_t *trie, const char *prefix)
+{
+#if 0
+	trie_node_t *trav;
+
+	trav = trie_findPrefixNode(trie, prefix);
+
+	return (trav != NULL);
+#endif
+	return 0;
+}
+
+
+
 int
 trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *suffix_queue)
 {
+#if 0
 	#define MAX_WORDLEN 100
 	char *suffix = malloc(MAX_WORDLEN);
 
@@ -168,4 +222,6 @@ trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *suffix_queue)
 	dfs_search(node, suffix_queue, suffix, 0);
 
 	return queue_length(suffix_queue);
+#endif
+	return 0;
 }
