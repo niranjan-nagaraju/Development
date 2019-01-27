@@ -66,7 +66,7 @@ trie_node_add(trie_node_t *node, char key)
 
 	/** node item already exists for character-key */
 	if (item)
-		return 0;
+		return -EEXIST;
 	
 	node->items[key] = malloc(sizeof(trie_node_item_t));
 	if (!node->items[key])
