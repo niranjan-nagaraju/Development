@@ -9,7 +9,8 @@ main(void)
 	trie_node_item_t *item;
 
 	tnode = trie_node_create();
-	trie_node_add(tnode, 'a');
+	trie_node_add(tnode, 'a'); // updates prefix count to 1
+	assert(trie_node_getPrefix_count(tnode, 'a') == 1); 
 	trie_node_setPrefix_count(tnode, 'a', 2);
 	trie_node_setEndOfWord(tnode, 'a', FALSE);
 	trie_node_setFrequency(tnode, 'a', 0);
@@ -30,10 +31,12 @@ main(void)
 	assert(tnode->items['a']->children == tnode2);
 	assert(trie_node_getChildNode(tnode, 'a') == tnode2);
 	assert(trie_node_getChildNode(tnode, 'b') == 0); // we have no words starting with 'b' as yet
-	trie_node_add(tnode2, 'b');
+	trie_node_add(tnode2, 'b'); // updates prefix count to 1
+	assert(trie_node_getPrefix_count(tnode2, 'b') == 1); 
 	trie_node_setPrefix_count(tnode2, 'b', 1);
 	assert(trie_node_getPrefix_count(tnode2, 'b') == 1);
-	trie_node_setEndOfWord(tnode2, 'b', TRUE);
+	trie_node_setEndOfWord(tnode2, 'b', TRUE); //updates frequency to 1
+	assert(trie_node_getFrequency(tnode2, 'b') == 1); 
 	assert(trie_node_getEndOfWord(tnode2, 'b') == TRUE);
 	trie_node_setFrequency(tnode2, 'b', 10);
 	assert(trie_node_getFrequency(tnode2, 'b') == 10);
@@ -45,9 +48,11 @@ main(void)
 	assert(item->isEndOfWord == TRUE);
 	assert(item->frequency == 10);
 
-	trie_node_add(tnode2, 'c');
+	trie_node_add(tnode2, 'c'); // updates prefix count to 1
+	assert(trie_node_getPrefix_count(tnode2, 'c') == 1); 
 	trie_node_setPrefix_count(tnode2, 'c', 2);
-	trie_node_setEndOfWord(tnode2, 'c', TRUE);
+	trie_node_setEndOfWord(tnode2, 'c', TRUE); //updates frequency to 1
+	assert(trie_node_getFrequency(tnode2, 'c') == 1); 
 	trie_node_setFrequency(tnode2, 'c', 100);
 
 	item = tnode2->items['c']; //representing 'ac'

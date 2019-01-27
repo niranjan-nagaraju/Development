@@ -10,7 +10,6 @@ trie_node_t *
 trie_node_create(void)
 {
 	trie_node_t *tmp = malloc(sizeof(trie_node_t));
-	int i = 0, j;
 
 	if (!tmp) 
 		return 0;
@@ -62,11 +61,12 @@ trie_node_add(trie_node_t *node, char key)
 	if( !(key > 0) )
 		return -EINVAL;
 
-	trie_node_item_t *item = node->items[key];
-
-	/** node item already exists for character-key */
-	if (item)
-		return -EEXIST;
+	/** 
+	 * node item already exists for character-key,
+	 * update prefix-count and return
+	 */
+	if (node->items[key]) 
+		goto update_and_return;
 	
 	node->items[key] = malloc(sizeof(trie_node_item_t));
 	if (!node->items[key])
@@ -75,6 +75,9 @@ trie_node_add(trie_node_t *node, char key)
 	memset(node->items[key], 0, sizeof(trie_node_item_t));
 	node->num_items++; // new character added to the trie node
 
+update_and_return: // PASSTHROUGH
+	/* update prefix-count */
+	node->items[key]->prefix_count++;
 	return 0;
 }
 
@@ -88,7 +91,12 @@ trie_node_setEndOfWord(trie_node_t *node, char key, boolean eow)
 {
 	trie_node_item_t *item = node->items[key];
 	item->isEndOfWord = eow;
+
+	// increase frequency if this is the last character of the word.
+	if(item->isEndOfWord == TRUE)
+		item->frequency++;
 }
+
 
 /**
  * Get EoW status in trie node for a specific 'key' in the node 
@@ -167,8 +175,6 @@ trie_node_remove(trie_node_t *node, char key)
 void
 trie_node_delete (trie_node_t *node)
 {
-	int i;
-
 	if (!node)
 		return;
 
