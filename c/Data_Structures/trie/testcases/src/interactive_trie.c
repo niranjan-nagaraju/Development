@@ -71,6 +71,8 @@ process_cmds(trie_t *trie, char *cmd, char *arg)
 				"find <prefix> :: Find words that match <prefix>\n"
 				"hasWord <word> :: Does trie have <word>\n"
 				"hasPrefix <prefix> :: Does trie have prefix\n"
+				"frequency <word> :: Frequency of word occurence in the trie\n"
+				"size :: Number of words in the trie\n"
 				"show :: Show all words in trie\n"
 				"help :: Show this message\n"
 				);
@@ -87,6 +89,8 @@ process_cmds(trie_t *trie, char *cmd, char *arg)
 	} else if (!strncmp(cmd, "find", 4)) {
 		printf("Matches: %d\n", trie_findPrefixMatches(trie, arg, &q));
 		print_queue_matches(&q);
+	} else if (!strncmp(cmd, "size", 4)) {
+		printf("Number of words in trie: %d\n", trie_len(trie));
 	} else if (!strncmp(cmd, "show", 4)) {
 		printf("Words in Trie: %d\n", trie_findPrefixMatches(trie, 0, &q));
 		print_queue_matches(&q);
@@ -109,6 +113,8 @@ process_cmds(trie_t *trie, char *cmd, char *arg)
 			goto done;
 		}
 		printf("Prefix '%s' matches %d words in trie\n", arg, trie_findPrefixesCount(trie, arg));
+	} else if (!strncmp(cmd, "frequency", 9)) {
+		printf("Frequency: %d\n", trie_frequency(trie, arg));
 	} else if (!strncmp(cmd, "quit", 7)) {
 		printf("Bye.\n");
 		return 1;
@@ -158,7 +164,7 @@ main(void)
 }
 
 /** 
-Sample session
+Sample session #1
 [21:14:05 trie]$ ./testcases/out/linux/interactive_trie
 *Trie> sho
 Unknown command
@@ -210,6 +216,39 @@ Word 'ab' does not exist in trie
 Word 'abc' exists in trie
 *Trie> hasWord abcd
 Word 'abcd' does not exist in trie
+*Trie> quit
+Bye.
+
+
+
+Sample session #2
+[01:00:57 trie]$ ./testcases/out/mac/interactive_trie 
+*Trie> fg
+Unknown command
+*Trie> add abc  
+Added 'abc' to trie.
+*Trie> add abc
+Added 'abc' to trie.
+*Trie> size
+Number of words in trie: 1
+*Trie> frequency 
+Frequency: 0
+*Trie> frequency ab
+Frequency: 0
+*Trie> frequency abc
+Frequency: 2
+*Trie> add hack
+Added 'hack' to trie.
+*Trie> frequency hack
+Frequency: 1
+*Trie> show
+Words in Trie: 2
+abc
+hack
+*Trie> hasPrefix abc
+Prefix 'abc' matches 1 words in trie
+*Trie> hasWord abc
+Word 'abc' exists in trie
 *Trie> quit
 Bye.
 

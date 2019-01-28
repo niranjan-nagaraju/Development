@@ -10,6 +10,19 @@ main(void)
 
 	trie_addWord(&trie, "hac");
 	trie_addWord(&trie, "hackerrank");
+	trie_addWord(&trie, "abc");
+	trie_addWord(&trie, "abc");
+	trie_addWord(&trie, "abc");
+	trie_addWord(&trie, "abcde");
+	trie_addWord(&trie, "aaab");
+	trie_addWord(&trie, "a");
+	
+	assert(trie_findPrefixesCount(&trie, "") == 6);
+	assert(trie_len(&trie) == 6); //"abc" is repeated thrice, but is only stored once in the trie
+	assert(trie_frequency(&trie, "abc") == 3);
+	assert(trie_frequency(&trie, "") == 0);
+	assert(trie_frequency(&trie, "a") == 1);
+	assert(trie_frequency(&trie, "hac") == 1);
 
 	assert(trie_findPrefixesCount(&trie, "hac") == 2);
 	assert(trie_findPrefixesCount(&trie, "hak")==0);

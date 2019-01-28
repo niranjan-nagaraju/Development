@@ -130,7 +130,9 @@ dfs_search(trie_node_t *node, queue_t *words_queue, char *word, int wordlen)
  * Public API functions for the trie *
  *************************************/
 
-
+/**
+ * Initialize trie
+ */ 
 void
 trie_init(trie_t * trie)
 {
@@ -138,7 +140,22 @@ trie_init(trie_t * trie)
 	trie->numWords = 0;
 }
 
+/**
+ * Number of words in the trie
+ */
+int trie_len(trie_t *trie)
+{
+	if (!trie)
+		return 0;
 
+	return trie->numWords;
+}
+
+
+/**
+ * Add a word into the trie
+ * if the word already exists, just update frequency and return
+ */
 int
 trie_addWord(trie_t *trie, const char *word)
 {
@@ -190,7 +207,42 @@ trie_addWord(trie_t *trie, const char *word)
 	return 0;
 }
 
+/**
+ * Return number of times 'word' was added to the trie
+ */
+int
+trie_frequency(trie_t *trie, const char *word)
+{
+	trie_node_t *node;
+	int n;
 
+	/** word being NULL or "" is not really a word, 
+	 * and won't be looked up in the trie
+	 */
+	if (!trie || !trie->root || !word || !word[0])
+		return 0;
+
+	node = trie_findPrefixNode(trie, word);
+	if(!node)
+		return 0;
+
+	n = strlen(word);
+	/** 
+	 * 'word' actually exists in the trie, but is not a whole word
+	 * it's actually a prefix for one or more words added to the trie
+	 */ 
+	if (!trie_node_getEndOfWord(node, word[n-1]))
+		return 0;
+
+	return trie_node_getFrequency(node, word[n-1]);
+}
+
+
+
+/**
+ * Return true if 'word' exists in the trie
+ * false otherwise
+ */
 boolean
 trie_hasWord(trie_t *trie, const char *word)
 {
@@ -219,27 +271,21 @@ trie_hasWord(trie_t *trie, const char *word)
 }
 
 
-
+/**
+ * Return number of words with the prefix
+ * if the prefix is NULL or "", return the total number of words in the trie
+ */
 int
 trie_findPrefixesCount(trie_t *trie, const char *prefix)
 {
 	trie_node_t *node;
-	int i, n;
+	int n;
 
 	if(!trie || !trie->root)
 		return 0;
 
-	if(!prefix || !prefix[0]) {
-		int count = 0;
-		// add prefix count of all characters in the root node
-		for(i=0; i<MAX_CHARS_IN_UNIVERSE; i++) {
-			trie_node_item_t *item = trie->root->items[i];
-			if (item) {
-				count += item->prefix_count;
-			}
-		}
-		return count;
-	} 
+	if(!prefix || !prefix[0])
+		return trie->numWords;
 
 	node = trie_findPrefixNode(trie, prefix);
 	if(!node)
@@ -250,6 +296,10 @@ trie_findPrefixesCount(trie_t *trie, const char *prefix)
 }
 
 
+/**
+ * Return true if there are words with the specified prefix in the trie
+ * false otherwise
+ */
 boolean
 trie_hasPrefix(trie_t *trie, const char *prefix)
 {

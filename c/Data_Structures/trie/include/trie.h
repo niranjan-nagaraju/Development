@@ -20,6 +20,8 @@ boolean trie_removeWord(trie_t *trie, const char *word);
 void trie_destroy(trie_t *trie);
 
 /** -- Trie find functions -- */
+/** Number of words in the trie */
+int trie_len(trie_t *trie);
 
 /** Query if trie has a specified word */
 boolean trie_hasWord(trie_t *trie, const char *word);
@@ -32,6 +34,9 @@ int trie_findPrefixesCount(trie_t *trie, const char *prefix);
 
 /** Return words that begin with the specified prefix */
 int trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *queue);
+
+/** Return number of times 'word' was added to the trie */
+int trie_frequency(trie_t *trie, const char *word);
 
 /** -- Trie find functions -- */
 
