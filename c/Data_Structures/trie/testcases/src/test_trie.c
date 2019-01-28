@@ -11,11 +11,9 @@ main(void)
 	trie_addWord(&trie, "hac");
 	trie_addWord(&trie, "hackerrank");
 
-	/**
 	assert(trie_findPrefixesCount(&trie, "hac") == 2);
 	assert(trie_findPrefixesCount(&trie, "hak")==0);
 	assert(trie_findPrefixesCount(&trie, "h")==2);
-
 
 	assert(trie_hasWord(&trie, "hac") == TRUE);
 	assert(trie_hasWord(&trie, "hack") == FALSE);
@@ -24,7 +22,7 @@ main(void)
 	assert(trie_hasPrefix(&trie, "hac") == TRUE);
 	assert(trie_hasPrefix(&trie, "hack") == TRUE);
 	assert(trie_hasPrefix(&trie, "hak") == FALSE);
-	*/
+
 	printf("All testcases pass!\n");
 
 	return 0;

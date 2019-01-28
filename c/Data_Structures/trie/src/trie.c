@@ -6,20 +6,22 @@
 #include <string.h>
 #include <errno.h>
 
+/******************************************
+ * Internal helper functions for the trie *
+ ******************************************/
 
-/** Return node following the 'prefix' if found, else null */
+/** Return node containing the 'prefix' if found, else null */
 static trie_node_t *
 trie_findPrefixNode(trie_t *trie, const char *prefix)
 {
-#if 0
-	int i, n;
-	trie_node_t *trav;
+	int i;
+	trie_node_t *trav, *last;
 
 	if (!trie || !trie->root)
 		return 0;
 
 	/** 
-	 * Technically, a null-prefix matches everything
+	 * Technically, a null-prefix/ "" matches everything
 	 * in the trie ;)
 	 */
 	if (!prefix || prefix[0] == 0)
@@ -27,26 +29,49 @@ trie_findPrefixNode(trie_t *trie, const char *prefix)
 
 
 	trav = trie->root;
+	last = trav;
 	for(i=0; prefix[i]; i++) {
-		int c = charToInt(prefix[i]);
-
-		if (!trav->children[c]) 
+		if (!trav || !trav->items[prefix[i]]) 
 			return 0;
 
-		trav = trav->children[c];
+		last = trav;
+		trav = trie_node_getChildNode(trav, prefix[i]);
 	}
 
-	return trav;
-#endif
-	return 0;
+	/** 
+	 * trav is one level below "prefix", and therefore one level too far.
+	 * last is at the end node containing prefix.
+	 */
+
+	return last;
 }
 
 
-static void
-trie_updateFrequency(trie_t *trie, const char *word)
+/**
+ * Return TRUE if the word already exists in the trie (after updating its frequency)
+ * else, return FALSE
+ */
+static boolean
+trie_update_frequency_if_word_exists(trie_t *trie, const char *word)
 {
 	trie_node_t *node = trie_findPrefixNode(trie, word);
-	node->items[word[strlen(word)-1]]->frequency += 1; 
+	int n;
+
+	/** The word doesn't exist in the trie */
+	if (!node)
+		return FALSE;
+
+
+	n = strlen(word);
+	/** 
+	 * 'word' actually exists in the trie, but is not a whole word
+	 * it's actually a prefix for one or more words added to the trie
+	 */ 
+	if (!trie_node_getEndOfWord(node, word[n-1]))
+		return FALSE;
+
+	node->items[word[n-1]]->frequency += 1; 
+	return TRUE;
 }
 
 
@@ -55,48 +80,55 @@ trie_updateFrequency(trie_t *trie, const char *word)
  * Return a queue of suffixes and the number of matching words.
  */ 
 static void
-dfs_search(trie_node_t *node, queue_t *suffix_queue, char *suffix, int suffixlen)
+dfs_search(trie_node_t *node, queue_t *words_queue, char *word, int wordlen)
 {
-#if 0
 	int i;
 	char *s;
 
 	if (!node)
 		return;
 
-	/** We have found a full-word, 
-	 * Pull a copy of it and store it as a result 
-	 */
-	if (node->isEndOfWord) {
-		s = strndup(suffix, suffixlen);
-		/** 
-		 * Copy only 'suffixlen' chars and close the string for good measure.
-		 * Some of the higher depth chars might be attached to it
-		 *
-		 * 'suffixlen' tells us what depth we are at and therefore our
-		 * word's suffix-part cannot be bigger than that
-		 *
-		 * 'strndup' does this for us anyways, but we can't be too sure.
+	/** ASCII readable characters are 0-127 */
+	for (i=0; i<MAX_CHARS_IN_UNIVERSE; i++) {
+		trie_node_item_t *item = node->items[i];
+
+		/** character 'i' doesn't exist in the current trie node */
+		if (!item)
+			continue;
+
+		/** append current character to word */
+		word[wordlen] = i;
+		word[wordlen+1] = 0;
+
+		/** We have found a full-word, 
+		 *  Pull a copy of it and store it as a result 
 		 */
-		s[suffixlen] = 0; 
+		if (item->isEndOfWord) {
+			s = strndup(word, wordlen+1);
+			/** 
+			 * Copy only 'wordlen+1' chars and close the string for good measure.
+			 * Some of the higher depth chars might be attached to it
+			 *
+			 * 'strndup' does this for us anyways, but we can't be too sure.
+			 */
+			s[wordlen+1] = 0; 
 
-		enqueue(suffix_queue, (void *)s);
-	}
-
-	for (i=0; i< MAX_CHARS_IN_UNIVERSE; i++) {
-		int first = 0;
-		if (node->children[i]) {
-			suffix[suffixlen] = i + 'a';
-
-			dfs_search(node->children[i], suffix_queue, suffix, suffixlen+1);
+			enqueue(words_queue, (void *)s);
 		}
+
+		dfs_search(trie_node_getChildNode(node, i), words_queue,  word, wordlen+1);
 	}
-#endif
-	
-	return;
 }
 
 
+/******************************************
+ * Internal helper functions for the trie *
+ ******************************************/
+
+
+/*************************************
+ * Public API functions for the trie *
+ *************************************/
 
 
 void
@@ -123,10 +155,8 @@ trie_addWord(trie_t *trie, const char *word)
 	 * If the word already exists in the trie, just 
 	 * update frequency and return
 	 */
-	if(trie_hasWord(trie, word)) {
-		trie_updateFrequency(trie, word);
+	if (trie_update_frequency_if_word_exists(trie, word))
 		return 0;
-	}
 
 	trie_node_add(trie->root, word[0]);
 	trav = trie->root;
@@ -155,8 +185,7 @@ trie_addWord(trie_t *trie, const char *word)
 	trie_node_setEndOfWord(trav, word[i-1], TRUE);
 
 	/** First time, this 'word' as a whole was seen */
-	if (trie_node_getFrequency(trav, word[i-1]) == 1)
-		trie->numWords ++;
+	trie->numWords ++;
 
 	return 0;
 }
@@ -165,13 +194,28 @@ trie_addWord(trie_t *trie, const char *word)
 boolean
 trie_hasWord(trie_t *trie, const char *word)
 {
-#if 0
-	trie_node_t *trav;
+	trie_node_t *node;
+	int n;
 
-	trav = trie_findPrefixNode(trie, word);
-	return (trav && trav->isEndOfWord);
-#endif
-	return 0;
+	/** word being NULL or "" is not really a word, 
+	 * and won't be looked up in the trie
+	 */
+	if (!trie || !trie->root || !word || !word[0])
+		return FALSE;
+
+	node = trie_findPrefixNode(trie, word);
+	if(!node)
+		return FALSE;
+
+	n = strlen(word);
+	/** 
+	 * 'word' actually exists in the trie, but is not a whole word
+	 * it's actually a prefix for one or more words added to the trie
+	 */ 
+	if (!trie_node_getEndOfWord(node, word[n-1]))
+		return FALSE;
+
+	return TRUE;
 }
 
 
@@ -179,49 +223,89 @@ trie_hasWord(trie_t *trie, const char *word)
 int
 trie_findPrefixesCount(trie_t *trie, const char *prefix)
 {
-#if 0
-	trie_node_t *trav = trie_findPrefixNode(trie, prefix);
+	trie_node_t *node;
+	int i, n;
 
-	return trav ? trav->prefix_count : 0;
-#endif
-	return 0;
+	if(!trie || !trie->root)
+		return 0;
+
+	if(!prefix || !prefix[0]) {
+		int count = 0;
+		// add prefix count of all characters in the root node
+		for(i=0; i<MAX_CHARS_IN_UNIVERSE; i++) {
+			trie_node_item_t *item = trie->root->items[i];
+			if (item) {
+				count += item->prefix_count;
+			}
+		}
+		return count;
+	} 
+
+	node = trie_findPrefixNode(trie, prefix);
+	if(!node)
+		return 0;
+
+	n = strlen(prefix);
+	return trie_node_getPrefix_count(node, prefix[n-1]);
 }
 
 
 boolean
 trie_hasPrefix(trie_t *trie, const char *prefix)
 {
-#if 0
-	trie_node_t *trav;
+	trie_node_t *node;
 
-	trav = trie_findPrefixNode(trie, prefix);
+	if(!trie || !trie->root)
+		return FALSE;
 
-	return (trav != NULL);
-#endif
-	return 0;
+	node = trie_findPrefixNode(trie, prefix);
+
+	return (node != NULL);
 }
 
 
 
 int
-trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *suffix_queue)
+trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *words_queue)
 {
-#if 0
 	#define MAX_WORDLEN 100
-	char *suffix = malloc(MAX_WORDLEN);
+	char *matching_word = malloc(MAX_WORDLEN);
+	int n;
+	trie_node_t *node;
 
-	trie_node_t *node = trie_findPrefixNode(trie, prefix);
+	if(!trie || !trie->root)
+		return 0;
+	
+	node = trie_findPrefixNode(trie, prefix);
 
 	/** prefix does not exist */
 	if (!node) {
 		return 0;
 	}
 
-	memset(suffix, 0, MAX_WORDLEN);
+	memset(matching_word, 0, MAX_WORDLEN);
 
-	dfs_search(node, suffix_queue, suffix, 0);
+	/** empty prefix - match every word in the trie */
+	if (!prefix || !prefix[0]) {
+		/** start a dfs search for everything from root */
+		dfs_search(node, words_queue, matching_word, 0);
+	} else {
+		n = strlen(prefix);
+		/** 
+		 * 'prefix' is an actual word in the trie
+		 * enqueue it as one of the results
+		 */ 
+		if (trie_node_getEndOfWord(node, prefix[n-1]))
+			enqueue(words_queue, (void *)prefix);
 
-	return queue_length(suffix_queue);
-#endif
-	return 0;
+		/** copy prefix to a template, 
+		 * all matching word-suffixes in the trie will be appended to this prefix */
+		strncpy(matching_word, prefix, n);
+		matching_word[n] = 0;
+
+		/** start a dfs-search for all child-nodes in the trie starting from the child node following the prefix */
+		dfs_search(trie_node_getChildNode(node, prefix[n-1]), words_queue, matching_word, n);
+	}
+
+	return queue_length(words_queue);
 }

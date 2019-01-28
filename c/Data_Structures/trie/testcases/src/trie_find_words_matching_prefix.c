@@ -9,7 +9,7 @@
 void
 printQueueElemsAndPrefix1(void *object)
 {
-	printf("hac%s ", (char*)object);
+	printf("%s ", (char*)object);
 }
 
 
@@ -32,8 +32,11 @@ main(void)
 	queue_init(&q3);
 
 	assert(trie_findPrefixMatches(&trie, "hac", &q1) == 3);
+	assert(trie_findPrefixesCount(&trie, "hac") == 3);
 	assert(trie_findPrefixMatches(&trie, "", &q2) == 5); /** All words in the trie */
+	assert(trie_findPrefixesCount(&trie, "") == 5);
 	assert(trie_findPrefixMatches(&trie, 0, &q3) == 5);  /** All words in the trie */
+	assert(trie_findPrefixesCount(&trie, 0) == 5);
 
 	printf("Prefix 'hac' matches:\n");
 	queue_print(&q1, printQueueElemsAndPrefix1);
@@ -47,8 +50,11 @@ main(void)
 	return 0;
 }
 
+
+
 /** 
   Sample run:
+
   Prefix 'hac' matches:
   [3]: hack  hackerrank  hacs  
   Prefix '' matches:

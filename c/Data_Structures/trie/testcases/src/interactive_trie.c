@@ -1,6 +1,7 @@
 #include <trie.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 /** 
  * TODO: Move these to essential test_common
@@ -45,11 +46,11 @@ getInputLine(char *cmd, char *arg, int maxlen)
 }
 
 void
-print_queue_matches(queue_t *q, const char *prefix)
+print_queue_matches(queue_t *q)
 {
 	char *s;
-	while (s = dequeue(q)) {
-		printf("%s%s\n", prefix, s);
+	while ( (s = dequeue(q)) ) {
+		printf("%s\n", s);
 	}
 }
 
@@ -85,10 +86,10 @@ process_cmds(trie_t *trie, char *cmd, char *arg)
 		}
 	} else if (!strncmp(cmd, "find", 4)) {
 		printf("Matches: %d\n", trie_findPrefixMatches(trie, arg, &q));
-		print_queue_matches(&q, arg);
+		print_queue_matches(&q);
 	} else if (!strncmp(cmd, "show", 4)) {
-		printf("Words in Trie: \n", trie_findPrefixMatches(trie, 0, &q));
-		print_queue_matches(&q, "");
+		printf("Words in Trie: %d\n", trie_findPrefixMatches(trie, 0, &q));
+		print_queue_matches(&q);
 	} else if  (!strncmp(cmd, "remove", 7)) {
 		if (!arg || !arg[0]) {
 			printf("Invalid Input\n");
@@ -133,7 +134,6 @@ interactive_shell(void)
 	trie_t trieObj;
 	trie_t *trie = &trieObj;
 	char cmd[MAX_CMD_LEN] = {0}, arg[MAX_LINE_LEN] = {0};
-	int ret=0;
 
 	trie_init(trie);
 

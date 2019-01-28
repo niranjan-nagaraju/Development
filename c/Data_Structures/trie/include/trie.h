@@ -14,6 +14,7 @@ typedef struct trie_s {
 }trie_t;
 
 
+void trie_init(trie_t * trie);
 int trie_addWord(trie_t *trie, const char *word);
 boolean trie_removeWord(trie_t *trie, const char *word);
 void trie_destroy(trie_t *trie);
