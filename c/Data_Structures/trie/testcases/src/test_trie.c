@@ -23,6 +23,7 @@ main(void)
 	assert(trie_frequency(&trie, "") == 0);
 	assert(trie_frequency(&trie, "a") == 1);
 	assert(trie_frequency(&trie, "hac") == 1);
+	assert(trie_frequency(&trie, "unknown") == 0);
 
 	assert(trie_findPrefixesCount(&trie, "hac") == 2);
 	assert(trie_findPrefixesCount(&trie, "hak")==0);
