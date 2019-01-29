@@ -1,0 +1,7 @@
++ [ ] Iterative tree traversals
+  + [ ] Inorder
+  + [ ] Preorder
+  + [ ] Postorder
+  + Iterator-based versions (store state, return next item on subsequent next() calls)
++ [ ] Morris Inorder traversal - iterative
++ [ ] Lowest-common-ancestor (LCA)
