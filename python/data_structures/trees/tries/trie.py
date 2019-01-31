@@ -38,6 +38,19 @@ class Node(object):
 		self.num_words = 0;
 
 
+	# [] shotcut to get node item from node at 'key' 
+	# return None if the node doesn't contain anything at 'key'
+	def __getitem__(self, key):
+		return self.items.get(key)
+
+
+	# [] shortcut to set node item in node at 'key'
+	def __setitem__(self, key, item):
+		if not self.items.has_key(key):
+			self.items[key] = item
+		self.items[key].prefix_count += 1
+
+
 	def add(self, character):
 		pass
 
