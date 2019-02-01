@@ -3,6 +3,20 @@ Placeholder: Implement a trie
 '''
 
 
+
+'''
+An item encapsulation that goes inside a Node
+Contains a node, EoW status, frequency of occurence if this
+item represents the last character in a word added to the trie
+'''
+class NodeItem(object):
+	def __init__(self, node=None, eow=False, frequency=0):
+		self.node = node
+		self.end_of_word = eow
+		self.frequency = frequency
+
+
+
 '''
 An item in a trie node
 Contains
@@ -32,50 +46,89 @@ class Node(object):
 		# and its frequency of occurence (the number of times it was added to the trie)
 		self.items = {}
 
-		# number of words in the trie
-		# this should be equivalent to len(self.items)
-		# but num_words provides a faster reference
-		self.num_words = 0;
+
+	# Length of a node => number of character-keys set in it
+	def __len__(self):
+		return len(self.items)
 
 
-	# [] shotcut to get node item from node at 'key' 
+	# [] shotcut to get node item from node at 'character' 
 	# return None if the node doesn't contain anything at 'key'
-	def __getitem__(self, key):
-		return self.items.get(key)
+	def __getitem__(self, character):
+		# TODO: Change this to a decorator later
+		if not (isinstance(character, str) or isinstance(character, unicode)):
+			raise ValueError("character is neither unicode not utf-8")
+		return self.items.get(character)
 
 
-	# [] shortcut to set node item in node at 'key'
-	def __setitem__(self, key, item):
-		if not self.items.has_key(key):
-			self.items[key] = item
-		self.items[key].prefix_count += 1
+
+	# [] shortcut to set node item in node at 'character'
+	def __setitem__(self, character, item):
+		# TODO: Change this to a decorator later
+		if not (isinstance(character, str) or isinstance(character, unicode)):
+			raise ValueError("character is neither unicode not utf-8")
+
+		# Nodes are indexed by character-keys
+		# and each character-key maps to a node item
+		# or None
+
+		# Item is None => reset current node's item at character-key
+		if item is None:
+			self.items[character] = None
+
+		# Node's character-keys should map to a node item
+		if not isinstance(item, NodeItem):
+			return
+
+		if not self.items.has_key(character):
+			self.items[character] = item
+		self.items[character].prefix_count += 1
 
 
+
+	# Add an item for character-key 
 	def add(self, character):
-		pass
+		item = NodeItem(self)
+		self[character] = item
 
+
+
+	# remove an item from node at index 'character'
+	def remove(self, character):
+		if not self[character]:
+			return
+		self[character] = None
+
+
+
+	# return node items and key in current node
 	def __str__(self):
-		pass
+		sstr = "[%d]: " %(self.__len__())
+		for (character, item) in self.items.items():
+			sstr += "(%s, $:%s f:%d pc:%d)" %(character, item.end_of_word, item.frequency, item.prefix_count)
+		return sstr.strip()
+
+
+	# child node for character-key at current node
+	def getChild(self, character):
+		# character is not set in current node
+		if not self[character]:
+			return None
+
+		return self[character].node
 
 
 
-'''
-An item encapsulation that goes inside a Node
-Contains a node, EoW status, frequency of occurence if this
-item represents the last character in a word added to the trie
-'''
-class NodeItem(object):
-	def __init__(self, node, eow=False, frequency=0):
-		self.node = node
-		self.isEoW = eow
-		self.frequency = frequency
+
 
 '''
 The Trie class
 '''
 class Trie(object):
 	def __init__(self):
-		# number of words added to the trie
+		# number of words added in the trie
+		# this should be equivalent to len(self.items)
+		# but num_words provides a faster reference
 		self.num_words = 0
 		self.root = None
 
