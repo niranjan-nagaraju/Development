@@ -1,19 +1,52 @@
 '''
 Placeholder: Implement a trie
-'''
+
+Design:
+	The trie is built as an n-array tree.
+	Each node contains a mapping for a character to its child nodes, and a few other node items.
+	The root node represents the first character of the words added to the trie,
+	 second level nodes contain the second character, and so on.
+	Words are added to the trie by following a path from the root, and navigating to the child node corresponding to the current character at position i to level i.
+	A node at level i, represents a word/prefix, i.e. a sequence of characters of size 'i'  containing the characters in the path from root to current node.
+	(ofcourse, a trie being a tree, each node has only one parent)
+
+	Each node contains the following node items, for each 'allowed' character
+	  $, end-of-word status: that says if there is a word that ends at current node (from the path of characters starting from root)
+	  f, frequency of occurence of the word (valid only if $ is set)
+	  pc: prefix count: number of words that begin the prefix at current node.
 
 
+e.g.,
+  the following trie contains the words:
+    A  (with a frequency of 9)
+    AB (with a frequency of 2)
+	CA (with a frequency of 1)
+
+	Two words that begin with A (pc: 2) -> A, AB
+	One word that begins with C (pc: 1) -> CA
+
+
+Node(root)
+|-------+-------+-------|
+|  A    |  B    |  C    |
+|-------+-------+-------|Items
+| f:  9 | f:  0 | f:  0 |
+| pc: 2 | pc: 0 | pc: 1 +----------+
+| $:  1 | $:  0 | $:  0 |          |
+|---+----+-------+------|          |
+    |                              |
+    +------+                       |
+Node       |                       |                 Node     
+|-------+--v----+-------|       |--v-----+-------+------|    
+|  A    |  B    |  C    |       |  A    |  B    |  C    |
+|-------+-------+-------|       |-------+-------+-------|
+| f:  0 | f:  2 | f:  0 |       | f:  1 | f:  0 | f:  0 |
+| pc: 0 | pc: 1 | pc: 0 |       | pc: 1 | pc: 0 | pc: 0 |
+| $:  0 | $:  1 | $:  0 |       | $:  1 | $:  0 | $:  0 |
+|-------+-------+-------|       |-------+-------+-------|
+Items                                               Items
 
 '''
-An item encapsulation that goes inside a Node
-Contains a node, EoW status, frequency of occurence if this
-item represents the last character in a word added to the trie
-'''
-class NodeItem(object):
-	def __init__(self, node=None, eow=False, frequency=0):
-		self.node = node
-		self.end_of_word = eow
-		self.frequency = frequency
 
 
 
@@ -26,11 +59,12 @@ Contains
   prefix_count: Number of words in the trie that begin with the prefix at current item.
 '''
 class NodeItem(object):
-	def __init__(self):
-		self.children = None
-		self.end_of_word = False
-		self.frequency = 0
-		self.prefix_count = 0
+	def __init__(self, children=None, eow=False, frequency=0, prefix_count=0):
+		self.children = children
+		self.end_of_word = eow
+		self.frequency = frequency
+		self.prefix_count = prefix_count
+
 
 
 '''
@@ -52,22 +86,31 @@ class Node(object):
 		return len(self.items)
 
 
+
+	# decorator to ensure character is
+	# either unicode as an ascii
+	def check_character(func):
+		def f(self, character, *args):
+			if not (isinstance(character, str) or isinstance(character, unicode)):
+				raise ValueError("ValueError: '%s(): character is neither unicode nor ascii'" %(func.__name__))
+			rv = func(self, character, *args)
+			return rv
+		return f
+
+
+
+
 	# [] shotcut to get node item from node at 'character' 
 	# return None if the node doesn't contain anything at 'key'
+	@check_character
 	def __getitem__(self, character):
-		# TODO: Change this to a decorator later
-		if not (isinstance(character, str) or isinstance(character, unicode)):
-			raise ValueError("character is neither unicode not utf-8")
 		return self.items.get(character)
 
 
 
 	# [] shortcut to set node item in node at 'character'
+	@check_character
 	def __setitem__(self, character, item):
-		# TODO: Change this to a decorator later
-		if not (isinstance(character, str) or isinstance(character, unicode)):
-			raise ValueError("character is neither unicode not utf-8")
-
 		# Nodes are indexed by character-keys
 		# and each character-key maps to a node item
 		# or None
@@ -88,7 +131,7 @@ class Node(object):
 
 	# Add an item for character-key 
 	def add(self, character):
-		item = NodeItem(self)
+		item = NodeItem()
 		self[character] = item
 
 
@@ -109,15 +152,17 @@ class Node(object):
 		return sstr.strip()
 
 
-	# child node for character-key at current node
-	def getChild(self, character):
-		# character is not set in current node
-		if not self[character]:
-			return None
-
-		return self[character].node
 
 
+'''
+Trie Empty exception
+'''
+class TrieEmptyError(Exception):
+	def __init__(self, message='Trie is empty!'):
+		self.message = message
+
+	def __str__(self):
+		return self.message
 
 
 
@@ -132,15 +177,49 @@ class Trie(object):
 		self.num_words = 0
 		self.root = None
 
+
+	# length of the trie = number of words in the trie
 	def __len__(self):
 		return self.num_words
 
+
+	# for if trie / (not trie) syntax to succeed
 	def __nonzero__(self):
-		return (self.root == None)
+		return (self.root != None)
 
 
+	# decorator to ensure root is not empty
+	# on trie operations
+	def check_root(func):
+		def f(self, *args):
+			if not self.root:
+				raise TrieEmptyError("TrieEmptyError: '%s(): Trie is empty'" %(func.__name__))
+			rv = func(self, *args)
+			return rv
+		return f
+
+
+	
+	# TODO partial implementation - complete
 	def add(self, word):
-		pass
+		# TODO: Update frequency if word exists
+		# and return
+
+		# First word to be added to the trie
+		# create a root node
+		if not self.root:
+			self.root = Node()
+
+		trav = self.root
+		trav.add(word[0])
+		previous = word[0]
+		for c in word[1:]:
+			parent = trav
+			trav = trav[previous].children
+			if not trav[c]:
+				trav[c] = NodeItem()
+
+
 
 
 	def remove(self, word):
@@ -155,7 +234,7 @@ class Trie(object):
 		pass
 
 
-	def frequency(self. word):
+	def frequency(self, word):
 		pass
 
 
