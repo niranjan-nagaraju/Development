@@ -99,8 +99,7 @@ class Node(object):
 
 
 
-
-	# [] shotcut to get node item from node at 'character' 
+	# [] shortcut to get node item from node at 'character' 
 	# return None if the node doesn't contain anything at 'key'
 	@check_character
 	def __getitem__(self, character):
@@ -145,12 +144,15 @@ class Node(object):
 
 
 	# return node items and key in current node
-	def __str__(self):
+	def __repr__ (self):
 		sstr = "[%d]: " %(self.__len__())
 		for (character, item) in self.items.items():
-			sstr += "(%s, $:%s f:%d pc:%d)" %(character, item.end_of_word, item.frequency, item.prefix_count)
+			sstr += "(%r, $:%s f:%d pc:%d) " %(character, item.end_of_word, item.frequency, item.prefix_count)
 		return sstr.strip()
 
+
+	def __str__(self):
+		return "[%d]: %s" %(self.__len__(), self.items.keys())
 
 
 
@@ -212,13 +214,30 @@ class Trie(object):
 
 		trav = self.root
 		trav.add(word[0])
-		previous = word[0]
+		p = word[0] # previous character
 		for c in word[1:]:
-			parent = trav
-			trav = trav[previous].children
-			if not trav[c]:
-				trav[c] = NodeItem()
+			child = trav[p].children
 
+			# parent node doesn't have a child node at character p
+			if not child:
+				child = Node()
+				# set parent node's child node at previous character p
+				trav[p].children = child
+
+			# At this point, we have a child node for p from parent node
+			# Set current character,c, in child node
+			child.add(c)
+
+			# move one level down to current character's node
+			trav = child
+			p = c
+
+		# set EoW status, and frequency at the last character of the word
+		trav[p].end_of_word = True
+		trav[p].frequency += 1
+
+		# update number of words in the trie
+		self.num_words += 1
 
 
 
