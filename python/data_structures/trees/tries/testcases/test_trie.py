@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../../../../")
-from data_structures.trees.tries.trie import Trie
+from data_structures.trees.tries.trie import Trie, TrieEmptyError
 
 
 
@@ -90,6 +90,29 @@ def test_add():
 	assert(repr(node) == "[1]: ('c', $:True f:1 pc:1)")
 
 
+
+
+def test_hasWord():
+	trie = Trie()
+	try:
+		assert(trie.hasWord("word") == False)
+	except TrieEmptyError as e:
+		assert(e.message == "TrieEmptyError: 'hasWord(): Trie is empty'")
+
+	trie.add("word")
+	trie.add("words")
+	trie.add("sword")
+
+	assert(len(trie) == 3)
+	assert(trie.hasWord("word") == True)
+	assert(trie.hasWord("words") == True)
+	assert(trie.hasWord("wor") == False)
+	assert(trie.hasWord("sword") == True)
+	assert(trie.hasWord("swords") == False)
+
+
+
 if __name__ == '__main__':
 	test_add()
+	test_hasWord()
 

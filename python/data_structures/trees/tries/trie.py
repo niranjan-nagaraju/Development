@@ -245,8 +245,26 @@ class Trie(object):
 		pass
 
 
+	@check_root
 	def hasWord(self, word):
-		pass
+		if not word:
+			return False
+
+		try:
+			trav = self.root
+		except TrieEmptyError:
+			return False
+
+		last = trav;
+		for c in word:
+			if not trav or not trav[c]:
+				return False
+			last = trav
+			trav = trav[c].children
+
+		# trav is one level below "prefix", and therefore one level too far.
+		# last is at the end node containing prefix.
+		return last[word[-1]].end_of_word
 
 
 	def hasPrefix(self, prefix):
