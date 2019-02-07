@@ -194,23 +194,52 @@ class Trie(object):
 	# on trie operations
 	def check_root(func):
 		def f(self, *args):
-			if not self.root:
+			if self.root is None:
 				raise TrieEmptyError("TrieEmptyError: '%s(): Trie is empty'" %(func.__name__))
 			rv = func(self, *args)
 			return rv
 		return f
 
 
-	
-	# TODO partial implementation - complete
-	def add(self, word):
-		# TODO: Update frequency if word exists
-		# and return
+	# Return the last node item in the trie for a matching prefix
+	# if it exists, 
+	# if it doesn't, return None
+	def findMatchingPrefixNodeItem(self, prefix):
+		if not prefix:
+			return None
 
+		trav = self.root
+
+		last = trav;
+		for c in prefix:
+			if not trav or not trav[c]:
+				return None
+			last = trav
+			trav = trav[c].children
+
+		# trav is one level below "prefix", and therefore one level too far.
+		# last is at the end node containing prefix.
+		return last[prefix[-1]]
+
+
+
+	# Add a word to the trie
+	# if the word already exists in the trie,
+	#  just update its frequency and return
+	def add(self, word):
 		# First word to be added to the trie
 		# create a root node
 		if not self.root:
 			self.root = Node()
+
+		# Update frequency if word exists
+		# and return
+		# NOTE: Creating 'root' before looking for the word, also ensures 
+		# check_root() passes
+		item = self.findMatchingPrefixNodeItem(word)
+		if item and item.end_of_word == True:
+			item.frequency += 1
+			return
 
 		trav = self.root
 		trav.add(word[0])
@@ -245,38 +274,39 @@ class Trie(object):
 		pass
 
 
+	# Return true if the trie has 'word'
+	# false otherwise
 	@check_root
 	def hasWord(self, word):
-		if not word:
-			return False
-
-		try:
-			trav = self.root
-		except TrieEmptyError:
-			return False
-
-		last = trav;
-		for c in word:
-			if not trav or not trav[c]:
-				return False
-			last = trav
-			trav = trav[c].children
-
-		# trav is one level below "prefix", and therefore one level too far.
-		# last is at the end node containing prefix.
-		return last[word[-1]].end_of_word
+		item = self.findMatchingPrefixNodeItem(word)
+		return item.end_of_word if item else False
 
 
+	# Return true if the trie has 'prefix'
+	# false otherwise
+	@check_root
 	def hasPrefix(self, prefix):
-		pass
+		item = self.findMatchingPrefixNodeItem(prefix)
+		return (item is not None)
 
 
+	# Return word frequency if the trie has 'word'
+	# 0 otherwise
+	@check_root
 	def frequency(self, word):
-		pass
+		item = self.findMatchingPrefixNodeItem(word)
+		if item and item.end_of_word:
+			return item.frequency
+		return 0
 
 
+	# Return number of words that match a prefix
+	# if the trie has words that begin with 'prefix'
+	# 0 if no such prefix exists
+	@check_root
 	def countPrefix(self, prefix):
-		pass
+		item = self.findMatchingPrefixNodeItem(prefix)
+		return item.prefix_count if item else 0
 
 
 	def findPrefixMatches(self, prefix):
