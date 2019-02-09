@@ -49,7 +49,6 @@ Items                                               Items
 '''
 
 
-
 '''
 An item in a trie node
 Contains
@@ -309,16 +308,58 @@ class Trie(object):
 		return item.prefix_count if item else 0
 
 
-	def findPrefixMatches(self, prefix):
-		pass
+
+	# Returns a list of words that match a prefix
+	# if the trie has words that begin with 'prefix'
+	# None if no such prefix exists
+	# raises 'TrieEmptyError' if trie is not initialized
+	@check_root
+	def prefixMatches(self, prefix=None):
+		# DFS search from the matching prefix node 
+		# Return a list of words that start with prefix
+		def dfs_search_helper(node, words_list, prefix=""):
+			if not node:
+				return
+
+			# look for characters set at the current node
+			# sort by keys for a lexicographic order
+			for (c , item) in sorted(node.items.items()):
+				# extend the prefix by the current character
+				if item:
+					words_list.append(prefix + c) if item.end_of_word else None
+					dfs_search_helper(item.children, words_list, prefix + c)
 
 
-	# lexicographic sort
+		# call the dfs helper
+		words_list = []
+		# empty prefix -> match everything in the trie
+		if not prefix:
+			dfs_search_helper(self.root, words_list)
+		else:
+			item = self.findMatchingPrefixNodeItem(prefix)
+			# Couldn't find the prefix in the trie,
+			# return an empty list
+			if not item:
+				return words_list
+
+			# prefix is a whole word by itself
+			# add it to the list of matching words
+			if item.end_of_word:
+				words_list.append(prefix)
+			dfs_search_helper(item.children, words_list, prefix)
+
+		return words_list
+
+
+
+
+	# lexicographic sorted sequence of words in the trie
 	def sorted(self):
-		pass
+		return self.prefixMatches("")
 
 
 	# remove all words matching prefix
-	def removeAllPrefix(self, prefix):
+	def removePrefix(self, prefix):
 		pass
+
 

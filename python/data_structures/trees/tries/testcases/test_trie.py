@@ -187,11 +187,53 @@ def test_countPrefix():
 
 
 
+def test_prefixMatches():
+	trie = Trie()
+	trie.add("cdef")
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("acdc")
+	trie.add("bcdef")
+
+	assert(len(trie) == 5)
+	assert(trie.prefixMatches("abc") == ["abc", "abcd"])
+	assert(trie.prefixMatches("a") == ["abc", "abcd", "acdc"])
+	assert(trie.prefixMatches("") == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.prefixMatches() == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.prefixMatches("ad") == [])
+	assert(trie.prefixMatches("b") == ["bcdef"])
+	assert(trie.prefixMatches("c") == ["cdef"])
+	assert(trie.prefixMatches("d") == [])
+
+
+
+def test_sorted():
+	trie = Trie()
+	trie.add("words")
+	trie.add("swords")
+	trie.add("cdef")
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("acdc")
+	trie.add("bcdef")
+	trie.add("bakery")
+	trie.add("oven")
+	trie.add("supercalifragilisticexpialidocious")
+
+	assert(len(trie) == 10)
+	assert(trie.sorted() == ['abc', 'abcd', 'acdc', 'bakery', 'bcdef', 'cdef', 'oven', 
+		'supercalifragilisticexpialidocious', 'swords', 'words'])
+
+
+
+
 if __name__ == '__main__':
 	test_add()
 	test_hasWord()
 	test_hasPrefix()
 	test_frequency()
 	test_countPrefix()
+	test_prefixMatches()
+	test_sorted()
 	
 
