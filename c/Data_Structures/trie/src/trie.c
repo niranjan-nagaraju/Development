@@ -326,20 +326,20 @@ trie_findPrefixMatches(trie_t *trie, const char *prefix, queue_t *words_queue)
 	if(!trie || !trie->root)
 		return 0;
 	
-	node = trie_findPrefixNode(trie, prefix);
-
-	/** prefix does not exist */
-	if (!node) {
-		return 0;
-	}
-
 	memset(matching_word, 0, MAX_WORDLEN);
 
 	/** empty prefix - match every word in the trie */
 	if (!prefix || !prefix[0]) {
 		/** start a dfs search for everything from root */
-		dfs_search(node, words_queue, matching_word, 0);
+		dfs_search(trie->root, words_queue, matching_word, 0);
 	} else {
+		node = trie_findPrefixNode(trie, prefix);
+
+		/** prefix does not exist */
+		if (!node) {
+			return 0;
+		}
+
 		n = strlen(prefix);
 		/** 
 		 * 'prefix' is an actual word in the trie

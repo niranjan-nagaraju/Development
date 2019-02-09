@@ -49,7 +49,6 @@ Items                                               Items
 '''
 
 
-
 '''
 An item in a trie node
 Contains
@@ -99,8 +98,7 @@ class Node(object):
 
 
 
-
-	# [] shotcut to get node item from node at 'character' 
+	# [] shortcut to get node item from node at 'character' 
 	# return None if the node doesn't contain anything at 'key'
 	@check_character
 	def __getitem__(self, character):
@@ -145,12 +143,15 @@ class Node(object):
 
 
 	# return node items and key in current node
-	def __str__(self):
+	def __repr__ (self):
 		sstr = "[%d]: " %(self.__len__())
 		for (character, item) in self.items.items():
-			sstr += "(%s, $:%s f:%d pc:%d)" %(character, item.end_of_word, item.frequency, item.prefix_count)
+			sstr += "(%r, $:%s f:%d pc:%d) " %(character, item.end_of_word, item.frequency, item.prefix_count)
 		return sstr.strip()
 
+
+	def __str__(self):
+		return "[%d]: %s" %(self.__len__(), self.items.keys())
 
 
 
@@ -192,33 +193,79 @@ class Trie(object):
 	# on trie operations
 	def check_root(func):
 		def f(self, *args):
-			if not self.root:
+			if self.root is None:
 				raise TrieEmptyError("TrieEmptyError: '%s(): Trie is empty'" %(func.__name__))
 			rv = func(self, *args)
 			return rv
 		return f
 
 
-	
-	# TODO partial implementation - complete
-	def add(self, word):
-		# TODO: Update frequency if word exists
-		# and return
+	# Return the last node item in the trie for a matching prefix
+	# if it exists, 
+	# if it doesn't, return None
+	def findMatchingPrefixNodeItem(self, prefix):
+		if not prefix:
+			return None
 
+		trav = self.root
+
+		last = trav;
+		for c in prefix:
+			if not trav or not trav[c]:
+				return None
+			last = trav
+			trav = trav[c].children
+
+		# trav is one level below "prefix", and therefore one level too far.
+		# last is at the end node containing prefix.
+		return last[prefix[-1]]
+
+
+
+	# Add a word to the trie
+	# if the word already exists in the trie,
+	#  just update its frequency and return
+	def add(self, word):
 		# First word to be added to the trie
 		# create a root node
 		if not self.root:
 			self.root = Node()
 
+		# Update frequency if word exists
+		# and return
+		# NOTE: Creating 'root' before looking for the word, also ensures 
+		# check_root() passes
+		item = self.findMatchingPrefixNodeItem(word)
+		if item and item.end_of_word == True:
+			item.frequency += 1
+			return
+
 		trav = self.root
 		trav.add(word[0])
-		previous = word[0]
+		p = word[0] # previous character
 		for c in word[1:]:
-			parent = trav
-			trav = trav[previous].children
-			if not trav[c]:
-				trav[c] = NodeItem()
+			child = trav[p].children
 
+			# parent node doesn't have a child node at character p
+			if not child:
+				child = Node()
+				# set parent node's child node at previous character p
+				trav[p].children = child
+
+			# At this point, we have a child node for p from parent node
+			# Set current character,c, in child node
+			child.add(c)
+
+			# move one level down to current character's node
+			trav = child
+			p = c
+
+		# set EoW status, and frequency at the last character of the word
+		trav[p].end_of_word = True
+		trav[p].frequency += 1
+
+		# update number of words in the trie
+		self.num_words += 1
 
 
 
@@ -226,32 +273,93 @@ class Trie(object):
 		pass
 
 
+	# Return true if the trie has 'word'
+	# false otherwise
+	@check_root
 	def hasWord(self, word):
-		pass
+		item = self.findMatchingPrefixNodeItem(word)
+		return item.end_of_word if item else False
 
 
+	# Return true if the trie has 'prefix'
+	# false otherwise
+	@check_root
 	def hasPrefix(self, prefix):
-		pass
+		item = self.findMatchingPrefixNodeItem(prefix)
+		return (item is not None)
 
 
+	# Return word frequency if the trie has 'word'
+	# 0 otherwise
+	@check_root
 	def frequency(self, word):
-		pass
+		item = self.findMatchingPrefixNodeItem(word)
+		if item and item.end_of_word:
+			return item.frequency
+		return 0
 
 
+	# Return number of words that match a prefix
+	# if the trie has words that begin with 'prefix'
+	# 0 if no such prefix exists
+	@check_root
 	def countPrefix(self, prefix):
-		pass
+		item = self.findMatchingPrefixNodeItem(prefix)
+		return item.prefix_count if item else 0
 
 
-	def findPrefixMatches(self, prefix):
-		pass
+
+	# Returns a list of words that match a prefix
+	# if the trie has words that begin with 'prefix'
+	# None if no such prefix exists
+	# raises 'TrieEmptyError' if trie is not initialized
+	@check_root
+	def prefixMatches(self, prefix=None):
+		# DFS search from the matching prefix node 
+		# Return a list of words that start with prefix
+		def dfs_search_helper(node, words_list, prefix=""):
+			if not node:
+				return
+
+			# look for characters set at the current node
+			# sort by keys for a lexicographic order
+			for (c , item) in sorted(node.items.items()):
+				# extend the prefix by the current character
+				if item:
+					words_list.append(prefix + c) if item.end_of_word else None
+					dfs_search_helper(item.children, words_list, prefix + c)
 
 
-	# lexicographic sort
+		# call the dfs helper
+		words_list = []
+		# empty prefix -> match everything in the trie
+		if not prefix:
+			dfs_search_helper(self.root, words_list)
+		else:
+			item = self.findMatchingPrefixNodeItem(prefix)
+			# Couldn't find the prefix in the trie,
+			# return an empty list
+			if not item:
+				return words_list
+
+			# prefix is a whole word by itself
+			# add it to the list of matching words
+			if item.end_of_word:
+				words_list.append(prefix)
+			dfs_search_helper(item.children, words_list, prefix)
+
+		return words_list
+
+
+
+
+	# lexicographic sorted sequence of words in the trie
 	def sorted(self):
-		pass
+		return self.prefixMatches("")
 
 
 	# remove all words matching prefix
-	def removeAllPrefix(self, prefix):
+	def removePrefix(self, prefix):
 		pass
+
 
