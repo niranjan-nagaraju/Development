@@ -15,25 +15,25 @@ def test_add():
 	node = trie.root
 	assert(not node['w'] == False)
 	assert(len(node) == 1) # only 1 character 'w' set in root
-	assert(repr(node) == "[1]: ('w', $:False f:0 pc:1)")
+	assert(repr(node) == "[1]: ('w', $:False f:0)")
 
 	node = node['w'].children
 	assert(not node == False)
 	assert(not node['o'] == False)
 	assert(len(node) == 1) # only 1 character 'o' set in level-1
-	assert(repr(node) == "[1]: ('o', $:False f:0 pc:1)")
+	assert(repr(node) == "[1]: ('o', $:False f:0)")
 
 	node = node['o'].children
 	assert(not node == False)
 	assert(not node['r'] == False)
 	assert(len(node) == 1) # only 1 character 'r' set in level-2
-	assert(repr(node) == "[1]: ('r', $:False f:0 pc:1)")
+	assert(repr(node) == "[1]: ('r', $:False f:0)")
 
 	node = node['r'].children
 	assert(not node == False)
 	assert(not node['d'] == False)
 	assert(len(node) == 1) # only 1 character 'd' set in level-3
-	assert(repr(node) == "[1]: ('d', $:True f:1 pc:1)")
+	assert(repr(node) == "[1]: ('d', $:True f:1)")
 
 	# Add a second word, "words"
 	trie.add("words")
@@ -42,31 +42,31 @@ def test_add():
 	node = trie.root
 	assert(not node['w'] == False)
 	assert(len(node) == 1) # only 1 character 'w' set in root
-	assert(repr(node) == "[1]: ('w', $:False f:0 pc:2)")
+	assert(repr(node) == "[1]: ('w', $:False f:0)")
 
 	node = node['w'].children
 	assert(not node == False)
 	assert(not node['o'] == False)
 	assert(len(node) == 1) # only 1 character 'o' set in level-1
-	assert(repr(node) == "[1]: ('o', $:False f:0 pc:2)")
+	assert(repr(node) == "[1]: ('o', $:False f:0)")
 
 	node = node['o'].children
 	assert(not node == False)
 	assert(not node['r'] == False)
 	assert(len(node) == 1) # only 1 character 'r' set in level-2
-	assert(repr(node) == "[1]: ('r', $:False f:0 pc:2)")
+	assert(repr(node) == "[1]: ('r', $:False f:0)")
 
 	node = node['r'].children
 	assert(not node == False)
 	assert(not node['d'] == False)
 	assert(len(node) == 1) # only 1 character 'd' set in level-3
-	assert(repr(node) == "[1]: ('d', $:True f:1 pc:2)")
+	assert(repr(node) == "[1]: ('d', $:True f:1)")
 
 	node = node['d'].children
 	assert(not node == False)
 	assert(not node['s'] == False)
 	assert(len(node) == 1) # only 1 character 's' set in level-4
-	assert(repr(node) == "[1]: ('s', $:True f:1 pc:1)")
+	assert(repr(node) == "[1]: ('s', $:True f:1)")
 
 	# Add a third word, "abc"
 	trie.add("abc")
@@ -75,19 +75,19 @@ def test_add():
 	node = trie.root
 	assert(not node['a'] == False)
 	assert(len(node) == 2) # only 2 characters 'w' and 'a' set in root
-	assert(repr(node) == "[2]: ('a', $:False f:0 pc:1) ('w', $:False f:0 pc:2)")
+	assert(repr(node) == "[2]: ('a', $:False f:0) ('w', $:False f:0)")
 
 	node = node['a'].children
 	assert(not node == False)
 	assert(not node['b'] == False)
 	assert(len(node) == 1) # only 1 character 'b' set in level-1 below 'a'
-	assert(repr(node) == "[1]: ('b', $:False f:0 pc:1)")
+	assert(repr(node) == "[1]: ('b', $:False f:0)")
 
 	node = node['b'].children
 	assert(not node == False)
 	assert(not node['c'] == False)
 	assert(len(node) == 1) # only 1 character 'c' set in level-2 below 'b'
-	assert(repr(node) == "[1]: ('c', $:True f:1 pc:1)")
+	assert(repr(node) == "[1]: ('c', $:True f:1)")
 
 
 
@@ -160,6 +160,12 @@ def test_frequency():
 
 
 def test_countPrefix():
+	t = Trie()
+	t.add("abcd")
+	#t.add("abc")
+	assert(len(t) == 1)
+	assert(t.countPrefix("abc") == 1)
+
 	trie = Trie()
 	try:
 		assert(trie.countPrefix("word") == 0)
@@ -226,6 +232,99 @@ def test_sorted():
 
 
 
+def test_remove():
+	trie = Trie()
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("abd")
+
+	assert(trie.countPrefix("abc") == 2)
+	assert(trie.countPrefix("a") == 3)
+
+	assert(len(trie) == 3)
+	assert(trie.remove("") == False)
+	assert(len(trie) == 3)
+	assert(trie.remove("a") == False)
+	assert(len(trie) == 3)
+	assert(trie.hasWord("abc") == True)
+	assert(trie.remove("abc") == True)
+	assert(trie.hasWord("abc") == False)
+	assert(len(trie) == 2)
+	assert(trie.countPrefix("abc") == 1)
+	assert(trie.countPrefix("a") == 2)
+
+	# already removed, now it only exists as a prefix
+	assert(trie.remove("abc") == False)
+	assert(len(trie) == 2)
+	assert(trie.hasWord("abd") == True)
+	assert(trie.remove("abd") == True)
+	assert(trie.hasWord("abd") == False)
+	assert(len(trie) == 1)
+	assert(trie.countPrefix("abc") == 1)
+	assert(trie.countPrefix("a") == 1)
+
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.remove("abcd") == True)
+	assert(len(trie) == 0)
+	assert(trie.root == None)
+
+	trie.add("abcd")
+	assert(len(trie) == 1)
+	assert(trie.hasPrefix("abc") == True)
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.countPrefix("abc") == 1)
+	assert(trie.countPrefix("a") == 1)
+
+	assert(trie.remove("abcd") == True)
+	assert(len(trie) == 0)
+	assert(trie.root == None)
+
+
+def test_removePrefix():
+	trie = Trie()
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("abd")
+	trie.add("abce")
+	trie.add("words")
+	trie.add("swords")
+
+	assert(trie.countPrefix("abc") == 3)
+	assert(trie.countPrefix("a") == 4)
+
+	assert(len(trie) == 6)
+	trie.removePrefix("abc")  # removes 'abc', 'abcd' and 'abce'
+
+	# 'ab' should only have 'd' as its child now
+	assert(len(trie) == 3)
+	assert(trie.root['a'].children['b'].children.items.keys() == ['d'])
+	assert(trie.countPrefix("abc") == 0)
+	assert(trie.countPrefix("a") == 1)
+	assert(trie.prefixMatches("a") == ["abd"])
+
+	# try and remove 'abc' again - nothing should change
+	trie.removePrefix("abc")  # removes 'abc', 'abcd' and 'abce'
+	assert(len(trie) == 3)
+	assert(trie.root['a'].children['b'].children.items.keys() == ['d'])
+	assert(trie.countPrefix("abc") == 0)
+	assert(trie.countPrefix("a") == 1)
+	assert(trie.prefixMatches("a") == ["abd"])
+
+	# remove 'a*'
+	trie.removePrefix("a")  # removes 'abd'
+	assert(len(trie) == 2)
+	assert(sorted(trie.root.items.keys()) == ['s', 'w'])
+	assert(trie.countPrefix("abc") == 0)
+	assert(trie.countPrefix("a") == 0)
+	assert(trie.prefixMatches("a") == [])
+	assert(trie.prefixMatches("") == ["swords", "words"])
+
+	# flush the whole trie
+	trie.removePrefix("")
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+
+
 
 if __name__ == '__main__':
 	test_add()
@@ -235,5 +334,8 @@ if __name__ == '__main__':
 	test_countPrefix()
 	test_prefixMatches()
 	test_sorted()
+	test_remove()
+	test_removePrefix()
+
 	
 

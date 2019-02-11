@@ -1,0 +1,11 @@
+trie:
+ + [X] Add word
+ + [X] find if word exists
+ + [X] find if there are words matching a prefix
+ + [X] find number of words that match prefix
+ + [X] find list of words that match prefix
+ + [X] Lexicographic sorted list of words added to the trie
+ + [X] Track frequency of words in the trie
+ + [X] Delete word
+ + [X] Delete all words that match a prefix
+ + Recursive versions of trie operations

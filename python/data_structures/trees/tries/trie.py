@@ -13,7 +13,7 @@ Design:
 	Each node contains the following node items, for each 'allowed' character
 	  $, end-of-word status: that says if there is a word that ends at current node (from the path of characters starting from root)
 	  f, frequency of occurence of the word (valid only if $ is set)
-	  pc: prefix count: number of words that begin the prefix at current node.
+	  pc: prefix count: number of words that begin the prefix at current node (!!: cannot be maintained across prefix removals)
 
 
 e.g.,
@@ -55,14 +55,20 @@ Contains
   children: Child node of current item.
   End of Word status: if the sequence of characters at current item is a whole word
   frequency: if current item is a whole word, its frequency of occurence.
-  prefix_count: Number of words in the trie that begin with the prefix at current item.
+NOTE: prefix_count cannot be accurately maintained in an node item
+      deleting all words that match a prefix for e.g., will need upstream
+	  propagation of how many words were deleted for each prefixes of length 1 to specified prefix.
 '''
 class NodeItem(object):
-	def __init__(self, children=None, eow=False, frequency=0, prefix_count=0):
+	def __init__(self, children=None, eow=False, frequency=0):
 		self.children = children
 		self.end_of_word = eow
 		self.frequency = frequency
-		self.prefix_count = prefix_count
+
+
+	def __str__(self):
+		return "children:%s eow:%s freq:%d" %(self.children, self.end_of_word,
+				self.frequency)
 
 
 
@@ -82,7 +88,7 @@ class Node(object):
 
 	# Length of a node => number of character-keys set in it
 	def __len__(self):
-		return len(self.items)
+		return len(self.items) if self.items else 0
 
 
 
@@ -123,7 +129,6 @@ class Node(object):
 
 		if not self.items.has_key(character):
 			self.items[character] = item
-		self.items[character].prefix_count += 1
 
 
 
@@ -138,7 +143,22 @@ class Node(object):
 	def remove(self, character):
 		if not self[character]:
 			return
+
+		# remove child node link
+		self[character].children = None
+
+		# set item to None so it can be garbage-collected?!
 		self[character] = None
+		# remove character from the current node's hash table
+		self.items.pop(character)
+
+		# if we just removed the last character set in the node,
+		# 'empty' the node as well
+		# NOTE: Is this needed?
+		if not self:
+			self.items = None
+
+
 
 
 
@@ -146,7 +166,7 @@ class Node(object):
 	def __repr__ (self):
 		sstr = "[%d]: " %(self.__len__())
 		for (character, item) in self.items.items():
-			sstr += "(%r, $:%s f:%d pc:%d) " %(character, item.end_of_word, item.frequency, item.prefix_count)
+			sstr += "(%r, $:%s f:%d) " %(character, item.end_of_word, item.frequency)
 		return sstr.strip()
 
 
@@ -200,10 +220,10 @@ class Trie(object):
 		return f
 
 
-	# Return the last node item in the trie for a matching prefix
+	# Return the last node in the trie for a matching prefix
 	# if it exists, 
 	# if it doesn't, return None
-	def findMatchingPrefixNodeItem(self, prefix):
+	def findMatchingPrefixNode(self, prefix):
 		if not prefix:
 			return None
 
@@ -218,7 +238,15 @@ class Trie(object):
 
 		# trav is one level below "prefix", and therefore one level too far.
 		# last is at the end node containing prefix.
-		return last[prefix[-1]]
+		return last
+
+
+	# Return the last node item in the trie for a matching prefix
+	# if it exists, 
+	# if it doesn't, return None
+	def findMatchingPrefixNodeItem(self, prefix):
+		last = self.findMatchingPrefixNode(prefix)
+		return last[prefix[-1]] if last else None
 
 
 
@@ -269,8 +297,131 @@ class Trie(object):
 
 
 
+	# remove a word from the trie
+	@check_root
 	def remove(self, word):
-		pass
+		# Helper function to recursively remove
+		# word from the bottom-up
+		def removehelper(node, word):
+			# we have either reached 'n' levels deep
+			# n: len(word)
+			# or word was "" to begn with
+			# in which case, there's nothing to remove anyway
+			if not word:
+				return True
+
+			# word search ended prematurely
+			# before we could match it
+			# e.g. trie has 'ab', and we are looking for 'abc'
+			if not node:
+				return False
+
+			item = node[word[0]]
+			# couldn't match word completely
+			if not item:
+				return False
+
+			if len(word) == 1:
+				if not item.end_of_word:
+					return False
+				item.end_of_word = False
+
+			# recursively try to remove child nodes
+			# if a child node remove succeeds, check if current node
+			# can safely un-set character,
+			# if un-setting the character in current node makes the node empty
+			# remove the current node too
+			if removehelper(item.children, word[1:]):
+				# child node was matched and 'removed'
+
+				# Either we are at the last character in the word,
+				# or removing the next character in the word rendered the
+				# node empty (i.e. no characters set in the child node)
+				if (not item.children):
+					node.remove(word[0])
+				return True
+
+			# one of the child nodes returned false
+			# so the word couldn't be matched completely
+			return False
+
+
+		# empty word
+		if not word:
+			return False
+
+		# word was found in the trie
+		# and removed using the helper function
+		# update number of words in the trie
+		# and adjust root if the trie becomes empty
+		# post-removal
+		if removehelper(self.root, word):
+			self.num_words -= 1
+			# this was the last word to be removed from the trie
+			# and the trie is now empty
+			if not len(self.root):
+				self.root = None
+			return True
+
+		# helper function did not remove the word
+		# either due to word not being found in the trie
+		# or if it's not completely matched (as a whole word)
+		return False
+
+
+
+
+	# helper function to remove all child nodes below specified node
+	def removeChildNodes(self, node):
+		if not node:
+			return
+
+		for (character, item) in node.items.items():
+			self.removeChildNodes(item.children)
+
+			# if the last character we removed is a word,
+			# update word count in the trie
+			if node[character].end_of_word:
+				self.num_words -= 1
+			node.remove(character)
+
+
+
+	# remove all words matching prefix
+	@check_root
+	def removePrefix(self, prefix):
+		# If an empty prefix is specified
+		# delete the whole trie
+		if not prefix:
+			self.removeChildNodes(self.root)
+			self.root = None
+			# individually removing every character should also
+			# have deducted word count by exactly the
+			# length of the trie
+			assert(self.num_words == 0)
+
+		# Get node containing last character in the prefix
+		last_node = self.findMatchingPrefixNode(prefix)
+		# couldn't match prefix in the trie
+		if not last_node:
+			return
+
+		# call helper function to remove all child nodes of 'last node'
+		self.removeChildNodes(last_node[prefix[-1]].children)
+
+		# If prefix by itself is also a word,
+		# update word count in the trie accordingly
+		# as the prefix (/word) willl also be removed from the trie
+		if last_node[prefix[-1]].end_of_word:
+			self.num_words -= 1
+
+		# remove last character in prefix from the trie as well
+		# e.g. 'ab*' removes * first, and then removes 'b' from as well
+		last_node.remove(prefix[-1])
+
+
+
+
 
 
 	# Return true if the trie has 'word'
@@ -299,13 +450,13 @@ class Trie(object):
 		return 0
 
 
+
 	# Return number of words that match a prefix
 	# if the trie has words that begin with 'prefix'
 	# 0 if no such prefix exists
 	@check_root
 	def countPrefix(self, prefix):
-		item = self.findMatchingPrefixNodeItem(prefix)
-		return item.prefix_count if item else 0
+		return len(self.prefixMatches(prefix))
 
 
 
@@ -357,9 +508,5 @@ class Trie(object):
 	def sorted(self):
 		return self.prefixMatches("")
 
-
-	# remove all words matching prefix
-	def removePrefix(self, prefix):
-		pass
 
 
