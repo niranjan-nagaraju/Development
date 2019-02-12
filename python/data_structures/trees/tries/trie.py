@@ -119,23 +119,18 @@ class Node(object):
 		# and each character-key maps to a node item
 		# or None
 
-		# Item is None => reset current node's item at character-key
-		if item is None:
-			self.items[character] = None
-
 		# Node's character-keys should map to a node item
-		if not isinstance(item, NodeItem):
+		if not (isinstance(item, NodeItem) or item is None):
 			return
 
-		if not self.items.has_key(character):
-			self.items[character] = item
+		self.items[character] = item
 
 
 
 	# Add an item for character-key 
 	def add(self, character):
-		item = NodeItem()
-		self[character] = item
+		if not self[character]:
+			self[character] = NodeItem()
 
 
 
