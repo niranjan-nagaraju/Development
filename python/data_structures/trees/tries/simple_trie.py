@@ -6,38 +6,21 @@ Design:
 	The root has 'n' nodes (n being the number of characters in the universe),
 	  root['A'] -> child node, indicates there is a word that begins with the character, 'A'
 	  the child node's properties, such as eow indicates eow status of 'A'
-	  Additional properties such as prefix count, and frequency can be added to the child nodes.
-
-
-Node(root)
-|-------+-------+-------|
-|  A    |  B    |  C    |
-|-------+-------+-------|Items
-| f:  0 | f:  0 | f:  0 |
-| pc: 0 | pc: 0 | pc: 0 |
-| $:  0 | $:  0 | $:  0 |
-|---+----+-------+------| 
-    |
-    + -------+
-	         |
-			 V
-|-------+-------+-------|                           |-------+-------+-------|
-|  A    |  B    |  C    |                           |  A    |  B    |  C    |
-|-------+-------+-------|Items                      |-------+-------+-------|
-| f:  9 | f:  0 | f:  0 |                           | f:  9 | f:  0 | f:  0 |
-| pc: 2 | pc: 1 | pc: 1 +----------+                | pc: 2 | pc: 1 | pc: 1 +
-| $:  1 | $:  0 | $:  0 |          |                | $:  1 | $:  0 | $:  0 | 
-|---+----+-------+------|          |                |---+----+-------+------| 
-    |                              |
-    +------+                       |
-Node       |                       |                 Node     
-|-------+--v----+-------|       |--v-----+-------+------|    
-|  A    |  B    |  C    |       |  A    |  B    |  C    |
-|-------+-------+-------|       |-------+-------+-------|
-| f:  0 | f:  2 | f:  0 |       | f:  1 | f:  0 | f:  0 |
-| pc: 0 | pc: 1 | pc: 0 |       | pc: 1 | pc: 0 | pc: 0 |
-| $:  0 | $:  1 | $:  0 |       | $:  1 | $:  0 | $:  0 |
-|-------+-------+-------|       |-------+-------+-------|
-Items                                               Items
-  
+	  Additional properties such as frequency can be added to the child nodes.
 '''
+
+class Node:
+	def __init__(self):
+		self.children = {}
+		# indicates if parent node prefix is a whole word
+		self.end_of_word = end_of_word
+
+
+	def add(self, character, eow=False):
+		if not self.children[character]:
+			self.children[character] = Node()
+		self.children[character].end_of_word = eow
+
+
+	def remove(self, character, eow=False):
+		pass
