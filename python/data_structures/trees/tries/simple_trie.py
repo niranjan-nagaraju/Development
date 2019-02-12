@@ -9,18 +9,62 @@ Design:
 	  Additional properties such as frequency can be added to the child nodes.
 '''
 
-class Node:
+class Node(object):
 	def __init__(self):
-		self.children = {}
+		self.characters = {}
 		# indicates if parent node prefix is a whole word
-		self.end_of_word = end_of_word
+		self.end_of_word = False
+		self.frequency = 0 # valid only if end_of_word is true
 
 
-	def add(self, character, eow=False):
-		if not self.children[character]:
-			self.children[character] = Node()
-		self.children[character].end_of_word = eow
+	def add(self, character):
+		if not self.characters.get(character):
+			self.characters[character] = Node()
 
 
 	def remove(self, character, eow=False):
 		pass
+
+
+	def getChildren(self, character):
+		return self.characters.get(character)
+
+
+	def setChildren(self, character):
+		self.characters[character] = Node()
+
+
+	@property
+	def eow(self):
+		return self.end_of_word
+
+
+	@eow.setter
+	def eow(self, end_of_word):
+		if not isinstance(end_of_word, bool):
+			raise TypeError("eow(): end of word should be a boolean value")
+		self.end_of_word = end_of_word
+		if end_of_word == True:
+			self.frequency += 1
+		else:
+			self.frequency -= 1
+
+
+
+
+class Trie(object):
+	def __init__(self):
+		self.root = None
+		self.num_words = 0
+
+
+	def add(self, word):
+		if not self.root:
+			self.root = Node()
+
+		trav = self.root
+		for c in word:
+			trav.add(c)
+			trav = trav.getChildren(c)
+
+		trav.eow = True
