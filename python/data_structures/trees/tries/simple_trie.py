@@ -11,27 +11,53 @@ Design:
 
 class Node(object):
 	def __init__(self):
-		self.characters = {}
+		self.children = {}
 		# indicates if parent node prefix is a whole word
 		self.end_of_word = False
 		self.frequency = 0 # valid only if end_of_word is true
 
 
+	# length of a node is the number of characters
+	# set in the node
+	def __len__(self):
+		return len(self.children)
+
+
+	def __str__(self):
+		return "[%d]: %s" %(len(self), sorted(self.children.keys()))
+
+
+	def __repr__(self):
+		return "%s: " %(self) + ", eow: %s, frequency: %d" %(self.eow, self.frequency) 
+
+
+	# Add a character in the node
+	# If the character is already set, just return without doing nothing
 	def add(self, character):
-		if not self.characters.get(character):
-			self.characters[character] = Node()
+		if not self.children.get(character):
+			self.children[character] = Node()
 
 
-	def remove(self, character, eow=False):
-		pass
 
+	# Remove a character from the node
+	def remove(self, character):
+		node = self.children.get(character)
+		if node is None:
+			return None
 
+		self.children.pop(character)
+		return node
+
+		
+
+	# Get child node of current node at character
 	def getChildren(self, character):
-		return self.characters.get(character)
+		return self.children.get(character)
 
 
+	# set a new child node of current node at character
 	def setChildren(self, character):
-		self.characters[character] = Node()
+		self.children[character] = Node()
 
 
 	@property
@@ -67,4 +93,9 @@ class Trie(object):
 			trav.add(c)
 			trav = trav.getChildren(c)
 
+		# first time we are adding the word, increase number of words
+		if not trav.eow:
+			self.num_words += 1
+
+		# mark EoW and increase frequency
 		trav.eow = True
