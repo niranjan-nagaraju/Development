@@ -40,8 +40,8 @@ def test_basic():
 	assert(node2['C'] is not None)
 	node2['C'].frequency = 1
 	node2['C'].end_of_word = True
-	assert(repr(node2) == "[2]: ('C', $:True f:1) ('B', $:True f:1)")
-	assert(str(node2) == "[2]: ['C', 'B']")
+	assert(repr(node2) == "[2]: ('B', $:True f:1) ('C', $:True f:1)")
+	assert(str(node2) == "[2]: ['B', 'C']")
 	assert(len(node2) == 2)
 	assert(node['A'].children == node2)
 	assert(node2['C'].children == None)

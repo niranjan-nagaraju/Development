@@ -160,13 +160,13 @@ class Node(object):
 	# return node items and key in current node
 	def __repr__ (self):
 		sstr = "[%d]: " %(self.__len__())
-		for (character, item) in self.items.items():
+		for (character, item) in sorted(self.items.items()):
 			sstr += "(%r, $:%s f:%d) " %(character, item.end_of_word, item.frequency)
 		return sstr.strip()
 
 
 	def __str__(self):
-		return "[%d]: %s" %(self.__len__(), self.items.keys())
+		return "[%d]: %s" %(self.__len__(), sorted(self.items.keys()))
 
 
 
