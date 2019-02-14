@@ -94,15 +94,17 @@ def test_add():
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
 
-	trie.add("abc")
+	trie.add("abc", "first word")
 	assert(trie.num_words == 2)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 1)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').end_of_word == True)
+	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == "first word")
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
 
 	trie.add("abc") # Increase frequency
 	assert(trie.num_words == 2)
+	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == None)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 2)
 
@@ -119,3 +121,4 @@ def trie_testcases():
 if __name__ == '__main__':
 	node_testcases()
 	trie_testcases()
+

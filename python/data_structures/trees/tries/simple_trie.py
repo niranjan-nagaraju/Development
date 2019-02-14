@@ -95,7 +95,9 @@ class Trie(object):
 		self.num_words = 0
 
 
-	def add(self, word):
+	# add a word to the trie
+	# If data is provided for word, add that too
+	def add(self, word, data=None):
 		if not self.root:
 			self.root = Node()
 
@@ -110,3 +112,7 @@ class Trie(object):
 
 		# mark EoW and increase frequency
 		trav.eow = True
+		trav.data = data
+
+
+	
