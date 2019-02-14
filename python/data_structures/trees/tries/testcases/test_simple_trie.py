@@ -57,7 +57,23 @@ def node_testcases():
 	assert(str(n) == "[2]: ['A', 'B']")
 	assert(str(nc) == "[0]: []")
 
+	nc.add('C') # AC
+	assert(str(nc) == "[1]: ['C']")
+	nc.getChildren('C').eow = True
+	assert(n.getChildren('A').getChildren('C').eow == True)
+	assert(n.getChildren('A').getChildren('C').frequency == 1)
 
+	# removing 'A' should not do anything at this point,
+	# since there's AC on the trie
+	node = n.remove('A')
+	assert(node == nc)
+	assert(str(node) == "[1]: ['C']")
+
+
+	# try to remove 'C' from child node
+	node = nc.remove('C')
+	assert(len(nc) == 0) # 'C' was removed, and its empty child node too
+	assert(len(node) == 0) # child node returned was empty
 
 
 # trie node testcases

@@ -40,12 +40,23 @@ class Node(object):
 
 
 	# Remove a character from the node
+	# if the character has a child node that's not empty, then do nothing
+	#    => character is part of a prefix and there are still words
+	#    with character as part of their prefix
 	def remove(self, character):
 		node = self.children.get(character)
+		# character is not in the node
 		if node is None:
 			return None
 
-		self.children.pop(character)
+		# character has an empty child node
+		# un-set the character from the node
+		# and remove the empty child node
+		if not node:
+			self.children[character] = None
+			self.children.pop(character)
+
+		# return the child node
 		return node
 
 		
