@@ -92,6 +92,8 @@ def test_add():
 
 
 
+
+
 def test_hasWord():
 	trie = Trie()
 	try:
@@ -326,6 +328,37 @@ def test_removePrefix():
 
 
 
+def test_search():
+	trie = Trie()
+	try:
+		assert(trie.search("word") == None)
+	except TrieEmptyError as e:
+		assert(e.message == "TrieEmptyError: 'search(): Trie is empty'")
+
+	trie.add("word", "word #1")
+	trie.add("words", "plural of words")
+	trie.add("sword", "sword sheath excalibur")
+
+	assert(len(trie) == 3)
+	assert(trie.search("word") == "word #1")
+	assert(trie.frequency("word") == 1)
+
+	trie.add("word")
+	assert(trie.search("word") == None) # overrridden by second 'add'
+	assert(trie.frequency("word") == 2)
+
+	trie.add("word", "words are found in a dictionary")
+	assert(trie.search("word") == "words are found in a dictionary") # overrridden by third 'add'
+	assert(trie.frequency("word") == 3)
+
+	assert(trie.search("words") == "plural of words")
+	assert(trie.search("sword") == "sword sheath excalibur")
+
+	# prefixes dont have storage
+	assert(trie.search("swo") == None)
+
+
+
 if __name__ == '__main__':
 	test_add()
 	test_hasWord()
@@ -336,6 +369,7 @@ if __name__ == '__main__':
 	test_sorted()
 	test_remove()
 	test_removePrefix()
+	test_search()
 
 	
 

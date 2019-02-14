@@ -14,7 +14,10 @@ def test_basic():
 	assert(len(node) == 0)
 	assert(not node == True)
 
-	node['A'] = NodeItem(None, eow=False, frequency=2)
+	node['A'] = NodeItem(None, eow=False, frequency=2, data='A')
+	assert(repr(node['A']) == "Data:'A' children:None eow:False freq:2")
+	assert(repr(node['A'] == 'A'))
+	assert(str(node['A'] == 'A'))
 	assert(repr(node) == "[1]: ('A', $:False f:2)")
 	assert(str(node) == "[1]: ['A']")
 	assert(len(node) == 1)

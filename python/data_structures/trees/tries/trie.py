@@ -60,15 +60,19 @@ NOTE: prefix_count cannot be accurately maintained in an node item
 	  propagation of how many words were deleted for each prefixes of length 1 to specified prefix.
 '''
 class NodeItem(object):
-	def __init__(self, children=None, eow=False, frequency=0):
+	def __init__(self, children=None, eow=False, frequency=0, data=None):
 		self.children = children
 		self.end_of_word = eow
 		self.frequency = frequency
+		self.data = data
 
+
+	def __repr__(self):
+		return "Data:%r children:%s eow:%s freq:%d" %(self.data, self.children, self.end_of_word,
+				self.frequency)
 
 	def __str__(self):
-		return "children:%s eow:%s freq:%d" %(self.children, self.end_of_word,
-				self.frequency)
+		return str(self.data)
 
 
 
@@ -248,7 +252,7 @@ class Trie(object):
 	# Add a word to the trie
 	# if the word already exists in the trie,
 	#  just update its frequency and return
-	def add(self, word):
+	def add(self, word, data=None):
 		# First word to be added to the trie
 		# create a root node
 		if not self.root:
@@ -261,6 +265,7 @@ class Trie(object):
 		item = self.findMatchingPrefixNodeItem(word)
 		if item and item.end_of_word == True:
 			item.frequency += 1
+			item.data = data
 			return
 
 		trav = self.root
@@ -286,6 +291,7 @@ class Trie(object):
 		# set EoW status, and frequency at the last character of the word
 		trav[p].end_of_word = True
 		trav[p].frequency += 1
+		trav[p].data = data
 
 		# update number of words in the trie
 		self.num_words += 1
@@ -417,6 +423,11 @@ class Trie(object):
 
 
 
+	# Return trie item if word exists in the trie
+	@check_root
+	def search(self, word):
+		item = self.findMatchingPrefixNodeItem(word)
+		return item.data if item else None
 
 
 	# Return true if the trie has 'word'
