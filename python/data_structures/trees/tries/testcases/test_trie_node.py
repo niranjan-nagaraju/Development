@@ -3,6 +3,12 @@ sys.path.append("../../../../")
 from data_structures.trees.tries.trie import Node, NodeItem
 
 
+def test_nodeItem():
+	item = NodeItem(data='data-field')
+	assert(item.value == 'data-field')
+	assert(repr(item) == "Data:'data-field' children:None $:False f:0")
+
+
 def test_basic():
 	node = Node()
 	try:
@@ -15,7 +21,7 @@ def test_basic():
 	assert(not node == True)
 
 	node['A'] = NodeItem(None, eow=False, frequency=2, data='A')
-	assert(repr(node['A']) == "Data:'A' children:None eow:False freq:2")
+	assert(repr(node['A']) == "Data:'A' children:None $:False f:2")
 	assert(repr(node['A'] == 'A'))
 	assert(str(node['A'] == 'A'))
 	assert(repr(node) == "[1]: ('A', $:False f:2)")
@@ -52,6 +58,8 @@ def test_basic():
 	assert(node2['C'].frequency == 1)
 
 
+
+
 def test_remove():
 	node = Node()
 	node.add('a')
@@ -64,6 +72,7 @@ def test_remove():
 
 
 if __name__ == "__main__":
+	test_nodeItem()
 	test_basic()
 	test_remove()
 

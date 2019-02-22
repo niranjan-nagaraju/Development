@@ -164,7 +164,6 @@ def test_frequency():
 def test_countPrefix():
 	t = Trie()
 	t.add("abcd")
-	#t.add("abc")
 	assert(len(t) == 1)
 	assert(t.countPrefix("abc") == 1)
 
@@ -194,8 +193,26 @@ def test_countPrefix():
 	assert(trie.countPrefix("so") == 0)
 
 
-
 def test_prefixMatches():
+	trie = Trie()
+	trie.add("cdef")
+	trie.add("abcd", "hello")
+	trie.add("abc", "world")
+	trie.add("acdc", "Back in Black")
+	trie.add("bcdef", "bleargh!")
+
+	assert(len(trie) == 5)
+	assert(trie.prefixMatches("abc") == [("abc", "world"), ("abcd", "hello")])
+	assert(trie.prefixMatches("a") == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black")])
+	assert(trie.prefixMatches("") == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black"), ("bcdef", "bleargh!"), ("cdef", None)])
+	assert(trie.prefixMatches() == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black"), ("bcdef", "bleargh!"), ("cdef", None)])
+	assert(trie.prefixMatches("ad") == [])
+	assert(trie.prefixMatches("b") == [("bcdef", "bleargh!")])
+	assert(trie.prefixMatches("c") == [("cdef", None)])
+	assert(trie.prefixMatches("d") == [])
+
+
+def test_findKeysMatchingPrefix():
 	trie = Trie()
 	trie.add("cdef")
 	trie.add("abcd")
@@ -204,14 +221,14 @@ def test_prefixMatches():
 	trie.add("bcdef")
 
 	assert(len(trie) == 5)
-	assert(trie.prefixMatches("abc") == ["abc", "abcd"])
-	assert(trie.prefixMatches("a") == ["abc", "abcd", "acdc"])
-	assert(trie.prefixMatches("") == ["abc", "abcd", "acdc", "bcdef", "cdef"])
-	assert(trie.prefixMatches() == ["abc", "abcd", "acdc", "bcdef", "cdef"])
-	assert(trie.prefixMatches("ad") == [])
-	assert(trie.prefixMatches("b") == ["bcdef"])
-	assert(trie.prefixMatches("c") == ["cdef"])
-	assert(trie.prefixMatches("d") == [])
+	assert(trie.findKeysMatchingPrefix("abc") == ["abc", "abcd"])
+	assert(trie.findKeysMatchingPrefix("a") == ["abc", "abcd", "acdc"])
+	assert(trie.findKeysMatchingPrefix("") == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.findKeysMatchingPrefix() == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.findKeysMatchingPrefix("ad") == [])
+	assert(trie.findKeysMatchingPrefix("b") == ["bcdef"])
+	assert(trie.findKeysMatchingPrefix("c") == ["cdef"])
+	assert(trie.findKeysMatchingPrefix("d") == [])
 
 
 
@@ -236,37 +253,37 @@ def test_sorted():
 
 def test_remove():
 	trie = Trie()
-	trie.add("abcd")
-	trie.add("abc")
-	trie.add("abd")
+	trie.add("abcd", "abcd")
+	trie.add("abc", "testing abc")
+	trie.add("abd", "Node abd")
 
 	assert(trie.countPrefix("abc") == 2)
 	assert(trie.countPrefix("a") == 3)
 
 	assert(len(trie) == 3)
-	assert(trie.remove("") == False)
+	assert(trie.remove("") == None)
 	assert(len(trie) == 3)
-	assert(trie.remove("a") == False)
+	assert(trie.remove("a") == None)
 	assert(len(trie) == 3)
 	assert(trie.hasWord("abc") == True)
-	assert(trie.remove("abc") == True)
+	assert(trie.remove("abc") == "testing abc")
 	assert(trie.hasWord("abc") == False)
 	assert(len(trie) == 2)
 	assert(trie.countPrefix("abc") == 1)
 	assert(trie.countPrefix("a") == 2)
 
 	# already removed, now it only exists as a prefix
-	assert(trie.remove("abc") == False)
+	assert(trie.remove("abc") == None)
 	assert(len(trie) == 2)
 	assert(trie.hasWord("abd") == True)
-	assert(trie.remove("abd") == True)
+	assert(trie.remove("abd") == "Node abd")
 	assert(trie.hasWord("abd") == False)
 	assert(len(trie) == 1)
 	assert(trie.countPrefix("abc") == 1)
 	assert(trie.countPrefix("a") == 1)
 
 	assert(trie.hasWord("abcd") == True)
-	assert(trie.remove("abcd") == True)
+	assert(trie.remove("abcd") == "abcd")
 	assert(len(trie) == 0)
 	assert(trie.root == None)
 
@@ -277,7 +294,7 @@ def test_remove():
 	assert(trie.countPrefix("abc") == 1)
 	assert(trie.countPrefix("a") == 1)
 
-	assert(trie.remove("abcd") == True)
+	assert(trie.remove("abcd") == None)
 	assert(len(trie) == 0)
 	assert(trie.root == None)
 
@@ -302,7 +319,7 @@ def test_removePrefix():
 	assert(trie.root['a'].children['b'].children.items.keys() == ['d'])
 	assert(trie.countPrefix("abc") == 0)
 	assert(trie.countPrefix("a") == 1)
-	assert(trie.prefixMatches("a") == ["abd"])
+	assert(trie.findKeysMatchingPrefix("a") == ["abd"])
 
 	# try and remove 'abc' again - nothing should change
 	trie.removePrefix("abc")  # removes 'abc', 'abcd' and 'abce'
@@ -310,7 +327,7 @@ def test_removePrefix():
 	assert(trie.root['a'].children['b'].children.items.keys() == ['d'])
 	assert(trie.countPrefix("abc") == 0)
 	assert(trie.countPrefix("a") == 1)
-	assert(trie.prefixMatches("a") == ["abd"])
+	assert(trie.findKeysMatchingPrefix("a") == ["abd"])
 
 	# remove 'a*'
 	trie.removePrefix("a")  # removes 'abd'
@@ -318,8 +335,8 @@ def test_removePrefix():
 	assert(sorted(trie.root.items.keys()) == ['s', 'w'])
 	assert(trie.countPrefix("abc") == 0)
 	assert(trie.countPrefix("a") == 0)
-	assert(trie.prefixMatches("a") == [])
-	assert(trie.prefixMatches("") == ["swords", "words"])
+	assert(trie.findKeysMatchingPrefix("a") == [])
+	assert(trie.findKeysMatchingPrefix("") == ["swords", "words"])
 
 	# flush the whole trie
 	trie.removePrefix("")
@@ -354,8 +371,69 @@ def test_search():
 	assert(trie.search("words") == "plural of words")
 	assert(trie.search("sword") == "sword sheath excalibur")
 
-	# prefixes dont have storage
-	assert(trie.search("swo") == None)
+	try:
+		# prefixes dont have storage
+		assert(trie.search("swo") == None)
+	except KeyError as e:
+		assert(e.message == "__getitem__(): Word 'swo' not found in trie")
+
+
+
+
+def test_indexing():
+	trie = Trie()
+	trie.add("abcd", "abcd")
+	trie.add("abc", "ABC")
+	trie.add("abd", "")
+	trie.add("abce", (1,2))
+	trie.add("words", ["one", "two", "three"])
+	trie.add("swords")
+	assert(len(trie) == 6)
+
+	try:
+		hit_exception = True
+		assert(trie["a"] == 1)
+		hit_exception = False
+	except KeyError as e: # we haven't added 'a' yet, it exists only as a prefix
+		assert(e.message == "__getitem__(): Word 'a' not found in trie")
+	assert(hit_exception == True)
+
+	trie["a"] = 1
+	assert(trie.search("a") == 1)
+	assert(trie["a"] == 1)
+	assert(len(trie) == 7)
+
+	assert(trie["swords"] == None)
+	trie["swords"] = "new value"
+	assert(trie["swords"] == "new value")
+	assert(len(trie) == 7) # len doesn't change on update
+
+	assert(trie["abcd"] == "abcd")
+	assert(trie["abc"] == "ABC")
+	assert(trie["abd"] == "")
+	assert(trie["abce"] == (1,2))
+	assert(trie["words"] == ["one", "two", "three"])
+
+
+
+def test_destroy():
+	trie = Trie()
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+	assert(not trie == True)
+
+	trie.add("abcd", "abcd")
+	trie.add("abc", "ABC")
+	trie.add("abd", "")
+	trie.add("abce", (1,2))
+	trie.add("words", ["one", "two", "three"])
+	trie.add("swords")
+	assert(len(trie) == 6)
+
+	trie.destroy()
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+	assert(not trie == True)
 
 
 
@@ -365,11 +443,15 @@ if __name__ == '__main__':
 	test_hasPrefix()
 	test_frequency()
 	test_countPrefix()
+	test_findKeysMatchingPrefix()
 	test_prefixMatches()
 	test_sorted()
 	test_remove()
 	test_removePrefix()
 	test_search()
+	test_indexing()
+	test_destroy()
+
 
 	
 

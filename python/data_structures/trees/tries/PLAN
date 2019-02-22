@@ -8,4 +8,6 @@ trie:
  + [X] Track frequency of words in the trie
  + [X] Delete word
  + [X] Delete all words that match a prefix
+ + [X] Destroy - remove everything from the trie
+ + [X] Storage - Add storage to trie, so a trie can be used as a key-value store
  + Recursive versions of trie operations
