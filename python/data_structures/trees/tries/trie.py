@@ -493,7 +493,7 @@ class Trie(object):
 	Return its assciated data upon successful removal
 	'''
 	@check_root
-	def remove(self, word):
+	def remove(self, word, forceremove=False):
 		# Helper function to recursively remove
 		# word from the bottom-up
 		def removehelper(node, word):
@@ -515,10 +515,22 @@ class Trie(object):
 			if not item:
 				return False
 
+			# last character of the word
 			if len(word) == 1:
+				# not a complete word, just a prefix,
+				# return False as whole word couldn't be matched
+				# NOTE: since, we already checked if 'word'
+				# is a whole word before calling this helper
+				# this shouldn't ever hold,
+				# but, it doesnt hurt (another redundant check)
 				if not item.end_of_word:
 					return False
+
+				# unset EoW status, and remove user data
+				# if this is not a prefix to other words,
+				# the entire item will be removed later
 				item.end_of_word = False
+				item.data = None
 
 			# recursively try to remove child nodes
 			# if a child node remove succeeds, check if current node
@@ -528,11 +540,23 @@ class Trie(object):
 			if removehelper(item.children, word[1:]):
 				# child node was matched and 'removed'
 
+				# one of the prefixes is a word in itself
+				# do not remove this whole path
+				# return true from here, so upper nodes will see they have a child left
+				# and wont remove themselves
+				if item.end_of_word:
+					return True
+
 				# Either we are at the last character in the word,
 				# or removing the next character in the word rendered the
 				# node empty (i.e. no characters set in the child node)
 				if (not item.children):
 					node.remove(word[0])
+				
+				# communicate to higher levels that word was matched
+				# and 'deleted'
+				# if word had children, or if its prefixes were words themselves
+				# then the entire path wouldn't be removed
 				return True
 
 			# one of the child nodes returned false
@@ -541,13 +565,23 @@ class Trie(object):
 
 
 		# Lookup word before deleting
-		try:
-			value = self[word]
-		except KeyError:
+		item = self.findMatchingPrefixNodeItem(word)
+		if not item or (not item.end_of_word):
 			return None
 
-		# word was found in the trie
-		# and removed using the helper function
+		# if forceremove is not set, just decrement frequency
+		# but if frequency hits 0, remove the word from the trie anyway
+		item.frequency -= 1
+		value = item.value
+		if not forceremove:
+			if item.frequency != 0:
+				return value
+
+
+		# At this point, 
+		# either forceremove is set, or frequency of the word has hit 0
+
+		# Find word and remove using the helper function
 		# update number of words in the trie
 		# and adjust root if the trie becomes empty
 		# post-removal
@@ -625,3 +659,4 @@ class Trie(object):
 	'''
 	def destroy(self):
 		self.removePrefix()
+
