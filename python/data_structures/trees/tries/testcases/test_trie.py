@@ -255,10 +255,12 @@ def test_remove():
 	trie = Trie()
 	trie.add("abcd", "abcd")
 	trie.add("abc", "testing abc")
+	trie.add("abc", "testing abc")
 	trie.add("abd", "Node abd")
 
 	assert(trie.countPrefix("abc") == 2)
 	assert(trie.countPrefix("a") == 3)
+	assert(trie.frequency("abc") == 2)
 
 	assert(len(trie) == 3)
 	assert(trie.remove("") == None)
@@ -266,7 +268,7 @@ def test_remove():
 	assert(trie.remove("a") == None)
 	assert(len(trie) == 3)
 	assert(trie.hasWord("abc") == True)
-	assert(trie.remove("abc") == "testing abc")
+	assert(trie.remove("abc", True) == "testing abc") # force remove
 	assert(trie.hasWord("abc") == False)
 	assert(len(trie) == 2)
 	assert(trie.countPrefix("abc") == 1)
@@ -288,15 +290,45 @@ def test_remove():
 	assert(trie.root == None)
 
 	trie.add("abcd")
+	trie.add("abcd")
+	trie.add("abcd")
+	assert(trie.frequency("abcd") == 3)
 	assert(len(trie) == 1)
 	assert(trie.hasPrefix("abc") == True)
 	assert(trie.hasWord("abcd") == True)
 	assert(trie.countPrefix("abc") == 1)
 	assert(trie.countPrefix("a") == 1)
 
-	assert(trie.remove("abcd") == None)
+	assert(trie.remove("abcd") == None) # soft remove, reduce frequency
+	assert(len(trie) == 1)
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.frequency("abcd") == 2)
+
+	trie.add("abcd", "what")
+	assert(trie.frequency("abcd") == 3)
+	
+	trie.add("abc")
+
+	assert(len(trie) == 2)
+	assert(trie.remove("abcd", True) == "what") # remove unconditionally
+	assert(len(trie) == 1)
+	assert(trie.hasWord("abc") == True)
+	assert(trie.hasWord("abcd") == False)
+
+	assert(trie.remove("abc") == None) # soft remove, reduce frequency + delete because f:0
 	assert(len(trie) == 0)
 	assert(trie.root == None)
+
+	trie.add("ab")
+	trie.add("abcd")
+	assert(len(trie) == 2)
+	assert(trie.remove("abcd") == None)
+	assert(len(trie) == 1)
+	assert(trie.hasWord("ab") == True)
+	assert(trie.hasWord("abcd") == False)
+	assert(trie.hasPrefix("abc") == False)
+	assert(trie.root['a'].children['b'].children.items == None)
+
 
 
 def test_removePrefix():
