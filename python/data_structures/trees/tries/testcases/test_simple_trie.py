@@ -6,7 +6,7 @@ from data_structures.trees.tries.simple_trie import Trie, Node
 # trie node testcases
 def node_testcases():
 	n = Node()
-	assert(not n == True)
+	assert((not n) == False)
 	assert(len(n) == 0)
 
 	n.add('A')

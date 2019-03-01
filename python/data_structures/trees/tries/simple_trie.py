@@ -28,6 +28,9 @@ class Node(object):
 		self.frequency = 0 # valid only if end_of_word is true
 
 
+	def __nonzero__(self):
+		return True
+
 	'''
 	length of a node is the number of characters
 	set in the node
@@ -55,7 +58,7 @@ class Node(object):
 	If the character is already set, just return without doing nothing
 	'''
 	def add(self, character):
-		if self.children.get(character) is None:
+		if not self.children.get(character):
 			self.children[character] = Node()
 
 
@@ -74,7 +77,7 @@ class Node(object):
 		# character has an empty child node
 		# un-set the character from the node
 		# and remove the empty child node
-		if not node:
+		if not node.children:
 			self.children[character] = None
 			self.children.pop(character)
 
@@ -207,7 +210,7 @@ class Trie(object):
 		trav = self.root
 		for p in prefix:
 			tmp = trav.getChildren(p)
-			if tmp is None:
+			if not tmp:
 				return False
 			trav = tmp
 
@@ -222,7 +225,7 @@ class Trie(object):
 	def hasPrefix_r(self, prefix):
 		def hasPrefix_helper(root, prefix):
 			# couldn't match prefix
-			if root is None:
+			if not root:
 				return False
 			
 			if not prefix:
