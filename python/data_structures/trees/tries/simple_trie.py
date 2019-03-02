@@ -238,3 +238,47 @@ class Trie(object):
 
 		return hasPrefix_helper(self.root, prefix)
 
+
+
+	'''
+	Return if 'word' is present as a whole word in the trie
+	'''
+	def hasWord(self, word):
+		if not self.root:
+			return False
+
+		trav = self.root
+		for c in word:
+			tmp = trav.getChildren(c)
+			if not tmp:
+				return False
+			trav = tmp
+
+		if	not trav:
+			return False
+
+		return trav.eow
+
+
+	'''
+	Recursive version
+	Return if 'word' is present as a whole word in the trie
+	'''
+	def hasWord_r(self, word):
+		def hasWord_helper(root, word):
+			# couldn't match word
+			if not root:
+				return False
+			
+			if not word:
+				return root.eow
+
+			return hasWord_helper(root.getChildren(word[0]), word[1:])
+
+
+		if not self.root:
+			return False
+
+		return hasWord_helper(self.root, word)
+
+

@@ -202,12 +202,50 @@ def test_hasPrefix_r():
 	assert(trie.hasPrefix("so") == False)
 
 
+def test_hasWord():
+	trie = Trie()
+	assert(trie.hasWord("word") == False)
+
+	trie.add("word")
+	trie.add("words")
+	trie.add("sword")
+
+	assert(len(trie) == 3)
+	assert(trie.hasWord("word") == True)
+	assert(trie.hasWord("wort") == False)
+	assert(trie.hasWord("words") == True)
+	assert(trie.hasWord("wor") == False)
+	assert(trie.hasWord("sword") == True)
+	assert(trie.hasWord("swords") == False)
+
+
+def test_hasWord_r():
+	trie = Trie()
+	assert(trie.hasWord("word") == False)
+
+	trie.add("word")
+	trie.add_r("words")
+	trie.add("sword")
+
+	assert(len(trie) == 3)
+	assert(trie.hasWord_r("word") == True)
+	assert(trie.hasWord_r("wort") == False)
+	assert(trie.hasWord_r("words") == True)
+	assert(trie.hasWord_r("wor") == False)
+	assert(trie.hasWord_r("sword") == True)
+	assert(trie.hasWord_r("swords") == False)
+
+
 
 def trie_testcases():
 	test_add()
 	test_add_r()
 	test_hasPrefix()
 	test_hasPrefix_r()
+	test_hasWord()
+	test_hasWord_r()
+
+
 
 # trie testcases
 
