@@ -8,4 +8,4 @@ class Node:
 		return "{0}".format(self.value)
 
 	def __repr__(self):
-		return "%r" %(self.value)
+		return "%s -> %s" %(self.value, self.next)
