@@ -83,11 +83,15 @@ def node_testcases():
 '''
 Test add word to trie (iterative version)
 '''
-def test_add():
+def test_add(recursive=False):
 	trie = Trie()
 	assert(trie.num_words == 0)
 
-	trie.add("abcd")
+	add_fn = trie.add
+	if recursive:
+		add_fn = trie.add_r
+
+	add_fn("abcd")
 	assert(trie.num_words == 1)
 	assert(trie.root.getChildren('a').end_of_word == False)
 	assert(trie.root.getChildren('a').frequency == 0)
@@ -98,7 +102,7 @@ def test_add():
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
 
-	trie.add("abc", "first word")
+	add_fn("abc", "first word")
 	assert(trie.num_words == 2)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 1)
@@ -106,72 +110,14 @@ def test_add():
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == "first word")
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
 
-	trie.add("abc") # Increase frequency
+	add_fn("abc") # Increase frequency
 	assert(trie.num_words == 2)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == None)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
 	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 2)
 
 
-
-'''
-Test add word to trie (recursive version)
-'''
-def test_add_r():
-	trie = Trie()
-	assert(trie.num_words == 0)
-
-	trie.add_r("abcd")
-	assert(trie.num_words == 1)
-	assert(trie.root.getChildren('a').end_of_word == False)
-	assert(trie.root.getChildren('a').frequency == 0)
-	assert(trie.root.getChildren('a').getChildren('b').end_of_word == False)
-	assert(trie.root.getChildren('a').getChildren('b').frequency == 0)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == False)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 0)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').end_of_word == True)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
-
-	trie.add_r("abc", "first word")
-	assert(trie.num_words == 2)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 1)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').end_of_word == True)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == "first word")
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').getChildren('d').frequency == 1)
-
-	trie.add_r("abc") # Increase frequency
-	assert(trie.num_words == 2)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').data == None)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').end_of_word == True)
-	assert(trie.root.getChildren('a').getChildren('b').getChildren('c').frequency == 2)
-
-
-def test_hasPrefix():
-	trie = Trie()
-	assert(trie.hasPrefix("word") == False)
-
-	trie.add("word")
-	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').end_of_word == True)
-
-	trie.add("words")
-	trie.add("sword")
-
-	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').end_of_word == True)
-	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').getChildren('s').end_of_word == True)
-
-	assert(len(trie) == 3)
-	assert(trie.hasPrefix("word") == True)
-	assert(trie.hasPrefix("wor") == True)
-	assert(trie.hasPrefix("wort") == False)
-	assert(trie.hasPrefix("words") == True)
-	assert(trie.hasPrefix("sword") == True)
-	assert(trie.hasPrefix("swo") == True)
-	assert(trie.hasPrefix("so") == False)
-
-
-
-def test_hasPrefix_r():
+def test_hasPrefix(recursive=False):
 	trie = Trie()
 	assert(trie.hasPrefix("word") == False)
 
@@ -179,61 +125,46 @@ def test_hasPrefix_r():
 	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').end_of_word == True)
 
 	trie.add_r("words")
-	trie.add_r("sword")
+	trie.add("sword")
 
 	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').end_of_word == True)
 	assert(trie.root.getChildren('w').getChildren('o').getChildren('r').getChildren('d').getChildren('s').end_of_word == True)
 
 	assert(len(trie) == 3)
-	assert(trie.hasPrefix_r("word") == True)
-	assert(trie.hasPrefix_r("wor") == True)
-	assert(trie.hasPrefix_r("wort") == False)
-	assert(trie.hasPrefix_r("words") == True)
-	assert(trie.hasPrefix_r("sword") == True)
-	assert(trie.hasPrefix_r("swo") == True)
-	assert(trie.hasPrefix_r("so") == False)
 
-	assert(trie.hasPrefix("word") == True)
-	assert(trie.hasPrefix("wor") == True)
-	assert(trie.hasPrefix("wort") == False)
-	assert(trie.hasPrefix("words") == True)
-	assert(trie.hasPrefix("sword") == True)
-	assert(trie.hasPrefix("swo") == True)
-	assert(trie.hasPrefix("so") == False)
+	hasPrefix_fn = trie.hasPrefix
+	if recursive:
+		hasPrefix_fn = trie.hasPrefix_r
+
+	assert(hasPrefix_fn("word") == True)
+	assert(hasPrefix_fn("wor") == True)
+	assert(hasPrefix_fn("wort") == False)
+	assert(hasPrefix_fn("words") == True)
+	assert(hasPrefix_fn("sword") == True)
+	assert(hasPrefix_fn("swo") == True)
+	assert(hasPrefix_fn("so") == False)
 
 
-def test_hasWord():
+
+def test_hasWord(recursive=False):
 	trie = Trie()
 	assert(trie.hasWord("word") == False)
 
 	trie.add("word")
 	trie.add("words")
 	trie.add("sword")
-
 	assert(len(trie) == 3)
-	assert(trie.hasWord("word") == True)
-	assert(trie.hasWord("wort") == False)
-	assert(trie.hasWord("words") == True)
-	assert(trie.hasWord("wor") == False)
-	assert(trie.hasWord("sword") == True)
-	assert(trie.hasWord("swords") == False)
 
+	hasWord_fn = trie.hasWord
+	if recursive:
+		hasWord_fn = trie.hasWord_r
 
-def test_hasWord_r():
-	trie = Trie()
-	assert(trie.hasWord("word") == False)
-
-	trie.add("word")
-	trie.add_r("words")
-	trie.add("sword")
-
-	assert(len(trie) == 3)
-	assert(trie.hasWord_r("word") == True)
-	assert(trie.hasWord_r("wort") == False)
-	assert(trie.hasWord_r("words") == True)
-	assert(trie.hasWord_r("wor") == False)
-	assert(trie.hasWord_r("sword") == True)
-	assert(trie.hasWord_r("swords") == False)
+	assert(hasWord_fn("word") == True)
+	assert(hasWord_fn("wort") == False)
+	assert(hasWord_fn("words") == True)
+	assert(hasWord_fn("wor") == False)
+	assert(hasWord_fn("sword") == True)
+	assert(hasWord_fn("swords") == False)
 
 
 def test_frequency():
@@ -264,11 +195,11 @@ def test_frequency():
 
 def trie_testcases():
 	test_add()
-	test_add_r()
+	test_add(recursive=True)
 	test_hasPrefix()
-	test_hasPrefix_r()
+	test_hasPrefix(recursive=True)
 	test_hasWord()
-	test_hasWord_r()
+	test_hasWord(recursive=True)
 	test_frequency()
 
 
