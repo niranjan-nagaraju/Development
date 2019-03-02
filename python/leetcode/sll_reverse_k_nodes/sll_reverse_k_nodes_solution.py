@@ -19,9 +19,7 @@ class ListNode(object):
 
 class Solution(object):
 	'''
-	Reverse k nodes starting from 'start'
-	and return the kth node from 'start', so it can be 
-	linked back to the chain
+	Reverse nodes in the SLL, k-nodes at a time
 	'''
 	def reverseKGroup(self, head, k):
 		"""
@@ -42,7 +40,18 @@ class Solution(object):
 
 		# Now do the other nodes 'k' at a time
 		while True:
+			# last saves where we left-off from last time
+			# this will be used to link to the reversed block of next 'k' nodes 
 			last = start
+
+			# previous start's next is where next reversing begins
+			# e.g. a->b->c->d->e->f->g->h->i,j    k=3
+			# initially, start = 'a'
+			# but after reversing once, c->b->a->d->e->f->g->h->i,j
+			# next k-blocks starts at start.next (a->d), start = 'd'
+			# and then c->b->a->f->e->d->g->h->i,j, 
+			# then again, next k-blocks begin at start.next (d->g), start = 'g'
+			# then later, start becomes 'i', and next k-block begins at start.next = 'j'
 			start = start.next
 			tmp = self.reverse_helper(start, k)
 			if not tmp:
@@ -53,7 +62,11 @@ class Solution(object):
 		return head
 
 
-
+	'''
+	Reverse k nodes starting from 'start'
+	and return the kth node from 'start', so it can be 
+	linked back to the chain
+	'''
 	def reverse_helper(self, start, k):
 		# Initially assume we have k-nodes to work with
 		if not start:
@@ -97,7 +110,7 @@ class Solution(object):
 
 
 		# at the end of the loop, we'll have k-nodes properly reversed
-		# except start node's next is still point to previous start.next
+		# except start node's next is still pointing to previous start.next
 		# Change this to point to the (k+1)st node, pointed to by 'succ' after the loop
 		# so if k=4
 		# initial list was: a->b->c->d->e

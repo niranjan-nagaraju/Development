@@ -64,7 +64,7 @@ def reverse_k_group(start, k):
 
 
 	# at the end of the loop, we'll have k-nodes properly reversed
-	# except start node's next is still point to previous start.next
+	# except start node's next is still pointing to previous start.next
 	# Change this to point to the (k+1)st node, pointed to by 'succ' after the loop
 	# so if k=4
 	# initial list was: a->b->c->d->e
@@ -77,6 +77,9 @@ def reverse_k_group(start, k):
 
 
 
+'''
+Reverse nodes in the SLL, k-nodes at a time
+'''
 def reverse(sll, k):
 	# if k == 1, no reversal needed
 	if k < 2:
@@ -91,7 +94,18 @@ def reverse(sll, k):
 
 	# Now do the other nodes 'k' at a time
 	while True:
+		# last saves where we left-off from last time
+		# this will be used to link to the reversed block of next 'k' nodes 
 		last = start
+
+		# previous start's next is where next reversing begins
+		# e.g. a->b->c->d->e->f->g->h->i,j    k=3
+		# initially, start = 'a'
+		# but after reversing once, c->b->a->d->e->f->g->h->i,j
+		# next k-blocks starts at start.next (a->d), start = 'd'
+		# and then c->b->a->f->e->d->g->h->i,j, 
+		# then again, next k-blocks begin at start.next (d->g), start = 'g'
+		# then later, start becomes 'i', and next k-block begins at start.next = 'j'
 		start = start.next
 		tmp = reverse_k_group(start, k)
 		if not tmp:
