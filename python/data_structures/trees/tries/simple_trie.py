@@ -260,6 +260,7 @@ class Trie(object):
 		return trav.eow
 
 
+
 	'''
 	Recursive version
 	Return if 'word' is present as a whole word in the trie
@@ -281,4 +282,26 @@ class Trie(object):
 
 		return hasWord_helper(self.root, word)
 
+
+
+	'''
+	Calculate frequency of occurence of a certain word in the trie
+	(the number of times it was added)
+	NOTE: frequency is only valid for whole words
+	'''
+	def frequency(self, word):
+		if not self.root:
+			return False
+
+		trav = self.root
+		for c in word:
+			tmp = trav.getChildren(c)
+			if not tmp:
+				return False
+			trav = tmp
+
+		if	not trav:
+			return False
+
+		return trav.frequency if trav.eow else 0
 

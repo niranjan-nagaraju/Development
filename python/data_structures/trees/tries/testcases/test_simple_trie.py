@@ -236,6 +236,31 @@ def test_hasWord_r():
 	assert(trie.hasWord_r("swords") == False)
 
 
+def test_frequency():
+	trie = Trie()
+	try:
+		assert(trie.frequency("word") == 0)
+	except TrieEmptyError as e:
+		assert(e.message == "TrieEmptyError: 'frequency(): Trie is empty'")
+
+	trie.add("word")
+	trie.add("word")
+	trie.add("words")
+	trie.add("words")
+	trie.add("words")
+	trie.add("words")
+	trie.add("sword")
+
+	assert(len(trie) == 3)
+	assert(trie.frequency("word") == 2)
+	assert(trie.frequency("wor") == 0)
+	assert(trie.frequency("wort") == 0)
+	assert(trie.frequency("words") == 4)
+	assert(trie.frequency("sword") == 1)
+	assert(trie.frequency("swo") == 0)
+	assert(trie.frequency("so") == 0)
+
+
 
 def trie_testcases():
 	test_add()
@@ -244,6 +269,7 @@ def trie_testcases():
 	test_hasPrefix_r()
 	test_hasWord()
 	test_hasWord_r()
+	test_frequency()
 
 
 
