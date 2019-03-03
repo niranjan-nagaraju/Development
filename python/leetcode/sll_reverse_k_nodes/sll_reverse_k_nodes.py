@@ -82,14 +82,14 @@ def reverse(sll, k):
 		return
 
 	tmp = reverse_k_group(sll.head, k)
-	if (tmp == None):
+	if not tmp:
 		return
 
 	start = sll.head
 	sll.head = tmp # first 'k' nodes done, update sll.head
 
 	# Now do the other nodes 'k' at a time
-	while True:
+	while tmp:
 		# last saves where we left-off from last time
 		# this will be used to link to the reversed block of next 'k' nodes 
 		last = start
@@ -106,10 +106,12 @@ def reverse(sll, k):
 		# then later, start becomes 'i', and next k-block begins at start.next = 'j'
 		start = start.next
 		tmp = reverse_k_group(start, k)
-		if not tmp:
-			return
-	
-		last.next = tmp
+
+		# If we had k-nodes to begin with, link last block to this reversed block
+		# if reverse_k_group() returned None, we are left with fewer than k nodes
+		# at the end, return immediately
+		if tmp:
+			last.next = tmp
 
 
 

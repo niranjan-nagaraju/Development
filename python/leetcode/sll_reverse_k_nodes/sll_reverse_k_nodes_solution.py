@@ -32,14 +32,14 @@ class Solution(object):
 			return head
 
 		tmp = self.reverse_helper(head, k)
-		if (tmp == None):
+		if not tmp:
 			return head
 
 		start = head
 		head = tmp # first 'k' nodes done, update sll.head
 
 		# Now do the other nodes 'k' at a time
-		while True:
+		while tmp:
 			# last saves where we left-off from last time
 			# this will be used to link to the reversed block of next 'k' nodes 
 			last = start
@@ -56,10 +56,12 @@ class Solution(object):
 			# then later, start becomes 'i', and next k-block begins at start.next = 'j'
 			start = start.next
 			tmp = self.reverse_helper(start, k)
-			if not tmp:
-				return head
 
-			last.next = tmp
+			# If we had k-nodes to begin with, link last block to this reversed block
+			# if reverse_k_group() returned None, we are left with fewer than k nodes
+			# at the end, return immediately
+			if tmp:
+				last.next = tmp
 
 		return head
 
