@@ -17,51 +17,47 @@ sys.path.append("../../")
 
 
 '''
+Lookahead from 'start' node to see if we have k nodes (start node included)
+'''
+def lookahead(start, k):
+	trav = start
+	i = 0
+	while trav and i<k:
+		trav = trav.next
+		i = i + 1
+
+	if i == k:
+		return True
+
+	return False
+
+
+'''
 Reverse k nodes starting from 'start'
 and return the kth node from 'start', so it can be 
 linked back to the chain
 '''
 def reverse_k_group(start, k):
-	# Initially assume we have k-nodes to work with
 	if not start:
-		return
+		return None
+
+	# We don't have k-nodes to work with
+	if not lookahead(start, k):
+		return None
 
 	curr = start
 	succ = start.next
 
-	# there's only one node,
-	# just return 'start' so a redundant link happens
-	# from previously left-off node to 'start'
-	if not succ:
-		return start
-
-	# we need to adjust (k-1) links
+	# we have k nodes to work with,
+	# adjust (k-1) links and return the kth node
+	# to be linked with previous k-blocks end
 	for i in xrange(1, k):
-		# reverse curr->succ link one link at a time
-		if not curr or not succ:
-			# we have reversed 'i-1' links / 'i' nodes
-			# but we don't have 'k' nodes to proceed
-			# Undo reversal of 'i' nodes starting from 'curr'
-			# e.g. k=6, list: a->b->c->d
-			# after reversing 4 nodes, we find
-			# a<-b<-c<-d == d->c->b->a, and succ:None, curr:d
-			# reversing 4 nodes from 'd'
-
-			# at this point
-			# start and start.next are in a loop
-			# start.next -> start, and start->start.next
-			# fix this loop, and undo last i reverses
-			start.next = None
-			reverse_k_group(curr, i)
-			return None
-
 		tmp = succ.next
 		succ.next = curr # reverse link curr->succ: curr<-succ
 
 		# move forward to next link
 		curr = succ
 		succ = tmp
-
 
 	# at the end of the loop, we'll have k-nodes properly reversed
 	# except start node's next is still pointing to previous start.next
@@ -98,7 +94,9 @@ def reverse(sll, k):
 		# this will be used to link to the reversed block of next 'k' nodes 
 		last = start
 
-		# previous start's next is where next reversing begins
+		# In a block of k nodes [start .. last],
+		# after reversing, it becomes [last .. start]
+		# Therefore, traversing start.next repeatedly will get us to next k nodes that needs reversing.
 		# e.g. a->b->c->d->e->f->g->h->i,j    k=3
 		# initially, start = 'a'
 		# but after reversing once, c->b->a->d->e->f->g->h->i,j
@@ -118,6 +116,9 @@ def reverse(sll, k):
 
 if __name__ == '__main__':
 	sll = SLL.fromList("abcde")
+	assert(lookahead(sll.head, 4) == True)
+	assert(lookahead(sll.head, 5) == True)
+	assert(lookahead(sll.head, 6) == False)
 	tmp = reverse_k_group(sll.head, 4)
 	sll.head = tmp
 	assert(SLL.toList(sll) ==  map (lambda x: x, "dcbae"))
