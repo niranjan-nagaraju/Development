@@ -90,12 +90,13 @@ class Solution(object):
 	and return the kth node from 'start', so it can be 
 	linked back to the chain
 	'''
-	def reverse_helper(self, start, k):
+	@staticmethod
+	def reverse_helper(start, k):
 		if not start:
 			return None
 
 		# We don't have k-nodes to work with
-		if not self.lookahead(start, k):
+		if not Solution.lookahead(start, k):
 			return None
 
 		curr = start
