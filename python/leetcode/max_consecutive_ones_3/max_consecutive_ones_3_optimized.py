@@ -197,7 +197,7 @@ class Solution(object):
     k = 2
     start: 1 => (4,5) to be flipped
 	=> A: [1,1,1,0,0,0,1,1,1,1]
-	=> longest 1s sequence is 4
+	=> longest 1s sequence is 6
 	'''
 	@staticmethod
 	def local_longest_1s(zeroes, startIdx, k, n):
