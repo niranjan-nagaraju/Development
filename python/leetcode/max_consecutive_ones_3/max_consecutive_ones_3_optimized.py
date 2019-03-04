@@ -194,8 +194,8 @@ class Solution(object):
 	e.g.
 	n:  10
 	0s: [3,4,5]
-    k = 2
-    start: 1 => (4,5) to be flipped
+	k = 2
+	start: 1 => (4,5) to be flipped
 	=> A: [1,1,1,0,0,0,1,1,1,1]
 	=> longest 1s sequence is 6
 	'''
