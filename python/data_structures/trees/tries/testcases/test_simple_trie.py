@@ -152,7 +152,7 @@ def test_hasWord(recursive=False):
 
 	trie.add("word")
 	trie.add("words")
-	trie.add("sword")
+	trie.add_r("sword")
 	assert(len(trie) == 3)
 
 	hasWord_fn = trie.hasWord
@@ -167,29 +167,68 @@ def test_hasWord(recursive=False):
 	assert(hasWord_fn("swords") == False)
 
 
-def test_frequency():
+def test_frequency(recursive=False):
 	trie = Trie()
-	try:
-		assert(trie.frequency("word") == 0)
-	except TrieEmptyError as e:
-		assert(e.message == "TrieEmptyError: 'frequency(): Trie is empty'")
+	assert(trie.frequency("word") == 0)
 
 	trie.add("word")
 	trie.add("word")
-	trie.add("words")
+	trie.add_r("words")
 	trie.add("words")
 	trie.add("words")
 	trie.add("words")
 	trie.add("sword")
 
+	frequency = trie.frequency
+	if recursive:
+		frequency = trie.frequency_r
+
 	assert(len(trie) == 3)
-	assert(trie.frequency("word") == 2)
-	assert(trie.frequency("wor") == 0)
-	assert(trie.frequency("wort") == 0)
-	assert(trie.frequency("words") == 4)
-	assert(trie.frequency("sword") == 1)
-	assert(trie.frequency("swo") == 0)
-	assert(trie.frequency("so") == 0)
+	assert(frequency("word") == 2)
+	assert(frequency("wor") == 0)
+	assert(frequency("wort") == 0)
+	assert(frequency("words") == 4)
+	assert(frequency("sword") == 1)
+	assert(frequency("swo") == 0)
+	assert(frequency("so") == 0)
+
+
+
+'''
+Test [] for get and set
+'''
+def test_indexing():
+	trie = Trie()
+	trie.add("abcd", "abcd")
+	trie.add_r("abc", "ABC")
+	trie.add("abd", "")
+	trie.add_r("abce", (1,2))
+	trie.add("words", ["one", "two", "three"])
+	trie.add_r("swords")
+	assert(len(trie) == 6)
+
+	try:
+		hit_exception = True
+		assert(trie["a"] == 1)
+		hit_exception = False
+	except KeyError as e: # we haven't added 'a' yet, it exists only as a prefix
+		assert(e.message == "__getitem__(): Word 'a' not found in trie")
+	assert(hit_exception == True)
+
+	trie["a"] = 1
+	assert(trie["a"] == 1)
+	assert(len(trie) == 7)
+
+	assert(trie["swords"] == None)
+	trie["swords"] = "new value"
+	assert(trie["swords"] == "new value")
+	assert(len(trie) == 7) # len doesn't change on update
+
+	assert(trie["abcd"] == "abcd")
+	assert(trie["abc"] == "ABC")
+	assert(trie["abd"] == "")
+	assert(trie["abce"] == (1,2))
+	assert(trie["words"] == ["one", "two", "three"])
 
 
 
@@ -201,6 +240,8 @@ def trie_testcases():
 	test_hasWord()
 	test_hasWord(recursive=True)
 	test_frequency()
+	test_frequency(recursive=True)
+	test_indexing()
 
 
 

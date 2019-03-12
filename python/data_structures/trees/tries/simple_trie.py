@@ -124,8 +124,21 @@ class Node(object):
 			self.frequency -= 1
 
 
+'''
+Trie Empty exception
+'''
+class TrieEmptyError(Exception):
+	def __init__(self, message='Trie is empty!'):
+		self.message = message
+
+	def __str__(self):
+		return self.message
 
 
+
+'''
+The Trie class
+'''
 class Trie(object):
 	def __init__(self):
 		self.root = None
@@ -136,6 +149,53 @@ class Trie(object):
 		if not self.root:
 			return 0
 		return self.num_words
+
+
+	'''
+	decorator to ensure root is not empty
+	on trie operations
+	'''
+	def check_root(func):
+		def f(self, *args, **kwargs):
+			if self.root is None:
+				raise TrieEmptyError("TrieEmptyError: '%s(): Trie is empty'" %(func.__name__))
+			rv = func(self, *args, **kwargs)
+			return rv
+		return f
+
+
+	'''
+	Find a node matching the path of characters in the 
+	prefix, inside the trie
+	'''
+	@staticmethod
+	def findMatchingNode(root, prefix):
+		if not root or not prefix:
+			return None
+
+		trav = root
+		for p in prefix:
+			trav = trav.getChildren(p)
+			if not trav:
+				return None
+
+		return trav
+
+
+	'''
+	Recursive version:
+	Find a node matching the path of characters in the 
+	prefix, inside the trie
+	'''
+	@staticmethod
+	def findMatchingNode_r(root, prefix):
+		if not root:
+			return None
+
+		if not prefix:
+			return root
+
+		return Trie.findMatchingNode_r(root.getChildren(prefix[0]), prefix[1:])
 
 
 	'''
@@ -181,8 +241,7 @@ class Trie(object):
 				return
 
 			root.add(word[0])
-			root = root.getChildren(word[0])
-			add_helper(root, word[1:], data)
+			add_helper(root.getChildren(word[0]), word[1:], data)
 
 		# Empty word, cannot be added to the trie
 		if not word:
@@ -204,17 +263,8 @@ class Trie(object):
 	words in the trie
 	'''
 	def hasPrefix(self, prefix):
-		if not self.root:
-			return False
-
-		trav = self.root
-		for p in prefix:
-			tmp = trav.getChildren(p)
-			if not tmp:
-				return False
-			trav = tmp
-
-		return True
+		node = self.findMatchingNode(self.root, prefix)
+		return (node is not None)
 
 
 	'''
@@ -223,20 +273,9 @@ class Trie(object):
 	words in the trie
 	'''
 	def hasPrefix_r(self, prefix):
-		def hasPrefix_helper(root, prefix):
-			# couldn't match prefix
-			if not root:
-				return False
-			
-			if not prefix:
-				return True
+		node = self.findMatchingNode_r(self.root, prefix)
+		return (node is not None)
 
-			return hasPrefix_helper(root.getChildren(prefix[0]), prefix[1:])
-
-		if not self.root or not prefix:
-			return False
-
-		return hasPrefix_helper(self.root, prefix)
 
 
 
@@ -244,20 +283,8 @@ class Trie(object):
 	Return if 'word' is present as a whole word in the trie
 	'''
 	def hasWord(self, word):
-		if not self.root:
-			return False
-
-		trav = self.root
-		for c in word:
-			tmp = trav.getChildren(c)
-			if not tmp:
-				return False
-			trav = tmp
-
-		if	not trav:
-			return False
-
-		return trav.eow
+		node = self.findMatchingNode(self.root, word)
+		return node.eow if node else False
 
 
 
@@ -266,21 +293,8 @@ class Trie(object):
 	Return if 'word' is present as a whole word in the trie
 	'''
 	def hasWord_r(self, word):
-		def hasWord_helper(root, word):
-			# couldn't match word
-			if not root:
-				return False
-			
-			if not word:
-				return root.eow
-
-			return hasWord_helper(root.getChildren(word[0]), word[1:])
-
-
-		if not self.root:
-			return False
-
-		return hasWord_helper(self.root, word)
+		node = self.findMatchingNode_r(self.root, word)
+		return node.eow if node else False
 
 
 
@@ -290,18 +304,53 @@ class Trie(object):
 	NOTE: frequency is only valid for whole words
 	'''
 	def frequency(self, word):
-		if not self.root:
-			return False
+		node = self.findMatchingNode(self.root, word)
+		if not node or not node.eow:
+			return 0
 
-		trav = self.root
-		for c in word:
-			tmp = trav.getChildren(c)
-			if not tmp:
-				return False
-			trav = tmp
+		return node.frequency
 
-		if	not trav:
-			return False
 
-		return trav.frequency if trav.eow else 0
+	'''
+	Recursive version
+	Calculate frequency of occurence of a certain word in the trie
+	(the number of times it was added)
+	NOTE: frequency is only valid for whole words
+	'''
+	def frequency_r(self, word):
+		node = self.findMatchingNode_r(self.root, word)
+		if not node or not node.eow:
+			return 0
+
+		return node.frequency
+
+
+
+	'''
+	[] syntax:
+	Return word's data if the trie has 'word'
+	raise KeyError otherwise
+	'''
+	@check_root
+	def __getitem__(self, word):
+		node = self.findMatchingNode(self.root, word)
+		if node and node.eow:
+			return node.data
+		else:
+			raise KeyError("__getitem__(): Word %r not found in trie" %(word))
+
+
+	'''
+	[] syntax:
+	Set word's data if the trie has 'word', replacing any value it might already have
+	if the word doesn't exist in the trie, add it now
+	'''
+	@check_root
+	def __setitem__(self, word, value=None):
+		node = self.findMatchingNode(self.root, word)
+		if node and node.eow:
+			node.data = value
+		else:
+			self.add(word, value)
+
 
