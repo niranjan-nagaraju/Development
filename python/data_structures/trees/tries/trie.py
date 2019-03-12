@@ -397,7 +397,7 @@ class Trie(object):
 	if the word doesn't exist in the trie, add it now
 	'''
 	@check_root
-	def __setitem__(self, word, value="None"):
+	def __setitem__(self, word, value=None):
 		item = self.findMatchingPrefixNodeItem(word)
 		if item and item.end_of_word:
 			item.data = value
