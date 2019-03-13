@@ -354,3 +354,74 @@ class Trie(object):
 			self.add(word, value)
 
 
+
+	'''
+	Traverse the Trie depth-first, starting from a root node (representing a prefix)
+	en-listing all matching words (and associated data) in the trie that start with the prefix.
+	en-listing => call a function callback to allow a caller to specify
+		what needs to be done with individual entries
+	'''
+	def dfs(self, prefix, fn, *args, **kwargs):
+		def dfs_helper(root, prefix, fn, *args, **kwargs):
+			if not root:
+				return
+
+			for (c,node) in sorted(root.children.items()):
+				fn(prefix+c, node.data, *args, **kwargs) if node.eow else None
+				dfs_helper(node, prefix+c, fn, *args, **kwargs)
+
+		if not prefix:
+			node = self.root
+		else:
+			node = self.findMatchingNode(self.root, prefix)
+			if not node:
+				return
+
+		fn(prefix, node.data, *args, **kwargs) if node.eow else None
+		dfs_helper(node, prefix, fn, *args, **kwargs)
+
+
+
+	'''
+	Returns a list of words that match a prefix
+	if the trie has words that begin with 'prefix'
+	None if no such prefix exists
+	raises 'TrieEmptyError' if trie is not initialized
+	'''
+	@check_root
+	def findKeys(self, prefix=""):
+		keys = []
+		self.dfs(prefix, lambda a,_,k: k.append(a), keys)
+		return keys
+
+
+
+	'''
+	Returns a list of (words, value) that match a prefix
+	if the trie has words that begin with 'prefix'
+	None if no such prefix exists
+	raises 'TrieEmptyError' if trie is not initialized
+	'''
+	@check_root
+	def search(self, prefix=""):
+		matches = []
+		self.dfs(prefix, lambda a,b,k: k.append((a,b)), matches)
+		return matches
+
+
+
+	'''
+	Return number of words that match a prefix
+	if the trie has words that begin with 'prefix'
+	0 if no such prefix exists
+	'''
+	@check_root
+	def count(self, prefix):
+		def _countfn(a, b, counter):
+			counter[0] += 1
+
+		counter = [0]
+		self.dfs(prefix, _countfn, counter)
+		return counter[0]
+
+

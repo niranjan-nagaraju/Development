@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../../../../")
-from data_structures.trees.tries.simple_trie import Trie, Node
+from data_structures.trees.tries.simple_trie import Trie, Node, TrieEmptyError
 
 
 # trie node testcases
@@ -232,6 +232,123 @@ def test_indexing():
 
 
 
+def test_dfs():
+	trie = Trie()
+	trie.add("a", "1")
+	trie.add("b", "2")
+	trie.add("ab", "12")
+	trie.add("bc", "23")
+	trie.add("abc", "123")
+	trie.add("bde", "245")
+
+	def fn(a, b, l):
+		l.append((a, b))
+
+	l = []
+	trie.dfs("a", fn, l)
+	assert(l == [('a', '1'), ('ab', '12'), ('abc', '123')])
+
+	l = []
+	trie.dfs("", fn, l)
+	assert l == [('a', '1'), ('ab', '12'), ('abc', '123'), ('b', '2'), ('bc', '23'), ('bde', '245')]
+
+	l = []
+	trie.dfs("b", fn, l)
+	assert(l == [('b', '2'), ('bc', '23'), ('bde', '245')])
+
+	def counter(a, b, l):
+		if not l:
+			l.append(0)
+		l[0] += 1
+
+	l = []
+	trie.dfs("a", counter, l)
+	assert(l[0] == 3)
+
+	l = []
+	trie.dfs("", counter, l)
+	assert(l[0] == len(trie))
+
+	l = []
+	trie.dfs("b", counter, l)
+	assert(l[0] == 3)
+
+	l = []
+	trie.dfs("bde", counter, l)
+	assert(l[0] == 1)
+
+
+def test_findKeys():
+	trie = Trie()
+	trie.add("cdef")
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("acdc")
+	trie.add("bcdef")
+
+	assert(len(trie) == 5)
+	assert(trie.findKeys("abc") == ["abc", "abcd"])
+	assert(trie.findKeys("a") == ["abc", "abcd", "acdc"])
+	assert(trie.findKeys("") == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.findKeys() == ["abc", "abcd", "acdc", "bcdef", "cdef"])
+	assert(trie.findKeys("ad") == [])
+	assert(trie.findKeys("b") == ["bcdef"])
+	assert(trie.findKeys("c") == ["cdef"])
+	assert(trie.findKeys("d") == [])
+
+
+def test_search():
+	trie = Trie()
+	trie.add("cdef")
+	trie.add("abcd", "hello")
+	trie.add("abc", "world")
+	trie.add("acdc", "Back in Black")
+	trie.add("bcdef", "bleargh!")
+
+	assert(len(trie) == 5)
+	assert(trie.search("abc") == [("abc", "world"), ("abcd", "hello")])
+	assert(trie.search("a") == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black")])
+	assert(trie.search("") == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black"), ("bcdef", "bleargh!"), ("cdef", None)])
+	assert(trie.search() == [("abc", "world"), ("abcd", "hello"), ("acdc", "Back in Black"), ("bcdef", "bleargh!"), ("cdef", None)])
+	assert(trie.search("ad") == [])
+	assert(trie.search("b") == [("bcdef", "bleargh!")])
+	assert(trie.search("c") == [("cdef", None)])
+	assert(trie.search("d") == [])
+
+
+def test_count():
+	t = Trie()
+	t.add("abcd")
+	assert(len(t) == 1)
+	assert(t.count("abc") == 1)
+
+	trie = Trie()
+	try:
+		assert(trie.count("word") == 0)
+	except TrieEmptyError as e:
+		assert(e.message == "TrieEmptyError: 'count(): Trie is empty'")
+
+	trie.add("word")
+	trie.add("word")
+	trie.add("words")
+	trie.add("words")
+	trie.add("words")
+	trie.add("words")
+	trie.add("sword")
+	trie.add("ward")
+
+	assert(len(trie) == 4)
+	assert(trie.count("w") == 3)
+	assert(trie.count("word") == 2)
+	assert(trie.count("wor") == 2)
+	assert(trie.count("wort") == 0)
+	assert(trie.count("words") == 1)
+	assert(trie.count("sword") == 1)
+	assert(trie.count("swo") == 1)
+	assert(trie.count("so") == 0)
+
+
+
 def trie_testcases():
 	test_add()
 	test_add(recursive=True)
@@ -242,7 +359,10 @@ def trie_testcases():
 	test_frequency()
 	test_frequency(recursive=True)
 	test_indexing()
-
+	test_dfs()
+	test_findKeys()
+	test_search()
+	test_count()
 
 
 # trie testcases
