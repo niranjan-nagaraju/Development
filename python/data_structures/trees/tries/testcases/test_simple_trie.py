@@ -348,6 +348,84 @@ def test_count():
 	assert(trie.count("so") == 0)
 
 
+def test_remove():
+	trie = Trie()
+	trie.add("abcd", "abcd")
+	trie.add("abc", "testing")
+	trie.add("abc", "testing abc")
+	trie.add("abd", "Node abd")
+
+	assert(trie.count("abc") == 2)
+	assert(trie.count("a") == 3)
+	assert(trie.frequency("abc") == 2)
+
+	assert(len(trie) == 3)
+	assert(trie.remove("") == None)
+	assert(len(trie) == 3)
+	assert(trie.remove("a") == None)
+	assert(len(trie) == 3)
+	assert(trie.hasWord("abc") == True)
+	assert(trie.remove("abc", True) == "testing abc") # force remove
+	assert(trie.hasWord("abc") == False)
+	assert(len(trie) == 2)
+	assert(trie.count("abc") == 1)
+	assert(trie.count("a") == 2)
+
+	# already removed, now it only exists as a prefix
+	assert(trie.remove("abc") == None)
+	assert(len(trie) == 2)
+	assert(trie.hasWord("abd") == True)
+	assert(trie.remove("abd") == "Node abd")
+	assert(trie.hasWord("abd") == False)
+	assert(len(trie) == 1)
+	assert(trie.count("abc") == 1)
+	assert(trie.count("a") == 1)
+
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.remove("abcd") == "abcd")
+	assert(len(trie) == 0)
+	assert(trie.root == None)
+
+	trie.add("abcd")
+	trie.add("abcd")
+	trie.add("abcd")
+	assert(trie.frequency("abcd") == 3)
+	assert(len(trie) == 1)
+	assert(trie.hasPrefix("abc") == True)
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.count("abc") == 1)
+	assert(trie.count("a") == 1)
+
+	assert(trie.remove("abcd") == None) # soft remove, reduce frequency
+	assert(len(trie) == 1)
+	assert(trie.hasWord("abcd") == True)
+	assert(trie.frequency("abcd") == 2)
+
+	trie.add("abcd", "what")
+	assert(trie.frequency("abcd") == 3)
+	
+	trie.add("abc")
+
+	assert(len(trie) == 2)
+	assert(trie.remove("abcd", True) == "what") # remove unconditionally
+	assert(len(trie) == 1)
+	assert(trie.hasWord("abc") == True)
+	assert(trie.hasWord("abcd") == False)
+
+	assert(trie.remove("abc") == None) # soft remove, reduce frequency + delete because f:0
+	assert(len(trie) == 0)
+	assert(trie.root == None)
+
+	trie.add("ab")
+	trie.add("abcd")
+	assert(len(trie) == 2)
+	assert(trie.remove("abcd") == None)
+	assert(len(trie) == 1)
+	assert(trie.hasWord("ab") == True)
+	assert(trie.hasWord("abcd") == False)
+	assert(trie.hasPrefix("abc") == False)
+
+
 
 def trie_testcases():
 	test_add()
@@ -363,6 +441,7 @@ def trie_testcases():
 	test_findKeys()
 	test_search()
 	test_count()
+	test_remove()
 
 
 # trie testcases

@@ -425,3 +425,72 @@ class Trie(object):
 		return counter[0]
 
 
+	'''
+	remove a word from the trie
+	Return its assciated data upon successful removal
+
+	decrease frequency until it becomes 0,
+	if frequency hits 0, then remove the word from the trie
+	unless 'forceremove' is set, in which case, remove the word
+	unconditionally.
+	'''
+	@check_root
+	def remove(self, word, forceremove=False):
+		# Helper function to recursively remove
+		# word from the bottom-up
+		def removehelper(node, word):
+			if not node:
+				# word search ended prematurely
+				# before we could match it
+				# e.g. trie has 'ab', and we are looking for 'abc'
+				return False
+
+			# we have either reached 'n' levels deep
+			# n: len(word)
+			# or word was "" to begn with
+			# in which case, there's nothing to remove anyway
+			if not word:
+				node.eow = False
+				node.data = None
+				return True
+
+			if removehelper(node.children[word[0]], word[1:]):
+				# child node was matched and 'removed'
+				# remove link to child node
+				node.remove(word[0])
+
+				# one of the prefixes is a word in itself
+				# do not remove this whole path
+				# return false from here, so upper nodes will see they have a child left
+				# and wont remove themselves
+				if node.eow:
+					return False
+
+				# communicate to higher levels that word was matched
+				# and 'deleted'
+				# if word had children, or if its prefixes were words themselves
+				# then the entire path wouldn't be removed
+				return True
+
+			# one of the child nodes returned false
+			# so the word couldn't be matched completely
+			return False
+
+	
+		node = self.findMatchingNode(self.root, word)
+		if not node or not node.eow:
+			return None
+
+		data = node.data
+
+		node.frequency -= 1
+		if forceremove or node.frequency == 0:
+			removehelper(self.root, word)
+			self.num_words -= 1
+			# this was the last word to be removed from the trie
+			# and the trie is now empty
+			if not len(self.root):
+				self.root = None
+			return data
+
+		return None
