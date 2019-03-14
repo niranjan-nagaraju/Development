@@ -494,3 +494,73 @@ class Trie(object):
 			return data
 
 		return None
+
+
+
+	'''
+	helper function to remove all child nodes below specified node
+	'''
+	def removeChildNodes(self, node):
+		if not node:
+			return
+
+		if node.end_of_word:
+			node.eow = False
+			self.num_words -= 1
+
+		for (character, cnode) in node.children.items():
+			self.removeChildNodes(cnode)
+
+			# if the last character we removed is a word,
+			# update word count in the trie
+			node.remove(character)
+
+
+
+	'''
+	remove all words matching prefix
+	'''
+	@check_root
+	def removePrefix(self, prefix=""):
+		# If an empty prefix is specified
+		# delete the whole trie
+		if not prefix:
+			self.removeChildNodes(self.root)
+			self.root = None
+			# individually removing every character should also
+			# have deducted word count by exactly the
+			# length of the trie
+			assert(self.num_words == 0)
+
+
+		# stop at last-but-one node, unlink this node's link to the child node at character
+		# then remove everything below and including the child node
+		if len(prefix) == 1:
+			pnode = self.root
+		else:
+			# Get node containing last character in the prefix
+			pnode = self.findMatchingNode(self.root, prefix[:-1])
+
+		# couldn't match prefix in the trie
+		if not pnode:
+			return
+
+		# if prefix itself is a word, remove it first
+		node = pnode.children[prefix[-1]]
+		if not node:
+			return
+
+		# cut off link to all child nodes following the prefix-node, un-set its last character link in the parent node
+		pnode.remove(prefix[-1])
+
+		# call helper function to remove all child nodes of 'node'
+		self.removeChildNodes(node)
+
+
+
+	'''
+	Remove everything in the trie
+	'''
+	def destroy(self):
+		self.removePrefix()
+

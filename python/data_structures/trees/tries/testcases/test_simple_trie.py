@@ -426,6 +426,69 @@ def test_remove():
 	assert(trie.hasPrefix("abc") == False)
 
 
+def test_removePrefix():
+	trie = Trie()
+	trie.add("abcd")
+	trie.add("abc")
+	trie.add("abd")
+	trie.add("abce")
+	trie.add("words")
+	trie.add("swords")
+
+	assert(trie.count("abc") == 3)
+	assert(trie.count("a") == 4)
+
+	assert(len(trie) == 6)
+	trie.removePrefix("abc")  # removes 'abc', 'abcd' and 'abce'
+
+	# 'ab' should only have 'd' as its child now
+	assert(len(trie) == 3)
+	assert(trie.count("abc") == 0)
+	assert(trie.count("a") == 1)
+	assert(trie.findKeys("a") == ["abd"])
+
+	# try and remove 'abc' again - nothing should change
+	trie.removePrefix("abc")  # NO-OP
+	assert(len(trie) == 3)
+	assert(trie.count("abc") == 0)
+	assert(trie.count("a") == 1)
+	assert(trie.findKeys("a") == ["abd"])
+
+	# remove 'a*'
+	trie.removePrefix("a")  # removes 'abd'
+	assert(len(trie) == 2)
+	assert(trie.count("abc") == 0)
+	assert(trie.count("a") == 0)
+	assert(trie.findKeys("a") == [])
+	assert(trie.findKeys("") == ["swords", "words"])
+
+	# flush the whole trie
+	trie.removePrefix("")
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+
+
+def test_destroy():
+	trie = Trie()
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+	assert(not trie == True)
+
+	trie.add("abcd", "abcd")
+	trie.add("abc", "ABC")
+	trie.add("abd", "")
+	trie.add("abce", (1,2))
+	trie.add("words", ["one", "two", "three"])
+	trie.add("swords")
+	assert(len(trie) == 6)
+
+	trie.destroy()
+	assert(trie.root == None)
+	assert(len(trie) == 0)
+	assert(not trie == True)
+
+
+
 
 def trie_testcases():
 	test_add()
@@ -442,6 +505,8 @@ def trie_testcases():
 	test_search()
 	test_count()
 	test_remove()
+	test_removePrefix()
+	test_destroy()
 
 
 # trie testcases
