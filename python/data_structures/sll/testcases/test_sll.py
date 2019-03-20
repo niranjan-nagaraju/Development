@@ -126,9 +126,18 @@ def test_place():
 	l = []
 	collate_fn = lambda xargs, data : xargs['lst'].append(data)
 	s2.traverse(collate_fn, lst=l)
-	print l
 	assert(l == [(0, 'c'), (1, 'a'), (2, 1), (2, 3), (3, 0), (4, 1)])
 
+	# Test custom comparator2
+	s3 = SLL()
+	test_list = [(2,1), (1, 'a'), (2, 3), (0, 'c'), (4,1), (3,0)]
+	for x in test_list:
+		s3.place(x, lambda (a,b),(c,d): cmp(b, d))
+
+	l = []
+	collate_fn = lambda xargs, data : xargs['lst'].append(data)
+	s3.traverse(collate_fn, lst=l)
+	assert l == [(3, 0), (2, 1), (4, 1), (2, 3), (1, 'a'), (0, 'c')]
 
 
 '''
