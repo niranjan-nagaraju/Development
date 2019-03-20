@@ -22,9 +22,9 @@ class Graph(object):
 		pass
 
 
-	def bfs(self):
+	def bfs(self, startvertex=0, aggregate_fn=None, *args, **kwargs):
 		pass
 
 
-	def dfs(self):
+	def dfs(self, startvertex=0, aggregate_fn=None, *args, **kwargs):
 		pass
