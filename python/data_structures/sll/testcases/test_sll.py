@@ -1,6 +1,94 @@
 from data_structures.sll.sll import SLL, UnderFlowError
 
 '''
+Test len/__nonzero__ if not sll/ if sll 
+'''
+def test_len():
+	sll = SLL()
+
+	assert(not sll == True)
+	if not sll:
+		assert(len(sll) == 0)
+
+	sll.push_back(1)
+
+	if sll:
+		assert(len(sll) == 1)
+
+
+
+'''
+Basic SLL testcases
+'''
+def basic_tests():
+	sll = SLL()
+
+	try:
+		sll.pop_back()
+	except UnderFlowError as e:
+		print "Tried popping from an empty SLL. Error:", e
+
+	sll.push_back(1)
+	assert(sll.size == 1)
+	assert(sll.head.value == 1) 
+	assert(sll.tail.value == 1) 
+
+	sll.push_front(0)
+	assert(sll.size == 2)
+	assert(sll.head.value == 0) 
+	assert(sll.tail.value == 1) 
+
+
+	sll.push_back(2)
+	assert(sll.size == 3)
+	assert(sll.head.value == 0) 
+	assert(sll.tail.value == 2) 
+
+	sll.push_back(3)
+	assert(sll.size == 4)
+	assert(sll.head.value == 0) 
+	assert(sll.tail.value == 3) 
+
+	sll.push_back(4)
+	assert(sll.size == 5)
+	assert(sll.head.value == 0) 
+	assert(sll.tail.value == 4) 
+
+	assert(4 == sll.pop_back())
+	assert(sll.size == 4)
+	assert(sll.head.value == 0) 
+	assert(sll.tail.value == 3) 
+
+	assert(0 == sll.pop_front())
+	assert(sll.size == 3)
+	assert(sll.head.value == 1) 
+	assert(sll.tail.value == 3) 
+
+	assert(1 == sll.pop_front())
+	assert(sll.size == 2)
+	assert(sll.head.value == 2) 
+	assert(sll.tail.value == 3) 
+
+	assert(3 == sll.pop_back())
+	assert(sll.size == 1)
+	assert(sll.head.value == 2) 
+	assert(sll.tail.value == 2) 
+
+
+	assert(2 == sll.pop_back())
+	assert(sll.size == 0)
+	assert(sll.head == None) 
+	assert(sll.tail == None) 
+
+
+	# fromList and toList
+	assert(SLL.toList(SLL.fromList(range(9, 0, -2))) == range(9, 0, -2))
+
+
+
+
+
+'''
 Test the plac() operation
 '''
 def test_place():
@@ -14,6 +102,11 @@ def test_place():
 	s.place(0)
 	s.place(7)
 
+	# wont get added
+	s.place(0, allowduplicates=False)
+	s.place(4, allowduplicates=False)
+	s.place(7, allowduplicates=False)
+
 	l = []
 	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
 	s.traverse(collate_fn, lst=l)
@@ -25,9 +118,15 @@ def test_place():
 	for x in test_list:
 		s2.place(x, lambda (a,b),(c,d): cmp(a, c))
 
+	# Duplicates, won't get added
+	s2.place((0, 'c'), allowduplicates=False)
+	s2.place((2, 1), allowduplicates=False)
+	s2.place((4, 1), allowduplicates=False)
+
 	l = []
 	collate_fn = lambda xargs, data : xargs['lst'].append(data)
 	s2.traverse(collate_fn, lst=l)
+	print l
 	assert(l == [(0, 'c'), (1, 'a'), (2, 1), (2, 3), (3, 0), (4, 1)])
 
 
@@ -135,6 +234,8 @@ def test_indexing():
 
 
 if __name__ == "__main__":
+	test_len()
+	basic_tests()
 	test_place()
 	test_iterator()
 	test_reverse()
