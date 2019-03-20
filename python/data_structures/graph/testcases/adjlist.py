@@ -26,13 +26,13 @@ def test_dfs_undirected():
 	g.add_edge(5, 5)
 
 	'''
-	0 -- 1
+    0 -- 1
      \	 |
-	  -- 2 -- |
+      -- 2 -- |
               |
-	3 -- 4 -- |
+    3 -- 4 -- |
 
-	5
+    5
 	'''
 
 	def aggregate_list(v):
@@ -78,14 +78,14 @@ def test_dfs_directed():
 	g.add_edge(5, 5)
 
 	'''
-	0 -> 1
-	|    |
+    0 -> 1
+    |    |
     |  	 v
    < - > 2 <- |
               |
-	3 -> 4 -> |
+    3 -> 4 -> |
 
-	5
+    5
 	'''
 
 	def aggregate_list(v):
