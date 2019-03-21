@@ -1,6 +1,13 @@
 from node import Node
 
-#### Exceptions for the SLL class ####
+'''
+Exceptions for the SLL class
+'''
+
+'''
+Overflow exception
+TODO: when does this happen?
+'''
 class OverFlowError(Exception):
 	def __init__(self):
 		self.message = 'Overflow error!'
@@ -9,6 +16,10 @@ class OverFlowError(Exception):
 		return self.message
 
 
+'''
+UnderFlow exception
+TODO: when does this happen?
+'''
 class UnderFlowError(Exception):
 	def __init__(self):
 		self.message = 'Underflow error!'
@@ -16,10 +27,11 @@ class UnderFlowError(Exception):
 	def __str__(self):
 		return self.message
 
-#### Exceptions for the SLL class ####
 
 
-#### Iterator helper for SLL ####
+'''
+Iterator helper for SLL
+'''
 class SLLIterator:
 	def __init__(self, node=None):
 		self.node = node
@@ -37,10 +49,11 @@ class SLLIterator:
 			self.node = tmp.next
 			return tmp.value
 
-#### Iterator helper for SLL ####
 
 
-# The SLL class
+'''
+The SLL class
+'''
 class SLL(object):
 	# A default print function if no aggregator is provided
 	# for traversal functions
@@ -222,6 +235,28 @@ class SLL(object):
 
 
 
+	# find node matching an item and return it
+	def findMatchingNode(self, item, comparatorfn=cmp):
+		trav = self.head
+		while trav:
+			if comparatorfn(item, trav.value) == 0:
+				return trav
+			trav = trav.next
+
+		return None
+
+
+	# find and return matching item from the SLL, if it exists
+	def find(self, item, comparatorfn=cmp):
+		node = self.findMatchingNode(item, comparatorfn)
+		if not node:
+			return None
+
+		return node.value
+
+
+
+
 	# Keep the SLL sorted, every insert places the item at the right place in order to keep the list sorted
 	# NOTE: assumes the list is sorted - if all inserts are done using place() it actually would be
 	#       A mixture of random push_xxx and place() will not ensure the list is sorted after place()
@@ -229,11 +264,9 @@ class SLL(object):
 	#
 	# NOTE: the place() operation _is_ stable
 	#    so if (a == b), and place(a) happened before place(b), then index(a) < index(b) in the list
-	def place(self, item, comparatorfn=None):
+	def place(self, item, comparatorfn=cmp, allowduplicates=True):
 		# if comparatorfn is not specified, try to use the item's __cmp__ method,
 		# or the default __cmp__ if the item's class hasn't implemented one
-		if not comparatorfn:
-			comparatorfn = cmp
 
 		# This is the first item to be 'placed' *OR* 
 		# item < head.value => item is less than all elements in the current list,
@@ -246,6 +279,8 @@ class SLL(object):
 		# Will save traversing all the way to the end, 
 		# if 'item' is bigger than all the elements in the current list
 		if comparatorfn(item, self.tail.value) >= 0:
+			if not allowduplicates and comparatorfn(item, self.tail.value) == 0:
+				return
 			self.push_back(item)
 			return
 
@@ -258,6 +293,9 @@ class SLL(object):
 
 		# At this point, we have found node trav, s.t
 		# prev.value <= item < trav.value
+		if not allowduplicates and comparatorfn(item, prev.value) == 0:
+			return
+
 		# Insert item between prev and trav
 		node = Node(item)
 		node.next = trav
@@ -298,96 +336,4 @@ class SLL(object):
 		self.head = a
 
 
-
-'''
-Test len/__nonzero__ if not sll/ if sll 
-'''
-def test_len():
-	sll = SLL()
-
-	assert(not sll == True)
-	if not sll:
-		assert(len(sll) == 0)
-
-	sll.push_back(1)
-
-	if sll:
-		assert(len(sll) == 1)
-
-
-
-'''
-Basic SLL testcases
-'''
-def TC():
-	sll = SLL()
-
-	try:
-		sll.pop_back()
-	except UnderFlowError as e:
-		print "Tried popping from an empty SLL. Error:", e
-
-	sll.push_back(1)
-	assert(sll.size == 1)
-	assert(sll.head.value == 1) 
-	assert(sll.tail.value == 1) 
-
-	sll.push_front(0)
-	assert(sll.size == 2)
-	assert(sll.head.value == 0) 
-	assert(sll.tail.value == 1) 
-
-
-	sll.push_back(2)
-	assert(sll.size == 3)
-	assert(sll.head.value == 0) 
-	assert(sll.tail.value == 2) 
-
-	sll.push_back(3)
-	assert(sll.size == 4)
-	assert(sll.head.value == 0) 
-	assert(sll.tail.value == 3) 
-
-	sll.push_back(4)
-	assert(sll.size == 5)
-	assert(sll.head.value == 0) 
-	assert(sll.tail.value == 4) 
-
-	assert(4 == sll.pop_back())
-	assert(sll.size == 4)
-	assert(sll.head.value == 0) 
-	assert(sll.tail.value == 3) 
-
-	assert(0 == sll.pop_front())
-	assert(sll.size == 3)
-	assert(sll.head.value == 1) 
-	assert(sll.tail.value == 3) 
-
-	assert(1 == sll.pop_front())
-	assert(sll.size == 2)
-	assert(sll.head.value == 2) 
-	assert(sll.tail.value == 3) 
-
-	assert(3 == sll.pop_back())
-	assert(sll.size == 1)
-	assert(sll.head.value == 2) 
-	assert(sll.tail.value == 2) 
-
-
-	assert(2 == sll.pop_back())
-	assert(sll.size == 0)
-	assert(sll.head == None) 
-	assert(sll.tail == None) 
-
-
-	# fromList and toList
-	assert(SLL.toList(SLL.fromList(range(9, 0, -2))) == range(9, 0, -2))
-
-
-
-
-if __name__ == "__main__":
-	TC()
-	test_len()
-	print 'SLL: Basic Testcases passed'
 
