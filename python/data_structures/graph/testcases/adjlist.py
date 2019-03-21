@@ -4,10 +4,34 @@ def basic_testcases():
 	g = Graph(3)
 	assert str(g) == "[[0]:, [0]:, [0]:]"
 
+	# undirected graph
 	g.add_edge(1,2)
-	g.add_edge(1,2)
+	g.add_edge(1,2) # duplicate - won't be added to adjacency lists
 	g.add_edge(1,0)
 	assert str(g) == "[[1]: (1, None), [2]: (0, None) (2, None), [1]: (1, None)]"
+
+	# directed graph
+	g = Graph(3, directed=True)
+	g.add_edge(1,2)
+	g.add_edge(1,2) # duplicate - won't be added to adjacency lists
+	g.add_edge(1,0)
+	assert str(g) == "[[0]:, [2]: (0, None) (2, None), [0]:]"
+
+
+	# weighted undirected graph
+	g = Graph(3)
+	g.add_edge(1,2, 5)
+	g.add_edge(1,2, 10) # duplicate - update weight
+	g.add_edge(1,0, 11)
+	assert str(g) == "[[1]: (1, 11), [2]: (0, 11) (2, 10), [1]: (1, 10)]"
+
+	# weighted directed graph
+	g = Graph(3, directed=True)
+	g.add_edge(1,2, 5)
+	g.add_edge(1,2, 10) # duplicate - Update weight
+	g.add_edge(1,0, 11)
+	assert str(g) == "[[0]:, [2]: (0, 11) (2, 10), [0]:]"
+
 
 
 '''

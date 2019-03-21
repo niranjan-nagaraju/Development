@@ -14,25 +14,27 @@ class AdjList(Graph):
 	def __str__(self):
 		return str(self._adjlists)
 
-	# A default print function if no aggregator is provided
-	# for traversal functions
-	@staticmethod
-	def _default_printfn(vertex):
-		print str(vertex) + " ",
-
-
 	'''
 	Add an edge from source vertex, src, to destination vertex, dst
 	assumes un-weighted by default (in which case weight will be set to 1)
 	if the graph is un-directed, an edge from dst->src will also be added
 	'''
 	def add_edge(self, src, dst, weight=None):
-		self._adjlists[src].place((dst, weight), 
+		def add_edge_helper(adjlists, v1, v2, weight):
+			node = adjlists[v1].findMatchingNode((v2, weight), 
+					comparatorfn=lambda (a,w1),(c,w2): cmp(a, c))
+
+			# edge already exists, update weight and return
+			if node:
+				node.value = (v2, weight)
+				return
+
+			adjlists[v1].place((v2, weight), 
 				comparatorfn=lambda (a,w1),(c,w2): cmp(a, c), allowduplicates=False)
 
+		add_edge_helper(self._adjlists, src, dst, weight)
 		if not self.directed:
-			self._adjlists[dst].place((src, weight), 
-					comparatorfn=lambda (a,w1),(c,w2): cmp(a, c), allowduplicates=False)
+			add_edge_helper(self._adjlists, dst, src, weight)
 
 
 			
