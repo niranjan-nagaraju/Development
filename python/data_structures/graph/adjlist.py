@@ -1,13 +1,13 @@
-from graph import Graph
+from graph import Graph as GraphBase
 from data_structures.sll.sll import SLL
 
 '''
 Graphs implemented using Adjacency Lists
 '''
-class AdjList(Graph):
+class Graph(GraphBase):
 
 	def __init__(self, vertices, directed=False):
-		Graph.__init__(self, vertices, directed)
+		GraphBase.__init__(self, vertices, directed)
 		self._adjlists = [SLL() for x in xrange(vertices)]
 
 
@@ -51,7 +51,7 @@ class AdjList(Graph):
 		aggregate_fn(startvertex, *args, **kwargs)
 
 		for v,_ in adjacency_lists[startvertex]:
-			AdjList.dfs(adjacency_lists, v, visited, aggregate_fn, *args, **kwargs)
+			Graph.dfs(adjacency_lists, v, visited, aggregate_fn, *args, **kwargs)
 
 
 
@@ -61,7 +61,7 @@ class AdjList(Graph):
 	'''
 	def dfs_reachable(self, startvertex=0, aggregate_fn=None, *args, **kwargs):
 		if not aggregate_fn:
-			aggregate_fn = AdjList._default_printfn
+			aggregate_fn = Graph._default_printfn
 		visited = [False] * self.vertices
 
 		self.dfs(self._adjlists, startvertex, visited, aggregate_fn, *args, **kwargs)
@@ -75,7 +75,7 @@ class AdjList(Graph):
 	'''
 	def dfs_all(self, aggregate_fn=None, *args, **kwargs):
 		if not aggregate_fn:
-			aggregate_fn = AdjList._default_printfn
+			aggregate_fn = Graph._default_printfn
 		visited = [False] * self.vertices
 
 		for i in xrange(self.vertices):

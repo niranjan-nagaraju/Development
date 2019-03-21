@@ -1,11 +1,11 @@
-from graph import Graph
+from graph import Graph as GraphBase
 
 '''
 Graphs implemented using Adjacency matrix
 '''
-class AdjMatrix(Graph):
+class Graph(GraphBase):
 	def __init__(self, vertices, directed=False):
-		Graph.__init__(self, vertices, directed)
+		GraphBase.__init__(self, vertices, directed)
 		self._adjmatrix = [ [None for x in xrange(vertices)] for x in xrange(vertices) ]
 
 
@@ -42,7 +42,7 @@ class AdjMatrix(Graph):
 			# if there exists an edge from startvertex to vertex, v
 			# continue DFS to vertex v
 			if adjacency_matrix[startvertex][v] is not None:
-				AdjMatrix.dfs(adjacency_matrix, v, visited, aggregate_fn, *args, **kwargs)
+				Graph.dfs(adjacency_matrix, v, visited, aggregate_fn, *args, **kwargs)
 
 
 
@@ -52,7 +52,7 @@ class AdjMatrix(Graph):
 	'''
 	def dfs_reachable(self, startvertex=0, aggregate_fn=None, *args, **kwargs):
 		if not aggregate_fn:
-			aggregate_fn = AdjMatrix._default_printfn
+			aggregate_fn = Graph._default_printfn
 		visited = [False] * self.vertices
 
 		self.dfs(self._adjmatrix, startvertex, visited, aggregate_fn, *args, **kwargs)
@@ -66,7 +66,7 @@ class AdjMatrix(Graph):
 	'''
 	def dfs_all(self, aggregate_fn=None, *args, **kwargs):
 		if not aggregate_fn:
-			aggregate_fn = AdjMatrix._default_printfn
+			aggregate_fn = Graph._default_printfn
 		visited = [False] * self.vertices
 
 		for i in xrange(self.vertices):

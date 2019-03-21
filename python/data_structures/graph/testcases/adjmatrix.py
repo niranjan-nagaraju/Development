@@ -1,4 +1,4 @@
-from data_structures.graph.adjmatrix import AdjMatrix as Graph
+from data_structures.graph.adjmatrix import Graph
 
 
 def basic_testcases():
