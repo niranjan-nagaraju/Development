@@ -1,4 +1,4 @@
-from data_structures.graph.adjlist import AdjList as Graph
+from data_structures.graph.adjlist import Graph
 
 def basic_testcases():
 	g = Graph(3)
