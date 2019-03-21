@@ -242,6 +242,75 @@ def test_indexing():
 
 
 
+def test_findMatchingNode():
+	s = SLL()
+	for x in [6,4,2]:
+		s.place(x)
+
+	for x in [5, 1]:
+		s.place(x)
+
+	s.place(0)
+	s.place(7)
+
+	assert s.findMatchingNode(0) == s.head
+	assert s.findMatchingNode(7) == s.tail
+	assert s.findMatchingNode(1) == s.head.next
+	assert s.findMatchingNode(2) == s.head.next.next
+	assert s.findMatchingNode(4) == s.head.next.next.next
+	assert s.findMatchingNode(3) == None
+	assert s.findMatchingNode(10) == None
+	assert s.findMatchingNode(-1) == None
+
+	# Test custom comparator
+	s2  = SLL.fromList([(2,1), (1, 'a'), (2, 3), (0, 'c'), (4,1), (3,0)])
+	assert s2.findMatchingNode((2,1)) == s2.head
+	assert s2.findMatchingNode((2,3), comparatorfn = lambda (a,b),(c,d): cmp(b,d)) == s2.head.next.next
+
+	# compare only the first item in the pair between two nodes
+	assert s2.findMatchingNode((2,100), comparatorfn = lambda (a,b),(c,d): cmp(a,c)) == s2.head
+	node = s2.findMatchingNode((0,100), comparatorfn = lambda (a,b),(c,d): cmp(a,c))
+
+	# change node's value
+	node.value = (0, 'e')
+	assert node == s2.head.next.next.next
+	assert node.value == (0, 'e')
+	assert SLL.toList(s2) == [(2,1), (1, 'a'), (2, 3), (0, 'e'), (4,1), (3,0)]
+
+
+
+def test_find():
+	s = SLL()
+	for x in [6,4,2]:
+		s.place(x)
+
+	for x in [5, 1]:
+		s.place(x)
+
+	s.place(0)
+	s.place(7)
+
+	assert s.find(0) == 0
+	assert s.find(7) == 7
+	assert s.find(1) == 1
+	assert s.find(2) == 2
+	assert s.find(4) == 4
+	assert s.find(3) == None
+	assert s.find(10) == None
+	assert s.find(-1) == None
+
+	# Test custom comparator
+	s2  = SLL.fromList([(2,1), (1, 'a'), (2, 3), (0, 'c'), (4,1), (3,0)])
+	assert s2.find((2,1)) == (2,1)
+	assert s2.find((4,3), comparatorfn = lambda (a,b),(c,d): cmp(b,d)) == (2,3)
+
+	# compare only the first item in the pair between two nodes
+	assert s2.find((2,100), comparatorfn = lambda (a,b),(c,d): cmp(a,c)) == (2,1)
+	assert s2.find((0,100), comparatorfn = lambda (a,b),(c,d): cmp(a,c)) == (0, 'c')
+
+
+
+
 if __name__ == "__main__":
 	test_len()
 	basic_tests()
@@ -249,5 +318,7 @@ if __name__ == "__main__":
 	test_iterator()
 	test_reverse()
 	test_indexing()
+	test_findMatchingNode()
+	test_find()
 	print 'SLL Testcases passed'
 

@@ -235,6 +235,28 @@ class SLL(object):
 
 
 
+	# find node matching an item and return it
+	def findMatchingNode(self, item, comparatorfn=cmp):
+		trav = self.head
+		while trav:
+			if comparatorfn(item, trav.value) == 0:
+				return trav
+			trav = trav.next
+
+		return None
+
+
+	# find and return matching item from the SLL, if it exists
+	def find(self, item, comparatorfn=cmp):
+		node = self.findMatchingNode(item, comparatorfn)
+		if not node:
+			return None
+
+		return node.value
+
+
+
+
 	# Keep the SLL sorted, every insert places the item at the right place in order to keep the list sorted
 	# NOTE: assumes the list is sorted - if all inserts are done using place() it actually would be
 	#       A mixture of random push_xxx and place() will not ensure the list is sorted after place()
@@ -242,11 +264,9 @@ class SLL(object):
 	#
 	# NOTE: the place() operation _is_ stable
 	#    so if (a == b), and place(a) happened before place(b), then index(a) < index(b) in the list
-	def place(self, item, comparatorfn=None, allowduplicates=True):
+	def place(self, item, comparatorfn=cmp, allowduplicates=True):
 		# if comparatorfn is not specified, try to use the item's __cmp__ method,
 		# or the default __cmp__ if the item's class hasn't implemented one
-		if not comparatorfn:
-			comparatorfn = cmp
 
 		# This is the first item to be 'placed' *OR* 
 		# item < head.value => item is less than all elements in the current list,
