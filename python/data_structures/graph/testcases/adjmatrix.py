@@ -138,12 +138,141 @@ def test_dfs_directed():
 
 
 
+'''
+BFS on an undirected graph
+'''
+def test_bfs_undirected(recursive=False):
+	g = Graph(6) 
+	g.add_edge(0, 1) 
+	g.add_edge(0, 2) 
+	g.add_edge(1, 2) 
+	g.add_edge(2, 0) 
+	g.add_edge(3, 3)
+	g.add_edge(3, 4)
+	g.add_edge(4, 4)
+	g.add_edge(4, 2)
+	g.add_edge(5, 5)
+
+	'''
+    0 -- 1
+     \	 |
+      -- 2 -- |
+              |
+    3 -- 4 -- |
+
+    5
+	'''
+
+	def aggregate_list(v):
+		if not hasattr(aggregate_list, "l"):
+			setattr(aggregate_list, "l", [])
+		aggregate_list.l.append(v)
+		return aggregate_list.l
+
+
+	if recursive:
+		bfs_fn = g.bfs_reachable_r
+		bfs_all = g.bfs_all_r
+	else:
+		bfs_fn = g.bfs_reachable
+		bfs_all = g.bfs_all
+
+	bfs_fn(2, aggregate_list)
+	assert(aggregate_list.l == [2,0,1,4,3])
+
+	aggregate_list.l = []
+	bfs_fn(0, aggregate_list)
+	assert(aggregate_list.l == [0,1,2,4,3])
+
+	aggregate_list.l = []
+	bfs_fn(4, aggregate_list)
+	assert(aggregate_list.l == [4,2,3,0, 1])
+
+	aggregate_list.l = []
+	bfs_fn(5, aggregate_list)
+	assert(aggregate_list.l == [5])
+
+	aggregate_list.l = []
+	bfs_all(aggregate_list)
+	assert(aggregate_list.l == [0,1,2,4,3,5])
+
+
+
+'''
+BFS on an directed graph
+'''
+def test_bfs_directed(recursive=False):
+	g = Graph(6, directed=True) 
+	g.add_edge(0, 1) 
+	g.add_edge(0, 2) 
+	g.add_edge(1, 2) 
+	g.add_edge(2, 0) 
+	g.add_edge(3, 3)
+	g.add_edge(3, 4)
+	g.add_edge(4, 4)
+	g.add_edge(4, 2)
+	g.add_edge(5, 5)
+
+	'''
+    0 -> 1
+    |    |
+    |  	 v
+   < - > 2 <- |
+              |
+    3 -> 4 -> |
+
+    5
+	'''
+
+	def aggregate_list(v):
+		if not hasattr(aggregate_list, "l"):
+			setattr(aggregate_list, "l", [])
+		aggregate_list.l.append(v)
+		return aggregate_list.l
+
+
+	if recursive:
+		bfs_fn = g.bfs_reachable_r
+		bfs_all = g.bfs_all_r
+	else:
+		bfs_fn = g.bfs_reachable
+		bfs_all = g.bfs_all
+
+	bfs_fn(2, aggregate_list)
+	assert(aggregate_list.l == [2,0,1])
+
+	aggregate_list.l = []
+	bfs_fn(0, aggregate_list)
+	assert(aggregate_list.l == [0,1,2])
+
+	aggregate_list.l = []
+	bfs_fn(4, aggregate_list)
+	assert(aggregate_list.l == [4,2,0,1])
+
+	aggregate_list.l = []
+	bfs_fn(5, aggregate_list)
+	assert(aggregate_list.l == [5])
+
+	aggregate_list.l = []
+	bfs_all(aggregate_list)
+	assert(aggregate_list.l == [0,1,2,3,4,5])
+
+
+
 def test_dfs():
 	test_dfs_undirected()
 	test_dfs_directed()
 
 
+def test_bfs():
+	test_bfs_undirected()
+	test_bfs_undirected(recursive=True)
+	test_bfs_directed()
+	test_bfs_directed(recursive=True)
+
+
 if __name__ == '__main__':
 	basic_testcases()
 	test_dfs()
+	test_bfs()
 
