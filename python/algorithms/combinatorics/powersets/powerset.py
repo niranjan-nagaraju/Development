@@ -42,19 +42,20 @@ def generate_power_set(a, n):
 		generate_power_set_helper (powerset, subsets_selector[i:], [], 0, n-i)
 
 	# Fill in actual items from the original set based on the subset masks
-	for i in range(n+1):
-		for x in powerset[i]:
+	for i in range(1, n+1):
+		for j in range(len(powerset[i])):
+			# row 'i' has 'i' items in each subset
 			for k in range(i):
-				x[k] = a[x[k]]
+				powerset[i][j][k] = a[powerset[i][j][k]]
 
-	# If the original set was a string, stringify the subsets too
+			# If the original set was a string, stringify the subsets too
+			if isinstance(a, str):
+				powerset[i][j] = ''.join(powerset[i][j])
+
+	# If the original set was a string, stringify the empty subset
+	# into empty string ""
 	if isinstance(a, str):
-		powerset_str = [[] for i in xrange(n+1)]
-		powerset_str[0] = ""
-		for i in range(1,n+1):
-			for x in powerset[i]:
-				powerset_str[i].append(''.join(x))
-		return powerset_str
+		powerset[0] = ""
 
 	return powerset
 
