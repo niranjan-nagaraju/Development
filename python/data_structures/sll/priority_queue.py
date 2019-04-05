@@ -17,12 +17,16 @@ from data_structures.sll.sll import UnderFlowError
 
 # Priority Queue using a SLL
 class PriorityQueue(SLL):
-	def __init__(self):
+	def __init__(self, comparatorfn=None):
 		SLL.__init__(self)
 
 		# Meaningful aliases for enqueue and dequeue
 		# for queue operations
 		self.dequeue = self.pop_front
+		if comparatorfn:
+			self.comparatorfn = comparatorfn
+		else:
+			self.comparatorfn = cmp
 
 
 	# return the item at the front of the Queue
@@ -35,7 +39,7 @@ class PriorityQueue(SLL):
 
 	# Add an item to the priority queue with an associated priority level
 	def enqueue(self, item, priority):
-		self.place((item, priority), lambda (a, p1),(b,p2): cmp(p1, p2))
+		self.place((item, priority), lambda (a, p1),(b,p2): self.comparatorfn(p1, p2))
 
 
 
@@ -90,6 +94,16 @@ def basic_testcases():
 	assert pq.dequeue() == ('Job7', 8)
 	assert pq.size == 0
 	assert (not pq == True)
+
+	# priority queue but higher value => higher priority
+	pq = PriorityQueue(comparatorfn = lambda p1,p2: cmp(p2,p1))
+	pq.enqueue("Job1", 4)
+	pq.enqueue("Job2", 3)
+	pq.enqueue("Job3", 7)
+	pq.enqueue("Job4", 1)
+	pq.enqueue("Job5", 3)
+
+	assert str(pq) == "[5]: ('Job3', 7) ('Job1', 4) ('Job2', 3) ('Job5', 3) ('Job4', 1)"
 
 
 
