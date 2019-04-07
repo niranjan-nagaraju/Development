@@ -26,6 +26,8 @@ class PriorityQueue(SLL):
 		if comparatorfn:
 			self.comparatorfn = comparatorfn
 		else:
+			# if no comparison is provided
+			# try using standard cmp()
 			self.comparatorfn = cmp
 
 
@@ -38,21 +40,30 @@ class PriorityQueue(SLL):
 
 
 	# Add an item to the priority queue with an associated priority level
-	def enqueue(self, item, priority):
-		self.place((item, priority), lambda (a, p1),(b,p2): self.comparatorfn(p1, p2))
+	def enqueue(self, item):
+		self.place(item, self.comparatorfn)
 
 
 
 # basic priority queue testcases
 def basic_testcases():
 	pq = PriorityQueue()
+	pq.enqueue(4)
+	pq.enqueue(5)
+	pq.enqueue(1)
+	pq.enqueue(3)
+	pq.enqueue(2)
+	assert pq.size == 5
+	assert str(pq) == "[5]: 1 2 3 4 5"
+
+	pq = PriorityQueue(lambda (a,p1),(b,p2): cmp(p1,p2))
 	assert(pq.size == 0)
 
-	pq.enqueue("Job1", 4)
-	pq.enqueue("Job2", 3)
-	pq.enqueue("Job3", 7)
-	pq.enqueue("Job4", 1)
-	pq.enqueue("Job5", 3)
+	pq.enqueue(("Job1", 4))
+	pq.enqueue(("Job2", 3))
+	pq.enqueue(("Job3", 7))
+	pq.enqueue(("Job4", 1))
+	pq.enqueue(("Job5", 3))
 
 	assert str(pq) == "[5]: ('Job4', 1) ('Job2', 3) ('Job5', 3) ('Job1', 4) ('Job3', 7)"
 	assert pq.peek() == ('Job4', 1)
@@ -68,9 +79,9 @@ def basic_testcases():
 	assert pq.dequeue() == ('Job5', 3)
 	assert pq.size == 2
 
-	pq.enqueue("Job6", 3)
-	pq.enqueue("Job7", 8)
-	pq.enqueue("Job8", 0)
+	pq.enqueue(("Job6", 3))
+	pq.enqueue(("Job7", 8))
+	pq.enqueue(("Job8", 0))
 	assert pq.size == 5
 	assert pq.peek() == ('Job8', 0)
 
@@ -96,12 +107,12 @@ def basic_testcases():
 	assert (not pq == True)
 
 	# priority queue but higher value => higher priority
-	pq = PriorityQueue(comparatorfn = lambda p1,p2: cmp(p2,p1))
-	pq.enqueue("Job1", 4)
-	pq.enqueue("Job2", 3)
-	pq.enqueue("Job3", 7)
-	pq.enqueue("Job4", 1)
-	pq.enqueue("Job5", 3)
+	pq = PriorityQueue(comparatorfn = lambda (a,p1),(b,p2): cmp(p2,p1))
+	pq.enqueue(("Job1", 4))
+	pq.enqueue(("Job2", 3))
+	pq.enqueue(("Job3", 7))
+	pq.enqueue(("Job4", 1))
+	pq.enqueue(("Job5", 3))
 
 	assert str(pq) == "[5]: ('Job3', 7) ('Job1', 4) ('Job2', 3) ('Job5', 3) ('Job4', 1)"
 
