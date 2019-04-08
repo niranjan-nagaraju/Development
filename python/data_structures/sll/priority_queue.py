@@ -116,6 +116,16 @@ def basic_testcases():
 
 	assert str(pq) == "[5]: ('Job3', 7) ('Job1', 4) ('Job2', 3) ('Job5', 3) ('Job4', 1)"
 
+	# Use default cmp(), in a pair (a,b), (c,d)
+	# (a,b) < (c,d) if a<b
+	pq = PriorityQueue()
+	pq.enqueue(("Job4", 4))
+	pq.enqueue(("Job3", 3))
+	pq.enqueue(("Job7", 7))
+	pq.enqueue(("Job1", 1))
+	pq.enqueue(("Job3", 11))
+
+	assert str(pq) == "[5]: ('Job1', 1) ('Job3', 3) ('Job3', 11) ('Job4', 4) ('Job7', 7)"
 
 
 if __name__ == '__main__':
