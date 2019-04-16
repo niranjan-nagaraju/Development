@@ -142,17 +142,17 @@ class Heap(object):
 	Uses bubble_down to build heap out of a list/iterable starting from 
 	first non-leaf node from the bottom 
 	'''
+	@staticmethod
 	def build_heap(l):
 		# heap[(n-1)/2 .. 0] are non-leaf nodes 
-		# e.g.
-		#                  0
-		#               /     \
-		#              1       2 
-		#             / \     / \
-		#            3  4     5  6
-		#            
 		# foreach i: (n-1)/2 .. 0, bubble_down(i)
-		pass
+
+		heap = Heap()
+		n = len(l)
+		heap.items = l
+		for i in xrange(n-1/2, -1, -1):
+			heap.bubble_down(i)
+
 
 
 	'''

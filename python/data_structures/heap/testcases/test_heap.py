@@ -55,10 +55,19 @@ def test_remove():
 		assert item == i
 
 
+
+def test_build_heap():
+	l = range(10, -1, -1)
+	Heap.build_heap(l)
+	assert l == [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+
+
 def basic_testcases():
 	test_add()
 	test_remove()
+	test_build_heap()
 
 if __name__ == '__main__':
 	basic_testcases()
+
 
