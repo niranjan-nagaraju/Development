@@ -13,6 +13,11 @@ class HeapEmptyError(Exception):
 		return self.message
 
 
+
+'''
+The heap class
+implements a min-heap
+'''
 class Heap(object):
 	def __init__(self, comparatorfn=None):
 		self.items = []
@@ -34,6 +39,7 @@ class Heap(object):
 
 	def __len__(self):
 		return len(self.items)
+
 
 	'''
 	decorator to ensure heap is not empty
@@ -67,11 +73,19 @@ class Heap(object):
 
 
 	'''
-	Bubble up item at the end of the heap
+	Is the list a heap?
+	Recursivelt check if a subtree rooted at 'i' is a heap
+	i.e. all its children are < the parent
+	'''
+	def isHeap(list):
+		pass
+		
+
+	'''
+	Bubble up item at index, 'i' all the way up
 	till the heap property is restored
 	'''
-	def bubble_up(self, n):
-		i = n-1
+	def bubble_up(self, i):
 		while (i > 0) and self.items[i] < self.items[self.parent(i)]:
 			self.items[i], self.items[self.parent(i)] = self.items[self.parent(i)], self.items[i]
 			i = self.parent(i)
@@ -87,6 +101,7 @@ class Heap(object):
 	and is bubbled down, until heap property is restored.
 	'''
 	def bubble_down(self, i):
+		# TODO: Fix if left or right don't exist
 		try:
 			l, r = self.left(i), self.right(i)
 			smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
@@ -113,7 +128,7 @@ class Heap(object):
 	'''
 	def add(self, item):
 		self.items.append(item)
-		self.bubble_up(len(self.items))
+		self.bubble_up(len(self.items)-1)
 
 
 	
@@ -136,7 +151,11 @@ class Heap(object):
 	new should be <  items[i]
 	'''
 	def decreaseKey(self, i, new):
-		pass
+		if not new < self.items[i]:
+			raise ValueError("%s: %s() - New key should be less current value" %('ValueError', self.decreaseKey.__name__))
+		self.items[i] = new
+		self.bubble_up(i)
+
 
 	'''
 	Uses bubble_down to build heap out of a list/iterable starting from 
@@ -158,11 +177,11 @@ class Heap(object):
 	'''
 	Repeatedly call remove() to get a sorted list
 	'''
-	def sorted(self, aggregatorfn=None):
+	def sorted(self, aggregatorfn=None, *args, **kwargs):
 		if not aggregatorfn:
-			aggregatorfn = _default_printfn
+			aggregatorfn = self._default_printfn
 
 		while self:
-			aggregatorfn(self.remove())
+			aggregatorfn(self.remove(), *args, **kwargs)
 
 
