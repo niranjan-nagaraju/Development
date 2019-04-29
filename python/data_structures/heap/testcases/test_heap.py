@@ -94,12 +94,73 @@ def test_sorted():
 	assert new_l == range(11)
 
 
+def test_isHeap(recursive = True):
+	h = Heap()
+	if recursive:
+		isHeap = h.isHeap
+	else:
+		isHeap = h.isHeap_i
+
+	h.items = []
+	assert isHeap() == True
+
+	h.items = [1, 1]
+	assert isHeap() == True
+
+	h.items = [1, 1, 1]
+	assert isHeap() == True
+
+	'''
+      1
+     / \
+    2   3
+   / \
+  4   5
+	'''
+	h.items = [1,2,3,4,5]
+	assert isHeap() == True
+
+	'''
+      1
+     /
+    2
+	'''
+	h.items = [2, 1]
+	assert isHeap() == False
+
+	'''
+      2
+     / \
+    3   1
+	'''
+	h.items = [2, 3, 1]
+	assert isHeap() == False
+
+	'''
+       1
+     /   \
+    2     3
+   / \   /
+  4   5 1
+	'''
+	h.items = [1, 2, 3, 4, 5, 1]
+	assert isHeap() == False
+
+	h.items = range(10, -1, -1)
+	assert isHeap() == False
+
+	h.items = range(10)
+	assert isHeap() == True
+
+
 def basic_testcases():
 	test_add()
 	test_remove()
 	test_build_heap()
 	test_decreaseKey()
 	test_sorted()
+	test_isHeap()
+	test_isHeap(recursive=False)
 
 if __name__ == '__main__':
 	basic_testcases()

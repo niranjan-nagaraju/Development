@@ -22,6 +22,7 @@ class Heap(object):
 	def __init__(self, comparatorfn=None):
 		self.items = []
 		self.comparatorfn = comparatorfn if comparatorfn else cmp
+		self.isHeap = self.isHeap_r # use recursive version by default
 
 
 	# A default print function if no aggregator is provided
@@ -73,20 +74,58 @@ class Heap(object):
 
 
 	'''
-	Is the list a heap?
-	Recursivelt check if a subtree rooted at 'i' is a heap
+	All items after index: n/2-1 are leaf nodes in a heap
+	'''
+	@staticmethod
+	def isLeaf(i, n):
+		return i > (n-2)/2
+
+
+	'''
+	Do the items form a heap (satisfy the heap property)?
+	Recursively check if a subtree rooted at 'i' is a heap
 	i.e. all its children are < the parent
 	'''
-	def isHeap(list):
-		pass
-		
+	def isHeap_r(self, i=0):
+		# Leaf nodes are heaps by default
+		if self.isLeaf(i, len(self.items)):
+			return True
+
+		# Do a preorder traversal checking if root < left,right
+		# and then check for left and subtrees
+		l,r = self.left(i), self.right(i)
+		if l < len(self.items) and not self.comparatorfn(self.items[i], self.items[l]) <= 0:
+			return False
+		if r < len(self.items) and not self.comparatorfn(self.items[i], self.items[r]) <= 0:
+			return False
+
+		return self.isHeap_r(l) and self.isHeap_r(r)
+
+
+	'''
+	Do the items form a heap (satisfy the heap property)?
+	Iteratively check all non-leaf nodes are heaps
+	i.e. all its children are < the parent
+	'''
+	def isHeap_i(self):
+		n = len(self.items)
+		for i in xrange((n-2)/2+1):
+			l,r = self.left(i), self.right(i)
+			if l < len(self.items) and not self.comparatorfn(self.items[i], self.items[l]) <= 0:
+				return False
+			if r < len(self.items) and not self.comparatorfn(self.items[i], self.items[r]) <= 0:
+				return False
+
+		return True
+
+
 
 	'''
 	Bubble up item at index, 'i' all the way up
 	till the heap property is restored
 	'''
 	def bubble_up(self, i):
-		while (i > 0) and self.items[i] < self.items[self.parent(i)]:
+		while (i > 0) and self.comparatorfn(self.items[i], self.items[self.parent(i)]) < 0:
 			self.items[i], self.items[self.parent(i)] = self.items[self.parent(i)], self.items[i]
 			i = self.parent(i)
 
@@ -100,23 +139,22 @@ class Heap(object):
 	the last item in the heap replaces the top of the heap
 	and is bubbled down, until heap property is restored.
 	'''
-	def bubble_down(self, i):
-		# TODO: Fix if left or right don't exist
-		try:
-			l, r = self.left(i), self.right(i)
-			smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
+	def bubble_down(self, i=0):
+		l, r = self.left(i), self.right(i)
+		smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
 
-			# Find the smallest of left, right and root items
-			smallest = smaller_of(l, r)
-			smallest = smaller_of(smallest, i)
+		smallest = i
+		# Find the smallest of left, right and root items
+		if l < len(self.items):
+			smallest = smaller_of(smallest, l)
 
-			# swap root of the subtree with the smallest of the left and right children
-			if (smallest != i):
-				self.items[i], self.items[smallest] = self.items[smallest], self.items[i]
-				self.bubble_down(smallest)
-		except IndexError:
-			# overshot left and right subtree indices beyond the list bounds
-			return
+		if r < len(self.items):
+			smallest = smaller_of(smallest, r)
+
+		# swap root of the subtree with the smallest of the left and right children
+		if (smallest != i):
+			self.items[i], self.items[smallest] = self.items[smallest], self.items[i]
+			self.bubble_down(smallest)
 
 
 
@@ -151,7 +189,7 @@ class Heap(object):
 	new should be <  items[i]
 	'''
 	def decreaseKey(self, i, new):
-		if not new < self.items[i]:
+		if not self.comparatorfn(new, self.items[i]) < 0:
 			raise ValueError("%s: %s() - New key should be less current value" %('ValueError', self.decreaseKey.__name__))
 		self.items[i] = new
 		self.bubble_up(i)
@@ -163,13 +201,13 @@ class Heap(object):
 	'''
 	@staticmethod
 	def build_heap(l):
-		# heap[(n-1)/2 .. 0] are non-leaf nodes 
-		# foreach i: (n-1)/2 .. 0, bubble_down(i)
+		# heap[(n-2)/2 .. 0] are non-leaf nodes
+		# foreach i: (n-2)/2 .. 0, bubble_down(i)
 
 		heap = Heap()
 		n = len(l)
 		heap.items = l
-		for i in xrange(n-1/2, -1, -1):
+		for i in xrange((n-2)/2, -1, -1):
 			heap.bubble_down(i)
 
 
