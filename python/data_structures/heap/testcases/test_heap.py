@@ -153,7 +153,57 @@ def test_isHeap(recursive = True):
 	assert isHeap() == True
 
 
-def basic_testcases():
+
+def test_custom_items():
+	class Record:
+		def __init__(self, a, b, c):
+			self.a = a
+			self.b = b
+			self.c = c
+
+		# by default, using 'b' as key to compare
+		def __cmp__(self, other):
+			return cmp(self.b, other.b)
+
+		def __str__(self):
+			return "(%s, %s, %s)" %(self.a, self.b, self.c)
+
+	h = Heap()
+	h.add(Record("record1", 1, 100))
+	h.add(Record("record4", 5, 125))
+	h.add(Record("record3", 2, 50))
+	h.add(Record("record2", 3, 25))
+	h.add(Record("record5", 4, 5))
+
+	sorted_records_bs = []
+	h.sorted(lambda x, l: l.append(x.b), sorted_records_bs)
+	assert sorted_records_bs == range(1,6)
+
+	h2 = Heap(lambda r1, r2: cmp(r1.a, r2.a))
+	h2.add(Record("record1", 1, 100))
+	h2.add(Record("record4", 5, 125))
+	h2.add(Record("record3", 2, 50))
+	h2.add(Record("record2", 3, 25))
+	h2.add(Record("record5", 4, 5))
+
+	sorted_records_as = []
+	h2.sorted(lambda x, l: l.append(x.a), sorted_records_as)
+	assert sorted_records_as == ["record"+str(i) for i in xrange(1,6)]
+
+	h3 = Heap(lambda r1, r2: cmp(r1.c, r2.c))
+	h3.add(Record("record1", 1, 100))
+	h3.add(Record("record4", 5, 125))
+	h3.add(Record("record3", 2, 50))
+	h3.add(Record("record2", 3, 25))
+	h3.add(Record("record5", 4, 5))
+
+	sorted_records_cs = []
+	h3.sorted(lambda x, l: l.append(x.c), sorted_records_cs)
+	assert sorted_records_cs == sorted([100, 125, 50, 25, 5])
+
+
+
+def test_heap():
 	test_add()
 	test_remove()
 	test_build_heap()
@@ -161,8 +211,9 @@ def basic_testcases():
 	test_sorted()
 	test_isHeap()
 	test_isHeap(recursive=False)
+	test_custom_items()
 
 if __name__ == '__main__':
-	basic_testcases()
+	test_heap()
 
 

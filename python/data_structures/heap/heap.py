@@ -32,7 +32,10 @@ class Heap(object):
 		print str(item) + " ",
 
 	def __str__(self):
-		return str(self.items)
+		hstr = "[%d]: " %(len(self.items))
+		for item in self.items:
+			hstr += "%s " %(item)
+		return hstr.strip()
 
 	def __repr__(self):
 		return repr(self.items)
