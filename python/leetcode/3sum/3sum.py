@@ -52,15 +52,8 @@ class Solution(object):
 	# (1, 0, -1) == (1, -1, 0) == (-1, 0, 1)
 	@staticmethod
 	def add_unique_triplets(triplets, a, b, c):
-		sorted_triplet = sorted([a,b,c])
-		for t in triplets:
-			# return without adding as soon as we find another triplet
-			# with the same digits
-			if sorted(t) == sorted_triplet:
-				return
-
-		# Entire list didn't have the same triplet (in whatever order)
-		triplets.append([a,b,c])
+		[a,b,c] = sorted([a,b,c])
+		triplets[(a,b,c)] = [a,b,c]
 
 
 	# find triplets (a,b,c) in the array that add upto to 0
@@ -68,7 +61,7 @@ class Solution(object):
 	# Use find_pair(array, -a) to find a pair that adds upto -(b+c)
 	@staticmethod
 	def find_triplet(array):
-		triplets = []
+		triplets = {}
 
 		# keep a lookup table of all pairs for a given number 'n', results in sum '-n'
 		lookup_table = {}
@@ -82,13 +75,13 @@ class Solution(object):
 						Solution.add_unique_triplets(triplets, array[i], a, b)
 				lookup_table[array[i]] = True
 
-		return triplets
+		return triplets.values()
 
 
 
 if __name__ == '__main__':
 	sol = Solution()
 	assert sol.find_pairs([1,2,3,4,5,1], 0, 5) == [(2,3), (1,4)]
-	assert sol.threeSum([-1, 0, 1, 2, -1, -4]) == [[-1, 0, 1], [-1, 2, -1]]
-	assert sol.threeSum([1,2,3,-1,0]) == [[1, -1, 0]]
+	assert sol.threeSum([-1, 0, 1, 2, -1, -4]) == [[-1, -1, 2], [-1, 0, 1]]
+	assert sol.threeSum([1,2,3,-1,0]) == [[-1, 0, 1]]
 
