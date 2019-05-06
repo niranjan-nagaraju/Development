@@ -68,9 +68,16 @@ class Solution(object):
 
 	# Return length of max palindrome starting with string[startidx]
 	@staticmethod
-	def max_palindrome_len(string, startIdx, endIdx):
+	def max_palindrome_len(string, startIdx, endIdx, lookup_table):
 		for i in xrange(endIdx, -1, -1):
+			lookup_startIdx = lookup_table.get(i)
+			if lookup_startIdx is not None:
+				if startIdx > lookup_startIdx:
+					return 0,0,0
+				return lookup_startIdx, i, (i-lookup_startIdx+1)
+
 			if Solution.isPalindrome(string, startIdx, i):
+				lookup_table[i] = startIdx
 				return startIdx, i, (i-startIdx+1)
 
 		# no palindromes found(?!)
@@ -88,13 +95,21 @@ class Solution(object):
 		max_sIdx = 0
 		max_eIdx = 0
 		n = len(s)
+
+		# keeps a tab of palindromes ending at string[endIdx]
+		# so when we ask for a second time, what's the max palindrome length ending at 'endIdx'
+		# we can use lookup table to answer
+		# lookup table stores endIdx -> startIdx mapping indicating string[startIdx..endIdx] is a palindrome
+		# if the query is for an endIdx, and our startIdx > lookup_table[startIdx], we are looking at a smaller subset of the palindrome
+		# and we already know a bigger palindrome exists, so we can just return 0 in that case
+		palindromes_lookup_table = {}
 		for i in xrange(n):
 			if max_len >= (n-i):
 				# we have already found the maximum possible palindrome
 				# its not gonna get any longer from here
 				break
 
-			sIdx, eIdx, curr_len = self.max_palindrome_len(s, i, n-1)
+			sIdx, eIdx, curr_len = self.max_palindrome_len(s, i, n-1, palindromes_lookup_table)
 			if curr_len > max_len:
 				max_len = curr_len
 				max_sIdx = sIdx
@@ -112,13 +127,14 @@ if __name__ == '__main__':
 	assert s.isPalindrome("ab", 1, 1) == True
 	assert s.isPalindrome("abcbd", 1, 3) == True
 
-	assert s.max_palindrome_len("abcd", 0, 3) == (0, 0, 1)
-	assert s.max_palindrome_len("abcbd", 1, 4) == (1, 3, 3) # bcb
-	assert s.max_palindrome_len("cbbd", 1, 3) == (1, 2, 2) # bb
-	assert s.max_palindrome_len("babad", 0, 4) == (0, 2, 3) # bab
-	assert s.max_palindrome_len("babad", 1, 4) == (1, 3, 3) # aba
+	assert s.max_palindrome_len("abcd", 0, 3, {}) == (0, 0, 1)
+	assert s.max_palindrome_len("abcbd", 1, 4, {}) == (1, 3, 3) # bcb
+	assert s.max_palindrome_len("cbbd", 1, 3, {}) == (1, 2, 2) # bb
+	assert s.max_palindrome_len("babad", 0, 4, {}) == (0, 2, 3) # bab
+	assert s.max_palindrome_len("babad", 1, 4, {}) == (1, 3, 3) # aba
 
 	assert s.longestPalindrome("abcbd") == "bcb"
 	assert s.longestPalindrome("abcd") == "a"
 	assert s.longestPalindrome("cbbd") == "bb"
 	assert s.longestPalindrome("babad") == "bab"
+	assert s.longestPalindrome("aaaabcaaa") == "aaaa"
