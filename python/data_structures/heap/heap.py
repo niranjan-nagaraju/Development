@@ -193,7 +193,7 @@ class Heap(object):
 	'''
 	def decreaseKey(self, i, new):
 		if not self.comparatorfn(new, self.items[i]) < 0:
-			raise ValueError("%s: %s() - New key should be less current value" %('ValueError', self.decreaseKey.__name__))
+			raise ValueError("%s: %s() - New key should be less than current value" %('ValueError', self.decreaseKey.__name__))
 		self.items[i] = new
 		self.bubble_up(i)
 
