@@ -24,21 +24,6 @@ class MaxHeap(Heap):
 
 
 
-	'''
-	Uses bubble_down to build heap out of a list/iterable starting from 
-	first non-leaf node from the bottom 
-	'''
-	@staticmethod
-	def build_heap(l):
-		# heap[(n-2)/2 .. 0] are non-leaf nodes
-		# foreach i: (n-2)/2 .. 0, bubble_down(i)
-
-		heap = MaxHeap()
-		n = len(l)
-		heap.items = l
-		for i in xrange((n-2)/2, -1, -1):
-			heap.bubble_down(i)
-
 
 if __name__ == '__main__':
 	caught_exception = False

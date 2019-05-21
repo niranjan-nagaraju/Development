@@ -202,12 +202,15 @@ class Heap(object):
 	Uses bubble_down to build heap out of a list/iterable starting from 
 	first non-leaf node from the bottom 
 	'''
-	@staticmethod
-	def build_heap(l):
+	@classmethod
+	def build_heap(cls, l):
 		# heap[(n-2)/2 .. 0] are non-leaf nodes
 		# foreach i: (n-2)/2 .. 0, bubble_down(i)
 
-		heap = Heap()
+		# Instantiate current class
+		# will instantiate derived class if build_heap is called
+		# from one of the Heap's child classes
+		heap = cls()
 		n = len(l)
 		heap.items = l
 		for i in xrange((n-2)/2, -1, -1):
