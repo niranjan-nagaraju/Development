@@ -219,9 +219,9 @@ def test_custom_comparator():
 		assert h.remove() == i
 
 def test_heap():
-	#test_add()
-	#test_remove()
-	#test_build_heap()
+	test_add()
+	test_remove()
+	test_build_heap()
 	test_increaseKey()
 	test_sorted()
 	test_isHeap()
