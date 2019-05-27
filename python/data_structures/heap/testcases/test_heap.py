@@ -47,15 +47,15 @@ class TestHeap(unittest.TestCase):
 		assert len(h) == 10
 		for i in xrange(10):
 			item = h.remove()
-			assert (len(h) == 10-i-1)
-			assert item == i
+			self.assertEqual(len(h), 10-i-1)
+			self.assertEqual(item, i)
 
 
 
 	def test_build_heap(self):
 		l = range(10, -1, -1)
 		Heap.build_heap(l)
-		assert l == [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+		self.assertEqual(l, [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10])
 
 		l = range(11)
 		Heap.build_heap(l)
@@ -121,9 +121,9 @@ class TestHeap(unittest.TestCase):
 		assert isHeap() == True
 
 		'''
-		  1
+		  2
 		 /
-		2
+		1
 		'''
 		h.items = [2, 1]
 		assert isHeap() == False
