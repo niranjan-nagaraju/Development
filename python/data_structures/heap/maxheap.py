@@ -8,6 +8,10 @@ class MaxHeap(Heap):
 		self.isHeap = self.isHeap_r # use recursive version by default
 		self.isMaxHeap = self.isHeap_r
 
+
+	'''
+	decreaseKey() is invalid for a max heap
+	'''
 	def decreaseKey(self, i, new):
 		raise AttributeError('Heap object has no attribute decreaseKey')
 
