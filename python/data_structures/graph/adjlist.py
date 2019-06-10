@@ -189,6 +189,6 @@ class Graph(GraphBase):
 
 		for v in xrange(self.vertices):
 			if not visited[v]:
-				self.bfs_i(self._adjlists, v, visited, aggregate_fn, *args, **kwargs)
+				self.bfs_r(self._adjlists, v, visited, aggregate_fn, *args, **kwargs)
 
 
