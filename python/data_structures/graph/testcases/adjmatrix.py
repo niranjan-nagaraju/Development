@@ -247,25 +247,25 @@ def test_bfs_directed(recursive=False):
 
 
 	if recursive:
-		bfs_fn = g.bfs_reachable_r
+		bfs_reachable = g.bfs_reachable_r
 		bfs_all = g.bfs_all_r
 	else:
-		bfs_fn = g.bfs_reachable
+		bfs_reachable = g.bfs_reachable
 		bfs_all = g.bfs_all
 
-	bfs_fn(2, aggregate_list)
+	bfs_reachable(2, aggregate_list)
 	assert(aggregate_list.l == [2,0,1])
 
 	aggregate_list.l = []
-	bfs_fn(0, aggregate_list)
+	bfs_reachable(0, aggregate_list)
 	assert(aggregate_list.l == [0,1,2])
 
 	aggregate_list.l = []
-	bfs_fn(4, aggregate_list)
+	bfs_reachable(4, aggregate_list)
 	assert(aggregate_list.l == [4,2,0,1])
 
 	aggregate_list.l = []
-	bfs_fn(5, aggregate_list)
+	bfs_reachable(5, aggregate_list)
 	assert(aggregate_list.l == [5])
 
 	aggregate_list.l = []
