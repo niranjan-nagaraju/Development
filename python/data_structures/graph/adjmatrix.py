@@ -161,7 +161,7 @@ class Graph(GraphBase):
 	iterative version
 	'''
 	@staticmethod
-	def bfs_i(adjacency_matrix, startvertex, visited, aggregate_fn, *args, **kwargs):
+	def bfs(adjacency_matrix, startvertex, visited, aggregate_fn, *args, **kwargs):
 		neighbors = Queue()
 		neighbors.enqueue(startvertex)
 		while neighbors:
@@ -218,7 +218,7 @@ class Graph(GraphBase):
 		if recursive:
 			bfs = self.bfs_r
 		else:
-			bfs = self.bfs_i
+			bfs = self.bfs
 
 		visited = [False] * self.vertices
 		bfs(self._adjmatrix, startvertex, visited, aggregate_fn, *args, **kwargs)
@@ -257,7 +257,7 @@ class Graph(GraphBase):
 		if recursive:
 			bfs = self.bfs_r
 		else:
-			bfs = self.bfs_i
+			bfs = self.bfs
 
 		visited = [False] * self.vertices
 		for v in xrange(self.vertices):

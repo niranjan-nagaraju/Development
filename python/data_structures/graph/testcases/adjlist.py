@@ -37,7 +37,7 @@ def basic_testcases():
 '''
 DFS on an undirected graph
 '''
-def test_dfs_undirected():
+def test_dfs_undirected(recursive=True):
 	g = Graph(6) 
 	g.add_edge(0, 1) 
 	g.add_edge(0, 2) 
@@ -65,24 +65,44 @@ def test_dfs_undirected():
 		aggregate_list.l.append(v)
 		return aggregate_list.l
 
-	g.dfs_reachable(2, aggregate_list)
-	assert(aggregate_list.l == [2,0,1,4,3])
+	if recursive:
+		dfs_reachable = g.dfs_reachable
+		dfs_all = g.dfs_all
+	else:
+		dfs_reachable = g.dfs_reachable_i
+		dfs_all = g.dfs_all_i
+
+
+	dfs_reachable(2, aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [2,0,1,4,3])
+	else:
+		assert(aggregate_list.l == [2, 4, 3, 1, 0])
 
 	aggregate_list.l = []
-	g.dfs_reachable(0, aggregate_list)
-	assert(aggregate_list.l == [0,1,2,4,3])
+	dfs_reachable(0, aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [0,1,2,4,3])
+	else:
+		assert(aggregate_list.l == [0,2,4,3,1])
 
 	aggregate_list.l = []
-	g.dfs_reachable(4, aggregate_list)
-	assert(aggregate_list.l == [4,2,0,1,3])
+	dfs_reachable(4, aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [4,2,0,1,3])
+	else:
+		assert(aggregate_list.l == [4,3,2,1,0])
 
 	aggregate_list.l = []
-	g.dfs_reachable(5, aggregate_list)
+	dfs_reachable(5, aggregate_list)
 	assert(aggregate_list.l == [5])
 
 	aggregate_list.l = []
-	g.dfs_all(aggregate_list)
-	assert(aggregate_list.l == [0,1,2,4,3,5])
+	dfs_all(aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [0,1,2,4,3,5])
+	else:
+		assert(aggregate_list.l == [0,2,4,3,1,5])
 
 
 
@@ -90,7 +110,7 @@ def test_dfs_undirected():
 '''
 DFS on an directed graph
 '''
-def test_dfs_directed():
+def test_dfs_directed(recursive=True):
 	g = Graph(6, directed=True) 
 	g.add_edge(0, 1) 
 	g.add_edge(0, 2) 
@@ -119,24 +139,38 @@ def test_dfs_directed():
 		aggregate_list.l.append(v)
 		return aggregate_list.l
 
-	g.dfs_reachable(2, aggregate_list)
+	if recursive:
+		dfs_reachable = g.dfs_reachable
+		dfs_all = g.dfs_all
+	else:
+		dfs_reachable = g.dfs_reachable_i
+		dfs_all = g.dfs_all_i
+
+
+	dfs_reachable(2, aggregate_list)
 	assert(aggregate_list.l == [2,0,1])
 
 	aggregate_list.l = []
-	g.dfs_reachable(0, aggregate_list)
-	assert(aggregate_list.l == [0,1,2])
+	dfs_reachable(0, aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [0,1,2])
+	else:
+		assert(aggregate_list.l == [0,2,1])
 
 	aggregate_list.l = []
-	g.dfs_reachable(4, aggregate_list)
+	dfs_reachable(4, aggregate_list)
 	assert(aggregate_list.l == [4,2,0,1])
 
 	aggregate_list.l = []
-	g.dfs_reachable(5, aggregate_list)
+	dfs_reachable(5, aggregate_list)
 	assert(aggregate_list.l == [5])
 
 	aggregate_list.l = []
-	g.dfs_all(aggregate_list)
-	assert(aggregate_list.l == [0,1,2,3,4,5])
+	dfs_all(aggregate_list)
+	if recursive:
+		assert(aggregate_list.l == [0,1,2,3,4,5])
+	else:
+		assert(aggregate_list.l == [0,2,1,3,4,5])
 
 
 '''
@@ -172,25 +206,25 @@ def test_bfs_undirected(recursive=False):
 
 
 	if recursive:
-		bfs_fn = g.bfs_reachable_r
+		bfs_reachable = g.bfs_reachable_r
 		bfs_all = g.bfs_all_r
 	else:
-		bfs_fn = g.bfs_reachable
+		bfs_reachable = g.bfs_reachable
 		bfs_all = g.bfs_all
 
-	bfs_fn(2, aggregate_list)
+	bfs_reachable(2, aggregate_list)
 	assert(aggregate_list.l == [2,0,1,4,3])
 
 	aggregate_list.l = []
-	bfs_fn(0, aggregate_list)
+	bfs_reachable(0, aggregate_list)
 	assert(aggregate_list.l == [0,1,2,4,3])
 
 	aggregate_list.l = []
-	bfs_fn(4, aggregate_list)
+	bfs_reachable(4, aggregate_list)
 	assert(aggregate_list.l == [4,2,3,0, 1])
 
 	aggregate_list.l = []
-	bfs_fn(5, aggregate_list)
+	bfs_reachable(5, aggregate_list)
 	assert(aggregate_list.l == [5])
 
 	aggregate_list.l = []
@@ -231,27 +265,26 @@ def test_bfs_directed(recursive=False):
 		aggregate_list.l.append(v)
 		return aggregate_list.l
 
-
 	if recursive:
-		bfs_fn = g.bfs_reachable_r
+		bfs_reachable = g.bfs_reachable_r
 		bfs_all = g.bfs_all_r
 	else:
-		bfs_fn = g.bfs_reachable
+		bfs_reachable = g.bfs_reachable
 		bfs_all = g.bfs_all
 
-	bfs_fn(2, aggregate_list)
+	bfs_reachable(2, aggregate_list)
 	assert(aggregate_list.l == [2,0,1])
 
 	aggregate_list.l = []
-	bfs_fn(0, aggregate_list)
+	bfs_reachable(0, aggregate_list)
 	assert(aggregate_list.l == [0,1,2])
 
 	aggregate_list.l = []
-	bfs_fn(4, aggregate_list)
+	bfs_reachable(4, aggregate_list)
 	assert(aggregate_list.l == [4,2,0,1])
 
 	aggregate_list.l = []
-	bfs_fn(5, aggregate_list)
+	bfs_reachable(5, aggregate_list)
 	assert(aggregate_list.l == [5])
 
 	aggregate_list.l = []
@@ -262,7 +295,9 @@ def test_bfs_directed(recursive=False):
 
 def test_dfs():
 	test_dfs_undirected()
+	test_dfs_undirected(recursive=False)
 	test_dfs_directed()
+	test_dfs_directed(recursive=False)
 
 
 def test_bfs():
