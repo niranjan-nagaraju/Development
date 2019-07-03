@@ -255,8 +255,6 @@ class Solution(object):
 			if word1[i] != word2[i]:
 				num_changes += 1
 
-			if num_changes > 1:
-				return False
 		return True if num_changes == 1 else False
 
 
@@ -271,32 +269,12 @@ class Solution(object):
 		return transforms
 
 
-	# Retrace path to Ws from We and add them to the list of paths
-	def add_to_path(self, paths, startIdx, endIdx, wordList, graph):
-		path = []
-		i = endIdx
-		while i != 0:
-			print 'add:', i, wordList[i]
-			path.insert(0, wordList[i])
-			i,_ = graph[i]
-
-		path.insert(0, wordList[0])
-		if path not in paths:
-			paths.append(path)
-
-
-	def printGraph(self, graph, wordList, visited):
-		print 'Graph:'
-		for j in xrange(len(graph)):
-			print '[', wordList[j], ']:', (wordList[graph[j][0]], graph[j][1]) if graph[j] else None,
-			print 'Visited:', visited[j]
-
 	def ladderLength(self, beginWord, endWord, wordList):
 		"""
 		:type beginWord: str
 		:type endWord: str
 		:type wordList: List[str]
-		:rtype: List[List[str]]
+		:rtype: int
 		"""
 
 		startIdx = None
@@ -307,11 +285,9 @@ class Solution(object):
 
 		# add beginWord to wordList if it doesn't exist in the wordlist
 		# so each word becomes a vertex in the graph
-		if startIdx is not None:
-			wordList.remove(beginWord)
-
-		wordList.insert(0, beginWord)
-		startIdx = 0
+		if startIdx is None:
+			wordList.insert(0, beginWord)
+			startIdx = 0
 
 		#print 'Dictionary: ', wordList
 
@@ -324,60 +300,29 @@ class Solution(object):
 		if endIdx is None:
 			return 0
 
-		shortest_paths = []
 		visited = [False] * len(wordList)
 
-		bfs_q = [(0, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
+		bfs_q = [(startIdx, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
 		visited[startIdx] = True  # Mark startword as visited
 
-		# Maximum depth == max number of edges in the graph
-		# this'll be equal to the number of words in the dictionary (sans Ws)
-		# in the worst case
-		minlength = len(wordList)
-
-		# adjacency list representation of the transformation DAG
-		# Edge Wj -> Wi exists of Wi can be transformed into Wj by changing one letter in Wi
-		# Since each vertex has exactly one parent, this can just be a simple 1-D list
-		# instead of list of lists as adjacency lists usually are.
-		transformation_graph = [None for x in xrange(len(wordList))]
 		while bfs_q:
 			(wordIdx, curr_level) = bfs_q.pop(0)
 
-			#print 'Current word', wordList[wordIdx]
-
 			oneLetterTranformsIdxs = self.findOneLetterTranforms(wordList[wordIdx], wordList, visited)
-			#print '1 letter away:', [wordList[i] for i in oneLetterTranformsIdxs]
 
 			curr_level += 1
 
-			# We have found all the shortest transformation paths
-			if curr_level > minlength:
-				#print '> minlevel'
-				break
-
 			for i in oneLetterTranformsIdxs:
-				# add an edge to the parent word from current word,
-				# capturing the level the current word is at
-				transformation_graph[i] = (wordIdx, curr_level)
-				#self.printGraph(transformation_graph, wordList, visited)
-
 				if i == endIdx:
-					minlength = curr_level
-					return (minlength + 1)
-					#self.add_to_path(shortest_paths, startIdx, endIdx, wordList, transformation_graph)
-					#print 'path:', shortest_paths
-				else:
-					# Do not mark endWord as visited ever.
-					visited[i] = True
-					bfs_q.append((i, curr_level))
+					return (curr_level + 1)
+				visited[i] = True
+				bfs_q.append((i, curr_level))
 
 
-		#self.printGraph(transformation_graph, wordList, visited)
 		return 0
 
 if __name__ == '__main__':
 	s = Solution()
-
 
 	assert s.isTransformation("mate", "mate") == False
 	assert s.isTransformation("mate", "math") == True
@@ -392,3 +337,4 @@ if __name__ == '__main__':
 
 	from test_in import we, ws, wl
 	assert s.ladderLength(ws, we, wl) == 20
+
