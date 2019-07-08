@@ -263,7 +263,7 @@ class Solution(object):
 	def findOneLetterTranforms(self, word, wordList, visited):
 		transforms = []
 		for i in xrange(len(wordList)):
-			if visited[i] is False and self.isTransformation(word, wordList[i]):
+			if not visited.get(wordList[i]) and self.isTransformation(word, wordList[i]):
 				transforms.append(i)
 
 		return transforms
@@ -277,48 +277,27 @@ class Solution(object):
 		:rtype: int
 		"""
 
-		startIdx = None
-		for i in xrange(len(wordList)):
-			if wordList[i] == beginWord:
-				startIdx = i
-				break
-
-		# add beginWord to wordList if it doesn't exist in the wordlist
-		# so each word becomes a vertex in the graph
-		if startIdx is None:
-			wordList.insert(0, beginWord)
-			startIdx = 0
-
-		#print 'Dictionary: ', wordList
-
-		endIdx = None
-		for i in xrange(len(wordList)):
-			if wordList[i] == endWord:
-				endIdx = i
-				break
-
-		if endIdx is None:
+		if endWord not in wordList:
 			return 0
 
-		visited = [False] * len(wordList)
-
-		bfs_q = [(startIdx, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
-		visited[startIdx] = True  # Mark startword as visited
+		visited = {}
+		bfs_q = [(beginWord, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
+		visited[beginWord] = True  # Mark startword as visited
 
 		while bfs_q:
-			(wordIdx, curr_level) = bfs_q.pop(0)
+			(word, curr_level) = bfs_q.pop(0)
 
-			oneLetterTranformsIdxs = self.findOneLetterTranforms(wordList[wordIdx], wordList, visited)
+			oneLetterTranformsIdxs = self.findOneLetterTranforms(word, wordList, visited)
 
 			curr_level += 1
 
 			for i in oneLetterTranformsIdxs:
-				if i == endIdx:
+				if wordList[i] == endWord:
 					return (curr_level + 1)
-				visited[i] = True
-				bfs_q.append((i, curr_level))
+				visited[wordList[i]] = True
+				bfs_q.append((wordList[i], curr_level))
 
-
+		# couldn't find a path from beginWord to endWord
 		return 0
 
 if __name__ == '__main__':
@@ -328,7 +307,7 @@ if __name__ == '__main__':
 	assert s.isTransformation("mate", "math") == True
 	assert s.isTransformation("mate", "meat") == False
 
-	assert s.findOneLetterTranforms("mate", ["mate", "meat", "math", "late", "male", "mile"], [False]*6) == [2, 3, 4]
+	assert s.findOneLetterTranforms("mate", ["mate", "meat", "math", "late", "male", "mile"], {}) == [2, 3, 4]
 
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log"]) == 0
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log","cog"]) == 5
