@@ -246,32 +246,84 @@ Level: 5
    (Add all words that are one letter away from COG)
 '''
 
+'''
+Lookup table to get one-letter transforms of any given word in list
+
+words: MALE, MAKE, MIKE, PALE
+u create lookup table initially like so
+MALE:
+  [*ALE]: {MALE}
+  [M*LE]: {MALE}
+  [MA*E]: {MALE}
+  [MAL*]: {MALE}
+MAKE:
+  [*AKE]: {MAKE}
+  [M*KE]: {MAKE}
+  [MA*E]: {MALE, MAKE}
+  [MAK*]: {MAKE}
+MIKE:
+  [*IKE]: {MIKE}
+  [M*KE}: {MAKE, MIKE}
+  [MI*E]: {MIKE}
+  [MIK*]: {MIKE}
+PALE:
+  [*ALE]: {MALE, PALE}
+  [P*LE]: {PALE}
+  [PA*E]: {PALE}
+  [PAL*]: {PALE}
+
+Final lookup table:
+  [M*LE]: {MALE}
+  [MAL*]: {MALE}
+  [*AKE]: {MAKE}
+  [MA*E]: {MALE, MAKE}
+  [MAK*]: {MAKE}
+  [*IKE]: {MIKE}
+  [M*KE}: {MAKE, MIKE}
+  [MI*E]: {MIKE}
+  [MIK*]: {MIKE}
+  [*ALE]: {MALE, PALE}
+  [P*LE]: {PALE}
+  [PA*E]: {PALE}
+  [PAL*]: {PALE}
+
+To lookup for 'neighbors' of PALE
+just search for *ALE, P*LE, PA*E and PAL*
+'''
+
 from Queue import Queue
 
 class Solution(object):
-	# Check whether if word1, and word2 are one letter away from each other
-	def isTransformation(self, word1, word2):
-		if word1 == word2:
-			return False
+	# Initialize a lookup-table to quickly get one-letter transforms of a given word
+	def initialize_lookup_table(self, wordList):
+		lookup_table = {}
+		for word in wordList:
+			for i in xrange(len(word)):
+				# Create different placeholder keys for lookup
+				key = word[:i] + '*' + word[i+1:]
+				if lookup_table.get(key) is None:
+					# Initialize an empty set incase the key doesnt already exist
+					# Using a set so incase there are duplicates in wordlist
+					# (problem statement says there arent)
+					# OR
+					# beginWord already exists in wordList
+					# in which case, we dont want duplicate entries in the lookup table
+					lookup_table[key] = set()
+				lookup_table[key].add(word)
 
-		num_changes = 0
-		for i in xrange(len(word1)):
-			if word1[i] != word2[i]:
-				num_changes += 1
-
-			if num_changes > 1:
-				return False
-
-		return True
+		return lookup_table
 
 
 	# Find all words in the wordList that are one letter
 	# away from 'word'
-	def findOneLetterTranforms(self, word, wordList, visited):
+	def findOneLetterTranforms(self, word, lookup_table, visited):
 		transforms = []
-		for w in wordList:
-			if not visited.get(w) and self.isTransformation(word, w):
-				transforms.append(w)
+		for i in xrange(len(word)):
+			key = word[:i] + '*' + word[i+1:]
+			words = lookup_table[key]
+			for w in words:
+				if w != word and not visited.get(w):
+					transforms.append(w)
 
 		return transforms
 
@@ -284,19 +336,25 @@ class Solution(object):
 		:rtype: int
 		"""
 
+		# Add beginWord to the list, just in case
+		# wordList doesn't have it already
+		wordList.insert(0, beginWord)
+
+		lookup_table = self.initialize_lookup_table(wordList)
 		visited = {}
 		bfs_q = Queue(len(wordList)+1)
+
 		bfs_q.put_nowait((beginWord, 0)) # Each 'vertex' in the graph has (parent word index, Level in the graph)
 		visited[beginWord] = True  # Mark startword as visited
 
 		while not bfs_q.empty():
 			(word, curr_level) = bfs_q.get_nowait()
 
-			oneLetterTranformsIdxs = self.findOneLetterTranforms(word, wordList, visited)
+			oneLetterTranforms = self.findOneLetterTranforms(word, lookup_table, visited)
 
 			curr_level += 1
 
-			for w in oneLetterTranformsIdxs:
+			for w in oneLetterTranforms:
 				if w == endWord:
 					return (curr_level + 1)
 				visited[w] = True
@@ -306,14 +364,37 @@ class Solution(object):
 		# a path from beginWord to endWord
 		return 0
 
+
 if __name__ == '__main__':
 	s = Solution()
 
-	assert s.isTransformation("mate", "mate") == False
-	assert s.isTransformation("mate", "math") == True
-	assert s.isTransformation("mate", "meat") == False
+	ltable = s.initialize_lookup_table(["MALE", "MAKE", "MIKE", "PALE"])
 
-	assert s.findOneLetterTranforms("mate", ["mate", "meat", "math", "late", "male", "mile"], {}) == ["math", "late", "male"]
+	table = {
+	'*AKE': ['MAKE'],
+	'*ALE': ['MALE', 'PALE'],
+	'*IKE': ['MIKE'],
+	'M*KE': ['MAKE', 'MIKE'],
+	'M*LE': ['MALE'],
+	'MA*E': ['MALE', 'MAKE'],
+	'MAK*': ['MAKE'],
+	'MAL*': ['MALE'],
+	'MI*E': ['MIKE'],
+	'MIK*': ['MIKE'],
+	'P*LE': ['PALE'],
+	'PA*E': ['PALE'],
+	'PAL*':  ['PALE']
+	}
+
+	i = 0
+	for k, v in sorted(ltable.items()):
+		assert table.has_key(k)
+		assert set(table[k]) == v
+
+	ltable = s.initialize_lookup_table(["mate", "meat", "math", "late", "male", "mile"])
+
+	assert sorted(s.findOneLetterTranforms("mate", ltable, {})) == sorted(["math", "late", "male"])
+	assert sorted(s.findOneLetterTranforms("male", ltable, {})) == sorted(["mate", "mile"])
 
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log"]) == 0
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log","cog"]) == 5
