@@ -246,25 +246,32 @@ Level: 5
    (Add all words that are one letter away from COG)
 '''
 
+from Queue import Queue
 
 class Solution(object):
 	# Check whether if word1, and word2 are one letter away from each other
 	def isTransformation(self, word1, word2):
+		if word1 == word2:
+			return False
+
 		num_changes = 0
 		for i in xrange(len(word1)):
 			if word1[i] != word2[i]:
 				num_changes += 1
 
-		return True if num_changes == 1 else False
+			if num_changes > 1:
+				return False
+
+		return True
 
 
 	# Find all words in the wordList that are one letter
 	# away from 'word'
 	def findOneLetterTranforms(self, word, wordList, visited):
 		transforms = []
-		for i in xrange(len(wordList)):
-			if not visited.get(wordList[i]) and self.isTransformation(word, wordList[i]):
-				transforms.append(i)
+		for w in wordList:
+			if not visited.get(w) and self.isTransformation(word, w):
+				transforms.append(w)
 
 		return transforms
 
@@ -277,27 +284,26 @@ class Solution(object):
 		:rtype: int
 		"""
 
-		if endWord not in wordList:
-			return 0
-
 		visited = {}
-		bfs_q = [(beginWord, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
+		bfs_q = Queue(len(wordList)+1)
+		bfs_q.put_nowait((beginWord, 0)) # Each 'vertex' in the graph has (parent word index, Level in the graph)
 		visited[beginWord] = True  # Mark startword as visited
 
-		while bfs_q:
-			(word, curr_level) = bfs_q.pop(0)
+		while not bfs_q.empty():
+			(word, curr_level) = bfs_q.get_nowait()
 
 			oneLetterTranformsIdxs = self.findOneLetterTranforms(word, wordList, visited)
 
 			curr_level += 1
 
-			for i in oneLetterTranformsIdxs:
-				if wordList[i] == endWord:
+			for w in oneLetterTranformsIdxs:
+				if w == endWord:
 					return (curr_level + 1)
-				visited[wordList[i]] = True
-				bfs_q.append((wordList[i], curr_level))
+				visited[w] = True
+				bfs_q.put_nowait((w, curr_level))
 
-		# couldn't find a path from beginWord to endWord
+		# couldn't find endWord in list or
+		# a path from beginWord to endWord
 		return 0
 
 if __name__ == '__main__':
@@ -307,7 +313,7 @@ if __name__ == '__main__':
 	assert s.isTransformation("mate", "math") == True
 	assert s.isTransformation("mate", "meat") == False
 
-	assert s.findOneLetterTranforms("mate", ["mate", "meat", "math", "late", "male", "mile"], {}) == [2, 3, 4]
+	assert s.findOneLetterTranforms("mate", ["mate", "meat", "math", "late", "male", "mile"], {}) == ["math", "late", "male"]
 
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log"]) == 0
 	assert s.ladderLength("hit", "cog", ["hot","dot","dog","lot","log","cog"]) == 5
