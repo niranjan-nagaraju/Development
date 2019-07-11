@@ -165,16 +165,16 @@ class Graph(GraphBase):
 	def bfs(adjacency_lists, startvertex, visited, aggregate_fn, *args, **kwargs):
 		neighbors = Queue()
 		neighbors.enqueue(startvertex)
+		visited[startvertex] = True
 		while neighbors:
 			v = neighbors.dequeue()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
-				# enqueue all vertices that are neighbors of v
-				for n,_ in adjacency_lists[v]:
-					if not visited[n]:
-						neighbors.enqueue(n)
+			# enqueue all vertices that are neighbors of v
+			for n,_ in adjacency_lists[v]:
+				if not visited[n]:
+					visited[n] = True
+					neighbors.enqueue(n)
 
 
 
