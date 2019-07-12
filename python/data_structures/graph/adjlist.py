@@ -190,19 +190,19 @@ class Graph(GraphBase):
 				return
 
 			v = neighbors.dequeue()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
 			# enqueue all vertices that are neighbors of v
 			for n,_ in adjacency_lists[v]:
 				if not visited[n]:
+					visited[n] = True
 					neighbors.enqueue(n)
 
 			bfs_helper()
 
 		neighbors = Queue()
 		neighbors.enqueue(startvertex)
+		visited[startvertex] = True
 		bfs_helper()
 
 
