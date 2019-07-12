@@ -292,23 +292,22 @@ just search for *ALE, P*LE, PA*E and PAL*
 '''
 
 from Queue import Queue
+from collections import defaultdict
 
 class Solution(object):
 	# Initialize a lookup-table to quickly get one-letter transforms of a given word
 	def initialize_lookup_table(self, wordList):
-		lookup_table = {}
+		lookup_table = defaultdict(set)
 		for word in wordList:
 			for i in xrange(len(word)):
 				# Create different placeholder keys for lookup
 				key = word[:i] + '*' + word[i+1:]
-				if lookup_table.get(key) is None:
-					# Initialize an empty set incase the key doesnt already exist
-					# Using a set so incase there are duplicates in wordlist
-					# (problem statement says there arent)
-					# OR
-					# beginWord already exists in wordList
-					# in which case, we dont want duplicate entries in the lookup table
-					lookup_table[key] = set()
+
+				# Using a set so incase there are duplicates in wordlist
+				# (problem statement says there arent)
+				# OR
+				# beginWord already exists in wordList
+				# in which case, we dont want duplicate entries in the lookup table
 				lookup_table[key].add(word)
 
 		return lookup_table
