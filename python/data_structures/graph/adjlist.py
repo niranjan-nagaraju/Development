@@ -64,21 +64,20 @@ class Graph(GraphBase):
 	def dfs_i(adjacency_lists, startvertex, visited, aggregate_fn, *args, **kwargs):
 		neighbors = Stack()
 		neighbors.push(startvertex)
+		visited[startvertex] = True
 		while neighbors:
 			v = neighbors.pop()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
-				# push all vertices that are neighbors of v
-				# NOTE: the adjacency list is ordered by vertex based on their numbers
-				# pushing it as-is in the stack will reverse this order
-				# Therefore, the recursive and iterative versions
-				# will not be in sync wrt to the order of the vertices tracversed.
-				for n,_ in adjacency_lists[v]:
-					if not visited[n]:
-						neighbors.push(n)
-
+			# push all vertices that are neighbors of v
+			# NOTE: the adjacency list is ordered by vertex based on their numbers
+			# pushing it as-is in the stack will reverse this order
+			# Therefore, the recursive and iterative versions
+			# will not be in sync wrt to the order of the vertices tracversed.
+			for n,_ in adjacency_lists[v]:
+				if not visited[n]:
+					visited[n] = True
+					neighbors.push(n)
 
 
 	'''
@@ -134,7 +133,8 @@ class Graph(GraphBase):
 
 		visited = [False] * self.vertices
 		for i in xrange(self.vertices):
-			dfs(self._adjlists, i, visited, aggregate_fn, *args, **kwargs)
+			if not visited[i]:
+				dfs(self._adjlists, i, visited, aggregate_fn, *args, **kwargs)
 
 	'''
 	Start a Depth-First search from 'vertex 0'
