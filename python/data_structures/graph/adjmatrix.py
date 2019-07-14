@@ -55,12 +55,12 @@ class Graph(GraphBase):
 	@staticmethod
 	def dfs_i(adjacency_matrix, startvertex, visited, aggregate_fn, *args, **kwargs):
 		neighbors = Stack()
+
+		visited[startvertex] = True
 		neighbors.push(startvertex)
 		while neighbors:
 			v = neighbors.pop()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
 			vertices = len(visited)
 			# push all vertices that are neighbors of v
@@ -70,6 +70,7 @@ class Graph(GraphBase):
 				# if there exists an edge from v to vertex, n
 				# continue DFS to vertex n
 				if adjacency_matrix[v][n] is not None and not visited[n]:
+					visited[n] = True
 					neighbors.push(n)
 
 
@@ -131,7 +132,8 @@ class Graph(GraphBase):
 
 		visited = [False] * self.vertices
 		for i in xrange(self.vertices):
-			dfs(self._adjmatrix, i, visited, aggregate_fn, *args, **kwargs)
+			if not visited[i]:
+				dfs(self._adjmatrix, i, visited, aggregate_fn, *args, **kwargs)
 
 
 
@@ -163,17 +165,18 @@ class Graph(GraphBase):
 	@staticmethod
 	def bfs(adjacency_matrix, startvertex, visited, aggregate_fn, *args, **kwargs):
 		neighbors = Queue()
+
+		visited[startvertex] = True
 		neighbors.enqueue(startvertex)
 		while neighbors:
 			v = neighbors.dequeue()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
-				# enqueue all vertices that are neighbors of v
-				for n in xrange(len(visited)):
-					if adjacency_matrix[v][n] is not None and not visited[n]:
-						neighbors.enqueue(n)
+			# enqueue all vertices that are neighbors of v
+			for n in xrange(len(visited)):
+				if adjacency_matrix[v][n] is not None and not visited[n]:
+					visited[n] = True
+					neighbors.enqueue(n)
 
 
 
@@ -189,18 +192,18 @@ class Graph(GraphBase):
 				return
 
 			v = neighbors.dequeue()
-			if not visited[v]:
-				visited[v] = True
-				aggregate_fn(v, *args, **kwargs)
+			aggregate_fn(v, *args, **kwargs)
 
 			# enqueue all vertices that are neighbors of v
 			for n in xrange(len(visited)):
 				if adjacency_matrix[v][n] is not None and not visited[n]:
+					visited[n] = True
 					neighbors.enqueue(n)
 
 			bfs_helper()
 
 		neighbors = Queue()
+		visited[startvertex] = True
 		neighbors.enqueue(startvertex)
 		bfs_helper()
 
