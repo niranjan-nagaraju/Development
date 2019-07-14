@@ -6,6 +6,7 @@ sys.path.append("../../../data_structures/")
 from sll.queue import Queue # import just the Queue, as sll.Node will conflict with binary_tree.node
 from sll.sll import SLL
 from node import Node
+from data_structures.sll.sll import UnderFlowError
 
 class BinaryTree:
 	# A default print function if no aggregator is provided
@@ -151,7 +152,11 @@ class BinaryTree:
 
 			# peek next node in the queue to see if this is the last node in the current level
 			# if yes, print it
-			(level,next_entry) = q.front() if q.front() else (None, None)
+			try:
+				(level,next_entry) = q.front()
+			except UnderFlowError:
+				(level,next_entry) = (None, None)
+
 
 			# Queue is either empty, in which case this is the rightmost node in the last level
 			# *OR*, next entry in the queue is for the level after this one, so this is the rightmost in the current level
@@ -205,7 +210,7 @@ class BinaryTree:
 			q.enqueue((width+1, node.right)) if node.right else None
 
 
-	# Top-view of a binary tree, but ordered from Left->Right
+	# Top-view of a binary tree, but ordered from Left->Right, width-wise
 	# Return the node items that would be seen from the top of the binary tree, but after ordering them from left->right
 	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
 	# e.g.
@@ -327,7 +332,7 @@ class BinaryTree:
 		# Find path to 'node' from the subtree rooted at 'root'
 		# and append each node in the path to the list
 		# Steps:
-		#   1. Start a post-order traversal
+		#   1. Start a pre-order traversal
 		#   2. Find path to node in left subtree, if not found, find in the right subtree
 		#   3. If either of the left subtree/ right subtree returns True, indicating subtree contains the node,
 		#        add current root node to list and return True to higher level calls
