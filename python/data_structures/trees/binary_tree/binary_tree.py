@@ -185,8 +185,8 @@ class BinaryTree:
 			return
 
 		q = Queue()
-		max_left_width = 0
-		max_right_width = 0
+		min_width = 0
+		max_width = 0
 		q.enqueue((0, self.root))
 
 		# Top-view begins with the root node
@@ -194,14 +194,12 @@ class BinaryTree:
 		while q.length() != 0:
 			width, node = q.dequeue()
 
-			if width < 0:
-				if width < max_left_width:
-					max_left_width = width
-					aggregate_fn(kwargs, node.value)
-			elif width > 0:
-				if width > max_right_width:
-					max_right_width = width
-					aggregate_fn(kwargs, node.value)
+			if width < min_width:
+				min_width = width
+				aggregate_fn(kwargs, node.value)
+			elif width > max_width:
+				max_width = width
+				aggregate_fn(kwargs, node.value)
 
 			# NOTE: width 0, is root, would already be filled in at root,
 			# and in a top-view is not going to replaced
@@ -242,8 +240,8 @@ class BinaryTree:
 		# depending on w1 vs w2 (where w1 and w2 are widths, so slist is kept sorted by the nodes' L/R widths)
 		pair_comparator = lambda (w1, node_val1), (w2, node_val2): cmp(w1, w2)
 
-		max_left_width = 0
-		max_right_width = 0
+		min_width = 0
+		max_width = 0
 		q.enqueue((0, self.root))
 
 		# Top-view begins with the root node
@@ -251,14 +249,12 @@ class BinaryTree:
 		while q.length() != 0:
 			width, node = q.dequeue()
 
-			if width < 0:
-				if width < max_left_width:
-					max_left_width = width
-					slist.place((width, node.value))
-			elif width > 0:
-				if width > max_right_width:
-					max_right_width = width
-					slist.place((width, node.value))
+			if width < min_width:
+				min_width = width
+				slist.place((width, node.value))
+			elif width > max_width:
+				max_width = width
+				slist.place((width, node.value))
 
 			# NOTE: width 0, is root, would already be filled in at root,
 			# and in a top-view is not going to replaced
@@ -291,8 +287,8 @@ class BinaryTree:
 		# node items that would be visible from a bottom view of the binary tree
 		slist = {}
 
-		max_left_width = 0
-		max_right_width = 0
+		min_width = 0
+		max_width = 0
 		q.enqueue((0, self.root))
 
 		# Star with placing root at width 0
@@ -307,19 +303,17 @@ class BinaryTree:
 			# Track max_left_width, max_right_width
 			# so we don't need to sort the hash table slist,
 			# Just retrieve slist[{-max_left_width, ...,  0, ..., max_right_width}]
-			if width < 0:
-				if width < max_left_width:
-					max_left_width = width
-			elif width > 0:
-				if width > max_right_width:
-					max_right_width = width
+			if width < min_width:
+				min_width = width
+			elif width > max_width:
+				max_width = width
 
 			q.enqueue((width-1, node.left))  if node.left else None
 			q.enqueue((width+1, node.right)) if node.right else None
 
 		# At the end of the level-order traversal,
 		# Just 'aggregate' slist[{-max_left_width, ...,  0, ..., max_right_width}]
-		for i in range(max_left_width, max_right_width+1):
+		for i in range(min_width, max_width+1):
 			aggregate_fn(kwargs, slist[i])
 
 
@@ -328,7 +322,7 @@ class BinaryTree:
 		pass
 
 	# Return a path, as a list of nodes, from root to the specified node in the binary tree
-	def path(self, data):
+	def path_n(self, data):
 		# Find path to 'node' from the subtree rooted at 'root'
 		# and append each node in the path to the list
 		# Steps:
@@ -368,6 +362,77 @@ class BinaryTree:
 		paths = []
 		path_helper(self.root, node, paths)
 		return paths
+
+
+
+	# Return a path, as a list of node items, from root to the specified item in the binary tree
+	def path_1(self, data):
+		# Find path to 'item' from the subtree rooted at 'root'
+		# and append each item in the path to the list
+		# Steps:
+		#   1. Start a pre-order traversal
+		#   2. Find path to item in left subtree, if not found, find in the right subtree
+		#   3. If either of the left subtree/ right subtree returns True, indicating subtree contains the item,
+		#        add current root node to list and return True to higher level calls
+		#   4. If a subtree's root matches item, we have hit the node we were looking for, start constructing
+		#	     path from here -> add item to list. return True
+		def path_helper(root, item, path):
+			if not root:
+				return False
+			
+			# Found item in the subtree
+			# add it to the path and return true
+			# else, recursively look for it in the left/right subtree
+			if root.value == item:
+				path.insert(0, item)
+				return True
+			elif path_helper(root.left, item, path):
+				path.insert(0, root.value)
+				return True
+			elif path_helper(root.right, item, path):
+				path.insert(0, root.value)
+				return True
+
+				
+		if not data:
+			return []
+
+		paths = []
+		path_helper(self.root, data, paths)
+		return paths
+
+
+
+	# Return a path, as a list of node items, from root to the specified item in the binary tree
+	def path_2(self, data):
+		# Find path to 'item' from the subtree rooted at 'root'
+		# and append each item in the path to the list
+		# Steps:
+		#   1. Start a pre-order traversal
+		#   2. Add prefix indicating current path until a match is found.
+		#      the prefix stores the path to the current node from root
+		#      using the recursion stack to add and remove paths
+		def path_helper(root, item, prefix, path):
+			if not root:
+				return
+			
+			# Found item in the subtree
+			# copy all items from the prefix so far + current item
+			# else, recursively look for it in the left/right subtree
+			if root.value == item:
+				path += prefix + [item]
+				return
+
+			path_helper(root.left, item, prefix + [root.value], path)
+			path_helper(root.right, item, prefix + [root.value], path)
+				
+		if not data:
+			return []
+
+		paths = []
+		path_helper(self.root, data, [], paths)
+		return paths
+
 
 
 	def lowest_common_ancestor(self, node1, node2):
@@ -497,17 +562,39 @@ def test_path():
 
 	assert(btree.height() == 2)
 
-	nodes =  btree.path(7)
+	nodes =  btree.path_n(7)
+	path = [1,3,7]
+	i=0
 	assert(len(nodes) == 3)
 	for n in nodes:
-		print n.value
+		assert n.value == path[i]
+		i += 1
 
 	# find path using a node reference
-	nodes =  btree.path(rnode)
+	nodes =  btree.path_n(rnode)
+	path = [1,3]
+	i=0
 	for n in nodes:
-		print n.value
+		assert n.value == path[i]
+		i += 1
 
-	assert(btree.path(8) == [])
+	assert(btree.path_n(8) == [])
+
+	assert btree.path_1(7) == [1,3,7]
+	assert btree.path_1(5) == [1,2,5]
+	assert btree.path_1(6) == [1,3,6]
+	assert btree.path_1(1) == [1]
+	assert btree.path_1(2) == [1, 2]
+	assert btree.path_1(9) == []
+
+	assert btree.path_2(7) == [1,3,7]
+	assert btree.path_2(5) == [1,2,5]
+	assert btree.path_2(6) == [1,3,6]
+	assert btree.path_2(1) == [1]
+	assert btree.path_2(2) == [1, 2]
+	assert btree.path_2(9) == []
+
+
 
 
 if __name__ == "__main__":
