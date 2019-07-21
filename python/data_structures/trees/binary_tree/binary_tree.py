@@ -435,8 +435,24 @@ class BinaryTree:
 
 
 
-	def lowest_common_ancestor(self, node1, node2):
-		pass
+	# Lowest common ancestors between two 2 nodes in the binary tree
+	def lca_n(self, node1, node2):
+		path1 = self.path_n(node1)
+		path2 = self.path_n(node2)
+		lca = None
+		i = 0
+		try:
+			while path1[i] == path2[i]:
+				lca = path1[i]
+				i += 1
+		except IndexError:
+			# Do nothing on reaching the end of either paths
+			# proceed to return stored lca, if any
+			pass
+
+		return lca
+
+		
 
 
 def TC1():
@@ -595,8 +611,21 @@ def test_path():
 	assert btree.path_2(9) == []
 
 
+	n1 = rnode.left
+	n2 = lnode.right
+	assert n1.value == 6
+	assert n2.value == 5
+	assert btree.lca_n(n1, n2) == root
+
+	assert btree.lca_n(rnode, lnode) == root
+	assert btree.lca_n(rnode.right, rnode.left) == rnode
+	assert btree.lca_n(lnode.right, lnode.left) == lnode
+	assert btree.lca_n(lnode.left, rnode.right) == root
+
+
 
 
 if __name__ == "__main__":
 	TC1()
 	test_path()
+
