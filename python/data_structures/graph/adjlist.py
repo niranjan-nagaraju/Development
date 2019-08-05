@@ -286,3 +286,32 @@ class Graph(GraphBase):
 		self._bfs_all_(True, aggregate_fn, *args, **kwargs)
 
 
+
+	# Return all paths between vertex v1 and vertex v2
+	def paths(self, v1, v2, aggregate_fn=None, *args, **kwargs):
+		def paths_util(prefix, curr_vertex, visited):
+			if visited[curr_vertex]:
+				return
+
+			# found destination vertex,
+			# record this path as one of the paths
+			if curr_vertex == v2:
+				aggregate_fn(prefix + [v2], *args, **kwargs)
+
+			visited[curr_vertex] = True
+			for v,_ in self._adjlists[curr_vertex]:
+				paths_util(prefix + [curr_vertex], v, visited)
+
+			# Mark current vertex as un-visited
+			# so all paths from v1 to v2
+			# can be extracted
+			visited[curr_vertex] = False
+
+		if not aggregate_fn:
+			aggregate_fn = Graph._default_printfn
+
+		# call helper function
+		visited = [False] * self.vertices
+		paths_util([], v1, visited)
+
+

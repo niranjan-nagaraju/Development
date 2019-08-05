@@ -1,3 +1,6 @@
+# -*- coding: UTF-8 -*-
+
+
 from data_structures.graph.adjlist import Graph
 
 def basic_testcases():
@@ -307,8 +310,83 @@ def test_bfs():
 	test_bfs_directed(recursive=True)
 
 
+
+def test_paths_directed():
+	g = Graph(7)
+	g.add_edge(0, 1) 
+	g.add_edge(0, 2) 
+	g.add_edge(0, 3) 
+	g.add_edge(0, 4) 
+	g.add_edge(1, 5) 
+	g.add_edge(2, 5)
+	g.add_edge(3, 5)
+	g.add_edge(5, 6)
+	g.add_edge(4, 6)
+
+	'''
+	    1
+	  ↗   ↘ 
+	0 → 2 → 5 → 6
+    ↓↘     ↗    ↑  
+	↓   3     ↗  
+	↘       ↗ 
+	  4 → ↗ 
+
+	'''
+
+	def aggregate_list(path):
+		if not hasattr(aggregate_list, "l"):
+			setattr(aggregate_list, "l", [])
+		aggregate_list.l.append(path)
+		return aggregate_list.l
+
+
+	g.paths(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6], [0, 4, 6]]
+
+	
+def test_paths_undirected():
+	g = Graph(7, directed=True)
+	g.add_edge(0, 1) 
+	g.add_edge(0, 2) 
+	g.add_edge(0, 3) 
+	g.add_edge(0, 4) 
+	g.add_edge(1, 5) 
+	g.add_edge(2, 5)
+	g.add_edge(3, 5)
+	g.add_edge(5, 6)
+	g.add_edge(4, 6)
+
+	'''
+	    1
+	  ⤢   ⤡
+	0 ⇿  2 ⇿  5 ⇿  6
+    ↕⤡    ⤢      ⤢  
+	↕   3      ⤢
+	⤡        ⤢ 
+	  4 ⇿  ⤢ 
+
+	'''
+
+	def aggregate_list(path):
+		if not hasattr(aggregate_list, "l"):
+			setattr(aggregate_list, "l", [])
+		aggregate_list.l.append(path)
+		return aggregate_list.l
+
+
+	g.paths(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6], [0, 4, 6]]
+
+
+
+def test_paths():
+	test_paths_directed()
+	test_paths_undirected()
+
 if __name__ == '__main__':
 	basic_testcases()
 	test_dfs()
 	test_bfs()
+	test_paths()
 
