@@ -22,20 +22,14 @@ class Solution(object):
 		:rtype: int
 		"""
 		counts = [0] * 26
-		indices = [None] * 26
 		for i in xrange(len(s)):
 			map_idx = ord(s[i]) - ord('a')
 			counts[map_idx] += 1
 
-			# First time we are seeing this character,
-			# capture its first occurence, at index i
-			if indices[map_idx] is None:
-				indices[map_idx] = i
-
-		for c in s:
-			map_idx = ord(c) - ord('a')
+		for i in xrange(len(s)):
+			map_idx = ord(s[i]) - ord('a')
 			if counts[map_idx] == 1:
-				return indices[map_idx]
+				return i
 
 		return -1
 
