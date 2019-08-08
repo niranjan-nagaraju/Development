@@ -19,7 +19,7 @@ class Solution(object):
 		:type nums: List[int]
 		:rtype: List[List[int]]
 		"""
-		return self.find_triplet(nums)
+		return self.find_triplets(nums)
 
 	# Find all pairs that adds in 'array' that adds upto a given 'target_sum'
 	# O(n), single-pass
@@ -60,7 +60,7 @@ class Solution(object):
 	# a+b+c == 0, b+c == -a,
 	# Use find_pair(array, -a) to find a pair that adds upto -(b+c)
 	@staticmethod
-	def find_triplet(array):
+	def find_triplets(array):
 		triplets = {}
 
 		# keep a lookup table of all pairs for a given number 'n', results in sum '-n'
