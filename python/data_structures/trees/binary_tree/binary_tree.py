@@ -32,8 +32,30 @@ class BinaryTree:
 
 
 	# Calculate width/diameter of the binary tree
+	# Do a bfs traversal, capturing left and right widths
+	# width = max(left width) + max(right width)
 	def width(self):
-		pass
+		if not self.root:
+			return
+
+		q = Queue()
+		min_width = 0
+		max_width = 0
+		q.enqueue((0, self.root))
+
+		while q.length() != 0:
+			width, node = q.dequeue()
+
+			if width < min_width:
+				min_width = width
+			elif width > max_width:
+				max_width = width
+
+			q.enqueue((width-1, node.left))  if node.left else None
+			q.enqueue((width+1, node.right)) if node.right else None
+
+		return max_width - min_width
+
 
 
 
@@ -454,178 +476,4 @@ class BinaryTree:
 
 		
 
-
-def TC1():
-	# prefix equation tree : "+a*bc"
-	'''
-	     +
-	   /   \	
-      a     *
-	      /   \
-	     b     c
-	'''		 
-
-	root = Node("+")
-	lnode = Node("a")
-	rnode = Node("*")
-	root.setChildren(lnode, rnode)
-
-	rlnode = Node("b")
-	rrnode = Node("c")
-	rnode.setChildren(rlnode, rrnode)
-
-	btree = BinaryTree(root)
-
-	assert(btree.height() == 2)
-
-	print 'Preorder: ',
-	btree.preorder_traversal()
-	print
-
-	l = []
-	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
-	btree.preorder_traversal(collate_fn, lst=l)
-	assert (l == ['+', 'a', '*', 'b', 'c'])
-
-	print 'Postorder: ',
-	btree.postorder_traversal()
-	print
-
-	l = []
-	btree.postorder_traversal(collate_fn, lst=l)
-	assert (l == ['a',  'b', 'c', '*', '+'])
-
-	print 'Inorder: ',
-	btree.inorder_traversal()
-	print
-
-	l = []
-	btree.inorder_traversal(collate_fn, lst=l)
-	assert (l == ['a', '+', 'b', '*', 'c'])
-
-	print 'Level order: ',
-	btree.levelorder_traversal()
-	print
-
-	l = []
-	btree.levelorder_traversal(collate_fn, lst=l)
-	assert (l == ['+', 'a', '*', 'b', 'c'])
-
-
-	print 'Left View: ',
-	btree.left_view()
-	print
-
-	l = []
-	btree.left_view(collate_fn, lst=l)
-	assert (l == ['+', 'a',  'b'])
-
-	print 'Right View: ',
-	btree.right_view()
-	print
-
-	l = []
-	btree.right_view(collate_fn, lst=l)
-	assert (l == ['+', '*',  'c'])
-
-	print 'Top View: ',
-	btree.top_view()
-	print
-
-	l = []
-	btree.top_view(collate_fn, lst=l)
-	assert (l == ['+', 'a',  '*', 'c'])
-
-	print 'Top View L-R: ',
-	btree.top_view_LR()
-	print
-
-	l = []
-	btree.top_view_LR(collate_fn, lst=l)
-	assert (l == ['a', '+',  '*', 'c'])
-
-
-	print 'Bottom View: ',
-	btree.bottom_view()
-	print
-
-	l = []
-	btree.bottom_view(collate_fn, lst=l)
-	assert (l == ['a', 'b',  '*', 'c'])
-
-	print 'Testcase TC1 passed!'
-
-
-
-def test_path():
-	'''
-		 1
-	   /   \    
-	  2     3
-	 /  \  /  \
-	4    5 6   7
-	'''      
-
-	root = Node(1)
-	lnode = Node(2)
-	rnode = Node(3)
-	root.setChildren(lnode, rnode)
-
-	lnode.setChildren(Node(4), Node(5))
-	rnode.setChildren(Node(6), Node(7))
-	btree = BinaryTree(root)
-
-	assert(btree.height() == 2)
-
-	nodes =  btree.path_n(7)
-	path = [1,3,7]
-	i=0
-	assert(len(nodes) == 3)
-	for n in nodes:
-		assert n.value == path[i]
-		i += 1
-
-	# find path using a node reference
-	nodes =  btree.path_n(rnode)
-	path = [1,3]
-	i=0
-	for n in nodes:
-		assert n.value == path[i]
-		i += 1
-
-	assert(btree.path_n(8) == [])
-
-	assert btree.path_1(7) == [1,3,7]
-	assert btree.path_1(5) == [1,2,5]
-	assert btree.path_1(6) == [1,3,6]
-	assert btree.path_1(1) == [1]
-	assert btree.path_1(2) == [1, 2]
-	assert btree.path_1(9) == []
-
-	assert btree.path_2(7) == [1,3,7]
-	assert btree.path_2(5) == [1,2,5]
-	assert btree.path_2(6) == [1,3,6]
-	assert btree.path_2(1) == [1]
-	assert btree.path_2(2) == [1, 2]
-	assert btree.path_2(9) == []
-
-
-	n1 = rnode.left
-	n2 = lnode.right
-	assert n1.value == 6
-	assert n2.value == 5
-	assert btree.lca_n(n1, n2) == root
-
-	assert btree.lca_n(rnode, lnode) == root
-	assert btree.lca_n(rnode.right, rnode.left) == rnode
-	assert btree.lca_n(lnode.right, lnode.left) == lnode
-	assert btree.lca_n(lnode.left, rnode.right) == root
-
-
-
-
-if __name__ == "__main__":
-	TC1()
-	test_path()
 
