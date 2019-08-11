@@ -99,8 +99,6 @@ class TestHeap(unittest.TestCase):
 		new_l = []
 		h.sorted(lambda i, l: l.append(i), new_l)
 
-		# TODO: Fix assert fail here owing to bug in remove()
-		# when bubble_down() is incorrect due to one/both of L-R not present
 		assert new_l == range(10, -1, -1)
 
 
@@ -225,6 +223,11 @@ class TestHeap(unittest.TestCase):
 		assert h.items == range(10)
 		for i in range(10):
 			assert h.remove() == i
+
+
+	def test_sort(self):
+		assert MaxHeap.sort([1,3,5,6,4,2]) == range(1, 7)
+
 
 
 if __name__ == '__main__':

@@ -28,6 +28,19 @@ class MaxHeap(Heap):
 
 
 
+	'''
+	Use heap to sort an input list
+	'''
+	@classmethod
+	def sort(cls, inList):
+		heap = cls.build_heap(inList)
+		for i in xrange(len(inList)-1, -1, -1):
+			inList[0], inList[i] = inList[i], inList[0]
+			heap.bubble_down(i, 0)
+
+		return inList
+
+
 
 if __name__ == '__main__':
 	caught_exception = False

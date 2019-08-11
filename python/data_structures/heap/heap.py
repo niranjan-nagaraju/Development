@@ -142,22 +142,22 @@ class Heap(object):
 	the last item in the heap replaces the top of the heap
 	and is bubbled down, until heap property is restored.
 	'''
-	def bubble_down(self, i=0):
+	def bubble_down(self, n, i=0):
 		l, r = self.left(i), self.right(i)
 		smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
 
 		smallest = i
 		# Find the smallest of left, right and root items
-		if l < len(self.items):
+		if l < n:
 			smallest = smaller_of(smallest, l)
 
-		if r < len(self.items):
+		if r < n:
 			smallest = smaller_of(smallest, r)
 
 		# swap root of the subtree with the smallest of the left and right children
 		if (smallest != i):
 			self.items[i], self.items[smallest] = self.items[smallest], self.items[i]
-			self.bubble_down(smallest)
+			self.bubble_down(n, smallest)
 
 
 
@@ -181,7 +181,7 @@ class Heap(object):
 		top = self.items[0]
 		self.items[0] = self.items[-1]
 		self.items.pop()
-		self.bubble_down(0)
+		self.bubble_down(len(self.items), 0)
 
 		return top
 
@@ -214,8 +214,9 @@ class Heap(object):
 		n = len(l)
 		heap.items = l
 		for i in xrange((n-2)/2, -1, -1):
-			heap.bubble_down(i)
+			heap.bubble_down(n, i)
 
+		return heap
 
 
 	'''
