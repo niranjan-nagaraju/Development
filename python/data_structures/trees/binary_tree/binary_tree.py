@@ -2,11 +2,11 @@
 
 import sys
 
-sys.path.append("../../../data_structures/")
-from sll.queue import Queue # import just the Queue, as sll.Node will conflict with binary_tree.node
-from sll.sll import SLL
+sys.path.append("../../../")
+from data_structures.sll.queue import Queue # import just the Queue, as sll.Node will conflict with binary_tree.node
+from data_structures.sll.sll import SLL
 from node import Node
-from data_structures.sll.sll import UnderFlowError
+from  data_structures.sll.sll import UnderFlowError
 
 class BinaryTree:
 	# A default print function if no aggregator is provided
@@ -16,6 +16,9 @@ class BinaryTree:
 	def __init__(self, root=None, size=0):
 		self.root = root
 		self.size = size
+
+		# Use path_1 as the default implementation for path()
+		self.path = self.path_1
 
 
 	# Calculate height of the binary tree
@@ -340,8 +343,10 @@ class BinaryTree:
 
 
 
+	# TODO: Implement
 	def zigzag_levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		pass
+
 
 	# Return a path, as a list of nodes, from root to the specified node in the binary tree
 	def path_n(self, data):
@@ -457,23 +462,26 @@ class BinaryTree:
 
 
 
-	# Lowest common ancestors between two 2 nodes in the binary tree
-	def lca_n(self, node1, node2):
+	# Return a node that is the Lowest common ancestor
+	# between two 2 nodes in the binary tree
+	# Algorithm:
+	#   Get paths from root to both nodes
+	#   Compare nodes in the paths until they diverge
+	#    the node at which they diverge is the LCA node
+	def lca(self, node1, node2):
 		path1 = self.path_n(node1)
 		path2 = self.path_n(node2)
-		lca = None
+		lca_node = None
 		i = 0
 		try:
 			while path1[i] == path2[i]:
-				lca = path1[i]
+				lca_node = path1[i]
 				i += 1
 		except IndexError:
 			# Do nothing on reaching the end of either paths
 			# proceed to return stored lca, if any
 			pass
 
-		return lca
-
-		
+		return lca_node
 
 

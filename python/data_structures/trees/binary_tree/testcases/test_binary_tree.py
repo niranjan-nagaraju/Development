@@ -213,17 +213,24 @@ def test_path_and_lca():
 	assert btree.path_2(2) == [1, 2]
 	assert btree.path_2(9) == []
 
+	assert btree.path(2) == [1, 2]
+	assert btree.path(9) == []
 
 	n1 = rnode.left
 	n2 = lnode.right
 	assert n1.value == 6
 	assert n2.value == 5
-	assert btree.lca_n(n1, n2) == root
+	assert btree.lca(n1, n2) == root
 
-	assert btree.lca_n(rnode, lnode) == root
-	assert btree.lca_n(rnode.right, rnode.left) == rnode
-	assert btree.lca_n(lnode.right, lnode.left) == lnode
-	assert btree.lca_n(lnode.left, rnode.right) == root
+	assert btree.lca(rnode, lnode) == root
+	assert btree.lca(rnode.right, rnode.left) == rnode
+	assert btree.lca(lnode.right, lnode.left) == lnode
+	assert btree.lca(lnode.left, rnode.right) == root
+
+	assert btree.lca(rnode, 2) == root
+	assert btree.lca(7, rnode.left) == rnode
+	assert btree.lca(5, 4) == lnode
+	assert btree.lca(4, 7) == root
 
 
 
