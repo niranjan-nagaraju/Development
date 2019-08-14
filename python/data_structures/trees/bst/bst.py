@@ -2,8 +2,8 @@
 
 import sys
 sys.path.append("../binary_tree/")
-from node import *
-from binary_tree import *
+from data_structures.trees.binary_tree.node import *
+from data_structures.trees.binary_tree.binary_tree import *
 
 # BST inherits Binary Tree features
 #   traversal functions - pre/post/in order, level order
@@ -49,89 +49,37 @@ class BST(BinaryTree):
 
 
 
-def test_traversals():
-	'''
-		Manually construct the below tree:
-			4
-		  /	  \
-		1      6
-		      / \
-		     5   7
+	# Lowest common ancestor
+	# In a BST, LCA is the node n of two nodes n1, and n2
+	# which has the value
+	# n1 < n < n2
+	def lca(self, n1, n2):
+		if not isinstance(n1, Node):
+			n1 = Node(n1)
 
-	'''
-	root = Node(4)
-	lnode = Node(1)
-	rnode = Node(6)
-	root.setChildren(lnode, rnode)
+		if not isinstance(n2, Node):
+			n2 = Node(n2)
+		
+		# recursively find lca
+		# by finding n s.t n1<n<n2
+		def lca_helper(n):
+			if not n:
+				return None
 
-	rlnode = Node(5)
-	rrnode = Node(7)
-	rnode.setChildren(rlnode, rrnode)
+			# LCA is to the left of current node 'n'
+			if n.value > n1.value and n.value > n2.value:
+				return lca_helper(n.left)
 
-	print_fn = lambda x,y : sys.stdout.write(str(y) + ' ')
+			# LCA is to the right of current node 'n'
+			if n.value < n1.value and n.value < n2.value:
+				return lca_helper(n.right)
 
-	bst = BST(root)
-	print 'Preorder: ',
-	bst.preorder_traversal(print_fn)
-	print
-
-	l = []
-	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
-	bst.preorder_traversal(collate_fn, lst=l)
-	assert (l == [4, 1, 6, 5, 7])
-
-	print 'Postorder: ',
-	bst.postorder_traversal(print_fn)
-	print
-
-	l = []
-	bst.postorder_traversal(collate_fn, lst=l)
-	assert (l == [1, 5, 7, 6, 4])
-
-	print 'Inorder: ',
-	bst.inorder_traversal(print_fn)
-	print
-
-	l = []
-	bst.inorder_traversal(collate_fn, lst=l)
-	assert (l == [1, 4, 5, 6, 7])
+			# Found the lowest common ancestor node
+			return n
 
 
+		# Call LCA helper function
+		return lca_helper(self.root)
 
-def test_insert():
-	bst = BST()
-	l = [2,1,4,5,3,8]
-	'''
-	  Resulting tree:
-	          2
-			/   \
-		   1	  4
-		        /  \
-			   3    5
-			         \
-					  8	
-	
-	   Inorder: 1 2 3 4 5 8
-	'''
-	for x in l:
-		bst.insert(x)
-
-	assert(bst.size == len(l))
-	assert(bst.height() == 3)
-
-	assert(bst.root.value == 2)
-
-	l2 = []
-	# define a lambda function that collates individual node values into a list
-	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
-	bst.inorder_traversal(collate_fn, lst=l2)
-
-	# NOTE: sorted(list): returns a new list with sorted order without modifying the input list unlike list.sort()
-	assert (l2 == sorted(l))
-
-
-if __name__ == "__main__":
-	test_traversals()
-	test_insert()
+			
 
