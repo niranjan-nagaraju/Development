@@ -103,16 +103,17 @@ def buy_sell_stock(prices):
 				buy, sell, profit = buy_, x, profit_
 				#print 'Tentatives:', buy, sell, profit
 
-	return (buy, sell, profit)
+	return (buy, sell), profit
 
 
-assert(buy_sell_stock(range(1,8)) == (1, 7, 6))
-assert(buy_sell_stock(range(7, 0, -1)) == (None, None, 0))
-assert(buy_sell_stock([2,5,1,7]) == (1,7,6))
-assert(buy_sell_stock([2,5,1,3]) == (2,5,3))
-assert(buy_sell_stock([1,5,2,7]) == (1,7,6))
-assert(buy_sell_stock([7,6,5,4,5]) == (4,5,1))
-assert(buy_sell_stock([7,6,5,4,6,1,4]) == (1,4,3))
-assert(buy_sell_stock([7,2,5,3,6,4,1,7]) == (1, 7, 6))
-assert(buy_sell_stock([7,1,5,3,6,4]) == (1, 6, 5))
-assert(buy_sell_stock([7,6,4,3,1]) == (None, None, 0))
+assert(buy_sell_stock(range(1,8)) == ((1, 7), 6))
+assert(buy_sell_stock(range(7, 0, -1)) == ((None, None), 0))
+assert(buy_sell_stock([2,5,1,7]) == ((1,7),6))
+assert(buy_sell_stock([2,5,1,3]) == ((2,5),3))
+assert(buy_sell_stock([1,5,2,7]) == ((1,7),6))
+assert(buy_sell_stock([7,6,5,4,5]) == ((4,5),1))
+assert(buy_sell_stock([7,6,5,4,6,1,4]) == ((1,4),3))
+assert(buy_sell_stock([7,2,5,3,6,4,1,7]) == ((1, 7), 6))
+assert(buy_sell_stock([7,1,5,3,6,4]) == ((1, 6), 5))
+assert(buy_sell_stock([7,6,4,3,1]) == ((None, None), 0))
+assert buy_sell_stock([1,3,2,5]) == ((1, 5), 4)
