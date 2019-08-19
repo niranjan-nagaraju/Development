@@ -403,11 +403,10 @@ class Solution(object):
 	def add_to_path(self, paths, startIdx, endIdx, wordList, graph):
 		path = []
 		i = endIdx
-		while i != startIdx:
+		while i != None:
 			path.insert(0, wordList[i])
 			i,_ = graph[i]
 
-		path.insert(0, wordList[startIdx])
 		if path not in paths:
 			paths.append(path)
 
@@ -465,6 +464,7 @@ class Solution(object):
 		# Since each vertex has exactly one parent, this can just be a simple 1-D list
 		# instead of list of lists as adjacency lists usually are.
 		transformation_graph = [None for x in xrange(len(wordList))]
+		transformation_graph[startIdx] = (None, 0)
 		while bfs_q:
 			(wordIdx, curr_level) = bfs_q.pop(0)
 
