@@ -244,22 +244,18 @@ class Solution(object):
 	# Extract all paths from endWord to beginWord, in reverse order
 	# and return a list of paths
 	def all_paths(self, graph, endWord, beginWord):
+		# Use dfs to extract all paths
+		# 'NOTE: keeping track of visited' is not needed as this is a DAG
 		def dfs_paths(prefix, current):
-			if visited[current]:
-				return
-
 			if current == beginWord:
 				paths.append([beginWord]+prefix)
 
-			visited[current] = True
 			for w,_ in graph[current]:
 				dfs_paths([current]+prefix, w)
 
-			visited[current] = False
 
 
 		paths = []
-		visited = defaultdict(bool)
 		dfs_paths([], endWord)
 		return paths
 
@@ -290,8 +286,9 @@ class Solution(object):
 
 		# adjacency list representation of the transformation DAG
 		# Edge Wj -> Wi exists if Wi can be transformed into Wj by changing one letter in Wi
-		transformation_graph = defaultdict(list)
-		transformation_graph[beginWord].append((None, 0))
+		# Use a set for adjacency list so duplicate words wont be added
+		transformation_graph = defaultdict(set)
+		transformation_graph[beginWord].add((None, 0))
 		while bfs_q:
 			(word, curr_level) = bfs_q.pop(0)
 
@@ -309,11 +306,11 @@ class Solution(object):
 				# Add an edge only if it doesnt change the vertex's current level
 				vertex_level = curr_level
 				if transformation_graph[w]:
-					_,vertex_level = transformation_graph[w][0]
+					# compare against an item in the adjacency list for w
+					_,vertex_level = next(iter(transformation_graph[w]))
 
 				if vertex_level == curr_level:
-					if (word, curr_level) not in transformation_graph[w]:
-						transformation_graph[w].append( (word, curr_level) )
+					transformation_graph[w].add( (word, curr_level) )
 
 				# Found minimum ladder length
 				# all transformations over this length needn't be included
@@ -345,4 +342,3 @@ if __name__ == '__main__':
 	assert s.findLadders("hit", "cog", ["hot","dot","dog","lot","log"]) == []
 	assert s.findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"]) == [['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']]
 	assert s.findLadders("mate", "mile", ["math","path","male","mole","mile","late", "lake", "like"]) == [['mate', 'male', 'mile']]
-
