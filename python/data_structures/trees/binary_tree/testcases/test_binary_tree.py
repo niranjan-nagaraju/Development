@@ -24,7 +24,7 @@ def basic_tests():
 	btree = BinaryTree(root)
 
 	assert(btree.height() == 2)
-	assert btree.width() == 3
+	assert btree.span() == 3
 
 	'''
            1
@@ -39,7 +39,7 @@ def basic_tests():
 	root.right.right = Node("9")
 	btree2 = BinaryTree(root)
 	assert(btree2.height() == 2)
-	assert btree2.width() == 4
+	assert btree2.span() == 4
 
 	'''
            1
@@ -53,7 +53,7 @@ def basic_tests():
 	root.left.left = Node("5")
 	btree3 = BinaryTree(root)
 	assert(btree3.height() == 2)
-	assert btree3.width() == 3
+	assert btree3.span() == 3
 
 
 

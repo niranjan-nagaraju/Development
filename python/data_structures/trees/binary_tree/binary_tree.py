@@ -34,10 +34,11 @@ class BinaryTree:
 		return _height(self.root)
 
 
-	# Calculate width/diameter of the binary tree
+	# Calculate span of the binary tree, i.e. 
+	# the max left + right widths of any node from root
 	# Do a bfs traversal, capturing left and right widths
-	# width = max(left width) + max(right width)
-	def width(self):
+	# span = max(left width) + max(right width)
+	def span(self):
 		if not self.root:
 			return
 
