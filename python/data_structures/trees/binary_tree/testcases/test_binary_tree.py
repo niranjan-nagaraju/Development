@@ -23,8 +23,9 @@ def basic_tests():
 
 	btree = BinaryTree(root)
 
-	assert(btree.height() == 2)
+	assert(btree.height() == 3)
 	assert btree.span() == 3
+	assert btree.width() == 2
 
 	'''
            1
@@ -38,8 +39,9 @@ def basic_tests():
 	root.left.setChildren(Node("5"), Node("3"))
 	root.right.right = Node("9")
 	btree2 = BinaryTree(root)
-	assert(btree2.height() == 2)
+	assert(btree2.height() == 3)
 	assert btree2.span() == 4
+	assert btree2.width() == 3
 
 	'''
            1
@@ -52,10 +54,15 @@ def basic_tests():
 	root.setChildren(Node("3"), Node("2"))
 	root.left.left = Node("5")
 	btree3 = BinaryTree(root)
-	assert(btree3.height() == 2)
+	assert(btree3.height() == 3)
 	assert btree3.span() == 3
+	assert btree3.width() == 2
 
 
+	btree4 = BinaryTree(Node('blah'))
+	assert(btree4.height() == 1)
+	assert btree4.span() == 0
+	assert btree4.width() == 1
 
 
 
@@ -179,7 +186,7 @@ def test_path_and_lca():
 	rnode.setChildren(Node(6), Node(7))
 	btree = BinaryTree(root)
 
-	assert(btree.height() == 2)
+	assert(btree.height() == 3)
 
 	nodes =  btree.path_n(7)
 	path = [1,3,7]

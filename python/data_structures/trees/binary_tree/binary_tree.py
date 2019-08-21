@@ -25,13 +25,52 @@ class BinaryTree:
 	def height(self):
 		# helper function to calculate height of a subtree rooted at 'root'
 		def _height(root):
-			if (not root) or root.isLeaf():
+			if (not root):
 				return 0
 
+			if root.isLeaf():
+				return 1
 			return (1 + max(_height(root.left), _height(root.right)))
 
 		# call helper function to calculate height of the entire tree
 		return _height(self.root)
+
+
+	# Calculate width of the binary tree
+	# width = max number of nodes at any level
+	def width(self):
+		if not self.root:
+			return 0
+
+		q = Queue()
+		q.enqueue((0, self.root))
+
+		curr_level = 0
+		curr_level_nodes = 0
+		max_width = 0
+		while q.length() != 0:
+			level, node = q.dequeue()
+
+			# Start of a new level
+			# Check if number of nodes at previous level > mqx nodes at any level
+			if level != curr_level:
+				if curr_level_nodes > max_width:
+					max_width = curr_level_nodes
+
+				# start counting nodes for the current level
+				curr_level_nodes = 0
+
+			curr_level_nodes += 1
+			curr_level = level
+
+			q.enqueue((level+1, node.left))  if node.left else None
+			q.enqueue((level+1, node.right)) if node.right else None
+
+		# Check last level
+		if curr_level_nodes > max_width:
+			max_width = curr_level_nodes
+		return max_width
+
 
 
 	# Calculate span of the binary tree, i.e. 
@@ -40,7 +79,7 @@ class BinaryTree:
 	# span = max(left width) + max(right width)
 	def span(self):
 		if not self.root:
-			return
+			return 0
 
 		q = Queue()
 		min_width = 0
