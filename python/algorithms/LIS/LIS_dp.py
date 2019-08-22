@@ -32,7 +32,6 @@ def longest_increasing_subsequence(numbers):
 				LIS_table[i] = max(LIS_table[i], LIS_table[j]+1)
 	
 	lis_len = max(LIS_table)
-	print 'LIS DP table:', lis_len, LIS_table
 
 	LIS = []
 	curr_lis_len = lis_len
@@ -42,30 +41,12 @@ def longest_increasing_subsequence(numbers):
 		LIS.insert(0, numbers[idx])
 		curr_lis_len -= 1
 
-	return LIS
+	return lis_len, LIS, LIS_table
 
 
 
 if __name__ == "__main__":
-	numbers = map(int, raw_input().strip().split())
-	print longest_increasing_subsequence(numbers)
-
-
-'''
-Trial runs:
-10 22 9 33 21 50 41 60
-LIS DP table: 5 [1, 2, 1, 3, 2, 4, 4, 5]
-[10, 22, 33, 41, 60]
-
-5 4 3 2 1
-LIS DP table: 1 [1, 1, 1, 1, 1]
-[1]
-
-1 2 3 4 5 4 3 2 1
-LIS DP table: 5 [1, 2, 3, 4, 5, 4, 3, 2, 1]
-[1, 2, 3, 4, 5]
-
-10 9 2 5 3 7 101 18
-LIS DP table: 4 [1, 1, 1, 2, 2, 3, 4, 4]
-[2, 3, 7, 18]
-'''
+	assert longest_increasing_subsequence([10,22,9,33,21,50,41,60]) == (5, [10, 22, 33, 41, 60], [1, 2, 1, 3, 2, 4, 4, 5])
+	assert longest_increasing_subsequence([5,4,3,2,1]) == (1, [1], [1, 1, 1, 1, 1])
+	assert longest_increasing_subsequence([1,2,3,4,5,4,3,2,1]) == (5, [1, 2, 3, 4, 5], [1, 2, 3, 4, 5, 4, 3, 2, 1])
+	assert longest_increasing_subsequence([10, 9, 2, 5, 3, 7, 101, 18]) == (4, [2,3,7,18], [1, 1, 1, 2, 2, 3, 4, 4])
