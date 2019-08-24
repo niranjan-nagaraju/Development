@@ -21,6 +21,12 @@ implements a min-heap
 class Heap(object):
 	def __init__(self, comparatorfn=None):
 		self.items = []
+
+		# helper functions to get parent, left and right nodes of a node at index, i
+		self.parent = lambda i:  (i-1)/2
+		self.left = lambda i:  2*i+1
+		self.right = lambda i:  2*i+2
+
 		self.comparatorfn = comparatorfn if comparatorfn else cmp
 		self.isHeap = self.isHeap_r # use recursive version by default
 
@@ -61,20 +67,6 @@ class Heap(object):
 	@check_empty
 	def peek(self):
 		return self.items[0]
-
-
-	@staticmethod
-	def parent(i):
-		return (i-1)/2
-
-	@staticmethod
-	def left(i):
-		return 2*i+1
-
-	@staticmethod
-	def right(i):
-		return 2*i+2
-
 
 	'''
 	All items after index: n/2-1 are leaf nodes in a heap

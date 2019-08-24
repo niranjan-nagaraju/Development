@@ -2,10 +2,12 @@ from heap import Heap
 
 class MaxHeap(Heap):
 	def __init__(self, comparatorfn=None):
-		self.items = []
+		Heap.__init__(self)
+
+		# flip comparator function to flip > and <
+		# so a minheap becomes a maxheap
 		_comparatorfn = comparatorfn if comparatorfn else cmp
 		self.comparatorfn = lambda a, b: _comparatorfn(b, a)
-		self.isHeap = self.isHeap_r # use recursive version by default
 		self.isMaxHeap = self.isHeap_r
 
 
