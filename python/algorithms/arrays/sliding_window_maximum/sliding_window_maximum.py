@@ -113,115 +113,40 @@ Example:
 	max: [3,3,5,5,6,7]
 '''
 
+from data_structures.heap.maxheap import MaxHeap
+def maxSlidingWindow(nums, k):
+	if not nums:
+		return []
 
-class MaxHeap(object):
-	def __init__(self):
-		self.items = []
-		self.parent = lambda i: (i-1)/2
-		self.left = lambda i: 2*i+1
-		self.right = lambda i: 2*i+2
+	h = MaxHeap()
 
-	'''
-	Bubble up item at index, 'i' all the way up
-	till the heap property is restored
-	'''
-	def bubble_up(self, i):
-		while (i > 0) and cmp(self.items[i], self.items[self.parent(i)]) > 0:
-			self.items[i], self.items[self.parent(i)] = self.items[self.parent(i)], self.items[i]
-			i = self.parent(i)
+	for i in xrange(k):
+		h.add((nums[i], i))
+		
+	max_list = [h.peek()[0]]
 
+	for i in xrange(1,len(nums)-k+1):
+		# max is to the left of window
+		# remove all previous max items that are no longer in the window,
+		# from the heap
+		while h and h.peek()[1] < i:
+			h.remove()
 
-	'''
-	Bubble-down an item at 'i'
-	to its rightful place, and the heap property is restored
-	Assumes left and right subtrees are already heaps.
+		# add item at end of current window, i+k-1, to the heap
+		h.add((nums[i+k-1], i+k-1))
 
-	Typically used after extracting the top of the heap,
-	the last item in the heap replaces the top of the heap
-	and is bubbled down, until heap property is restored.
-	'''
-	def bubble_down(self, n, i=0):
-		l, r = self.left(i), self.right(i)
-		larger_of = lambda i,j: i if cmp(self.items[i], self.items[j])>0 else j
+		# add current window's max from the top of the heap
+		max_list.append(h.peek()[0])
 
-		largest = i
-		# Find the largest of left, right and root items
-		if l < n:
-			largest = larger_of(largest, l)
-
-		if r < n:
-			largest = larger_of(largest, r)
-
-		# swap root of the subtree with the largest of the left and right children
-		if (largest != i):
-			self.items[i], self.items[largest] = self.items[largest], self.items[i]
-			self.bubble_down(n, largest)
-
-
-
-	'''
-	Add an item to the heap
-	Start by adding item to the end to the list,
-	then bubble up until it's in its rightful place, and 
-	the heap property is restored.
-	'''
-	def add(self, item):
-		self.items.append(item)
-		self.bubble_up(len(self.items)-1)
-
-	'''
-	remove the top of the heap
-	'''
-	def remove(self):
-		top = self.items[0]
-		self.items[0] = self.items[-1]
-		self.items.pop()
-		self.bubble_down(len(self.items), 0)
-
-		return top
-
-
-class Solution(object):
-	def maxSlidingWindow(self, nums, k):
-		"""
-		:type nums: List[int]
-		:type k: int
-		:rtype: List[int]
-		"""
-
-		if not nums:
-			return []
-
-		h = MaxHeap()
-
-		for i in xrange(k):
-			h.add((nums[i], i))
-			
-		max_list = [h.items[0][0]]
-
-		for i in xrange(1,len(nums)-k+1):
-			# max is to the left of window
-			# remove all previous max items that are no longer in the window,
-			# from the heap
-			while h.items and h.items[0][1] < i:
-				h.remove()
-
-			# add item at end of current window, i+k-1, to the heap
-			h.add((nums[i+k-1], i+k-1))
-
-			# add current window's max from the top of the heap
-			max_list.append(h.items[0][0])
-
-		return max_list
+	return max_list
 
 
 if __name__ == '__main__':
-	s = Solution()
-	assert s.maxSlidingWindow([5,1,4,3], 2) == [5,4,4]
-	assert s.maxSlidingWindow([4,3,2,1], 2) == [4,3,2]
-	assert s.maxSlidingWindow([4,3,2,1], 3) == [4,3]
-	assert s.maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3) == [3,3,5,5,6,7]
-	assert s.maxSlidingWindow([9,10,9,-7,-4,-8,2,-6], 5) == [10, 10, 9, 2]
-	assert s.maxSlidingWindow([1, -1], 1) == [1, -1]
-	assert s.maxSlidingWindow([4,3,2,1,2,3,4], 3) == [4,3,2,3,4]
+	assert maxSlidingWindow([5,1,4,3], 2) == [5,4,4]
+	assert maxSlidingWindow([4,3,2,1], 2) == [4,3,2]
+	assert maxSlidingWindow([4,3,2,1], 3) == [4,3]
+	assert maxSlidingWindow([1,3,-1,-3,5,3,6,7], 3) == [3,3,5,5,6,7]
+	assert maxSlidingWindow([9,10,9,-7,-4,-8,2,-6], 5) == [10, 10, 9, 2]
+	assert maxSlidingWindow([1, -1], 1) == [1, -1]
+	assert maxSlidingWindow([4,3,2,1,2,3,4], 3) == [4,3,2,3,4]
 	
