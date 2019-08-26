@@ -56,6 +56,20 @@ Output: 8
 Explanation:The maximum width existing in the fourth level with the length 8 (6,null,null,null,null,null,null,7).
 
 
+Example 5:
+Input: 
+
+          1
+         / \
+        3   2
+             \  
+              9 
+               \
+                7
+Output: 2
+Explanation:The maximum width existing in the second level with the length 2 (3,2)
+
+
 Note: Answer will in the range of 32-bit signed integer.
 '''
 
@@ -64,9 +78,9 @@ Note: Answer will in the range of 32-bit signed integer.
 Solution outline:
   0. Do a BFS
   1. Capture number of nodes at each level
-     Keep a track of non-empty nodes. as well as all nodes including empty children
-	 Everytime, a non-empty node is hit, 
-	 update level width from total num nodes count (both empty and otherwise).
+     Keep a track of the left-most position where a non-empty node exists,
+	 Keep updating of right-most position where a non-empty node end in the level
+	 width at end of any level = (right - left + 1)
   3. Return max of width at any level
 '''
 
@@ -97,7 +111,8 @@ class Solution(object):
 		curr_level = 0
 		max_width = 0
 		all_nodes = 0
-		non_empty_nodes = 0
+		left_position = None
+		right_position = None
 
 		q = [(0,root)]
 		while q:
@@ -114,34 +129,36 @@ class Solution(object):
 			if curr_level != level:
 				curr_level = level
 
-				# No nodes at this level
+				# There were no nodes at previous level
 				# we have covered all levels in the tree
-				if non_empty_nodes == 0:
+				if left_position is None:
 					break
 
-				# Current level's > max
-				if non_empty_nodes > max_width:
-					max_width = non_empty_nodes
+				# Current level's width > max
+				curr_width = right_position - left_position + 1
+				if curr_width > max_width:
+					max_width = curr_width
 
 				# reset current level nodes
 				all_nodes = 0
-				non_empty_nodes = 0
+				left_position = None
+				right_position = None
 
 			all_nodes +=1
 			if node:
-				non_empty_nodes = all_nodes
+				if left_position is None:
+					left_position = all_nodes
 
-		'''
-		# Check if last level's width > max
-		if non_empty_nodes > max_width:
-			max_width = non_empty_nodes
-		'''
+				right_position = all_nodes
 
 		return max_width
 
 
 if __name__ == '__main__':
 	s = Solution()
+	root = Node(1)
+	root.right = Node(2)
+	assert s.widthOfBinaryTree(root) == 1
 
 	root = Node(1)
 	root.left = Node(3)
@@ -172,8 +189,9 @@ if __name__ == '__main__':
 	root4.right.right.right = Node(7)
 	assert s.widthOfBinaryTree(root4) == 8
 
-
-	'''
-	TODO: Wrong answer (FIXME)
-	[1,1,1,1,1,1,1,null,null,null,1,null,null,null,null,2,2,2,2,2,2,2,null,2,null,null,2,null,2]
-	'''
+	root5 = Node(1)
+	root5.right = Node(2)
+	root5.left = Node(3)
+	root5.right.right = Node(9)
+	root5.right.right.right = Node(7)
+	assert s.widthOfBinaryTree(root5) == 2
