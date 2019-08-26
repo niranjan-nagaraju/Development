@@ -54,7 +54,7 @@ class BinaryTree:
 			q.enqueue((level+1, node.left))  if node.left else None
 			q.enqueue((level+1, node.right)) if node.right else None
 
-			# Start of a new level or this was the last node in the tree
+			# Start of a new level
 			# Check if number of nodes at previous level > mqx nodes at any level
 			if level != curr_level:
 				if curr_level_nodes > max_width:
@@ -523,5 +523,6 @@ class BinaryTree:
 			pass
 
 		return lca_node
+
 
 
