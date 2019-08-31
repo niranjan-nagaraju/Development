@@ -1,10 +1,9 @@
 from data_structures.trees.binary_tree.binary_tree import BinaryTree
-from data_structures.trees.binary_tree.make_tree import make_tree
+from data_structures.trees.binary_tree.tree_maker import TreeMaker
 import unittest
 
-class Test_make_tree(unittest.TestCase):
-	def test_make_tree(self):
-		l = [1,2,3,4,5]
+class Test_TreeMaker(unittest.TestCase):
+	def test_make_tree_from_list(self):
 		'''
       1
     /   \
@@ -12,7 +11,9 @@ class Test_make_tree(unittest.TestCase):
  /   \
 4     5
 		'''
-		bt = make_tree(l)
+		t = TreeMaker()
+		l = [1,2,3,4,5]
+		bt = t.fromList(l)
 		assert bt is not None
 		assert bt.root is not None
 
@@ -37,7 +38,7 @@ class Test_make_tree(unittest.TestCase):
 4     5
 		'''
 
-		bt2 = make_tree([1, 2, None, 4, 5])
+		bt2 = t.fromList([1, 2, None, 4, 5])
 		assert bt2 is not None
 		assert bt2.root is not None
 
@@ -60,7 +61,7 @@ class Test_make_tree(unittest.TestCase):
  /             \
 6               7
 		'''
-		bt3 = make_tree([1, 2, 3, 4, None, None, 5, 6, None, None, None, None, None, None, 7])
+		bt3 = t.fromList([1, 2, 3, 4, None, None, 5, 6, None, None, None, None, None, None, 7])
 		assert bt3 is not None
 		assert bt3.root is not None
 
