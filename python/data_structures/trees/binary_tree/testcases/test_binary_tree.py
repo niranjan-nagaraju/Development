@@ -241,9 +241,58 @@ def test_path_and_lca():
 
 
 
+def test_tree_maker():
+	'''
+        1
+      /   \	
+     2     3
+   /        \
+  4          5	
+	'''
+	btree = BinaryTree.fromList([1, 2, 3, 4, None, None, 5])
+	assert btree is not None
+	assert btree.root is not None
+
+	assert btree.root.value == 1
+	assert btree.root.left.value == 2
+	assert btree.root.right.value == 3
+
+	assert btree.root.left.left.value == 4
+	assert btree.root.left.right == None
+	assert btree.root.right.left == None
+	assert btree.root.right.right.value == 5
+
+	assert btree.root.left.left.left == None
+	assert btree.root.left.left.right == None
+	assert btree.root.right.right.left == None
+	assert btree.root.right.right.right == None
+
+	'''
+							1
+						  /   \	
+						 2     3
+					   /  \  /  \
+					  4   5 6    7
+
+	In-order traversal:  [4,2,5,1,6,3,7]
+	Pre-order traversal: [1,2,4,5,3,6,7]
+	'''
+	btree = BinaryTree.from_traversal_in_pre([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
+	assert btree is not None
+	assert btree.root is not None
+
+	# Compare inorder and preorder traversals of the resulting tree
+	inorder, preorder = [], []
+	aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
+	btree.preorder_traversal(aggregate_list, lst=preorder)
+	btree.inorder_traversal(aggregate_list, lst=inorder)
+	assert inorder, preorder == ([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
+
+
+
 
 if __name__ == "__main__":
 	basic_tests()
 	traversals()
 	test_path_and_lca()
-
+	test_tree_maker()

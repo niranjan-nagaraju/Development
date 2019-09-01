@@ -22,8 +22,10 @@ class TreeMaker(object):
 	 /   \
 	4     5
 
-	Solution outline:
-		Start a BFS into the tree while assigning the nodes level by level
+	Algorithm outline:
+		Use indices to identify the child nodes of each parent node, and insert them at the appropriate place
+		in the binary tree.
+		In a heap-based indexing system, all odd numbered indices are left children, all even-numbered ones are right.
 	'''
 	@staticmethod
 	def fromList(array):
@@ -62,3 +64,75 @@ class TreeMaker(object):
 			nodes_list.append(n)
 
 		return btree
+
+
+
+	'''
+	Create a binary tree from an in-order and pre-order traversal.
+
+	Algorithm:
+		0. pre-order traversal goes R-l-r, in-order traversal goes l-R-r [l: left, r: right, R: root]
+		1. The first item in the pre-order traversal is therefore the root of the binary tree
+		2. Locate the root item in in-order traversal, everything before this item's index belongs in the left
+		   subtree, everything after belongs in the right.
+		3. Recursively solve for left and right subtrees, with a leaf node as a base case.
+
+	Example:
+							1
+						  /   \	
+						 2     3
+					   /  \  /  \
+					  4   5 6    7
+
+	In-order traversal:  [4,2,5,1,6,3,7]
+	Pre-order traversal: [1,2,4,5,3,6,7]
+
+	root = (1)
+
+	f([4,2,5,1,6,3,7], [1,2,4,5,3,6,7]):
+		node: 1
+		left: [4,2,5], [2,4,5]
+		right: [6,3,7], [3,6,7]
+		(1).left = f([4,2,5], [2,4,5])
+		(1).right = f([6,3,7], [3,6,7])
+
+	f([4,2,5], [2,4,5])					f([6,3,7], [3,6,7])
+		node: 2								node: 3
+		left: [4], [4]						left: [6], [6]
+		right: [5], [5]						right: [7], [7]
+		(2).left = f([4], [4])				(3).left = f([6], [6])
+		(2).right = f([5], [5])				(3).right = f([7], [7])
+	'''
+	@staticmethod
+	def from_traversal_in_pre(inorder, preorder):
+		# some checks to see if the inputs are in order (heh!)
+		if not inorder or not preorder:
+			return None
+
+		if len(inorder) != len(preorder):
+			return None
+
+		# helper function to recursively build the binary tree
+		# NOTE: Assumes no duplicates FIXME
+		def _from_traversal(inorder, preorder):
+			# Empty traversal lists, return empty node
+			if not inorder:
+				return None
+
+			# Create root node for this subtree
+			root = Node(preorder[0])
+
+			# Locate root in inorder traversal sequence
+			root_idx = inorder.index(preorder[0])
+
+			root.left = _from_traversal(inorder[:root_idx], preorder[1:root_idx+1])
+			root.right = _from_traversal(inorder[root_idx+1:], preorder[root_idx+1:])
+
+			return root
+
+		# call the helper function
+		root = _from_traversal(inorder, preorder)
+		return BinaryTree(root)
+
+
+

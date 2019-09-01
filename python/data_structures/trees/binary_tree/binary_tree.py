@@ -21,6 +21,24 @@ class BinaryTree:
 		self.path = self.path_1
 
 
+	'''
+	Create a binary tree from an array representation of items in the tree
+	'''
+	@staticmethod
+	def fromList(array):
+		from tree_maker import TreeMaker
+		return TreeMaker.fromList(array)
+
+
+	'''
+	Create a binary tree from inorder and preorder traversals
+	'''
+	@staticmethod
+	def from_traversal_in_pre(inorder, preorder):
+		from tree_maker import TreeMaker
+		return TreeMaker.from_traversal_in_pre(inorder, preorder)
+
+
 	# Calculate height of the binary tree
 	def height(self):
 		# helper function to calculate height of a subtree rooted at 'root'
