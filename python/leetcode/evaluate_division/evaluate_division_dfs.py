@@ -22,7 +22,7 @@ The input is always valid. You may assume that evaluating the queries will resul
 
 
 '''
-Algorithm outline:
+Algorithm outline (DFS-based):
 	Use a directed graph to store each equation,
 	if the equation is a/b = k, Add an edge from a->b with a weight k, and an edge from b->a with a weight 1/k.
 	To answer each query p/q, find a path from p in the graph that ends with q.
