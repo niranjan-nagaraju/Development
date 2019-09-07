@@ -312,7 +312,7 @@ def test_bfs():
 
 
 def test_paths_directed():
-	g = Graph(7)
+	g = Graph(7, directed=True)
 	g.add_edge(0, 1) 
 	g.add_edge(0, 2) 
 	g.add_edge(0, 3) 
@@ -344,9 +344,14 @@ def test_paths_directed():
 	g.paths(0, 6, aggregate_list)
 	assert aggregate_list.l == [[0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6], [0, 4, 6]]
 
+	aggregate_list.l = []
+	g.paths(1, 6, aggregate_list)
+	assert aggregate_list.l == [[1, 5, 6]]
+
+
 	
 def test_paths_undirected():
-	g = Graph(7, directed=True)
+	g = Graph(7, directed=False)
 	g.add_edge(0, 1) 
 	g.add_edge(0, 2) 
 	g.add_edge(0, 3) 
@@ -378,6 +383,9 @@ def test_paths_undirected():
 	g.paths(0, 6, aggregate_list)
 	assert aggregate_list.l == [[0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6], [0, 4, 6]]
 
+	aggregate_list.l = []
+	g.paths(1, 6, aggregate_list)
+	assert aggregate_list.l == [[1, 0, 2, 5, 6], [1, 0, 3, 5, 6], [1, 0, 4, 6], [1, 5, 2, 0, 4, 6], [1, 5, 3, 0, 4, 6], [1, 5, 6]]
 
 
 def test_paths():

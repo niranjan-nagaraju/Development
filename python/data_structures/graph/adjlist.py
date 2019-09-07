@@ -287,7 +287,7 @@ class Graph(GraphBase):
 
 
 
-	# Return all paths between vertex v1 and vertex v2
+	# Return all paths between vertex v1 and vertex v2 using DFS
 	def paths(self, v1, v2, aggregate_fn=None, *args, **kwargs):
 		def paths_util(prefix, curr_vertex, visited):
 			if visited[curr_vertex]:
