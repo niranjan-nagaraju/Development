@@ -327,6 +327,24 @@ def test_paths_directed():
 	g.paths(1, 6, aggregate_list)
 	assert aggregate_list.l == [[1, 5, 6]]
 
+	aggregate_list.l = []
+	g.paths(6, 1, aggregate_list)
+	assert aggregate_list.l == []
+
+	# Try BFS-based all paths extraction
+	aggregate_list.l = []
+	g.paths_2(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0, 4, 6], [0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6]]
+
+	aggregate_list.l = []
+	g.paths_2(1, 6, aggregate_list)
+	assert aggregate_list.l == [[1, 5, 6]]
+
+	aggregate_list.l = []
+	g.paths_2(6, 1, aggregate_list)
+	assert aggregate_list.l == []
+
+
 
 	
 def test_paths_undirected():
@@ -365,6 +383,24 @@ def test_paths_undirected():
 	aggregate_list.l = []
 	g.paths(1, 6, aggregate_list)
 	assert aggregate_list.l == [[1, 0, 2, 5, 6], [1, 0, 3, 5, 6], [1, 0, 4, 6], [1, 5, 2, 0, 4, 6], [1, 5, 3, 0, 4, 6], [1, 5, 6]]
+
+	aggregate_list.l = []
+	g.paths(1, 1, aggregate_list)
+	assert aggregate_list.l == [[1]]
+
+	# Try BFS-based all paths extraction
+	aggregate_list.l = []
+	g.paths_2(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0, 4, 6], [0, 1, 5, 6], [0, 2, 5, 6], [0, 3, 5, 6]]
+
+	aggregate_list.l = []
+	g.paths_2(1, 6, aggregate_list)
+	assert aggregate_list.l == sorted([[1, 0, 2, 5, 6], [1, 0, 3, 5, 6], [1, 0, 4, 6], [1, 5, 2, 0, 4, 6], [1, 5, 3, 0, 4, 6], [1, 5, 6]],
+			cmp=lambda l1,l2: cmp(len(l1), len(l2)))
+
+	aggregate_list.l = []
+	g.paths_2(1, 1, aggregate_list)
+	assert aggregate_list.l == [[1]]
 
 
 def test_paths():

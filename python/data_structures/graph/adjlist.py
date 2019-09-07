@@ -315,3 +315,35 @@ class Graph(GraphBase):
 		paths_util([], v1, visited)
 
 
+	# Return all paths between vertex v1 and vertex v2 using BFS
+	# should return paths ordered by length of the paths
+	def paths_2(self, v1, v2, aggregate_fn=None, *args, **kwargs):
+		def bfs_paths_util(prefix, curr_vertex):
+			q = Queue()
+			q.enqueue((v1, []))
+
+			while q:
+				curr_vertex, curr_prefix = q.dequeue()
+
+				# found destination vertex,
+				# record this path as one of the paths
+				if curr_vertex == v2:
+					aggregate_fn(curr_prefix + [v2], *args, **kwargs)
+
+				for v,_ in self._adjlists[curr_vertex]:
+					# visited[] traking doesn't yield well to BFS
+					# when extracting all paths
+					# Instead just check if we don't add a vertex already
+					# in the current path so we don't loop endlessly
+					# if there's a cycle / its an undirected graph
+					if v not in curr_prefix:
+						q.enqueue((v, curr_prefix + [curr_vertex]))
+
+
+		if not aggregate_fn:
+			aggregate_fn = Graph._default_printfn
+
+		# call helper function
+		bfs_paths_util([], v1)
+
+
