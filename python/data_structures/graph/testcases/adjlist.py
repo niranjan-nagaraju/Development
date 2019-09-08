@@ -366,6 +366,11 @@ def test_paths_directed():
 	assert aggregate_list.l == []
 
 
+	# shortest path by length
+	aggregate_list.l = []
+	g.shortest_paths_by_length(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0,4,6]]
+
 
 	
 def test_paths_undirected():
@@ -423,6 +428,14 @@ def test_paths_undirected():
 	g.paths_2(1, 1, aggregate_list)
 	assert aggregate_list.l == [[1]]
 
+	# shortest path by length
+	aggregate_list.l = []
+	g.shortest_paths_by_length(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0,4,6]]
+
+	aggregate_list.l = []
+	g.shortest_paths_by_length(1, 6, aggregate_list)
+	assert aggregate_list.l == [[1,5,6]]
 
 
 
