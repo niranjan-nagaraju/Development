@@ -345,7 +345,7 @@ class Graph(GraphBase):
 
 
 	# Return all the shortest path between vertex v1 and vertex v2 by number of edges in the paths
-	def shortest_paths_by_length(self, v1, v2, aggregate_fn=None, *args, **kwargs):
+	def all_shortest_paths_by_length(self, v1, v2, aggregate_fn=None, *args, **kwargs):
 		q = Queue()
 		q.enqueue((v1, [], 0))
 
@@ -375,5 +375,47 @@ class Graph(GraphBase):
 				# if there's a cycle / its an undirected graph
 				if v not in curr_prefix:
 					q.enqueue((v, curr_prefix + [curr_vertex], level+1))
+
+
+
+	# Return the shortest path between vertex v1 and vertex v2 by number of edges in the paths
+	def shortest_path_by_length(self, v1, v2):
+		q = Queue()
+		retrace = {}
+
+		q.enqueue(v1)
+		retrace[v1] = None
+
+		def retrace_path(retrace):
+			path = []
+			v = v2
+			while retrace.get(v) is not None:
+				path.insert(0, v)
+				v = retrace[v]
+
+			path.insert(0,v1)
+
+			return path
+
+
+		while q:
+			curr_vertex = q.dequeue()
+
+			# found destination vertex,
+			# record this path as one of the paths
+			if curr_vertex == v2:
+				return retrace_path(retrace)
+
+			for v,_ in self._adjlists[curr_vertex]:
+				# visited[] traking doesn't yield well to BFS
+				# when extracting all paths
+				# Instead just check if we don't add a vertex already
+				# in the current path so we don't loop endlessly
+				# if there's a cycle / its an undirected graph
+				if not retrace.has_key(v):
+					q.enqueue(v)
+					retrace[v] = curr_vertex
+
+		return []
 
 
