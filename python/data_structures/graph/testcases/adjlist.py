@@ -377,6 +377,7 @@ def test_paths_directed():
 	# shortest path by length
 	assert g.shortest_path_by_length(0, 6) == [0,4,6]
 	assert g.shortest_path_by_length(0, 5) == [0,1,5]
+	assert g.shortest_path_by_length(6, 1) == []
 
 
 	
@@ -452,7 +453,6 @@ def test_paths_undirected():
 	assert g.shortest_path_by_length(0, 6) == [0,4,6]
 	assert g.shortest_path_by_length(1, 6) == [1,5,6]
 	assert g.shortest_path_by_length(0, 5) == [0,1,5]
-
 
 
 def test_paths():

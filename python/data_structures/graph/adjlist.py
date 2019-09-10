@@ -389,20 +389,19 @@ class Graph(GraphBase):
 		def retrace_path(retrace):
 			path = []
 			v = v2
-			while retrace.get(v) is not None:
+			while v is not None:
 				path.insert(0, v)
 				v = retrace[v]
-
-			path.insert(0,v1)
 
 			return path
 
 
+		# Start a BFS traversal
 		while q:
 			curr_vertex = q.dequeue()
 
 			# found destination vertex,
-			# record this path as one of the paths
+			# retrace from last vertex using the mapping all the way to v1
 			if curr_vertex == v2:
 				return retrace_path(retrace)
 

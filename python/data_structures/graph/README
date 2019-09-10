@@ -1,0 +1,12 @@
+Graph problems:
+   [ ] All paths between two nodes u,v
+   [ ] Shortest path between two nodes u,v
+       [ ] By number of the edges in the paths
+	   [ ] By weight of the edges in the paths
+   [ ] Are two nodes u,v connected -- (Union-Find)
+   [ ] Cycles
+       [ ] Are there negative cycles? (Bellman Ford, Floyd-Warshall)
+   [ ] Travelling Salesman Problem
+   [ ] Bridges / Articulation points
+   [ ] Minimum Spanning Trees (kruskal's, Prim's, Boruvka's)
+   [ ] Max flow / flow networks (Ford-Fulkerson, Edmonds-Karp, Dinic's)

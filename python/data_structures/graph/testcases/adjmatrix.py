@@ -344,6 +344,21 @@ def test_paths_directed():
 	g.paths_2(6, 1, aggregate_list)
 	assert aggregate_list.l == []
 
+	# All shortest paths by length
+	aggregate_list.l = []
+	g.all_shortest_paths_by_length(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0,4,6]]
+
+	aggregate_list.l = []
+	g.all_shortest_paths_by_length(0, 5, aggregate_list)
+	assert aggregate_list.l == [[0,1,5], [0,2,5], [0,3,5]]
+
+	# shortest path by length
+	assert g.shortest_path_by_length(0, 6) == [0,4,6]
+	assert g.shortest_path_by_length(0, 5) == [0,1,5]
+	assert g.shortest_path_by_length(6, 1) == []
+
+
 
 
 	
@@ -401,6 +416,25 @@ def test_paths_undirected():
 	aggregate_list.l = []
 	g.paths_2(1, 1, aggregate_list)
 	assert aggregate_list.l == [[1]]
+
+	# All shortest paths by length
+	aggregate_list.l = []
+	g.all_shortest_paths_by_length(0, 6, aggregate_list)
+	assert aggregate_list.l == [[0,4,6]]
+
+	aggregate_list.l = []
+	g.all_shortest_paths_by_length(1, 6, aggregate_list)
+	assert aggregate_list.l == [[1,5,6]]
+
+	aggregate_list.l = []
+	g.all_shortest_paths_by_length(0, 5, aggregate_list)
+	assert aggregate_list.l == [[0,1,5], [0,2,5], [0,3,5]]
+
+	# shortest path by length
+	assert g.shortest_path_by_length(0, 6) == [0,4,6]
+	assert g.shortest_path_by_length(1, 6) == [1,5,6]
+	assert g.shortest_path_by_length(0, 5) == [0,1,5]
+
 
 
 def test_paths():

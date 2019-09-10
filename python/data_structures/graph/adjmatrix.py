@@ -321,32 +321,103 @@ class Graph(GraphBase):
 	# Return all paths between vertex v1 and vertex v2 using BFS
 	# should return paths ordered by length of the paths
 	def paths_2(self, v1, v2, aggregate_fn=None, *args, **kwargs):
-		def bfs_paths_util(prefix, curr_vertex):
-			q = Queue()
-			q.enqueue((v1, []))
-
-			while q:
-				curr_vertex, curr_prefix = q.dequeue()
-
-				# found destination vertex,
-				# record this path as one of the paths
-				if curr_vertex == v2:
-					aggregate_fn(curr_prefix + [v2], *args, **kwargs)
-
-				for v in xrange(self.vertices):
-					# visited[] traking doesn't yield well to BFS
-					# when extracting all paths
-					# Instead just check if we don't add a vertex already
-					# in the current path so we don't loop endlessly
-					# if there's a cycle / its an undirected graph
-					if self._adjmatrix[curr_vertex][v] is not None and v not in curr_prefix:
-						q.enqueue((v, curr_prefix + [curr_vertex]))
-
-
 		if not aggregate_fn:
 			aggregate_fn = Graph._default_printfn
 
-		# call helper function
-		bfs_paths_util([], v1)
+		q = Queue()
+		q.enqueue((v1, []))
+
+		while q:
+			curr_vertex, curr_prefix = q.dequeue()
+
+			# found destination vertex,
+			# record this path as one of the paths
+			if curr_vertex == v2:
+				aggregate_fn(curr_prefix + [v2], *args, **kwargs)
+
+			for v in xrange(self.vertices):
+				# visited[] traking doesn't yield well to BFS
+				# when extracting all paths
+				# Instead just check if we don't add a vertex already
+				# in the current path so we don't loop endlessly
+				# if there's a cycle / its an undirected graph
+				if self._adjmatrix[curr_vertex][v] is not None and v not in curr_prefix:
+					q.enqueue((v, curr_prefix + [curr_vertex]))
+
+
+
+
+	# Return all the shortest path between vertex v1 and vertex v2 by number of edges in the paths
+	def all_shortest_paths_by_length(self, v1, v2, aggregate_fn=None, *args, **kwargs):
+		q = Queue()
+		q.enqueue((v1, [], 0))
+
+		# Maximum number of vertices wont exceed the number of vertices
+		# if there are cycles, they'd not be included more than once in the path
+		shortest_path_level = self.vertices
+
+		while q:
+			curr_vertex, curr_prefix, level = q.dequeue()
+
+			# Found all the shortest paths
+			if level > shortest_path_level:
+				return
+
+			# found destination vertex,
+			# record this path as one of the paths
+			if curr_vertex == v2:
+				path = curr_prefix + [v2]
+				shortest_path_level = level
+				aggregate_fn(path, *args, **kwargs)
+
+			for v in xrange(self.vertices):
+				# visited[] traking doesn't yield well to BFS
+				# when extracting all paths
+				# Instead just check if we don't add a vertex already
+				# in the current path so we don't loop endlessly
+				# if there's a cycle / its an undirected graph
+				if self._adjmatrix[curr_vertex][v] is not None and v not in curr_prefix:
+					q.enqueue((v, curr_prefix + [curr_vertex], level+1))
+
+
+
+	# Return the shortest path between vertex v1 and vertex v2 by number of edges in the paths
+	def shortest_path_by_length(self, v1, v2):
+		q = Queue()
+		retrace = {}
+
+		q.enqueue(v1)
+		retrace[v1] = None
+
+		def retrace_path(retrace):
+			path = []
+			v = v2
+			while v is not None:
+				path.insert(0, v)
+				v = retrace[v]
+
+			return path
+
+
+		# Start a BFS traversal
+		while q:
+			curr_vertex = q.dequeue()
+
+			# found destination vertex,
+			# retrace from last vertex using the mapping all the way to v1
+			if curr_vertex == v2:
+				return retrace_path(retrace)
+
+			for v in xrange(self.vertices):
+				# visited[] traking doesn't yield well to BFS
+				# when extracting all paths
+				# Instead just check if we don't add a vertex already
+				# in the current path so we don't loop endlessly
+				# if there's a cycle / its an undirected graph
+				if self._adjmatrix[curr_vertex][v] is not None and not retrace.has_key(v):
+					q.enqueue(v)
+					retrace[v] = curr_vertex
+
+		return []
 
 
