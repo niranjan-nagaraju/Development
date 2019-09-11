@@ -1,5 +1,6 @@
 '''
-Fill an array of size 2*n with each of numbers 1-n such that each number is repeated twice, but every number, i, has to be separated exactly 'i' slots between the two occurences.
+Fill an array of size 2*n with each of numbers 1-n such that each number is repeated twice, but every number, i, 
+has to be separated exactly 'i' numbers between the two occurences.
 eg, the two occurrences of 3 has to be separated  by  3 slots, 
 Return all such arrangements for a specified n, or an empty list, [],  if such an arrangement does not exist
     n = 2: {not possible} => []
