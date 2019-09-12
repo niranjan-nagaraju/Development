@@ -243,21 +243,47 @@ class Solution(object):
 
 	# Extract all paths from endWord to beginWord, in reverse order
 	# and return a list of paths
-	def all_paths(self, graph, endWord, beginWord):
+	def all_paths_dfs(self, graph, endWord, beginWord):
 		# Use dfs to extract all paths
 		# 'NOTE: keeping track of visited' is not needed as this is a DAG
 		def dfs_paths(prefix, current):
 			if current == beginWord:
 				paths.append([beginWord]+prefix)
 
+			prefix.insert(0, current)
 			for w,_ in graph[current]:
-				dfs_paths([current]+prefix, w)
-
+				dfs_paths(prefix, w)
+			prefix.pop(0)
 
 
 		paths = []
 		dfs_paths([], endWord)
 		return paths
+
+
+
+	# Extract all paths from endWord to beginWord, in reverse order using BFS
+	# and return a list of paths
+	def all_paths_bfs(self, graph, endWord, beginWord):
+		# Use bfs to extract all paths
+		# 'NOTE: keeping track of visited' is not needed as this is a DAG
+		def bfs_paths():
+			q = [([], endWord)]
+
+			while q:
+				prefix, current = q.pop(0)
+				if current == beginWord:
+					paths.append([beginWord]+prefix)
+
+				for w,_ in graph[current]:
+					q.append(([current]+prefix, w))
+
+
+		paths = []
+		bfs_paths()
+
+		return paths
+
 
 
 	# Find minimumm-length ladders from beginWord -> endWord
@@ -323,7 +349,7 @@ class Solution(object):
 
 
 		#self.printGraph(transformation_graph)
-		shortest_paths = self.all_paths(transformation_graph, endWord, beginWord)
+		shortest_paths = self.all_paths_dfs(transformation_graph, endWord, beginWord)
 
 		return shortest_paths
 
