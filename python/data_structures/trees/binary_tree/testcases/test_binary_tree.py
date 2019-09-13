@@ -276,8 +276,9 @@ def test_tree_maker():
 
 	In-order traversal:  [4,2,5,1,6,3,7]
 	Pre-order traversal: [1,2,4,5,3,6,7]
+	Post-order traversal: [4,5,2,6,7,3,1]
 	'''
-	btree = BinaryTree.from_traversal_in_pre([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
+	btree = BinaryTree.from_traversal([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
 	assert btree is not None
 	assert btree.root is not None
 
@@ -286,7 +287,20 @@ def test_tree_maker():
 	aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
 	btree.preorder_traversal(aggregate_list, lst=preorder)
 	btree.inorder_traversal(aggregate_list, lst=inorder)
-	assert inorder, preorder == ([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
+	assert inorder == [4,2,5,1,6,3,7]
+	assert preorder ==  [1,2,4,5,3,6,7]
+	
+	btree = BinaryTree.from_traversal([4,2,5,1,6,3,7], postorder=[4,5,2,6,7,3,1])
+	assert btree is not None
+	assert btree.root is not None
+
+	# Compare inorder and postorder traversals of the resulting tree
+	inorder, postorder = [], []
+	aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
+	btree.postorder_traversal(aggregate_list, lst=postorder)
+	btree.inorder_traversal(aggregate_list, lst=inorder)
+	assert inorder ==[4,2,5,1,6,3,7]
+	assert postorder == [4,5,2,6,7,3,1]
 
 
 

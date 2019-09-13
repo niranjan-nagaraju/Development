@@ -34,9 +34,20 @@ class BinaryTree:
 	Create a binary tree from inorder and preorder traversals
 	'''
 	@staticmethod
-	def from_traversal_in_pre(inorder, preorder):
+	def from_traversal(inorder, preorder=None, postorder=None):
 		from tree_maker import TreeMaker
-		return TreeMaker.from_traversal_in_pre(inorder, preorder)
+
+		# Inorder traversasl is required to build an unique tree
+		if not inorder:
+			return None
+
+		if preorder:
+			return TreeMaker.from_traversal_in_pre(inorder, preorder)
+		elif postorder:
+			return TreeMaker.from_traversal_in_post(inorder, postorder)
+
+		# atleast one of preorder/postorder traversal is needed to build the tree
+		return None
 
 
 	# Calculate height of the binary tree
