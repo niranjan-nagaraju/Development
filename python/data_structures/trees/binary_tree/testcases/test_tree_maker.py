@@ -102,7 +102,8 @@ class Test_TreeMaker(unittest.TestCase):
 		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
 		btree.preorder_traversal(aggregate_list, lst=preorder)
 		btree.inorder_traversal(aggregate_list, lst=inorder)
-		assert inorder, preorder == ([4,2,5,1,6,3,7], [1,2,4,5,3,6,7])
+		assert inorder == [4,2,5,1,6,3,7]
+		assert preorder == [1,2,4,5,3,6,7]
 
 		'''
                                 1
@@ -123,7 +124,8 @@ class Test_TreeMaker(unittest.TestCase):
 		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
 		btree.preorder_traversal(aggregate_list, lst=preorder)
 		btree.inorder_traversal(aggregate_list, lst=inorder)
-		assert inorder, preorder == ([2,1,6,3,7], [1,2,3,6,7])
+		assert inorder == [2,1,6,3,7]
+		assert preorder == [1,2,3,6,7]
 
 		'''
                                 1
@@ -144,7 +146,76 @@ class Test_TreeMaker(unittest.TestCase):
 		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
 		btree.preorder_traversal(aggregate_list, lst=preorder)
 		btree.inorder_traversal(aggregate_list, lst=inorder)
-		assert inorder, preorder == ([4,2,5,1], [1,2,4,5])
+		assert inorder == [4,2,5,1]
+		assert preorder  == [1,2,4,5]
+
+
+	# from inorder and postorder traversals
+	def test_from_traversal_in_post(self):
+		'''
+                                1
+                              /   \	
+                             2     3
+                           /  \  /  \
+                          4   5 6    7
+
+		In-order traversal:  [4,2,5,1,6,3,7]
+		Post-order traversal: [4,5,2,6,3,7,1]
+		'''
+		btree = TreeMaker.from_traversal_in_post([4,2,5,1,6,3,7], [4,5,2,6,3,7,1])
+		assert btree is not None
+		assert btree.root is not None
+
+		# Compare inorder and postorder traversals of the resulting tree
+		inorder, postorder = [], []
+		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
+		btree.postorder_traversal(aggregate_list, lst=postorder)
+		btree.inorder_traversal(aggregate_list, lst=inorder)
+		assert inorder == [4,2,5,1,6,3,7] 
+		assert postorder == [4,5,2,6,3,7,1]
+
+
+		'''
+                                1
+                              /   \	
+                             2     3
+                                 /  \
+                                6    7
+
+		In-order traversal:  [2,1,6,3,7]
+		Post-order traversal: [2,6,7,3,1]
+		'''
+		btree = TreeMaker.from_traversal_in_post([2,1,6,3,7], [2,6,7,3,1])
+		assert btree is not None
+		assert btree.root is not None
+
+		# Compare inorder and postorder traversals of the resulting tree
+		inorder, postorder = [], []
+		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
+		btree.postorder_traversal(aggregate_list, lst=postorder)
+		btree.inorder_traversal(aggregate_list, lst=inorder)
+		assert inorder, postorder == ([2,1,6,3,7], [2,6,7,3,1])
+
+		'''
+                                1
+                              /    	
+                             2      
+                           /  \      
+                          4   5       
+
+		In-order traversal:  [4,2,5,1]
+		Post-order traversal: [4,5,2,1]
+		'''
+		btree = TreeMaker.from_traversal_in_post([4,2,5,1], [4,5,2,1])
+		assert btree is not None
+		assert btree.root is not None
+
+		# Compare inorder and postorder traversals of the resulting tree
+		inorder, postorder = [], []
+		aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
+		btree.postorder_traversal(aggregate_list, lst=postorder)
+		btree.inorder_traversal(aggregate_list, lst=inorder)
+		assert inorder, postorder == ([4,2,5,1], [4,5,2,1])
 
 
 
