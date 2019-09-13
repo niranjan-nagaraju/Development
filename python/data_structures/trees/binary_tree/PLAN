@@ -5,4 +5,5 @@
   + Iterator-based versions (store state, return next item on subsequent next() calls)
 + [ ] Morris Inorder traversal - iterative
   + [ ] Postorder, and Preorder
++ [ ] Inorder, preorder, postorder successors and predecessors
 + [X] Lowest-common-ancestor (LCA)
