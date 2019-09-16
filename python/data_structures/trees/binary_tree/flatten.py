@@ -2,6 +2,29 @@ from data_structures.trees.binary_tree.binary_tree import BinaryTree
 
 class FlattenBinaryTree(object):
 	'''
+	Helper function to merge two DLLs
+	represented by their heads and tails into one DLL
+	   (lh, lt): represents left subtree's head and tail nodes
+	   (rh, rh): represents right subtree's head and tail nodes
+	   The new merged DLL will look like
+	   lh ... lt, rh, ... rh
+	   (lh, rt) will be the head and tail of the merged DLL
+	NOTE: Atleast one of the two DLLs are assumed to be non-empty
+	'''
+	@staticmethod
+	def mergeDLLs(lh, lt, rh, rt):
+		if not lh: # Left DLL is empty
+			lh = rh
+		elif not rh: # Right DLL is empty
+			rt = lt
+		else:
+			lt.right = rh
+			rh.left = lt
+
+		return (lh, rt)
+
+
+	'''
 	Flatten a Binary Tree into a doubly linked list in-place such that the DLL has nodes in the inorder traversal of the binary tree
 
 	Algorithm:
@@ -52,22 +75,13 @@ class FlattenBinaryTree(object):
 			(lh, lt) = _binaryTreeToDLL_in(root.left)
 
 			# Merge current subtree's root to left subtree's DLL's tail
-			if lh:
-				lt.right = root
-				root.left = lt
-				lt = root
-			else: # Left subtree is empty
-				lh = lt = root
+			(lh, lt) = FlattenBinaryTree.mergeDLLs(lh, lt, root, root)
 
 			(rh, rt) = _binaryTreeToDLL_in(root.right)
-			# Merge (left+root) and right subtrees-based DLLs
-			if rh:
-				lt.right = rh
-				rh.left = lt
-			else: # right subtree is empty, return (left+root) DLL as-is
-				rt = lt
 
-			return (lh, rt)
+			# Merge (left+root) and right subtrees-based DLLs
+			return FlattenBinaryTree.mergeDLLs(lh, lt, rh, rt)
+
 
 		# Call the helper function
 		if not bt:
