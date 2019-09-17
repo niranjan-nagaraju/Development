@@ -5,6 +5,7 @@ import unittest
 
 
 class Test_Flatten(unittest.TestCase):
+	# called before every testcase
 	def setUp(self):
 		self.aggregate_list = lambda kwargs, data : kwargs['lst'].append(data)
 		'''
@@ -99,6 +100,69 @@ class Test_Flatten(unittest.TestCase):
 			tmp = tmp.left
 
 		assert forward == [6,4,2,1,3,5,7]
+		assert reverse == forward[::-1]
+
+
+	def test_postorder_flatten_to_dll(self):
+		bt = self.bt
+		(head, tail) = FlattenBinaryTree.binTreeToDLL_pre(bt)
+		assert head.value == 1
+		assert tail.value == 7
+
+		forward = []
+		tmp = head
+		while tmp:
+			forward.append(tmp.value)
+			tmp = tmp.right
+
+		reverse = []
+		tmp = tail
+		while tmp:
+			reverse.append(tmp.value)
+			tmp = tmp.left
+
+		assert forward == [1,2,4,5,3,6,7]
+		assert reverse == forward[::-1]
+
+		bt = self.bt2
+		(head, tail) = FlattenBinaryTree.binTreeToDLL_pre(bt)
+		assert head.value == 1
+		assert tail.value == 5
+
+		forward = []
+		tmp = head
+		while tmp:
+			forward.append(tmp.value)
+			tmp = tmp.right
+
+		reverse = []
+		tmp = tail
+		while tmp:
+			reverse.append(tmp.value)
+			tmp = tmp.left
+
+		assert forward == [1,2,4,5]
+		assert reverse == forward[::-1]
+
+
+		bt = self.bt3
+		(head, tail) = FlattenBinaryTree.binTreeToDLL_pre(bt)
+		assert head.value == 1
+		assert tail.value == 7
+
+		forward = []
+		tmp = head
+		while tmp:
+			forward.append(tmp.value)
+			tmp = tmp.right
+
+		reverse = []
+		tmp = tail
+		while tmp:
+			reverse.append(tmp.value)
+			tmp = tmp.left
+
+		assert forward == [1,2,4,6,3,5,7]
 		assert reverse == forward[::-1]
 
 
