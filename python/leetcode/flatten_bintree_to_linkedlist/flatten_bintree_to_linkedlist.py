@@ -62,7 +62,7 @@ class Solution(object):
 
 
 	'''
-	Flatten a Binary Tree into a doubly linked list in-place such that the SLL has nodes in the preorder traversal of the binary tree
+	Flatten a Binary Tree into a singly linked list in-place such that the SLL has nodes in the preorder traversal of the binary tree
 
 	Algorithm:
 		1. Recursively convert left and right subtrees to SLLs, each with their own head and tail.
