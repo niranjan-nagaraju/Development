@@ -101,6 +101,33 @@ class Test_Flatten(unittest.TestCase):
 		_test(self.bt4, [1,2,3,4,5,6])
 
 
+	def test_postorder_flatten_to_dll(self):
+		def _test(bt, postorder_sequence):
+			(head, tail) = FlattenBinaryTree.binTreeToDLL_post(bt)
+			assert head.value == postorder_sequence[0]
+			assert tail.value == postorder_sequence[-1]
+
+			forward = []
+			tmp = head
+			while tmp:
+				forward.append(tmp.value)
+				tmp = tmp.right
+
+			reverse = []
+			tmp = tail
+			while tmp:
+				reverse.append(tmp.value)
+				tmp = tmp.left
+
+			assert forward == postorder_sequence
+			assert reverse == forward[::-1]
+
+		_test(self.bt, [4,5,2,6,7,3,1])
+		_test(self.bt2, [4,5,2,1])
+		_test(self.bt3, [6,4,2,7,5,3,1])
+		_test(self.bt4, [3,4,2,6,5,1])
+
+
 if __name__ == '__main__':
 	unittest.main()
 
