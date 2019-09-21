@@ -94,7 +94,6 @@ class Solution(object):
 		lb = 0
 		rb = len(height)-1
 		while True:
-			water_in_curr_level = 0
 			# trim left gaps
 			i = lb
 			while i < len(height) and height[i] <= 0:
@@ -111,11 +110,16 @@ class Solution(object):
 			if not height[lb:rb+1]:
 				break
 
-			water_in_curr_level = reduce(lambda x,y: x+1 if y <= 0 else x, height[lb:rb+1], 0)
+			#water_in_curr_level = reduce(lambda x,y: x+1 if y <= 0 else x, height[lb:rb+1], 0)
+			water_in_curr_level = 0
+			for i in xrange(lb, rb+1):
+				if height[i] <= 0:
+					water_in_curr_level += 1
 
 			total_water_trapped += water_in_curr_level
 
 			# decrement all bar heights to move to next level
+			#map(lambda x: x-1, height)
 			for i in xrange(lb, rb+1):
 				height[i] -= 1
 
