@@ -88,36 +88,36 @@ class Solution(object):
 		:rtype: int
 		"""
 		total_water_trapped = 0
-		bars = height[:]
 
 		# lb, ub represents the active part of the bars elevation maps
 		# that are still under consideration after all the trims
 		lb = 0
-		rb = len(bars)-1
+		rb = len(height)-1
 		while True:
 			water_in_curr_level = 0
 			# trim left gaps
 			i = lb
-			while i < len(bars) and bars[i] <= 0:
+			while i < len(height) and height[i] <= 0:
 				i += 1
 			lb = i
 
 			# trim right gaps
 			i = rb
-			while i >= 0 and bars[i] <= 0:
+			while i >= 0 and height[i] <= 0:
 				i -= 1
 			rb = i
 
 			# processed all bar heights
-			if not bars[lb:rb+1]:
+			if not height[lb:rb+1]:
 				break
 
-			water_in_curr_level = reduce(lambda x,y: x+1 if y <= 0 else x, bars[lb:rb+1], 0)
+			water_in_curr_level = reduce(lambda x,y: x+1 if y <= 0 else x, height[lb:rb+1], 0)
 
 			total_water_trapped += water_in_curr_level
 
 			# decrement all bar heights to move to next level
-			bars = map (lambda x: x-1, bars)
+			for i in xrange(lb, rb+1):
+				height[i] -= 1
 
 		return total_water_trapped
 
