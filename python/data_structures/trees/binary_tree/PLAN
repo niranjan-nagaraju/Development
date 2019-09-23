@@ -1,9 +1,14 @@
-+ [ ] Iterative tree traversals
-  + [ ] Inorder
-  + [ ] Preorder
-  + [ ] Postorder
-  + Iterator-based versions (store state, return next item on subsequent next() calls)
++ [X] Iterative tree traversals
+  + [X] Inorder
+  + [X] Preorder
+  + [X] Postorder
+  + [ ] Iterator-based versions (store state, return next item on subsequent next() calls)
++ [ ] Zigzag level order traversal
 + [ ] Morris Inorder traversal - iterative
   + [ ] Postorder, and Preorder
 + [ ] Inorder, preorder, postorder successors and predecessors
 + [X] Lowest-common-ancestor (LCA)
+  + [X] paths-based match
+  + [X] Efficient version that looks for n1, n2 in left and right subtrees recursively
++ [X] Construct tree from pre+in(order) or post+in(order) traversals
++ [X] Flatten a binary tree into a DLL/SLL (ordered by in/pre/post order traversals)
