@@ -654,13 +654,7 @@ class BinaryTree:
 
 		# wrap n in an node if its a data item
 		# else return node as-is if its of type Node.
-		def wrap_node(n):
-			# n is not Node, wrap it in a node and return the node
-			if not isinstance(n, Node):
-				return Node(n)
-			else:
-				return n
-		
+		wrap_node = lambda n: Node(n) if not isinstance(n, Node) else n
 		node1 = wrap_node(n1)
 		node2 = wrap_node(n2)
 		return _lca_(self.root, node1, node2)
