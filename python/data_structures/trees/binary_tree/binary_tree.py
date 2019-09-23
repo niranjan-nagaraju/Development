@@ -50,7 +50,9 @@ class BinaryTree:
 		return None
 
 
-	# Calculate height of the binary tree
+	'''
+	Calculate height of the binary tree
+	'''
 	def height(self):
 		# helper function to calculate height of a subtree rooted at 'root'
 		def _height(root):
@@ -65,8 +67,10 @@ class BinaryTree:
 		return _height(self.root)
 
 
-	# Calculate width of the binary tree
-	# width = max number of nodes at any level
+	'''
+	Calculate width of the binary tree
+	width = max number of nodes at any level
+	'''
 	def width(self):
 		if not self.root:
 			return 0
@@ -102,10 +106,12 @@ class BinaryTree:
 
 
 
-	# Calculate span of the binary tree, i.e. 
-	# the max left + right widths of any node from root
-	# Do a bfs traversal, capturing left and right widths
-	# span = max(left width) + max(right width)
+	'''
+	Calculate span of the binary tree, i.e. 
+	the max left + right widths of any node from root
+	Do a bfs traversal, capturing left and right widths
+	span = max(left width) + max(right width)
+	'''
 	def span(self):
 		if not self.root:
 			return 0
@@ -131,10 +137,12 @@ class BinaryTree:
 
 
 
-	# preorder traversal: (R,l,r, l:left, r:right, R:Root)
-	# Traverse binary tree nodes in pre-order and return their values
-	# if no aggregate function callback is specified,
-	# just print the current node's contents
+	'''
+	preorder traversal: (R,l,r, l:left, r:right, R:Root)
+	Traverse binary tree nodes in pre-order and return their values
+	if no aggregate function callback is specified,
+	just print the current node's contents
+	'''
 	def preorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in preorder
 		def _preorder_traversal(root, aggregate_fn, **kwargs):
@@ -150,10 +158,12 @@ class BinaryTree:
 
 
 
-	# post-order traversal (l,r,R, l:left, r:right, R:Root)
-	# Traverse binary tree nodes in post-order and return their values
-	# if no aggregate function callback is specified,
-	# just print the current node's contents
+	'''
+	post-order traversal (l,r,R, l:left, r:right, R:Root)
+	Traverse binary tree nodes in post-order and return their values
+	if no aggregate function callback is specified,
+	just print the current node's contents
+	'''
 	def postorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in postorder
 		def _postorder_traversal(root, aggregate_fn, **kwargs):
@@ -169,10 +179,12 @@ class BinaryTree:
 
 
 
-	# In-order traversal (l,r,R, l:left, r:right, R:Root)
-	# Traverse binary tree nodes in in-order and return their values
-	# if no aggregate function callback is specified,
-	# just print the current node's contents
+	'''
+	In-order traversal (l,r,R, l:left, r:right, R:Root)
+	Traverse binary tree nodes in in-order and return their values
+	if no aggregate function callback is specified,
+	just print the current node's contents
+	'''
 	def inorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		# helper function to traverse a Binary subtree rooted at 'root', in In-order
 		def _inorder_traversal(root, aggregate_fn, **kwargs):
@@ -188,10 +200,12 @@ class BinaryTree:
 
 
 
-	# Level-order traversal
-	# Traverse binary tree nodes level by level, and return their values
-	# if no aggregate function callback is specified,
-	# just print the current node's contents
+	'''
+	Level-order traversal
+	Traverse binary tree nodes level by level, and return their values
+	if no aggregate function callback is specified,
+	just print the current node's contents
+	'''
 	def levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -207,8 +221,10 @@ class BinaryTree:
 
 
 
-	# Left-view of a binary tree
-	# Return tree items that would be seen from the left side of the binary tree
+	'''
+	Left-view of a binary tree
+	Return tree items that would be seen from the left side of the binary tree
+	'''
 	def left_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -230,8 +246,10 @@ class BinaryTree:
 
 
 
-	# Right-view of a binary tree
-	# Return tree items that would be seen from the right side of the binary tree
+	'''
+	Right-view of a binary tree
+	Return tree items that would be seen from the right side of the binary tree
+	'''
 	def right_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -260,20 +278,22 @@ class BinaryTree:
 
 
 
-	# Top-view of a binary tree
-	# Return the node items that would be seen from the top of the binary tree
-	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
-	# e.g.
-	#     a
-	#    / \
-    #   b   c
-	#  /  \/ \
-	# d   ef  g
-	# Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
-	#
-	# Vizualize the algorithm as an cone increasing in diameter, and printing all the nodes on the edge of the cone,
-	# (assume the tree is completely full), and ignoring everything within the cone itself as they would be masked by
-	# the outer nodes when viewed from the top.
+	'''
+	Top-view of a binary tree
+	Return the node items that would be seen from the top of the binary tree
+	NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
+	e.g.
+	    a
+	   / \
+      b   c
+	 /  \/ \
+	d   ef  g
+	Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
+	
+	Vizualize the algorithm as an cone increasing in diameter, and printing all the nodes on the edge of the cone,
+	(assume the tree is completely full), and ignoring everything within the cone itself as they would be masked by
+	the outer nodes when viewed from the top.
+	'''
 	def top_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -302,21 +322,24 @@ class BinaryTree:
 			q.enqueue((width+1, node.right)) if node.right else None
 
 
-	# Top-view of a binary tree, but ordered from Left->Right, width-wise
-	# Return the node items that would be seen from the top of the binary tree, but after ordering them from left->right
-	# NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
-	# e.g.
-	#     a
-	#    / \
-    #   b   c
-	#  /  \/ \
-	# d   ef  g
-	# Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
-	# In the sample tree above,
-	# traditional top-view (level by level) would be
-	#   a b c d g
-	# whereas, a L-R top-view would yield
-	#  d b a c g
+
+	'''
+	Top-view of a binary tree, but ordered from Left->Right, width-wise
+	Return the node items that would be seen from the top of the binary tree, but after ordering them from left->right
+	NOTE: The left-right and right-left grandchildren-nodes of a node overlap, and are masked by the grandfather node
+	e.g.
+	    a
+	   / \
+      b   c
+	 /  \/ \
+	d   ef  g
+	Top-view of the tree rooted at a, node 'a' masks nodes LR-grandchild node 'e', and RL-grandchild node 'f'
+	In the sample tree above,
+	traditional top-view (level by level) would be
+	  a b c d g
+	whereas, a L-R top-view would yield
+	 d b a c g
+	'''
 	def top_view_LR(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -367,8 +390,10 @@ class BinaryTree:
 
 
 
-	# Bottom-view of a binary tree
-	# Return the nodes that would be seen from the bottom side of the binary tree
+	'''
+	Bottom-view of a binary tree
+	Return the nodes that would be seen from the bottom side of the binary tree
+	'''
 	def bottom_view(self, aggregate_fn=_default_printfn, **kwargs):
 		if not self.root:
 			return
@@ -412,22 +437,29 @@ class BinaryTree:
 
 
 
-	# TODO: Implement
+	'''
+	TODO: Implement
+	'''
 	def zigzag_levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
 		pass
 
 
-	# Return a path, as a list of nodes, from root to the specified node in the binary tree
+
+	'''
+	Return a path, as a list of nodes, from root to the specified node in the binary tree
+	'''
 	def path_n(self, data):
-		# Find path to 'node' from the subtree rooted at 'root'
-		# and append each node in the path to the list
-		# Steps:
-		#   1. Start a pre-order traversal
-		#   2. Find path to node in left subtree, if not found, find in the right subtree
-		#   3. If either of the left subtree/ right subtree returns True, indicating subtree contains the node,
-		#        add current root node to list and return True to higher level calls
-		#   4. If a subtree's root matches node, we have hit the node we were looking for, start constructing
-		#	     path from here -> add node to list. return True
+		'''
+		Find path to 'node' from the subtree rooted at 'root'
+		and append each node in the path to the list
+		Steps:
+		  1. Start a pre-order traversal
+		  2. Find path to node in left subtree, if not found, find in the right subtree
+		  3. If either of the left subtree/ right subtree returns True, indicating subtree contains the node,
+		       add current root node to list and return True to higher level calls
+		  4. If a subtree's root matches node, we have hit the node we were looking for, start constructing
+		     path from here -> add node to list. return True
+		'''
 		def path_helper(root, node, path_nodes):
 			if not root:
 				return False
@@ -461,17 +493,21 @@ class BinaryTree:
 
 
 
-	# Return a path, as a list of node items, from root to the specified item in the binary tree
+	'''
+	Return a path, as a list of node items, from root to the specified item in the binary tree
+	'''
 	def path_1(self, data):
-		# Find path to 'item' from the subtree rooted at 'root'
-		# and append each item in the path to the list
-		# Steps:
-		#   1. Start a pre-order traversal
-		#   2. Find path to item in left subtree, if not found, find in the right subtree
-		#   3. If either of the left subtree/ right subtree returns True, indicating subtree contains the item,
-		#        add current root node to list and return True to higher level calls
-		#   4. If a subtree's root matches item, we have hit the node we were looking for, start constructing
-		#	     path from here -> add item to list. return True
+		'''
+		Find path to 'item' from the subtree rooted at 'root'
+		and append each item in the path to the list
+		Steps:
+		  1. Start a pre-order traversal
+		  2. Find path to item in left subtree, if not found, find in the right subtree
+		  3. If either of the left subtree/ right subtree returns True, indicating subtree contains the item,
+		       add current root node to list and return True to higher level calls
+		  4. If a subtree's root matches item, we have hit the node we were looking for, start constructing
+		     path from here -> add item to list. return True
+		'''
 		def path_helper(root, item, path):
 			if not root:
 				return False
@@ -499,15 +535,19 @@ class BinaryTree:
 
 
 
-	# Return a path, as a list of node items, from root to the specified item in the binary tree
+	'''
+	Return a path, as a list of node items, from root to the specified item in the binary tree
+	'''
 	def path_2(self, data):
-		# Find path to 'item' from the subtree rooted at 'root'
-		# and append each item in the path to the list
-		# Steps:
-		#   1. Start a pre-order traversal
-		#   2. Add prefix indicating current path until a match is found.
-		#      the prefix stores the path to the current node from root
-		#      using the recursion stack to add and remove paths
+		'''
+		Find path to 'item' from the subtree rooted at 'root'
+		and append each item in the path to the list
+		Steps:
+		  1. Start a pre-order traversal
+		  2. Add prefix indicating current path until a match is found.
+		     the prefix stores the path to the current node from root
+		     using the recursion stack to add and remove paths
+		'''
 		def path_helper(root, item, prefix, path):
 			if not root:
 				return
@@ -531,13 +571,15 @@ class BinaryTree:
 
 
 
-	# Return a node that is the Lowest common ancestor
-	# between two 2 nodes in the binary tree
-	# Algorithm:
-	#   Get paths from root to both nodes
-	#   Compare nodes in the paths until they diverge
-	#    the node at which they diverge is the LCA node
-	def lca(self, node1, node2):
+	'''
+	Return a node that is the Lowest common ancestor
+	between two 2 nodes in the binary tree
+	Algorithm: (paths-based)
+	  Get paths from root to both nodes
+	  Compare nodes in the paths until they diverge
+	   the node at which they diverge is the LCA node
+	'''
+	def lca_p(self, node1, node2):
 		path1 = self.path_n(node1)
 		path2 = self.path_n(node2)
 		lca_node = None
@@ -554,4 +596,72 @@ class BinaryTree:
 		return lca_node
 
 
+	'''
+	Return a node that is the Lowest common ancestor
+	between two 2 nodes in the binary tree
+	Algorithm: (Efficient version)
+	  Instead of getting paths to either nodes and return the lca as the 
+	  last node that diverges in their paths, (using additional storage for paths)
+	  Traverse the tree pre-order, and return the node whose left and right children return n1 and n2
+	  Each node returns 
+	    None if its subtree does not contain neither n1 or n2
+	    n1 if its subtree contains n1, n2 if its subtree contains n2
+	    if its subtree contains both, returns node itself as LCA
+	    We return the (non-null) node returned to root as LCA
+	NOTE: As an optimization, anytime an lca is already found, we check if the subtree's return value is neither n1 nor n2
+	      and stop computing lca
+	      eg
+             a
+          /     \
+         b       c
+       /   \    /  \
+      d     e  f    g
+	  LCA(d,e) = b
+	  LCA(b,d,e) == b
+	  LCA(root, d,e) == b != e,d => we have found LCA
+	  dont have to look in the right subtree
+	'''
+	def lca(self, n1, n2):
+		# Helper function to recursively find lca
+		def _lca_(root, node1, node2):
+			if not root:
+				return None
+
+			# Located either node1 or node2
+			if root.value == node1.value or root.value == node2.value:
+				return root
+
+			left = _lca_(root.left, node1, node2)
+
+			# return value of left subtree is neither node1 or node2
+			# => LCA has been found
+			# Just propagate this LCA up, no new calls needed
+			if left and left.value != node1.value and left.value != node2.value:
+				return left
+
+			right = _lca_(root.right, node1, node2)
+
+			# Found LCA
+			if left is not None and right is not None:
+				return root
+
+			# Either both left and right subtrees returned None at this point
+			# or one of left/right subtrees returned None
+			# return non-None node if possible, 
+			# else return None if both were None (indicating neither n1/n2 were found in this subtree)
+			return left if left else right
+
+
+		# wrap n in an node if its a data item
+		# else return node as-is if its of type Node.
+		def wrap_node(n):
+			# n is not Node, wrap it in a node and return the node
+			if not isinstance(n, Node):
+				return Node(n)
+			else:
+				return n
+		
+		node1 = wrap_node(n1)
+		node2 = wrap_node(n2)
+		return _lca_(self.root, node1, node2)
 

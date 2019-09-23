@@ -223,22 +223,45 @@ def test_path_and_lca():
 	assert btree.path(2) == [1, 2]
 	assert btree.path(9) == []
 
+
+	# Test paths-based LCA
 	n1 = rnode.left
 	n2 = lnode.right
 	assert n1.value == 6
 	assert n2.value == 5
-	assert btree.lca(n1, n2) == root
+	assert btree.lca_p(n1, n2) == root
 
+	assert btree.lca_p(rnode, lnode) == root
+	assert btree.lca_p(rnode.right, rnode.left) == rnode
+	assert btree.lca_p(lnode.right, lnode.left) == lnode
+	assert btree.lca_p(lnode.left, rnode.right) == root
+
+	assert btree.lca_p(rnode, 2) == root
+	assert btree.lca_p(7, rnode.left) == rnode
+	assert btree.lca_p(5, 4) == lnode
+	assert btree.lca_p(4, 7) == root
+	assert btree.lca_p(2, 4) == root.left
+	assert btree.lca_p(4, 2) == root.left
+	assert btree.lca_p(3, 7) == root.right
+	assert btree.lca_p(7, 3) == root.right
+
+	# Test efficient LCA that obviates the need for storing paths
+	assert btree.lca(n1, n2) == root
 	assert btree.lca(rnode, lnode) == root
 	assert btree.lca(rnode.right, rnode.left) == rnode
 	assert btree.lca(lnode.right, lnode.left) == lnode
 	assert btree.lca(lnode.left, rnode.right) == root
 
 	assert btree.lca(rnode, 2) == root
+	assert btree.lca(4, 5) == root.left
+	assert btree.lca(5, 4) == root.left
 	assert btree.lca(7, rnode.left) == rnode
 	assert btree.lca(5, 4) == lnode
 	assert btree.lca(4, 7) == root
-
+	assert btree.lca(2, 4) == root.left
+	assert btree.lca(4, 2) == root.left
+	assert btree.lca(3, 7) == root.right
+	assert btree.lca(7, 3) == root.right
 
 
 def test_tree_maker():
