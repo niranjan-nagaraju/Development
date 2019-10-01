@@ -56,7 +56,7 @@ Solution Outline:
 	
 Sample run:
 Input: nums = [1,1,2,2,2,2,2,3,3,3], target = 2
-	   0 1 2 3 4 5 6 7 8 9
+       0 1 2 3 4 5 6 7 8 9
 Input: 1 1 2 2 2 2 2 3 3 3
 
 binSearch(nums, 8) == 4
@@ -81,7 +81,7 @@ findLeftMost(0, 3, 4):
          
 
 
-	   0 1 2 3 4 5 6 7 8 9
+       0 1 2 3 4 5 6 7 8 9
 Input: 1 1 2 2 2 2 2 3 3 3
 position = 4
 
@@ -103,5 +103,5 @@ findRightMost(5, 9, 4):
    newposition = findRightMost(5, 6, 4): 6
    return 6
 
-return (5,6)
+return (2,6)
 '''
