@@ -101,105 +101,73 @@ findRightMost(5, 9, 4):
 return (2,6)
 '''
 
+from binary_search import binary_search
 
-class Solution(object):
-	# Returns the first and last occurence of 'element' in array
-	def searchRange(self, nums, target):
-		"""
-		:type nums: List[int]
-		:type target: int
-		:rtype: List[int]
-		"""
-		match = self.binary_search(nums, target)
-		if match == -1:
-			return (-1, -1)
+# Returns the first and last occurence of 'element' in array
+def findFirstLast(array, element):
+	match = binary_search(array, element)
 
-		left = self.findLeftMost(nums, target, 0, match-1, match)
-		right = self.findRightMost(nums, target, match+1, len(nums)-1, match)
-		return (left, right)
+	if match == -1:
+		return (-1, -1)
+
+	left = findLeftMost(array, element, 0, match-1, match)
+	right = findRightMost(array, element, match+1, len(array)-1, match)
+	return (left, right)
 
 
-	# A Recursive binary search implementation
-	# Return the index where the item 'x' was found on the list
-	@staticmethod
-	def binary_search(lst, x):
-		# Find x in lst[l:h]
-		def binary_search_helper(lst, x, l, h):
-			# List's low and high indices have criss-crossed
-			# => x could not be found
-			if l > h:
-				return -1
+# Find leftmost occurence of 'element' in array[l:h]
+def findLeftMost(array, element, l, h, position):
+	if l > h:
+		return position
 
-			mid = (l+h)/2
-			if lst[mid] == x:
-				return mid
-			elif x > lst[mid]:
-				# search in second half of the sub-array
-				return binary_search_helper(lst, x, mid+1, h)
-			else:
-				# search in first half of the sub-array
-				return binary_search_helper(lst, x, l, mid-1)
+	mid = (l+h)/2
+	if array[mid] == element:
+		# search to the left of the sub-array
+		# after recording 'mid' as a better match
+		# compared to 'position'
+		position = mid
+		h = mid - 1
+	else:
+		# search to the right of the sub-array
+		l = mid + 1
 
-		# Call the helper
-		return binary_search_helper(lst, x, 0, len(lst)-1)
+	return findLeftMost(array, element, l, h, position)
 
 
-	# Find leftmost occurence of 'element' in array[l:h]
-	@staticmethod
-	def findLeftMost(array, element, l, h, position):
-		if l > h:
-			return position
+# Find rightmost occurence of 'element' in array[l:h]
+def findRightMost(array, element, l, h, position):
+	if l > h:
+		return position
 
-		mid = (l+h)/2
-		if array[mid] == element:
-			# search to the left of the sub-array
-			# after recording 'mid' as a better match
-			# compared to 'position'
-			position = mid
-			h = mid - 1
-		else:
-			# search to the right of the sub-array
-			l = mid + 1
+	mid = (l+h)/2
+	if array[mid] == element:
+		# search to the right of the sub-array
+		# after recording 'mid' as a better match
+		# compared to 'position'
+		position = mid
+		l = mid + 1
+	else:
+		# search to the left of the sub-array
+		h = mid - 1
 
-		return Solution.findLeftMost(array, element, l, h, position)
-
-
-	# Find rightmost occurence of 'element' in array[l:h]
-	@staticmethod
-	def findRightMost(array, element, l, h, position):
-		if l > h:
-			return position
-
-		mid = (l+h)/2
-		if array[mid] == element:
-			# search to the right of the sub-array
-			# after recording 'mid' as a better match
-			# compared to 'position'
-			position = mid
-			l = mid + 1
-		else:
-			# search to the left of the sub-array
-			h = mid - 1
-
-		return Solution.findRightMost(array, element, l, h, position)
+	return findRightMost(array, element, l, h, position)
 
 	
 
 	
 if __name__ == '__main__':
-	s = Solution()
-	assert s.binary_search([1,1,2,2,2,2,2,3,3,3], 2) == 4
+	assert binary_search([1,1,2,2,2,2,2,3,3,3], 2) == 4
 
-	assert s.findLeftMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 9) == 2
-	assert s.findRightMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 0) == 6
+	assert findLeftMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 9) == 2
+	assert findRightMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 0) == 6
 
-	assert s.findLeftMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 3, 4) == 2
-	assert s.findRightMost([1,1,2,2,2,2,2,3,3,3], 2, 5, 9, 4) == 6
+	assert findLeftMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 3, 4) == 2
+	assert findRightMost([1,1,2,2,2,2,2,3,3,3], 2, 5, 9, 4) == 6
 
-	assert s.searchRange([1,1,2,2,2,2,2,3,3,3], 2) == (2,6)
-	assert s.searchRange([5,7,7,8,8,10], 8) == (3,4)
-	assert s.searchRange([5,7,7,8,8,10], 7) == (1,2)
-	assert s.searchRange([5,7,7,8,8,10], 6) == (-1,-1)
-	assert s.searchRange([5,7,7,8,8,10], 5) == (0,0)
-	assert s.searchRange([5,7,7,8,8,10], 10) == (5,5)
+	assert findFirstLast([1,1,2,2,2,2,2,3,3,3], 2) == (2,6)
+	assert findFirstLast([5,7,7,8,8,10], 8) == (3,4)
+	assert findFirstLast([5,7,7,8,8,10], 7) == (1,2)
+	assert findFirstLast([5,7,7,8,8,10], 6) == (-1,-1)
+	assert findFirstLast([5,7,7,8,8,10], 5) == (0,0)
+	assert findFirstLast([5,7,7,8,8,10], 10) == (5,5)
 
