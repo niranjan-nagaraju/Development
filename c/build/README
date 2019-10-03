@@ -97,13 +97,15 @@ include $(BASE_DIR)/build/Makefile.inc
 
 0. cd <source_folder>; touch Makefile
 
-1. Define SRC, INCLUDE, CFLAGS, LDFLAGS
+1. Define SRC, INCLUDE, CFLAGS, LDFLAGS, EXE=<executable name>
+   (EXE=<>) is optional, and will use the filename from filename.c if not specified.
+   However, if there are multiple input files, it's better to define a target file.
 
 2. Use 
-	$ make
-	  which is equivalent to "make opt"
+	$ make exe
+	  which is equivalent to "make opt exe"
 	*OR*
-	$ make debug
+	$ make debug exe
 	  to compile with debug symbols
 
 *********************

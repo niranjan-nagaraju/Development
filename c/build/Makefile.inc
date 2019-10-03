@@ -98,8 +98,11 @@ endif
 endif # end ifneq "$(LIBNAME)" ""
 
 exe: 
+	mkdir -p $(OBJDIR)
 ifneq "$(EXE)" ""
-	$(CC) $(CFLAGS) $(INCLUDE) $< -o $(OBJDIR)/$(EXE) $(LDFLAGS) 
+	$(CC) $(SRC) $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $(OBJDIR)/$(EXE)
+else
+	$(CC) $(SRC) $(CFLAGS) $(INCLUDE) $(LDFLAGS) -o $(OBJDIR)/$(basename $(SRC))
 endif # end ifneq "$(EXE)" ""
 
 
