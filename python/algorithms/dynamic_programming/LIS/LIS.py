@@ -27,6 +27,79 @@ class LIS(object):
 
 	'''
 	Create a DP table of LIS for i:0 -> n-1, using dynamic programming
+	Sample run:
+	A: [10, 22, 9, 33, 21, 50, 41, 60]
+	i:  0   1   2  3   4   5   6   7 
+
+	LIS: [1, 1, 1, 1, 1, 1, 1, 1]
+
+	i: 1
+	  j: 0, 22 > 10 => LIS[1] = max(LIS[0]+1, LIS[1]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 1, 1, 1, 1, 1]
+
+	i: 2
+	  j: 0, 9 > 10? NO 
+	  j: 1, 9 > 22? NO
+	  LIS: [1, 2, 1, 1, 1, 1, 1, 1]
+
+	i: 3
+	  j: 0, 33 > 10 => LIS[3] = max(LIS[0]+1, LIS[3]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 2, 1, 1, 1, 1]
+	  j: 1, 33 > 22 => LIS[3] = max(LIS[1]+1, LIS[3]) == max(3, 2) == 3
+	  LIS: [1, 2, 1, 3, 1, 1, 1, 1]
+	  j: 2, 33 > 9 => LIS[3] = max(LIS[2]+1, LIS[3]) == max(2, 3) == 3
+
+	i: 4
+	  j: 0, 21 > 10 => LIS[4] = max(LIS[0]+1, LIS[4]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 3, 2, 1, 1, 1]
+	  j: 1, 21 > 22? NO
+	  j: 2, 21 > 9 => LIS[4] = max(LIS[2]+1, LIS[4]) == max(2, 2) == 2
+	  j: 3, 21 > 33? NO
+
+	i: 5
+	  j: 0, 50 > 10 => LIS[5] = max(LIS[0]+1, LIS[5]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 3, 2, 2, 1, 1]
+	  j: 1, 50 > 22 => LIS[5] = max(LIS[1]+1, LIS[5]) == max(3, 2) == 3
+	  LIS: [1, 2, 1, 3, 2, 3, 1, 1]
+	  j: 2, 50 > 9 => LIS[5] = max(LIS[2]+1, LIS[5]) == max(2, 3) == 3
+	  LIS: [1, 2, 1, 3, 2, 3, 1, 1]
+	  j: 3, 50 > 33 => LIS[5] = max(LIS[3]+1, LIS[5]) == max(4, 3) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 1, 1]
+	  j: 4, 50 > 21 => LIS[5] = max(LIS[4]+1, LIS[5]) == max(3, 4) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 1, 1]
+
+	i: 6
+	  j: 0, 41 > 10 => LIS[6] = max(LIS[0]+1, LIS[6]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 3, 2, 4, 2, 1]
+	  j: 1, 41 > 22 => LIS[6] = max(LIS[1]+1, LIS[6]) == max(3, 2) == 3
+	  LIS: [1, 2, 1, 3, 2, 4, 3, 1]
+	  j: 2, 41 > 9 => LIS[6] = max(LIS[2]+1, LIS[6]) == max(2, 3) == 3
+	  LIS: [1, 2, 1, 3, 2, 4, 3, 1]
+	  j: 3, 41 > 33 => LIS[6] = max(LIS[3]+1, LIS[6]) == max(4, 3) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 1]
+	  j: 4, 41 > 21 => LIS[6] = max(LIS[4]+1, LIS[6]) == max(3, 4) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 1]
+	  j: 5, 41 > 50? NO
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 1]
+
+	i: 7
+	  j: 0, 60 > 10 => LIS[7] = max(LIS[0]+1, LIS[7]) == max(2, 1) == 2
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 2]
+	  j: 1, 60 > 22 => LIS[7] = max(LIS[1]+1, LIS[7]) == max(3, 1) == 3
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 3]
+	  j: 2, 60 > 9 => LIS[7] = max(LIS[2]+1, LIS[7]) == max(2, 3) == 3
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 3]
+	  j: 3, 60 > 33 => LIS[7] = max(LIS[3]+1, LIS[7]) == max(4, 3) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 4]
+	  j: 4, 60 > 21 => LIS[7] = max(LIS[4]+1, LIS[7]) == max(3, 4) == 4
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 4]
+	  j: 5, 60 > 50 => LIS[7] = max(LIS[5]+1, LIS[7]) == max(5, 4) == 5
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 5]
+	  j: 6, 60 > 41 => LIS[7] = max(LIS[6]+1, LIS[7]) == max(5, 4) == 5
+	  LIS: [1, 2, 1, 3, 2, 4, 4, 5]
+
+	  LIS length: max(LIS) = 5
+	  LIS sequence: {10,22,33,41,60}
 	'''
 	def make_lis_table(self):
 		# LIS[i]: Will contain longest increasing subsequence length ending at index i in the numbers list
