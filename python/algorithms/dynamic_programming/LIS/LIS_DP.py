@@ -102,6 +102,9 @@ class LIS(object):
 	  LIS sequence: {10,22,33,41,60}
 	'''
 	def make_lis_table(self):
+		if not self.numbers:
+			return []
+
 		# LIS[i]: Will contain longest increasing subsequence length ending at index i in the numbers list
 		# Each number is an LIS by itself, so initialize each index to 1
 		lis_table = [1] * len(self.numbers)
@@ -119,7 +122,7 @@ class LIS(object):
 	'''
 	Get length of the LIS from given numbers
 	'''
-	def lis_length(self):
+	def get_lis_length(self):
 		# First time calling this function,
 		# Create the DP table first
 		if self.lis_table is None:
@@ -167,27 +170,31 @@ class LIS(object):
 
 
 if __name__ == "__main__":
+	assert LIS([]).get_lis_length() == 0
+	assert LIS([]).get_lis_sequence() == []
+
 	l1 = LIS([10,22,9,33,21,50,41,60])
-	l2 = LIS([5,4,3,2,1])
-	l3 = LIS([1,2,3,4,5,4,3,2,1])
-	l4 = LIS([10, 9, 2, 5, 3, 7, 101, 18])
-
 	assert l1.make_lis_table() == [1, 2, 1, 3, 2, 4, 4, 5]
-	assert l3.make_lis_table() == [1, 2, 3, 4, 5, 4, 3, 2, 1]
-
-	assert l1.lis_length() == 5
+	assert l1.get_lis_length() == 5
 	assert l1.lis_table == [1, 2, 1, 3, 2, 4, 4, 5]
 	assert l1.get_lis_sequence() == [10, 22, 33, 41, 60]
 
-	assert l2.lis_length() == 1
+	l2 = LIS([5,4,3,2,1])
+	assert l2.get_lis_length() == 1
 	assert l2.get_lis_sequence() == [1]
 	assert l2.lis_table == [1, 1, 1, 1, 1]
 
-	assert l3.lis_length() == 5
+	l3 = LIS([1,2,3,4,5,4,3,2,1])
+	assert l3.make_lis_table() == [1, 2, 3, 4, 5, 4, 3, 2, 1]
+	assert l3.get_lis_length() == 5
 	assert l3.lis_table == [1, 2, 3, 4, 5, 4, 3, 2, 1]
 	assert l3.get_lis_sequence() == [1, 2, 3, 4, 5]
 
-	assert l4.lis_length() == 4
+	l4 = LIS([10, 9, 2, 5, 3, 7, 101, 18])
+	assert l4.get_lis_length() == 4
 	assert l4.get_lis_sequence() == [2,3,7,18]
 	assert l4.lis_table == [1, 1, 1, 2, 2, 3, 4, 4]
+
+	assert LIS([1, 5, 2, 3, 4, 7, 2]).get_lis_sequence() == [1, 2, 3, 4, 7]
+	assert LIS([1, 5, 2, 3, 4, 7, 2]).make_lis_table() == [1, 2, 2, 3, 4, 5, 2]
 
