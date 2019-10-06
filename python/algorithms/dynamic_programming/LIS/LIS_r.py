@@ -19,10 +19,8 @@ Naive Solution: Uses the recurrence formula (O2^n)
 class LIS(object):
 	def __init__(self, array):
 		self.array = array
-		self.lis_sequence = None
-		self.lis_sequence_len = 0
 
-	def calculate_lis_r(self):
+	def calculate_lis_r(self, n=None):
 		def lis_util(n):
 			curr_inc_seq_len = 1
 			curr_inc_seq = [array[n]]
@@ -32,38 +30,49 @@ class LIS(object):
 					curr_inc_seq_len = len(seq_i) + 1
 					curr_inc_seq = seq_i + [array[n]]
 
-					if curr_inc_seq_len > self.lis_sequence_len:
-						self.lis_sequence_len = curr_inc_seq_len
-						self.lis_sequence = curr_inc_seq
+					if curr_inc_seq_len > lis_sequence_and_len[1]:
+						lis_sequence_and_len[1] = curr_inc_seq_len
+						lis_sequence_and_len[0] = curr_inc_seq
 
 			return curr_inc_seq
 
 		array = self.array
 		if not array:
 			return ([], 0)
-		
-		lis_util(len(array)-1)
+	
+		# By default, calculate LIS for the whole array
+		if n is None or n > len(array):
+			n = len(array)
+
+		lis_sequence_and_len = [None, 0]
+		lis_util(n-1)
+
 		# We couldn't find an increasing sequence
 		# Just set [array[0]] as LIS
-		if self.lis_sequence is None:
-			self.lis_sequence = [array[0]]
-			self.lis_sequence_len = 1
+		if lis_sequence_and_len[0] is None:
+			lis_sequence_and_len = [array[0]], 1
 
-		return self.lis_sequence, self.lis_sequence_len
-
-
-	def get_lis_length(self):
-		if not self.lis_sequence:
-			self.calculate_lis_r()
-
-		return self.lis_sequence_len
+		return lis_sequence_and_len[0], lis_sequence_and_len[1]
 
 
-	def get_lis_sequence(self):
-		if not self.lis_sequence:
-			self.calculate_lis_r()
+	'''
+	Get length of the LIS of the subarray, numbers[0:n] (or first n numbers)
+	0 < n <= len(numbers)
+	if n is not specified explicitly, calculate LIS for the whole array
+	'''
+	def get_lis_length(self, n=None):
+		return self.calculate_lis_r(n)[1]
 
-		return self.lis_sequence
+
+	'''
+	Get subsequence making the LIS of first n numbers (subarray [0:n]) from given numbers
+	0 < n <= len(numbers)
+	if n is not specified explicitly, calculate LIS for the whole array
+	NOTE: There can be many longest increasing subsequences
+	 This function returns one of them
+	'''
+	def get_lis_sequence(self, n=None):
+		return self.calculate_lis_r(n)[0]
 
 
 
@@ -79,6 +88,9 @@ if __name__ == '__main__':
 	l1 = LIS([10,22,9,33,21,50,41,60])
 	assert l1.get_lis_length() == 5
 	assert l1.get_lis_sequence() == [10, 22, 33, 50, 60]
+	# Subarray:  [10, 22, 9, 33, 21, 50]
+	assert l1.get_lis_length(6) == 4 
+	assert l1.get_lis_sequence(6) == [10, 22, 33, 50]
 
 	l2 = LIS([5,4,3,2,1])
 	assert l2.get_lis_length() == 1
@@ -87,8 +99,16 @@ if __name__ == '__main__':
 	l3 = LIS([1,2,3,4,5,4,3,2,1])
 	assert l3.get_lis_length() == 5
 	assert l3.get_lis_sequence() == [1, 2, 3, 4, 5]
+	for x in xrange(1, 6):
+		assert l3.get_lis_length(x) == x
+		assert l3.get_lis_sequence(x) == range(1, x+1)
+	assert l3.get_lis_length(100) == 5   # n > len(numbers) => whole array
+	assert l3.get_lis_sequence(100) == [1, 2, 3, 4, 5] # n > len(numbers) => whole array
 
 	l4 = LIS([10, 9, 2, 5, 3, 7, 101, 18])
+	# Find LIS length for first four numbers [10, 9, 2, 5]
+	assert l4.get_lis_length(4) == 2
+	assert l4.get_lis_sequence(4) == [2,5]
 	assert l4.get_lis_length() == 4
 	assert l4.get_lis_sequence() == [2,5,7,18]
 
