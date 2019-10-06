@@ -20,8 +20,6 @@ class LIS(object):
 	def __init__(self, numbers):
 		self.numbers = numbers
 		self.lis_table = None
-		self.lis_sequence = None
-		self.lis_len = 0
 
 
 
@@ -108,63 +106,79 @@ class LIS(object):
 		# LIS[i]: Will contain longest increasing subsequence length ending at index i in the numbers list
 		# Each number is an LIS by itself, so initialize each index to 1
 		lis_table = [1] * len(self.numbers)
-		for i in range(1, len(self.numbers)):
-			for j in range(0, i):
+		for i in xrange(1, len(self.numbers)):
+			for j in xrange(0, i):
 				if self.numbers[i] > self.numbers[j]:
 					lis_table[i] = max(lis_table[i], lis_table[j]+1)
 
 		self.lis_table = lis_table
-		self.lis_len = max(lis_table)
 		return lis_table
 		
 
 
 	'''
-	Get length of the LIS from given numbers
+	Get length of the LIS of the subarray, numbers[0:n-1] (or first n numbers)
+	0 <= n < len(numbers)
+	if n is not specified explicitly, calculate LIS for the whole array
 	'''
-	def get_lis_length(self):
-		# First time calling this function,
-		# Create the DP table first
+	def get_lis_length(self, n=None):
+		# Build an LIS DP table for the whole array
+		# if its not already built
+		# Reuse the DP table for later queries
+		# of get_lis_length[0:i]
 		if self.lis_table is None:
 			self.make_lis_table()
 
-		return self.lis_len
+
+		# By default, calculate LIS for the whole array
+		if n is None or n > len(self.numbers):
+			n = len(self.numbers)
+
+		if self.lis_table:
+			return max(self.lis_table[:n])
+
+		return 0
 
 
 
 	'''
-	Get subsequence making the LIS from given numbers
+	Get subsequence making the LIS of first n numbers (subarray [0:n-1]) from given numbers
+	0 <= n < len(numbers)
+	if n is not specified explicitly, calculate LIS for the whole array
 	NOTE: There can be many longest increasing subsequences
 	 This function reconstructs and returns one of them from the DP table
 	'''
-	def get_lis_sequence(self):
+	def get_lis_sequence(self, n=None):
 		# find first occurence of 'x' from right of arr, arr[0:rightWin]
 		def rfind(arr, x, rightWin):
-			for i in range(rightWin, -1, -1):
+			for i in xrange(rightWin, -1, -1):
 				if arr[i] == x:
 					return i
 			return -1
 
-		# Previously computed LIS is still valid,
-		# return the list of numbers making the LIS
-		if self.lis_sequence is not None:
-			return self.lis_sequence
 
-		# First time calling this function,
-		# Create the DP table first
-		lis_table = self.lis_table
-		if lis_table is None:
-			lis_table = self.make_lis_table()
+		# Build an LIS DP table for the whole array
+		# if its not already built
+		# Reuse the DP table for later queries
+		# of get_lis_length[0:i]
+		if self.lis_table is None:
+			self.make_lis_table()
+
+		if not self.lis_table:
+			return []
+
+		# By default, calculate LIS for the whole array
+		if n is None or n > len(self.numbers):
+			n = len(self.numbers)
 
 		lis_sequence = []
-		curr_lis_len = self.lis_len
-		idx = len(lis_table)
-		for i in range(self.lis_len):
-			idx = rfind(lis_table, curr_lis_len, idx-1)
+		curr_lis_len = max(self.lis_table[:n])
+		idx = n
+		for i in xrange(curr_lis_len):
+			idx = rfind(self.lis_table, curr_lis_len, idx-1)
 			lis_sequence.insert(0, self.numbers[idx])
 			curr_lis_len -= 1
 
-		self.lis_sequence = lis_sequence
 		return lis_sequence
 
 
@@ -178,6 +192,9 @@ if __name__ == "__main__":
 	assert l1.get_lis_length() == 5
 	assert l1.lis_table == [1, 2, 1, 3, 2, 4, 4, 5]
 	assert l1.get_lis_sequence() == [10, 22, 33, 41, 60]
+	# Subarray:  [10, 22, 9, 33, 21, 50]
+	assert l1.get_lis_length(6) == 4 
+	assert l1.get_lis_sequence(6) == [10, 22, 33, 50]
 
 	l2 = LIS([5,4,3,2,1])
 	assert l2.get_lis_length() == 1
@@ -189,6 +206,11 @@ if __name__ == "__main__":
 	assert l3.get_lis_length() == 5
 	assert l3.lis_table == [1, 2, 3, 4, 5, 4, 3, 2, 1]
 	assert l3.get_lis_sequence() == [1, 2, 3, 4, 5]
+	for x in xrange(1, 6):
+		assert l3.get_lis_length(x) == x
+		assert l3.get_lis_sequence(x) == range(1, x+1)
+	assert l3.get_lis_length(100) == 5   # n > len(numbers) => whole array
+	assert l3.get_lis_sequence(100) == [1, 2, 3, 4, 5] # n > len(numbers) => whole array
 
 	l4 = LIS([10, 9, 2, 5, 3, 7, 101, 18])
 	assert l4.get_lis_length() == 4
