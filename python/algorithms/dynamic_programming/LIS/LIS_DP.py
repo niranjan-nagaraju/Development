@@ -118,7 +118,7 @@ class LIS(object):
 
 	'''
 	Get length of the LIS of the subarray, numbers[0:n] (or first n numbers)
-	0 <= n <= len(numbers)
+	0 < n <= len(numbers)
 	if n is not specified explicitly, calculate LIS for the whole array
 	'''
 	def get_lis_length(self, n=None):
@@ -143,7 +143,7 @@ class LIS(object):
 
 	'''
 	Get subsequence making the LIS of first n numbers (subarray [0:n]) from given numbers
-	0 <= n <= len(numbers)
+	0 < n <= len(numbers)
 	if n is not specified explicitly, calculate LIS for the whole array
 	NOTE: There can be many longest increasing subsequences
 	 This function reconstructs and returns one of them from the DP table
