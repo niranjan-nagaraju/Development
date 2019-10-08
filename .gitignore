@@ -4,3 +4,4 @@ out/
 *.pyc
 cscope.*
 ncscope.*
+__pycache__
