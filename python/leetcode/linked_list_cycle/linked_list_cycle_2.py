@@ -26,7 +26,7 @@ class Solution(object):
 		:type head: ListNode
 		:rtype: bool
 		"""
-		# Checks if a cycle has a loop/cycle or not
+		# Checks if an SLL has a loop/cycle or not
 		# using 2 pointers, one fast pointer moving 2 nodes at a time
 		# and another slow moving pointer moving 1 node at a time
 		# O(1) memory + O(n) time 

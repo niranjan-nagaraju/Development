@@ -26,7 +26,7 @@ class Solution(object):
 		:type head: ListNode
 		:rtype: bool
 		"""
-		# Checks if a cycle has a loop/cycle or not
+		# Checks if an SLL has a loop/cycle or not
 		# using a hash table to compare individual nodes
 		# O(n) memory + O(n) time 
 		nodes = set()
