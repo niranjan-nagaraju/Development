@@ -3,8 +3,8 @@ A simple trie implementation
 
 Design:
 	Implemented as an n-ary tree.
-	The root has 'n' nodes (n being the number of characters in the universe),
-	  root['A'] -> child node, indicates there is a word that begins with the character, 'A'
+	The root can have 'n' child nodes (n being the number of characters in the universe), implemented as a map instead of a static [n] allocation,
+	  root.children['A'] -> child node, indicates there is a word that begins with the character, 'A'
 	  the child node's properties, such as eow indicates eow status of 'A'
 	  Additional properties such as frequency can be added to the child nodes.
 '''
@@ -22,106 +22,51 @@ Each node contains:
 class Node(object):
 	def __init__(self):
 		self.children = {}
-		self.data = None
-		# indicates if parent node prefix is a whole word
+
+		# indicates if current node prefix is a whole word
 		self.end_of_word = False
 		self.frequency = 0 # valid only if end_of_word is true
+		self.data = None  # additional data associated with a word, valid only if end_of_word is true
 
-
-	def __nonzero__(self):
-		return True
-
-	'''
-	length of a node is the number of characters
-	set in the node
-	'''
-	def __len__(self):
-		return len(self.children)
 
 
 	'''
 	Node str(): returns [size]: [characters set in node]
 	'''
 	def __str__(self):
-		return "[%d]: %s" %(len(self), sorted(self.children.keys()))
+		return "[%d]: %s" %(len(self.children), sorted(self.children.keys()))
 
 
 	'''
 	Node repr(): returns [size]: [characters set in node], eow: <T/F>, frequency: <f> 
 	'''
 	def __repr__(self):
-		return "%s: " %(self) + ", eow: %s, frequency: %d" %(self.eow, self.frequency) 
+		return "%s: " %(self) + ", eow: %s, frequency: %d" %(self.end_of_word, self.frequency) 
 
 
 	'''
 	Add a character in the node
-	If the character is already set, just return without doing nothing
+	If the character-key is already set, just return without doing nothing
 	'''
 	def add(self, character):
-		if not self.children.get(character):
+		if not self.children.has_key(character):
 			self.children[character] = Node()
 
 
 	'''
 	Remove a character from the node
-	if the character has a child node that's not empty, then do nothing
-	   => character is part of a prefix and there are still words
-	   with character as part of their prefix
 	'''
 	def remove(self, character):
-		node = self.children.get(character)
-		# character is not in the node
-		if node is None:
-			return None
-
-		# character has an empty child node
-		# un-set the character from the node
-		# and remove the empty child node
-		if not node.children:
+		if self.children.has_key(character):
 			self.children[character] = None
 			self.children.pop(character)
 
-		# return the child node
-		return node
-
-		
 
 	'''
 	Get child node of current node at character
 	'''
-	def getChildren(self, character):
+	def getChildNode(self, character):
 		return self.children.get(character)
-
-
-	'''
-	set a new child node of current node at character
-	'''
-	def setChildren(self, character):
-		self.children[character] = Node()
-
-
-	'''
-	getter for EoW status
-	'''
-	@property
-	def eow(self):
-		return self.end_of_word
-
-
-	'''
-	setter for EoW status
-	this also updates frequency based on whether
-	EoW is being set to true/false
-	'''
-	@eow.setter
-	def eow(self, end_of_word):
-		if not isinstance(end_of_word, bool):
-			raise TypeError("eow(): end of word should be a boolean value")
-		self.end_of_word = end_of_word
-		if end_of_word == True:
-			self.frequency += 1
-		else:
-			self.frequency -= 1
 
 
 '''
@@ -141,13 +86,13 @@ The Trie class
 '''
 class Trie(object):
 	def __init__(self):
-		self.root = None
-		self.num_words = 0
+		self.root = Node()
+		self.num_words = 0 # number of unique words added to the trie
+		self.total_words_added = 0 # Total number of words added to the trie ==> counts duplicate adds as well == sum(word{i} * frequency{i})
 
 
+	# Returns number of unique words added to the trie
 	def __len__(self):
-		if not self.root:
-			return 0
 		return self.num_words
 
 
@@ -175,7 +120,7 @@ class Trie(object):
 
 		trav = root
 		for p in prefix:
-			trav = trav.getChildren(p)
+			trav = trav.getChildNode(p)
 			if not trav:
 				return None
 
@@ -195,7 +140,7 @@ class Trie(object):
 		if not prefix:
 			return root
 
-		return Trie.findMatchingNode_r(root.getChildren(prefix[0]), prefix[1:])
+		return Trie.findMatchingNode_r(root.getChildNode(prefix[0]), prefix[1:])
 
 
 	'''
@@ -203,20 +148,20 @@ class Trie(object):
 	If data is provided for word, add that too
 	'''
 	def add(self, word, data=None):
-		if not self.root:
-			self.root = Node()
-
 		trav = self.root
 		for c in word:
 			trav.add(c)
-			trav = trav.getChildren(c)
+			trav = trav.getChildNode(c)
 
 		# first time we are adding the word, increase number of words
-		if not trav.eow:
+		if not trav.end_of_word:
 			self.num_words += 1
 
+		self.total_words_added += 1
+
 		# mark EoW and increase frequency
-		trav.eow = True
+		trav.end_of_word = True
+		trav.frequency += 1
 		trav.data = data
 
 
@@ -228,29 +173,26 @@ class Trie(object):
 	def add_r(self, word, data=None):
 		def add_helper(root, word, data=None):
 			# we have added all the characters in the word
-			# Mark is EoW, set its 'data' field and return
+			# Mark as EoW, set its 'data' field and return
 			if not word:
 				# first time we are adding the word, increase number of words
-				if not root.eow:
+				if not root.end_of_word:
 					# trie's reference is obtained outer function
 					self.num_words += 1
 
+				self.total_words_added += 1
 				# mark EoW and increase frequency
-				root.eow = True
+				root.end_of_word = True
+				root.frequency += 1
 				root.data = data
 				return
 
 			root.add(word[0])
-			add_helper(root.getChildren(word[0]), word[1:], data)
+			add_helper(root.getChildNode(word[0]), word[1:], data)
 
 		# Empty word, cannot be added to the trie
 		if not word:
 			return
-
-		# first word to be added to the trie
-		# initialize root
-		if not self.root:
-			self.root = Node()
 
 		# call helper function to add word
 		add_helper(self.root, word, data)
@@ -284,7 +226,7 @@ class Trie(object):
 	'''
 	def hasWord(self, word):
 		node = self.findMatchingNode(self.root, word)
-		return node.eow if node else False
+		return node.end_of_word if node is not None else False
 
 
 
@@ -294,7 +236,7 @@ class Trie(object):
 	'''
 	def hasWord_r(self, word):
 		node = self.findMatchingNode_r(self.root, word)
-		return node.eow if node else False
+		return node.end_of_word if node is not None else False
 
 
 
@@ -305,7 +247,7 @@ class Trie(object):
 	'''
 	def frequency(self, word):
 		node = self.findMatchingNode(self.root, word)
-		if not node or not node.eow:
+		if not node or not node.end_of_word:
 			return 0
 
 		return node.frequency
@@ -319,7 +261,7 @@ class Trie(object):
 	'''
 	def frequency_r(self, word):
 		node = self.findMatchingNode_r(self.root, word)
-		if not node or not node.eow:
+		if not node or not node.end_of_word:
 			return 0
 
 		return node.frequency
@@ -334,7 +276,7 @@ class Trie(object):
 	@check_root
 	def __getitem__(self, word):
 		node = self.findMatchingNode(self.root, word)
-		if node and node.eow:
+		if node and node.end_of_word:
 			return node.data
 		else:
 			raise KeyError("__getitem__(): Word %r not found in trie" %(word))
@@ -348,7 +290,7 @@ class Trie(object):
 	@check_root
 	def __setitem__(self, word, value=None):
 		node = self.findMatchingNode(self.root, word)
-		if node and node.eow:
+		if node and node.end_of_word:
 			node.data = value
 		else:
 			self.add(word, value)
@@ -367,7 +309,7 @@ class Trie(object):
 				return
 
 			for (c,node) in sorted(root.children.items()):
-				fn(prefix+c, node.data, *args, **kwargs) if node.eow else None
+				fn(prefix+c, node.data, *args, **kwargs) if node.end_of_word else None
 				dfs_helper(node, prefix+c, fn, *args, **kwargs)
 
 		if not prefix:
@@ -377,7 +319,7 @@ class Trie(object):
 			if not node:
 				return
 
-		fn(prefix, node.data, *args, **kwargs) if node.eow else None
+		fn(prefix, node.data, *args, **kwargs) if node.end_of_word else None
 		dfs_helper(node, prefix, fn, *args, **kwargs)
 
 
@@ -389,7 +331,7 @@ class Trie(object):
 	raises 'TrieEmptyError' if trie is not initialized
 	'''
 	@check_root
-	def findKeys(self, prefix=""):
+	def findWords(self, prefix=""):
 		keys = []
 		self.dfs(prefix, lambda a,_,k: k.append(a), keys)
 		return keys
@@ -450,7 +392,8 @@ class Trie(object):
 			# or word was "" to begn with
 			# in which case, there's nothing to remove anyway
 			if not word:
-				node.eow = False
+				node.end_of_word = False
+				node.frequency = 0
 				node.data = None
 				return True
 
@@ -463,7 +406,7 @@ class Trie(object):
 				# do not remove this whole path
 				# return false from here, so upper nodes will see they have a child left
 				# and wont remove themselves
-				if node.eow:
+				if node.end_of_word:
 					return False
 
 				# communicate to higher levels that word was matched
@@ -478,7 +421,7 @@ class Trie(object):
 
 	
 		node = self.findMatchingNode(self.root, word)
-		if not node or not node.eow:
+		if not node or not node.end_of_word:
 			return None
 
 		data = node.data
@@ -487,10 +430,6 @@ class Trie(object):
 		if forceremove or node.frequency == 0:
 			removehelper(self.root, word)
 			self.num_words -= 1
-			# this was the last word to be removed from the trie
-			# and the trie is now empty
-			if not len(self.root):
-				self.root = None
 			return data
 
 		return None
@@ -505,7 +444,7 @@ class Trie(object):
 			return
 
 		if node.end_of_word:
-			node.eow = False
+			node.end_of_word = False
 			self.num_words -= 1
 
 		for (character, cnode) in node.children.items():
