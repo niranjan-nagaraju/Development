@@ -96,12 +96,12 @@ class Trie(object):
 
 
 	'''
-	decorator to ensure root is not empty
+	decorator to ensure trie is not empty
 	on trie operations
 	'''
-	def check_root(func):
+	def check_empty(func):
 		def f(self, *args, **kwargs):
-			if self.root is None:
+			if self.num_words == 0:
 				raise TrieEmptyError("TrieEmptyError: '%s(): Trie is empty'" %(func.__name__))
 			rv = func(self, *args, **kwargs)
 			return rv
@@ -270,7 +270,7 @@ class Trie(object):
 	Return word's data if the trie has 'word'
 	raise KeyError otherwise
 	'''
-	@check_root
+	@check_empty
 	def __getitem__(self, word):
 		node = self.findMatchingNode(self.root, word)
 		if node and node.end_of_word:
@@ -284,7 +284,6 @@ class Trie(object):
 	Set word's data if the trie has 'word', replacing any value it might already have
 	if the word doesn't exist in the trie, add it now
 	'''
-	@check_root
 	def __setitem__(self, word, value=None):
 		node = self.findMatchingNode(self.root, word)
 		if node and node.end_of_word:
@@ -327,7 +326,7 @@ class Trie(object):
 	None if no such prefix exists
 	raises 'TrieEmptyError' if trie is not initialized
 	'''
-	@check_root
+	@check_empty
 	def findWords(self, prefix=""):
 		keys = []
 		self.dfs(prefix, lambda a,_,k: k.append(a), keys)
@@ -341,7 +340,7 @@ class Trie(object):
 	None if no such prefix exists
 	raises 'TrieEmptyError' if trie is not initialized
 	'''
-	@check_root
+	@check_empty
 	def search(self, prefix=""):
 		matches = []
 		self.dfs(prefix, lambda a,b,k: k.append((a,b)), matches)
@@ -354,7 +353,7 @@ class Trie(object):
 	if the trie has words that begin with 'prefix'
 	0 if no such prefix exists
 	'''
-	@check_root
+	@check_empty
 	def count(self, prefix):
 		def _countfn(a, b, counter):
 			counter[0] += 1
@@ -373,7 +372,7 @@ class Trie(object):
 	unless 'forceremove' is set, in which case, remove the word
 	unconditionally.
 	'''
-	@check_root
+	@check_empty
 	def remove(self, word, forceremove=False):
 		def removehelper(root, word):
 			if not word:
@@ -438,7 +437,7 @@ class Trie(object):
 	'''
 	remove all words matching prefix
 	'''
-	@check_root
+	@check_empty
 	def removePrefix(self, prefix=""):
 		# If an empty prefix is specified
 		# delete the whole trie

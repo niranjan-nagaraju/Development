@@ -331,10 +331,14 @@ def test_count():
 	assert(t.count("abc") == 1)
 
 	trie = Trie()
+	hit_exception = False
 	try:
 		assert(trie.count("word") == 0)
 	except TrieEmptyError as e:
 		assert(e.message == "TrieEmptyError: 'count(): Trie is empty'")
+		hit_exception = True
+
+	assert(hit_exception == True)	
 
 	trie.add("word")
 	trie.add("word")
