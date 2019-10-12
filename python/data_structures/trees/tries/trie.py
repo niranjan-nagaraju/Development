@@ -387,7 +387,7 @@ class Trie(object):
 						self.num_words -= 1
 						# Signal to higher node that word was found
 						# and can be removed at each level
-						return True if len(root.children) == 0 else False
+						return len(root.children) == 0
 				# No eow found / word shouldnt be deleted (because frequency != 0)
 				# propagate this 'to delete/not status' to higher nodes
 				return False
@@ -401,7 +401,7 @@ class Trie(object):
 				# Remove character from current node only if
 				# child node was empty (ie didnt have eow status or contains any more children)
 				root.remove(word[0])
-				return True if ((not root.end_of_word) and len(root.children) == 0) else False
+				return ((not root.end_of_word) and len(root.children) == 0)
 
 			return False
 
