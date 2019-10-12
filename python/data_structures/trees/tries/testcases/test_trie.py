@@ -229,6 +229,14 @@ def test_indexing():
 	dictionary.add("Zephyr", "light wind")
 	assert(dictionary["Zephyr"] == "light wind")
 
+	dictionary["historiated"] = "decorated"
+	assert(dictionary["historiated"] == "decorated")
+
+	# Add word using [] syntax
+	dictionary["frozen"] = "cold"
+	assert(dictionary["frozen"] == "cold")
+	assert(len(dictionary) == 3)
+
 
 
 
