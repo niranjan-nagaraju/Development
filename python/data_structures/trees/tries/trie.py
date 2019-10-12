@@ -88,7 +88,6 @@ class Trie(object):
 	def __init__(self):
 		self.root = Node()
 		self.num_words = 0 # number of unique words added to the trie
-		self.total_words_added = 0 # Total number of words added to the trie ==> counts duplicate adds as well == sum(word{i} * frequency{i})
 
 
 	# Returns number of unique words added to the trie
@@ -157,7 +156,6 @@ class Trie(object):
 		if not trav.end_of_word:
 			self.num_words += 1
 
-		self.total_words_added += 1
 
 		# mark EoW and increase frequency
 		trav.end_of_word = True
@@ -180,7 +178,6 @@ class Trie(object):
 					# trie's reference is obtained outer function
 					self.num_words += 1
 
-				self.total_words_added += 1
 				# mark EoW and increase frequency
 				root.end_of_word = True
 				root.frequency += 1
@@ -378,61 +375,43 @@ class Trie(object):
 	'''
 	@check_root
 	def remove(self, word, forceremove=False):
-		# Helper function to recursively remove
-		# word from the bottom-up
-		def removehelper(node, word):
-			if not node:
-				# word search ended prematurely
-				# before we could match it
-				# e.g. trie has 'ab', and we are looking for 'abc'
+		def removehelper(root, word):
+			if not word:
+				# Matched word completely
+				if root.end_of_word:
+					root.frequency -= 1
+					data[0] = root.data # record 'data' to be returned
+					# Frequency hit 0 or forceremove => unconditionally remove word from trie
+					if forceremove or root.frequency == 0:
+						root.end_of_word = False
+						self.num_words -= 1
+						# Signal to higher node that word was found
+						# and can be removed at each level
+						return True if len(root.children) == 0 else False
+				# No eow found / word shouldnt be deleted (because frequency != 0)
+				# propagate this 'to delete/not status' to higher nodes
 				return False
 
-			# we have either reached 'n' levels deep
-			# n: len(word)
-			# or word was "" to begn with
-			# in which case, there's nothing to remove anyway
-			if not word:
-				node.end_of_word = False
-				node.frequency = 0
-				node.data = None
-				return True
+			child = root.getChildNode(word[0])
+			if not child:
+				return False
 
-			if removehelper(node.children[word[0]], word[1:]):
-				# child node was matched and 'removed'
-				# remove link to child node
-				node.remove(word[0])
+			if removehelper(child, word[1:]):
+				# word found and needs to be deleted from the trie
+				# Remove character from current node only if
+				# child node was empty (ie didnt have eow status or contains any more children)
+				root.remove(word[0])
+				return True if ((not root.end_of_word) and len(root.children) == 0) else False
 
-				# one of the prefixes is a word in itself
-				# do not remove this whole path
-				# return false from here, so upper nodes will see they have a child left
-				# and wont remove themselves
-				if node.end_of_word:
-					return False
-
-				# communicate to higher levels that word was matched
-				# and 'deleted'
-				# if word had children, or if its prefixes were words themselves
-				# then the entire path wouldn't be removed
-				return True
-
-			# one of the child nodes returned false
-			# so the word couldn't be matched completely
 			return False
 
-	
-		node = self.findMatchingNode(self.root, word)
-		if not node or not node.end_of_word:
+
+		if not word:
 			return None
 
-		data = node.data
-
-		node.frequency -= 1
-		if forceremove or node.frequency == 0:
-			removehelper(self.root, word)
-			self.num_words -= 1
-			return data
-
-		return None
+		data = [None]
+		removehelper(self.root, word)
+		return data[0]
 
 
 
@@ -445,13 +424,13 @@ class Trie(object):
 
 		if node.end_of_word:
 			node.end_of_word = False
+			# if the last character we removed is a word,
+			# update word count in the trie
 			self.num_words -= 1
 
 		for (character, cnode) in node.children.items():
 			self.removeChildNodes(cnode)
 
-			# if the last character we removed is a word,
-			# update word count in the trie
 			node.remove(character)
 
 
@@ -465,7 +444,6 @@ class Trie(object):
 		# delete the whole trie
 		if not prefix:
 			self.removeChildNodes(self.root)
-			self.root = None
 			# individually removing every character should also
 			# have deducted word count by exactly the
 			# length of the trie
@@ -485,7 +463,7 @@ class Trie(object):
 			return
 
 		# if prefix itself is a word, remove it first
-		node = pnode.children[prefix[-1]]
+		node = pnode.getChildNode(prefix[-1])
 		if not node:
 			return
 

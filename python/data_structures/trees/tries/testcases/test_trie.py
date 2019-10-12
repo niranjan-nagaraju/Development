@@ -222,6 +222,14 @@ def test_indexing():
 	assert(trie["abce"] == (1,2))
 	assert(trie["words"] == ["one", "two", "three"])
 
+	dictionary = Trie()
+	definition = "adjective [hi-stawr-ee-ey-tid, -stohr-] decorated with animals, flowers, or other designs that have a narrative or symbolic purpose, especially of initial letters on an illuminated manuscript."
+	dictionary.add("historiated", definition)
+	assert(dictionary["historiated"] == definition)
+	dictionary.add("Zephyr", "light wind")
+	assert(dictionary["Zephyr"] == "light wind")
+
+
 
 
 def test_dfs():
@@ -330,6 +338,7 @@ def test_count():
 	trie.add("ward")
 
 	assert(len(trie) == 4)
+	assert(len(trie) == trie.count(""))
 	assert(trie.count("w") == 3)
 	assert(trie.count("word") == 2)
 	assert(trie.count("wor") == 2)
@@ -376,7 +385,7 @@ def test_remove():
 	assert(trie.hasWord("abcd") == True)
 	assert(trie.remove("abcd") == "abcd")
 	assert(len(trie) == 0)
-	assert(trie.root == None)
+	assert(trie.root is not None)
 
 	trie.add("abcd")
 	trie.add("abcd")
@@ -406,7 +415,7 @@ def test_remove():
 
 	assert(trie.remove("abc") == None) # soft remove, reduce frequency + delete because f:0
 	assert(len(trie) == 0)
-	assert(trie.root == None)
+	assert(trie.root is not None)
 
 	trie.add("ab")
 	trie.add("abcd")
@@ -456,13 +465,23 @@ def test_removePrefix():
 
 	# flush the whole trie
 	trie.removePrefix("")
-	assert(trie.root == None)
+	assert(trie.root is not None)
+	assert(len(trie) == 0)
+
+	trie.add("words")
+	trie.add("newly")
+	trie.add("added")
+	assert(len(trie) == 3)
+
+	# flush the whole trie again
+	trie.removePrefix("")
+	assert(trie.root is not None)
 	assert(len(trie) == 0)
 
 
 def test_destroy():
 	trie = Trie()
-	assert(trie.root == None)
+	assert(trie.root is not None)
 	assert(len(trie) == 0)
 	assert(not trie == True)
 
@@ -475,10 +494,19 @@ def test_destroy():
 	assert(len(trie) == 6)
 
 	trie.destroy()
-	assert(trie.root == None)
+	assert(trie.root is not None)
 	assert(len(trie) == 0)
 	assert(not trie == True)
 
+	trie.add("new", "new set")
+	trie.add("words", "from dictionary")
+	assert(len(trie) == 2)
+	assert(trie["new"] == "new set")
+	assert(trie["words"] == "from dictionary")
+	trie.destroy()
+	assert(trie.root is not None)
+	assert(len(trie) == 0)
+	assert(not trie == True)
 
 
 
