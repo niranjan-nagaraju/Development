@@ -58,37 +58,43 @@ class NumWaysToScore(object):
 		self.b = b
 		self.c = c
 
+	# NOTE: We can no longer get sequences
+	# because memoization cuts short the counting repeatedly
+	# To extract all the sequences would need to actually exhaustively count like in the recursive version.
 	def countWays(self, score):
-		def _count(prefix, score):
+		def _count(score):
+			if memoized.get(score):
+				return memoized[score]
+
 			if score == 0:
-				sequence.append(prefix[:])
 				return 1
 			if score < 0:
 				return 0
 			
-			return _count(prefix+[a], score-a) + _count(prefix+[b], score-b) + _count(prefix+[c], score-c)
+			memoized[score] = _count(score-a) + _count(score-b) + _count(score-c)
+			return memoized[score]
 
-		sequence = []
+
+		memoized = {}
 		a, b, c = self.a, self.b, self.c
-		return _count([], score), sequence
+		return _count(score)
+
 
 
 
 
 if __name__ == '__main__':
 	n = NumWaysToScore(3,5,10)
-	assert n.countWays(13) == (5, [[3,5,5], [3,10], [5,3,5], [5,5,3], [10,3]])
-	assert n.countWays(15) == (4, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10], [10, 5]])
+	assert n.countWays(13) == 5
 
 	# order of a,b,c should return the same results
-	# albeit it'll be sequences starting with b, a, followed by c if the order is (b,a,c)
 	n = NumWaysToScore(5,10,3)
-	assert n.countWays(13) == (5, [[5, 5, 3], [5, 3, 5], [10, 3], [3, 5, 5], [3, 10]])
+	assert n.countWays(13) == 5
 
 	n = NumWaysToScore(5,3,10)
-	assert n.countWays(13) == (5, [[5, 5, 3], [5, 3, 5], [3, 5, 5], [3, 10], [10,3]])
+	assert n.countWays(13) == 5
 
 	n2 = NumWaysToScore(3,4,8)
-	assert n2.countWays(12) == (4, [[3, 3, 3, 3], [4, 4, 4], [4, 8], [8, 4]])
-	assert n2.countWays(10) == (3, [[3, 3, 4], [3, 4, 3], [4, 3, 3]])
+	assert n2.countWays(12) == 4
+	assert n2.countWays(10) == 3
 
