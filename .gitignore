@@ -5,3 +5,4 @@ out/
 cscope.*
 ncscope.*
 __pycache__
+*.ipynb_checkpoints
