@@ -154,27 +154,15 @@ class NumWaysToScore(object):
 		self.a = a
 		self.b = b
 		self.c = c
-		self.dp_table = []
+		self.dp_table = [1]
 
 	def countWays(self, score):
 		a, b, c = self.a, self.b, self.c
 		T = self.dp_table
-		if T == []:
-			T += [1] + [0] * score
 
-			for i in xrange(1, score+1):
-				if i-a >= 0:
-					T[i] = T[i-a]
-				if i-b >= 0:
-					T[i] += T[i-b]
-				if i-c >= 0:
-					T[i] += T[i-c]
-
-
-		# if score > len(T)-1
-		# we need to extend the DP table
+		# if the previous DP table upto a score S, wasnt big enough for current score (ie. current score > S)
+		# we need to extend the DP table, but only from previous score to current score
 		# from T[len(T)+1 : score+1]
-		T = self.dp_table
 		start = len(T)
 		T += [0] * (score - len(T) + 1)
 		for i in xrange(start, score+1):
