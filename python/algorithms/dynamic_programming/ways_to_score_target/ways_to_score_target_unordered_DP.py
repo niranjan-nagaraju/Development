@@ -219,8 +219,9 @@ class NumWaysToScore3(object):
 
 		lookup = lambda table,i: 0 if i < 0 else table[i]
 		for i in xrange(1, score+1):
-			U[i] = lookup(U, i-b) + lookup(W, i-c)
-			T[i] = lookup(T, i-a) + lookup(U, i-b) + lookup(W, i-c)
+			W[i] = lookup(W, i-c)
+			U[i] = lookup(U, i-b) + lookup(W, i)
+			T[i] = lookup(T, i-a) + U[i]
 		
 		return T[score]
 
@@ -232,12 +233,14 @@ class NumWaysToScore3(object):
 		points = [self.a, self.b, self.c]
 		T = [([1] + [0] * score) for x in xrange(len(points))]  # T[0], T[1], T[2]: T, U, W
 
+		for i in xrange(0, score, points[-1]):
+			T[-1][i] = 1
+
 		a, b, c = self.a, self.b, self.c
 		lookup = lambda table,i: 0 if i < 0 else table[i]
 		for i in xrange(1, score+1):
 			for j in xrange(len(points)-2, -1, -1):
-				for k in xrange(j, len(points)):
-					T[j][i] += lookup(T[k], i-points[k])
+				T[j][i] = lookup(T[j], i-points[j]) + lookup(T[j+1], i)
 
 		return T[0][score]
 
@@ -270,4 +273,6 @@ if __name__ == '__main__':
 	assert n2.countWays_2(12) == 3
 	assert n2.countWays(10) == 1
 	assert n2.countWays_2(10) == 1
+	assert n2.countWays(32) == 10
+	assert n2.countWays_2(32) == 10 #FIXME
 

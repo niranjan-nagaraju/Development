@@ -145,4 +145,6 @@ if __name__ == '__main__':
 	assert n2.countWays_2(12) == 3
 	assert n2.countWays(10) == 1
 	assert n2.countWays_2(10) == 1
+	assert n2.countWays(32) == 10
+	assert n2.countWays_2(32) == 10
 
