@@ -54,33 +54,40 @@ class NumWaysToScore3(object):
 		self.a, self.b, self.c  = sorted([a, b, c])
 
 	def countWays(self, score):
-		def f(prefix, n):
+		def f(n):
+			if memoized_a.get(n):
+				return memoized_a[n]
+
 			if n == 0:
-				sequence.append(prefix[:])
 				return 1
 			if n < 0:
 				return 0
-			return f(prefix+[a], n-a) + g(prefix+[b], n-b) + h(prefix+[c], n-c)
 
-		def g(prefix, n):
+			memoized_a[n] = f(n-a) + g(n-b) + h(n-c)
+			return memoized_a[n]
+
+		def g(n):
+			if memoized_b.get(n):
+				return memoized_b[n]
 			if n == 0:
-				sequence.append(prefix[:])
 				return 1
 			if n < 0:
 				return 0
-			return g(prefix+[b], n-b) + h(prefix+[c], n-c)
+			memoized_b[n] = g(n-b) + h(n-c)
+			return memoized_b[n]
 
-		def h(prefix, n):
+		# No need to memoize h(), its already constant time.
+		def h(n):
 			if n < 0:
 				return 0
 			if n % c == 0:
-				sequence.append(prefix[:])
 				return 1
 			return 0
 
-		sequence = []
+		memoized_a = {}
+		memoized_b = {}
 		a, b, c = self.a, self.b, self.c
-		return f([], score), sequence
+		return f(score)
 
 
 	'''
@@ -89,50 +96,53 @@ class NumWaysToScore3(object):
 	g on b,c and h operates on only c
 	'''
 	def countWays_2(self, score):
-		def _count(prefix, points, n):
+		def _count(points, n):
+			if memoized.get((points,n)):
+				return memoized[(points,n)]
+
 			if n == 0:
-				sequence.append(prefix[:])
 				return 1
 			if n < 0:
 				return 0
 
-			num_ways = 0
+			memoized[(points,n)] = 0
 			for i in xrange(len(points)):
 				x = points[i]
-				num_ways += _count(prefix + [x], points[i:], n - x)
-			return num_ways
+				memoized[(points,n)] += _count(points[i:], n - x)
+			return memoized[(points,n)]
 
-
-		points = [self.a, self.b, self.c]
-		sequence = []
-		return _count([], points, score), sequence
+		# tuples instead if list because list are not hashable
+		# perhaps, tuples should be used in other versions of this function as well :)
+		points = (self.a, self.b, self.c)
+		memoized = {}
+		return _count(points, score)
 
 
 if __name__ == '__main__':
 	n = NumWaysToScore3(3,5,10)
-	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays(10) == (2, [[5, 5], [10]])
-	assert n.countWays_2(10) == (2, [[5, 5], [10]])
+	assert n.countWays(13) == 2
+	assert n.countWays_2(13) == 2
+	assert n.countWays(15) == 3
+	assert n.countWays_2(15) == 3
+	assert n.countWays(10) == 2
+	assert n.countWays_2(10) == 2
 
 	# order of a,b,c should return the same results
 	n = NumWaysToScore3(5,10,3)
-	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays(13) == 2
+	assert n.countWays_2(13) == 2
+	assert n.countWays(15) == 3
+	assert n.countWays_2(15) == 3
 
 	n = NumWaysToScore3(5,3,10)
-	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays(13) == 2
+	assert n.countWays_2(13) == 2
+	assert n.countWays(15) == 3
+	assert n.countWays_2(15) == 3
 
 	n2 = NumWaysToScore3(3,4,8)
-	assert n2.countWays(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])
-	assert n2.countWays_2(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])
-	assert n2.countWays(10) == (1, [[3, 3, 4]])
-	assert n2.countWays_2(10) == (1, [[3, 3, 4]])
+	assert n2.countWays(12) == 3
+	assert n2.countWays_2(12) == 3
+	assert n2.countWays(10) == 1
+	assert n2.countWays_2(10) == 1
 

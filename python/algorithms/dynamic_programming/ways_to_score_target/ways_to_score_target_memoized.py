@@ -52,7 +52,7 @@ Solution Outline: Top-down, recursive implementation
 	f(13) = f(10) + f(8) + f(3) == 2 + 2 + 1 = 5
 '''
 
-class NumWaysToScore(object):
+class NumWaysToScore3(object):
 	def __init__(self, a, b, c):
 		self.a = a
 		self.b = b
@@ -80,21 +80,48 @@ class NumWaysToScore(object):
 		return _count(score)
 
 
+	'''
+	Consolidate the 3 calls into a loop so it can eventually work any number of inputs
+	'''
+	def countWays_2(self, score):
+		def _count(score):
+			if memoized.get(score):
+				return memoized[score]
+
+			if score == 0:
+				return 1
+			if score < 0:
+				return 0
+	
+			memoized[score] = 0
+			for x in points:
+				memoized[score] +=  _count(score-x)
+			return memoized[score]
+
+		memoized = {}
+		points = [self.a, self.b, self.c]
+		return _count(score)
+
 
 
 
 if __name__ == '__main__':
-	n = NumWaysToScore(3,5,10)
+	n = NumWaysToScore3(3,5,10)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 
 	# order of a,b,c should return the same results
-	n = NumWaysToScore(5,10,3)
+	n = NumWaysToScore3(5,10,3)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 
-	n = NumWaysToScore(5,3,10)
+	n = NumWaysToScore3(5,3,10)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 
-	n2 = NumWaysToScore(3,4,8)
+	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == 4
+	assert n2.countWays_2(12) == 4
 	assert n2.countWays(10) == 3
+	assert n2.countWays_2(10) == 3
 

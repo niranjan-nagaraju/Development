@@ -149,7 +149,7 @@ Solution Outline: Top-down, recursive implementation
 
 '''
 
-class NumWaysToScore(object):
+class NumWaysToScore3(object):
 	def __init__(self, a, b, c):
 		self.a = a
 		self.b = b
@@ -165,14 +165,31 @@ class NumWaysToScore(object):
 		# from T[len(T)+1 : score+1]
 		start = len(T)
 		T += [0] * (score - len(T) + 1)
+		lookup = lambda x: 0 if x < 0 else T[x]
 		for i in xrange(start, score+1):
-			if i-a >= 0:
-				T[i] = T[i-a]
-			if i-b >= 0:
-				T[i] += T[i-b]
-			if i-c >= 0:
-				T[i] += T[i-c]
+			T[i] = lookup(i-a) + lookup(i-b) + lookup(i-c)
 
+		return T[score]
+
+
+
+	'''
+	Consolidate the 3 calls into a loop so it can eventually work any number of inputs
+	'''
+	def countWays_2(self, score):
+		points = [self.a, self.b, self.c]
+		T = self.dp_table
+
+		# if the previous DP table upto a score S, wasnt big enough for current score (ie. current score > S)
+		# we need to extend the DP table, but only from previous score to current score
+		# from T[len(T)+1 : score+1]
+		start = len(T)
+		T += [0] * (score - len(T) + 1)
+		for i in xrange(start, score+1):
+			for j in xrange(len(points)):
+				x = points[j]
+				if i-x >= 0:
+					T[i] += T[i-a]
 
 		return T[score]
 
@@ -180,21 +197,28 @@ class NumWaysToScore(object):
 
 
 if __name__ == '__main__':
-	n = NumWaysToScore(3,5,10)
+	n = NumWaysToScore3(3,5,10)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 	# extends current DP table to fit in 2 more entries, 14, and 15
 	assert n.countWays(15) == 4
+	assert n.countWays_2(15) == 4
 	# DP table already has solution for 11
 	assert n.countWays(11) == 3
+	assert n.countWays_2(11) == 3
 
 	# order of a,b,c should return the same results
-	n = NumWaysToScore(5,10,3)
+	n = NumWaysToScore3(5,10,3)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 
-	n = NumWaysToScore(5,3,10)
+	n = NumWaysToScore3(5,3,10)
 	assert n.countWays(13) == 5
+	assert n.countWays_2(13) == 5
 
-	n2 = NumWaysToScore(3,4,8)
+	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == 4
+	assert n2.countWays_2(12) == 4
 	assert n2.countWays(10) == 3
+	assert n2.countWays_2(10) == 3
 

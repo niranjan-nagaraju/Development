@@ -52,7 +52,7 @@ Solution Outline: Top-down, recursive implementation
 	f(13) = f(10) + f(8) + f(3) == 2 + 2 + 1 = 5
 '''
 
-class NumWaysToScore(object):
+class NumWaysToScore3(object):
 	def __init__(self, a, b, c):
 		self.a = a
 		self.b = b
@@ -73,22 +73,49 @@ class NumWaysToScore(object):
 		return _count([], score), sequence
 
 
+	'''
+	Consolidate the 3 calls into a loop so it can eventually work any number of inputs
+	'''
+	def countWays_2(self, score):
+		def _count(prefix, score):
+			if score == 0:
+				sequence.append(prefix[:])
+				return 1
+			if score < 0:
+				return 0
+	
+			num_ways = 0
+			for x in points:
+				num_ways +=  _count(prefix+[x], score-x)
+			return num_ways
+
+		sequence = []
+		points = [self.a, self.b, self.c]
+		return _count([], score), sequence
+
+
 
 
 if __name__ == '__main__':
-	n = NumWaysToScore(3,5,10)
+	n = NumWaysToScore3(3,5,10)
 	assert n.countWays(13) == (5, [[3,5,5], [3,10], [5,3,5], [5,5,3], [10,3]])
+	assert n.countWays_2(13) == (5, [[3,5,5], [3,10], [5,3,5], [5,5,3], [10,3]])
 	assert n.countWays(15) == (4, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10], [10, 5]])
+	assert n.countWays_2(15) == (4, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10], [10, 5]])
 
 	# order of a,b,c should return the same results
 	# albeit it'll be sequences starting with b, a, followed by c if the order is (b,a,c)
-	n = NumWaysToScore(5,10,3)
+	n = NumWaysToScore3(5,10,3)
 	assert n.countWays(13) == (5, [[5, 5, 3], [5, 3, 5], [10, 3], [3, 5, 5], [3, 10]])
+	assert n.countWays_2(13) == (5, [[5, 5, 3], [5, 3, 5], [10, 3], [3, 5, 5], [3, 10]])
 
-	n = NumWaysToScore(5,3,10)
+	n = NumWaysToScore3(5,3,10)
 	assert n.countWays(13) == (5, [[5, 5, 3], [5, 3, 5], [3, 5, 5], [3, 10], [10,3]])
+	assert n.countWays_2(13) == (5, [[5, 5, 3], [5, 3, 5], [3, 5, 5], [3, 10], [10,3]])
 
-	n2 = NumWaysToScore(3,4,8)
+	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == (4, [[3, 3, 3, 3], [4, 4, 4], [4, 8], [8, 4]])
+	assert n2.countWays_2(12) == (4, [[3, 3, 3, 3], [4, 4, 4], [4, 8], [8, 4]])
 	assert n2.countWays(10) == (3, [[3, 3, 4], [3, 4, 3], [4, 3, 3]])
+	assert n2.countWays_2(10) == (3, [[3, 3, 4], [3, 4, 3], [4, 3, 3]])
 
