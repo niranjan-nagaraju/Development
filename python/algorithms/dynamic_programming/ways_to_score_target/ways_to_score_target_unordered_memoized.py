@@ -7,6 +7,8 @@ e.g.
 S = 13, a, b, c = 3, 5, 10
 Number of ways the player can score 13 is 2
 Sequences: {3,10}, {3,5,5}
+
+NOTE: This is essentially the same as the coin-change problem at this point (albeit with 3 coin denominations)
 '''
 
 '''
