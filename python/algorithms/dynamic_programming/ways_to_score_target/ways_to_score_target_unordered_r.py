@@ -53,7 +53,7 @@ Solution Outline: Top-down, recursive implementation
 
 class NumWaysToScore3(object):
 	def __init__(self, a, b, c):
-		self.a, self.b, self.c  = sorted([a, b, c])
+		self.a, self.b, self.c  = [a, b, c]
 
 	def countWays(self, score):
 		def f(prefix, n):
@@ -163,20 +163,20 @@ if __name__ == '__main__':
 
 	# order of a,b,c should return the same results
 	n = NumWaysToScore3(5,10,3)
-	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_3(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_3(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays(13) == (2, [[5,5,3], [10,3]])
+	assert n.countWays_2(13) == (2, [[5,5,3], [10,3]])
+	assert n.countWays_3(13) == (2, [[5,5,3], [10,3]])
+	assert n.countWays(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
+	assert n.countWays_2(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
+	assert n.countWays_3(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
 
 	n = NumWaysToScore3(5,3,10)
-	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays_3(13) == (2, [[3,5,5], [3,10]])
-	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
-	assert n.countWays_3(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays(13) == (2, [[5,5,3], [3,10]])
+	assert n.countWays_2(13) == (2, [[5,5,3], [3,10]])
+	assert n.countWays_3(13) == (2, [[5,5,3], [3,10]])
+	assert n.countWays(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
+	assert n.countWays_2(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
+	assert n.countWays_3(15) == (3, [[5, 5, 5], [5, 10], [3, 3, 3, 3, 3]])
 
 	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])

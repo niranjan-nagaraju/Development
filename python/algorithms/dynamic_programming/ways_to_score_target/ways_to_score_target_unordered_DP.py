@@ -218,7 +218,7 @@ Solution Outline: Top-down, recursive implementation
 
 class NumWaysToScore3(object):
 	def __init__(self, a, b, c):
-		self.a, self.b, self.c  = sorted([a, b, c])
+		self.a, self.b, self.c  = [a, b, c]
 		self.T, self.U, self.W = None, None, None
 
 	def countWays(self, score):
