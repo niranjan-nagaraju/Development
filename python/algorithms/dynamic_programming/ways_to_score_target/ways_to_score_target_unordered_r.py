@@ -28,6 +28,7 @@ Solution Outline: Top-down, recursive implementation
 
 	   g(S) = g(S-a) + h(S-b) + i(S-c), g(0) = 1, g(x) = 0, if x < 0
 	   h(S) = h(S-b) + i(S-c), h(0) = 1, h(x) = 0, if x < 0
+
 	   i(S) = i(S-c), i(0) = 1, i(x) = 0, if x < 0
 	     or just check if S | c (S is divisible by c)
 
@@ -48,7 +49,6 @@ Solution Outline: Top-down, recursive implementation
 		h(8) = h(3) + i(-2) = 0
 		i(3) = i(-7) = 0
 	f(13) = g(10) + h(8) + i(3) = 2 + 0 + 0 = 2
-
 '''
 
 class NumWaysToScore3(object):
@@ -110,33 +110,82 @@ class NumWaysToScore3(object):
 		return _count([], points, score), sequence
 
 
+	'''
+	Consolidate f,g and h()
+	The only difference between f, g and h are that f operates on all a,b,c
+	g on b,c and h operates on only c
+
+    Recurrence relation:
+	   i(S) = i(S-c), i(0) = 1, i(x) = 0, if x < 0
+	     or just check if S | c (S is divisible by c)
+
+	   h(0) = 1, h(x) = 0, if x < 0
+	   h(S) = h(S-b) + i(S-c)
+	   => substitute i(S)
+	   h(S) = h(S-b) + i(S)
+
+	   g(0) = 1, g(x) = 0, if x < 0
+	   g(S) = g(S-a) + h(S-b) + i(S-c)
+	   => substitute h(S)
+	   g(S) = g(S-a) + h(S)
+
+	   f(0) = 1
+	   f(x) = 0, if x < 0
+	   f(S) = g(S-a) + h(S)
+	'''
+	def countWays_3(self, score):
+		def _count(prefix, points, n):
+			if n == 0:
+				sequence.append(prefix[:])
+				return 1
+			if n < 0:
+				return 0
+
+			return _count(prefix + [points[0]], points, n-points[0]) + (_count(prefix, points[1:], n) if len(points) > 1 else 0)
+
+
+		points = [self.a, self.b, self.c]
+		sequence = []
+		return _count([], points, score), sequence
+
+
 if __name__ == '__main__':
 	n = NumWaysToScore3(3,5,10)
 	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
+	assert n.countWays_3(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays_3(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 	assert n.countWays(10) == (2, [[5, 5], [10]])
 	assert n.countWays_2(10) == (2, [[5, 5], [10]])
+	assert n.countWays_3(10) == (2, [[5, 5], [10]])
 
 	# order of a,b,c should return the same results
 	n = NumWaysToScore3(5,10,3)
 	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
+	assert n.countWays_3(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays_3(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 
 	n = NumWaysToScore3(5,3,10)
 	assert n.countWays(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays_2(13) == (2, [[3,5,5], [3,10]])
+	assert n.countWays_3(13) == (2, [[3,5,5], [3,10]])
 	assert n.countWays(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 	assert n.countWays_2(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
+	assert n.countWays_3(15) == (3, [[3, 3, 3, 3, 3], [5, 5, 5], [5, 10]])
 
 	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])
 	assert n2.countWays_2(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])
+	assert n2.countWays_3(12) == (3, [[3, 3, 3, 3], [4, 4, 4], [4, 8]])
 	assert n2.countWays(10) == (1, [[3, 3, 4]])
 	assert n2.countWays_2(10) == (1, [[3, 3, 4]])
+	assert n2.countWays_3(10) == (1, [[3, 3, 4]])
 	assert  n2.countWays(32) == (10, [[3, 3, 3, 3, 3, 3, 3, 3, 4, 4], [3, 3, 3, 3, 3, 3, 3, 3, 8], [3, 3, 3, 3, 4, 4, 4, 4, 4], [3, 3, 3, 3, 4, 4, 4, 8], [3, 3, 3, 3, 4, 8, 8], [4, 4, 4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4, 8], [4, 4, 4, 4, 8, 8], [4, 4, 8, 8, 8], [8, 8, 8, 8]])
 	assert  n2.countWays_2(32) == (10, [[3, 3, 3, 3, 3, 3, 3, 3, 4, 4], [3, 3, 3, 3, 3, 3, 3, 3, 8], [3, 3, 3, 3, 4, 4, 4, 4, 4], [3, 3, 3, 3, 4, 4, 4, 8], [3, 3, 3, 3, 4, 8, 8], [4, 4, 4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4, 8], [4, 4, 4, 4, 8, 8], [4, 4, 8, 8, 8], [8, 8, 8, 8]])
+	assert  n2.countWays_3(32) == (10, [[3, 3, 3, 3, 3, 3, 3, 3, 4, 4], [3, 3, 3, 3, 3, 3, 3, 3, 8], [3, 3, 3, 3, 4, 4, 4, 4, 4], [3, 3, 3, 3, 4, 4, 4, 8], [3, 3, 3, 3, 4, 8, 8], [4, 4, 4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4, 8], [4, 4, 4, 4, 8, 8], [4, 4, 8, 8, 8], [8, 8, 8, 8]])
 

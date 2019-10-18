@@ -120,33 +120,81 @@ class NumWaysToScore3(object):
 		return _count(points, score)
 
 
+	'''
+	Consolidate f,g and h()
+	The only difference between f, g and h are that f operates on all a,b,c
+	g on b,c and h operates on only c
+
+    Recurrence relation:
+	   i(S) = i(S-c), i(0) = 1, i(x) = 0, if x < 0
+	     or just check if S | c (S is divisible by c)
+
+	   h(0) = 1, h(x) = 0, if x < 0
+	   h(S) = h(S-b) + i(S-c)
+	   => substitute i(S)
+	   h(S) = h(S-b) + i(S)
+
+	   g(0) = 1, g(x) = 0, if x < 0
+	   g(S) = g(S-a) + h(S-b) + i(S-c)
+	   => substitute h(S)
+	   g(S) = g(S-a) + h(S)
+
+	   f(0) = 1
+	   f(x) = 0, if x < 0
+	   f(S) = g(S-a) + h(S)
+	'''
+	def countWays_3(self, score):
+		def _count(points, n):
+			if n == 0:
+				return 1
+			if n < 0:
+				return 0
+
+			return _count(points, n-points[0]) + (_count(points[1:], n) if len(points) > 1 else 0)
+
+
+		points = [self.a, self.b, self.c]
+		return _count(points, score)
+
+
+
 if __name__ == '__main__':
 	n = NumWaysToScore3(3,5,10)
 	assert n.countWays(13) == 2
 	assert n.countWays_2(13) == 2
+	assert n.countWays_3(13) == 2
 	assert n.countWays(15) == 3
 	assert n.countWays_2(15) == 3
+	assert n.countWays_3(15) == 3
 	assert n.countWays(10) == 2
 	assert n.countWays_2(10) == 2
+	assert n.countWays_3(10) == 2
 
 	# order of a,b,c should return the same results
 	n = NumWaysToScore3(5,10,3)
 	assert n.countWays(13) == 2
 	assert n.countWays_2(13) == 2
+	assert n.countWays_3(13) == 2
 	assert n.countWays(15) == 3
 	assert n.countWays_2(15) == 3
+	assert n.countWays_3(15) == 3
 
 	n = NumWaysToScore3(5,3,10)
 	assert n.countWays(13) == 2
 	assert n.countWays_2(13) == 2
+	assert n.countWays_3(13) == 2
 	assert n.countWays(15) == 3
 	assert n.countWays_2(15) == 3
+	assert n.countWays_3(15) == 3
 
 	n2 = NumWaysToScore3(3,4,8)
 	assert n2.countWays(12) == 3
 	assert n2.countWays_2(12) == 3
+	assert n2.countWays_3(12) == 3
 	assert n2.countWays(10) == 1
 	assert n2.countWays_2(10) == 1
+	assert n2.countWays_3(10) == 1
 	assert n2.countWays(32) == 10
 	assert n2.countWays_2(32) == 10
+	assert n2.countWays_3(32) == 10
 
