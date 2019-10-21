@@ -74,6 +74,7 @@ class Dungeon(object):
 	# and return the time
 	def solve(self):
 		bfs_q = [(self.start, 0)]
+		visited = {}
 		while bfs_q:
 			current, t = bfs_q.pop(0)
 			if self.end == current:
@@ -83,15 +84,23 @@ class Dungeon(object):
 
 			i,j,k = current
 
-			# Enqueue up and down levels, mark visited grids as '#' so they wont be visited again forming a loop
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i-1, j, k), t+1)) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i+1, j, k), t+1)) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+
+			# helper function to add to the bfs queue
+			# mark current grid as '#' so its not revisited again
+			def add_to_queue(x,y,z, t):
+				self.dungeon[x][y][z] = '#'
+				bfs_q.append(((x,y,z), t))
+
+
+			# Enqueue up and down levels
+			add_to_queue(i+1, j, k, t+1) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+			add_to_queue(i-1, j, k, t+1) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
 
 			# Enqueue left, right, top, below grids in the same level
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j-1, k), t+1)) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j+1, k), t+1)) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j, k-1), t+1)) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j, k+1), t+1)) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+			add_to_queue(i, j+1, k, t+1) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
+			add_to_queue(i, j-1, k, t+1) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
+			add_to_queue(i, j, k+1, t+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+			add_to_queue(i, j, k-1, t+1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
 
 		print 'Trapped!'
 

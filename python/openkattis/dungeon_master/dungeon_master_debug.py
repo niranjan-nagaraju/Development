@@ -99,15 +99,22 @@ class Dungeon(object):
 				return t, self.reconstruct_path()
 
 			i,j,k = current
-			# Enqueue up and down levels, mark visited grids as '#' so they wont be visited again forming a loop
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i-1, j, k), t+1, current)) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i+1, j, k), t+1, current)) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+			# helper function to add to the bfs queue
+			# mark current grid as '#' so its not revisited again
+			def add_to_queue(x,y,z, t):
+				self.dungeon[x][y][z] = '#'
+				bfs_q.append(((x,y,z), t, current))
+
+
+			# Enqueue up and down levels
+			add_to_queue(i+1, j, k, t+1) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+			add_to_queue(i-1, j, k, t+1) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
 
 			# Enqueue left, right, top, below grids in the same level
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j-1, k), t+1, current)) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j+1, k), t+1, current)) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j, k-1), t+1, current)) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
-			self.dungeon[i][j][k] = '#'; bfs_q.append(((i, j, k+1), t+1, current)) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+			add_to_queue(i, j+1, k, t+1) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
+			add_to_queue(i, j-1, k, t+1) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
+			add_to_queue(i, j, k+1, t+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+			add_to_queue(i, j, k-1, t+1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
 
 		print 'Trapped!'
 		return -1, []
@@ -143,7 +150,8 @@ class Dungeon(object):
 
 
 def unit_tests():
-	m = '''S....
+	m = '''
+S....
 .###.
 .##..
 ###.#
@@ -159,7 +167,7 @@ def unit_tests():
 ####E
 '''
 	d = Dungeon(3,4,5)
-	d.read_map(m.split('\n'))
+	d.read_map(m.split('\n')[1:])
 	assert d.solve() == (11, ['R', 'R', 'R', 'R', 'D', 'D', 'L', 'D', '-1', 'R', '-1'])
 
 	y = '''
@@ -168,8 +176,21 @@ S##
 ###
 '''
 	d = Dungeon(1,3,3)
-	d.read_map(m.split('\n'))
+	d.read_map(y.split('\n')[1:])
 	assert d.solve() == (-1, [])
+
+	z = '''
+#E#.
+#..#
+##.#
+#..#
+#.##
+..S.
+'''
+	d = Dungeon(1,6,4)
+	d.read_map(z.split('\n')[1:])
+	assert d.solve() == (8, ['L', 'U', 'U', 'R', 'U', 'U', 'L', 'U'])
+
 
 if __name__ == '__main__':
 	unit_tests()
