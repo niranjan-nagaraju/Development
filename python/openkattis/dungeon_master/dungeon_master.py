@@ -74,7 +74,6 @@ class Dungeon(object):
 	# and return the time
 	def solve(self):
 		bfs_q = [(self.start, 0)]
-		visited = {}
 		while bfs_q:
 			current, t = bfs_q.pop(0)
 			if self.end == current:
