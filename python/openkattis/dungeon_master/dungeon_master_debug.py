@@ -98,23 +98,23 @@ class Dungeon(object):
 				print 'Escaped in {0} minute(s).'.format(t)
 				return t, self.reconstruct_path()
 
-			i,j,k = current
 			# helper function to add to the bfs queue
 			# mark current grid as '#' so its not revisited again
-			def add_to_queue(x,y,z, t):
+			def add_to_queue(x,y,z):
 				self.dungeon[x][y][z] = '#'
-				bfs_q.append(((x,y,z), t, current))
+				bfs_q.append(((x,y,z), t+1, current))
 
 
+			i,j,k = current
 			# Enqueue up and down levels
-			add_to_queue(i+1, j, k, t+1) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
-			add_to_queue(i-1, j, k, t+1) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
+			add_to_queue(i+1, j, k) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+			add_to_queue(i-1, j, k) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
 
 			# Enqueue left, right, top, below grids in the same level
-			add_to_queue(i, j+1, k, t+1) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
-			add_to_queue(i, j-1, k, t+1) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
-			add_to_queue(i, j, k+1, t+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
-			add_to_queue(i, j, k-1, t+1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
+			add_to_queue(i, j+1, k) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
+			add_to_queue(i, j-1, k) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
+			add_to_queue(i, j, k+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+			add_to_queue(i, j, k-1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
 
 		print 'Trapped!'
 		return -1, []
