@@ -47,7 +47,6 @@ Escaped in 11 minute(s).
 Trapped!
 '''
 
-
 class Dungeon(object):
 	def __init__(self, l, r, c):
 		self.l, self.r, self.c = l, r, c
@@ -68,6 +67,10 @@ class Dungeon(object):
 					dungeon[i][j][k] = row[k]
 					if row[k] == 'S':
 						self.start = (i,j,k)
+						# Mark start cell as blocked
+						# right at the outset
+						# so we dont have to revisit it
+						dungeon[i][j][k] = '#'
 					if row[k] == 'E':
 						self.end = (i,j,k)
 			_ = read_row() # blank lines between levels
@@ -116,6 +119,7 @@ class Dungeon(object):
 			add_to_queue(i, j, k+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
 			add_to_queue(i, j, k-1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
 
+		# Couldn't reach end cell
 		print 'Trapped!'
 		return -1, []
 

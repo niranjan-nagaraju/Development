@@ -47,6 +47,13 @@ Escaped in 11 minute(s).
 Trapped!
 '''
 
+# Upon finding the end cell, the BFS solve() method raises this exception
+# to avoid any further processing
+# and return the result immediately
+class FoundEndCellError(Exception):
+	def __init__(self):
+		pass
+
 
 class Dungeon(object):
 	def __init__(self, l, r, c):
@@ -64,6 +71,9 @@ class Dungeon(object):
 				for k in xrange(c):
 					dungeon[i][j][k] = row[k]
 					if row[k] == 'S':
+						# Mark start cell as visited
+						# right at the outset
+						dungeon[i][j][k] = '#'
 						self.start = (i,j,k)
 					if row[k] == 'E':
 						self.end = (i,j,k)
@@ -73,34 +83,38 @@ class Dungeon(object):
 	# Find a minimum-distance path from start -> end
 	# and return the time
 	def solve(self):
-		bfs_q = [(self.start, 0)]
-		while bfs_q:
-			current, t = bfs_q.pop(0)
-			if self.end == current:
-				# Found end grid in the dungeon
-				print 'Escaped in {0} minute(s).'.format(t)
-				return
+		try:
+			bfs_q = [(self.start, 0)]
+			while bfs_q:
+				current, t = bfs_q.pop(0)
+
+				# helper function to add to the bfs queue
+				# mark current grid as '#' so its not revisited again
+				def add_to_queue(x,y,z):
+					if self.end == (x,y,z):
+						# Found end grid in the dungeon
+						print 'Escaped in {0} minute(s).'.format(t+1)
+						raise FoundEndCellError
+					self.dungeon[x][y][z] = '#'
+					bfs_q.append(((x,y,z), t+1))
 
 
-			# helper function to add to the bfs queue
-			# mark current grid as '#' so its not revisited again
-			def add_to_queue(x,y,z):
-				self.dungeon[x][y][z] = '#'
-				bfs_q.append(((x,y,z), t+1))
+				i,j,k = current
+				# Enqueue up and down levels
+				add_to_queue(i+1, j, k) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
+				add_to_queue(i-1, j, k) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
 
+				# Enqueue left, right, top, below grids in the same level
+				add_to_queue(i, j+1, k) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
+				add_to_queue(i, j-1, k) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
+				add_to_queue(i, j, k+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
+				add_to_queue(i, j, k-1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
 
-			i,j,k = current
-			# Enqueue up and down levels
-			add_to_queue(i+1, j, k) if (i+1 < self.l and self.dungeon[i+1][j][k] != '#') else None
-			add_to_queue(i-1, j, k) if (i-1 >= 0 and self.dungeon[i-1][j][k] != '#') else None
+			# Couldn't reach end cell
+			print 'Trapped!'
+		except FoundEndCellError:
+			return
 
-			# Enqueue left, right, top, below grids in the same level
-			add_to_queue(i, j+1, k) if (j+1 < self.r and self.dungeon[i][j+1][k] != '#') else None
-			add_to_queue(i, j-1, k) if (j-1 >= 0 and self.dungeon[i][j-1][k] != '#') else None
-			add_to_queue(i, j, k+1) if (k+1 < self.c and self.dungeon[i][j][k+1] != '#') else None
-			add_to_queue(i, j, k-1) if (k-1 >= 1 and self.dungeon[i][j][k-1] != '#') else None
-
-		print 'Trapped!'
 
 if __name__ == '__main__':
 	while True:
