@@ -162,12 +162,69 @@ class TestHeap(unittest.TestCase):
 		assert new_l == range(10, -1, -1)
 
 
-	def test_isMaxHeap(self, recursive = True):
+	def test_isMaxHeap(self):
 		h = MaxHeap()
-		if recursive:
-			isHeap = h.isHeap
-		else:
-			isHeap = h.isHeap_i
+		isHeap = h.isHeap
+
+		h.items = []
+		assert isHeap() == True
+
+		h.items = [1, 1]
+		assert isHeap() == True
+
+		h.items = [1, 1, 1]
+		assert isHeap() == True
+
+		'''
+		  5
+		 / \
+		4   3
+	   / \
+	  2   1
+		'''
+		h.items = [5,4,3,2,1]
+		assert isHeap() == True
+
+		'''
+		  2
+		 /
+		1
+		'''
+		h.items = [2, 1]
+		assert isHeap() == True
+
+		h.items = [1, 2]
+		assert isHeap() == False
+
+		'''
+		  3
+		 / \
+		1   2
+		'''
+		h.items = [3, 1, 2]
+		assert isHeap() == True
+
+		'''
+		   1
+		 /   \
+		2     3
+	   / \  
+	  4   5 
+		'''
+		h.items = [1, 2, 3, 4, 5]
+		assert isHeap() == False
+
+		h.items = range(10, -1, -1)
+		assert isHeap() == True
+
+		h.items = range(10)
+		assert isHeap() == False
+
+
+	# Test iterative version of isHeap
+	def test_isMaxHeap_i(self):
+		h = MaxHeap()
+		isHeap = h.isHeap_i
 
 		h.items = []
 		assert isHeap() == True
