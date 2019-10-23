@@ -80,6 +80,41 @@ class TestHeap(unittest.TestCase):
 		assert h.items == [0, 0, 4, 2, 1, 5, 8, 3, 7, 9, 10]
 
 
+	def test_increaseKey(self):
+		l = [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+		h = Heap()
+		h.items = l
+
+		'''
+              0
+            /   \
+           1     4
+         /  \   /  \
+        2    6 5    8
+       / \  / \
+      3   7 9 10
+		'''
+		caught_exception = False
+		try:
+			h.increaseKey(4, 5)
+		except ValueError as v:
+			assert v.message == "ValueError: increaseKey() - New key should be greater than current value"
+			caught_exception = True
+		assert caught_exception == True
+
+		h.increaseKey(1, 11)
+		'''
+              0
+            /   \
+           2     4
+         /  \   /  \
+        3    6 5    8
+       / \  / \
+     11   7 9 10
+	  '''
+		assert h.items == [0, 2, 4, 3, 6, 5, 8, 11, 7, 9, 10]
+
+
 	def test_sorted(self):
 		l = range(10, -1, -1)
 		Heap.build_heap(l)

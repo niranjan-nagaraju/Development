@@ -75,6 +75,15 @@ class TestHeap(unittest.TestCase):
 		for x in l:
 			h.add(x)
 
+		'''
+             10
+            /   \
+           9     6
+         /  \   /  \
+        4    8 1    5
+       / \  / \
+      0   3 2  7
+		'''
 		assert h.items == [10, 9, 6, 4, 8, 1, 5, 0, 3, 2, 7]
 
 		caught_exception = False
@@ -86,7 +95,58 @@ class TestHeap(unittest.TestCase):
 		assert caught_exception == True
 
 		h.increaseKey(4, 11)
+		'''
+             11
+            /   \
+          10     6
+         /  \   /  \
+        4    9 1    5
+       / \  / \
+      0   3 2  7
+		'''
+
 		assert h.items == [11, 10, 6, 4, 9, 1, 5, 0, 3, 2, 7]
+
+
+	def test_decreaseKey(self):
+		l = [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+		h = MaxHeap()
+
+		for x in l:
+			h.add(x)
+
+		'''
+             10
+            /   \
+           9     6
+         /  \   /  \
+        4    8 1    5
+       / \  / \
+      0   3 2  7
+		'''
+		assert h.items == [10, 9, 6, 4, 8, 1, 5, 0, 3, 2, 7]
+
+		caught_exception = False
+		try:
+			h.decreaseKey(4, 10)
+		except ValueError as v:
+			assert v.message == "ValueError: decreaseKey() - New key should be lesser than current value"
+			caught_exception = True
+		assert caught_exception == True
+
+		h.decreaseKey(0, -1)
+		'''
+              9
+            /   \
+           8     6
+         /  \   /  \
+        4    7 1    5
+       / \  / \
+      0   3 2 -1
+		'''
+
+		assert h.items == [9, 8, 6, 4, 7, 1, 5, 0, 3, 2, -1]
+
 
 
 	# TODO: Needs fix from here on

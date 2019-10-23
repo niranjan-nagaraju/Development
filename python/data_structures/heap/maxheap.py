@@ -12,10 +12,14 @@ class MaxHeap(Heap):
 
 
 	'''
-	decreaseKey() is invalid for a max heap
+	decreaseKey() on a maxHeap is the same as increaseKey() on a minHeap
+	The current item gets bubbled down
 	'''
 	def decreaseKey(self, i, new):
-		raise AttributeError('Heap object has no attribute decreaseKey')
+		try:
+			Heap.increaseKey(self, i, new)
+		except ValueError:
+			raise ValueError("%s: %s() - New key should be lesser than current value" %('ValueError', "decreaseKey"))
 
 	
 	'''
@@ -43,14 +47,4 @@ class MaxHeap(Heap):
 		return inList
 
 
-
-if __name__ == '__main__':
-	caught_exception = False
-	try:
-		h = MaxHeap()
-		assert h.decreaseKey(0, 5)
-	except AttributeError:
-		caught_exception = True
-
-	assert caught_exception == True
 

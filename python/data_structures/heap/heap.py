@@ -191,6 +191,20 @@ class Heap(object):
 
 
 	'''
+	Increase key of item at index 'i' to new
+	new should be >  items[i]
+	NOTE: decreaseKey() is the common operation because it promotes an item up the tree in a heap
+	However, there's no reason why increaseKey() cannot be supported.
+	NOTE: increaseKey() promotes up the tree for a maxheap.
+	'''
+	def increaseKey(self, i, new):
+		if not self.comparatorfn(new, self.items[i]) > 0:
+			raise ValueError("%s: %s() - New key should be greater than current value" %('ValueError', self.increaseKey.__name__))
+		self.items[i] = new
+		self.bubble_down(len(self.items), i)
+
+
+	'''
 	Uses bubble_down to build heap out of a list/iterable starting from 
 	first non-leaf node from the bottom 
 	'''
