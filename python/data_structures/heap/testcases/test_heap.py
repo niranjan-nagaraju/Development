@@ -25,6 +25,43 @@ class TestHeap(unittest.TestCase):
 			self.assertEqual (h.items, intermediate_heaps[i])
 
 
+
+	# get []
+	def test_getitem(self):
+		l = range(10, -1, -1)
+		h = Heap()
+
+		caught_exception = False
+		try:
+			print h[1]
+		except HeapEmptyError:
+			caught_exception = True
+		assert caught_exception == True
+
+		for i in xrange(len(l)):
+			h.add(l[i])
+
+		caught_exception = False
+		try:
+			print h[-2]
+		except IndexError:
+			caught_exception = True
+		assert caught_exception == True
+
+		assert len(h) == 11
+		caught_exception = False
+		try:
+			print h[11]
+		except IndexError:
+			caught_exception = True
+		assert caught_exception == True
+
+		x = [0, 1, 5, 4, 2, 9, 6, 10, 7, 8, 3]
+		for i in xrange(10):
+			assert h[i] == x[i]
+
+
+
 	def test_remove(self):
 		l = [5,4,3,2,1,6,7,8,9,0]
 		h = Heap()
@@ -113,6 +150,49 @@ class TestHeap(unittest.TestCase):
      11   7 9 10
 	  '''
 		assert h.items == [0, 2, 4, 3, 6, 5, 8, 11, 7, 9, 10]
+
+
+	# Test [] assignment
+	def test_setitem(self):
+		l = [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+		h = Heap()
+		h.items = l
+
+		'''
+              0
+            /   \
+           1     4
+         /  \   /  \
+        2    6 5    8
+       / \  / \
+      3   7 9 10
+		'''
+
+		assert h[4] == 6
+		h[4] = 0 # calls decreaseKey
+		'''
+              0
+            /   \
+           0     4
+         /  \   /  \
+        2    1 5    8
+       / \  / \
+      3   7 9 10
+		'''
+		assert h.items == [0, 0, 4, 2, 1, 5, 8, 3, 7, 9, 10]
+
+		assert h[1] ==  0
+		h[1] = 11 # calls increaseKey
+		'''
+              0
+            /   \
+           1     4
+         /  \   /  \
+        2    9 5    8
+       / \  / \
+      3   7 11 10
+		'''
+		assert h.items == [0, 1, 4, 2, 9, 5, 8, 3, 7, 11, 10]
 
 
 	def test_sorted(self):

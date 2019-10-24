@@ -64,9 +64,19 @@ class Heap(object):
 		return f
 
 
+	# []
+	@check_empty
+	def __getitem__(self, i):
+		if (i < 0 or i >= len(self.items)):
+			raise IndexError
+		return self.items[i] 
+
+
+
 	@check_empty
 	def peek(self):
 		return self.items[0]
+
 
 	'''
 	All items after index: n/2-1 are leaf nodes in a heap
@@ -202,6 +212,24 @@ class Heap(object):
 			raise ValueError("%s: %s() - New key should be greater than current value" %('ValueError', self.increaseKey.__name__))
 		self.items[i] = new
 		self.bubble_down(len(self.items), i)
+
+
+	'''
+	[] : update item at index i
+	'''
+	@check_empty
+	def __setitem__(self, i, value):
+		if (i < 0 and i >= len(self.items)):
+			raise IndexError
+
+		if self.comparatorfn(value, self.items[i]) < 0:
+			# If new value is lesser, Use decreaseKey() to bubble up
+			self.decreaseKey(i, value)
+		elif self.comparatorfn(value, self.items[i]) > 0:
+			# If new value is greater, Use increaseKey() to bubble down
+			self.increaseKey(i, value)
+		else:
+			self.items[i] = value
 
 
 	'''

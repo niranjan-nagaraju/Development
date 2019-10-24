@@ -13,6 +13,16 @@ class PriorityQueue(Heap):
 		self.add(item)
 
 
+	# Increase priority of item at index 'i' based on 'new' value
+	# new should be < current
+	def promote(self, i, new):
+		self.decreaseKey(i, new)
+
+	# Decrease priority of item at index 'i' based on 'new' value
+	# new should be > current
+	def demote(self, i, new):
+		self.increaseKey(i, new)
+
 
 # basic priority queue testcases
 def basic_testcases():
@@ -86,16 +96,49 @@ def basic_testcases():
 
 	assert pq.items == [('Job3', 7), ('Job2', 3), ('Job1', 4), ('Job4', 1), ('Job5', 3)]
 
-	# Use default cmp(), in a pair (a,b), (c,d)
-	# (a,b) < (c,d) if a<b
-	pq = PriorityQueue()
+	# Lower value => Higher priority
+	pq = PriorityQueue(comparatorfn = lambda (a,p1),(b,p2): cmp(p1,p2))
 	pq.enqueue(("Job4", 4))
 	pq.enqueue(("Job3", 3))
 	pq.enqueue(("Job7", 7))
 	pq.enqueue(("Job1", 1))
-	pq.enqueue(("Job3", 11))
+	pq.enqueue(("JobX", 11))
 
-	assert pq.items == [('Job1', 1), ('Job3', 3), ('Job7', 7), ('Job4', 4), ('Job3', 11)]
+	'''
+          1
+        /   \
+       3     7
+     /  \
+    4   11
+	'''
+	assert pq.items == [('Job1', 1), ('Job3', 3), ('Job7', 7), ('Job4', 4), ('JobX', 11)]
+	pq.promote(4, ('JobX', 1))
+	'''
+          1
+        /   \
+       1     7
+     /  \
+    4    3
+	'''
+	assert pq.items == [('Job1', 1), ('JobX', 1), ('Job7', 7), ('Job4', 4), ('Job3', 3)]
+	pq.demote(1, ('JobX', 2))
+	'''
+          1
+        /   \
+       2     7
+     /  \
+    4    3
+	'''
+	assert pq.items == [('Job1', 1), ('JobX', 2), ('Job7', 7), ('Job4', 4), ('Job3', 3)]
+	pq.demote(1, ('JobX', 6))
+	'''
+          1
+        /   \
+       3     7
+     /  \
+    4    6
+	'''
+	assert pq.items == [('Job1', 1), ('Job3', 3), ('Job7', 7), ('Job4', 4), ('JobX', 6)]
 
 
 if __name__ == '__main__':

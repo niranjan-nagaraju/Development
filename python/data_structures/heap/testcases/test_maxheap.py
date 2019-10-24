@@ -24,6 +24,40 @@ class TestHeap(unittest.TestCase):
 			h.add(l[i])
 			assert h.items == intermediate_heaps[i]
 
+	# get []
+	def test_getitem(self):
+		l = range(11)
+		h = MaxHeap()
+
+		caught_exception = False
+		try:
+			print h[1]
+		except HeapEmptyError:
+			caught_exception = True
+		assert caught_exception == True
+
+		for i in l:
+			h.add(i)
+
+		caught_exception = False
+		try:
+			print h[-2]
+		except IndexError:
+			caught_exception = True
+		assert caught_exception == True
+
+		assert len(h) == 11
+		caught_exception = False
+		try:
+			print h[11]
+		except IndexError:
+			caught_exception = True
+		assert caught_exception == True
+
+		x = [10, 9, 5, 6, 8, 1, 4, 0, 3, 2, 7]
+		for i in xrange(11):
+			assert h[i] == x[i]
+
 
 	def test_remove(self):
 		l = [5,4,3,2,1,6,7,8,9,0]
@@ -146,6 +180,53 @@ class TestHeap(unittest.TestCase):
 		'''
 
 		assert h.items == [9, 8, 6, 4, 7, 1, 5, 0, 3, 2, -1]
+
+
+	# Test [] assignment
+	def test_setitem(self):
+		l = [0, 1, 4, 2, 6, 5, 8, 3, 7, 9, 10]
+		h = MaxHeap()
+
+		for x in l:
+			h.add(x)
+
+		'''
+             10
+            /   \
+           9     6
+         /  \   /  \
+        4    8 1    5
+       / \  / \
+      0   3 2  7
+		'''
+		assert h.items == [10, 9, 6, 4, 8, 1, 5, 0, 3, 2, 7]
+
+		assert h[4] == 8
+		h[4] = 11 # calls MaxHeap's decreaseKey
+
+		'''
+             11
+            /   \
+          10     6
+         /  \   /  \
+        4    9 1    5
+       / \  / \
+      0   3 2  7
+		'''
+		assert h.items == [11, 10, 6, 4, 9, 1, 5, 0, 3, 2, 7]
+
+		assert h[0] ==  11
+		h[0] = -1 # calls decreaseKey
+		'''
+             10
+            /   \
+           9     6
+         /  \   /  \
+        4    7 1    5
+       / \  / \
+      0   3 2 -1
+		'''
+		assert h.items == [10, 9, 6, 4, 7, 1, 5, 0, 3, 2, -1]
 
 
 

@@ -12,6 +12,20 @@ class MaxHeap(Heap):
 
 
 	'''
+	decorator to ensure heap is not empty
+	on heap operations that modify the heap
+	'''
+	def check_empty(func):
+		def f(self, *args, **kwargs):
+			if len(self.items) == 0:
+				raise HeapEmptyError("HeapEmptyError: '%s(): Heap is empty'" %(func.__name__))
+			rv = func(self, *args, **kwargs)
+			return rv
+		return f
+
+
+
+	'''
 	decreaseKey() on a maxHeap is the same as increaseKey() on a minHeap
 	The current item gets bubbled down
 	'''
@@ -31,6 +45,25 @@ class MaxHeap(Heap):
 			Heap.decreaseKey(self, i, new)
 		except ValueError:
 			raise ValueError("%s: %s() - New key should be greater than current value" %('ValueError', "increaseKey"))
+
+
+	'''
+	[] : update item at index i
+	override parent class' minheap based update
+	'''
+	@check_empty
+	def __setitem__(self, i, value):
+		if (i < 0 and i >= len(self.items)):
+			raise IndexError
+
+		if self.comparatorfn(value, self.items[i]) < 0:
+			# If new value is greater, Use increaseKey() to bubble down
+			self.increaseKey(i, value)
+		elif self.comparatorfn(value, self.items[i]) > 0:
+			# If new value is lesser, Use decreaseKey() to bubble up
+			self.decreaseKey(i, value)
+		else:
+			self.items[i] = value
 
 
 
