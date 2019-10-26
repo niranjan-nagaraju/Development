@@ -451,7 +451,8 @@ class Graph(GraphBase):
 
 		for v in xrange(self.vertices):
 			# Start a DFS-based topological sort at vertex 0,
-			# and continue for all unconnected components
+			# and continue for all vertices not reachable
+			# from vertices visited so far
 			if not visited[v]:
 				_topsort_dfs_util(v)
 
