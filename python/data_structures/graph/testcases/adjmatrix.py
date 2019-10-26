@@ -441,9 +441,64 @@ def test_paths():
 	test_paths_directed()
 	test_paths_undirected()
 
+
+'''
+Test toplogical sort on DAGs
+'''
+def test_topological_sort():
+	g = Graph(7, directed=True)
+	g.add_edge(0, 1)
+	g.add_edge(0, 2)
+	g.add_edge(0, 3)
+	g.add_edge(0, 4)
+	g.add_edge(1, 5)
+	g.add_edge(2, 5)
+	g.add_edge(3, 5)
+	g.add_edge(5, 6)
+	g.add_edge(4, 6)
+
+	'''
+	    1
+	  ↗   ↘ 
+	0 → 2 → 5 → 6
+    ↓↘     ↗    ↑  
+	↓   3     ↗  
+	↘       ↗ 
+	  4 → ↗ 
+	'''
+	s = g.topological_sort()
+	l = [0, 4, 3, 2, 1, 5, 6]
+	for i in xrange(7):
+		assert s.pop() == l[i]
+
+	'''
+    0     1
+     ↘  ↙ |
+	   2  |
+     ↙    ↓
+    3     4
+     ↘  ↙ 
+       5
+	   ↓
+	   6
+	'''
+	g = Graph(7, directed=True)
+	g.add_edge(0, 2)
+	g.add_edge(1, 2)
+	g.add_edge(1, 4)
+	g.add_edge(2, 3)
+	g.add_edge(3, 5)
+	g.add_edge(4, 5)
+	g.add_edge(5, 6)
+
+	assert str(g.topological_sort()) == "[7]: 1 4 0 2 3 5 6"
+
+
+
 if __name__ == '__main__':
 	basic_testcases()
 	test_dfs()
 	test_bfs()
 	test_paths()
+	test_topological_sort()
 

@@ -421,3 +421,43 @@ class Graph(GraphBase):
 		return []
 
 
+
+	'''
+	Get a topological sort order of vertices given a DAG
+	Returns a stack containing the ordering
+	'''
+	def topological_sort(self):
+		# Topological sort is ambiguous on undirected graphs
+		if not self.directed:
+			raise TypeError
+
+		# Do a DFS traversal, adding vertices to the stack
+		# once all its neighbors have been visited
+		def _topsort_dfs_util(curr_vertex):
+			if visited[curr_vertex]:
+				return
+
+			visited[curr_vertex] = True
+			for v in xrange(self.vertices):
+				if self._adjmatrix[curr_vertex][v] is not None:
+					_topsort_dfs_util(v)
+
+			# All neighbors of vertex, curr_vertex, have been visited
+			# add curr_vertex to stack
+			stack.push(curr_vertex)
+
+
+		# call helper function
+		stack = Stack()
+		visited = [False] * self.vertices
+
+		for v in xrange(self.vertices):
+			# Start a DFS-based topological sort at vertex 0,
+			# and continue for all unconnected components
+			if not visited[v]:
+				_topsort_dfs_util(v)
+
+		return stack
+
+
+
