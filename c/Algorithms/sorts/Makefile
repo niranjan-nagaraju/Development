@@ -1,29 +1,15 @@
 BASE_DIR=../..
 
 # Include files
-INCLUDE +=-I$(PWD) -I$(BASE_DIR)/common
+INCLUDE +=-I$(PWD)/include -I$(BASE_DIR)/common/include
 
 # Library filenames, _MT for multi-threaded version
 LIBNAME=sort
 
-# Source directory for the library
-SRC = sort_common.c
-SRC += bubble_sort.c bubble_sortR.c
-# SRC += counting_sort.c
-# SRC += heap_sort.c              
-SRC += insertion_sort.c
-SRC += merge_sort.c             
-SRC += quick_sort.c    
-# SRC += radix_sort.c             
-SRC += selection_sort.c
-
 # Testcases directory
-TESTDIR = testcases
-
-# Testcases for single-threaded library
-TEST_SRC = test_sorts.c
+TEST_SUBDIRS = testcases
 
 # library flags
-LDFLAGS += -lpthread -L$(BASE_DIR)/common/$(OUTDIR) -lcommon
+LDFLAGS += -L$(BASE_DIR)/common/$(OBJDIR) -lcommon
 
-include $(BASE_DIR)/build/GlobalMake
+include $(BASE_DIR)/build/Makefile.inc

@@ -4,8 +4,6 @@ void insertion_sort( int a[], int n)
 {
 	int i, j, key;
 
-	printf("%s\n", __func__);
-
 	for (i=1; i<n; i++) {
 		key = a[i];
 		j = i - 1;

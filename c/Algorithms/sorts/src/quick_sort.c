@@ -5,7 +5,6 @@ void quick_sort_helper(int a[], int lb, int ub);
 
 void quick_sort(int a[], int n)
 {
-	printf("%s\n", __func__);
 	quick_sort_helper(a, 0, n-1);
 }
 

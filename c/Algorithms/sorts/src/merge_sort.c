@@ -5,8 +5,6 @@ void merge(int a[], int b[], int la, int lb);
 
 void merge_sort (int a[], int n)
 {
-	printf("%s\n", __func__);
-
 	merge_sort_helper(a, 0, n-1);
 }
 
