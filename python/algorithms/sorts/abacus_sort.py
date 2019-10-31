@@ -6,7 +6,7 @@ Abacus sort / Bead sort/ Gravity sort (efficient O(n) space, O(mn) time) impleme
 
 
 '''
-Version 1: Scan input array L-R so the temp array is sorted in ascending order
+Version 1: Scan input array R-L so the temp array is sorted in ascending order
 Sample run:
 a[]: 2 5 1 4
 
