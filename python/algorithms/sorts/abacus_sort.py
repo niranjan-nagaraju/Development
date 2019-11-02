@@ -195,6 +195,7 @@ def abacus_sort(a):
 		a[i] = temp[i]
 
 
+	return a
 
 
 '''
@@ -300,25 +301,57 @@ def abacus_sort_2(a):
 	for i in xrange(n):
 		a[i] = temp[n-i-1]
 
+	return a
+
+
+# Move from maximum to minimum downwards
+# simulating stacking up of the beads from the bottom-up
+def abacus_sort_3(a):
+	minimum, maximum = a[0], a[0]
+	n = len(a)
+
+	for x in a[1:]:
+		# a[i] cannot be both maximum and minimum at the same time
+		if x < minimum:
+			minimum = x
+		elif x > maximum:
+			maximum = x
+
+	# Initialize a temporary array filled with minimum
+	temp = [minimum] * n
+	for i in xrange(maximum-1, minimum-1, -1):
+		k = 0
+		for j in xrange(n):
+			if a[j] > i:
+				temp[k] += 1
+				k += 1
+
+	# Copy temp array back into original array
+	# replacing the array into sorted order
+	# temp array is reverse sorted, so copy backwards for ascending order
+	for i in xrange(n):
+		a[i] = temp[n-i-1]
+
+	return a
 
 
 def test_abacus_sort(sortfn):
 	a = [2,5,1,4]
-	sortfn(a)
-	assert a == [1,2,4,5]
+	assert sortfn(a) == [1,2,4,5]
 
 	b = [1, 2, 4, 2, 5, 3, 2, 3, 4]
-	sortfn(b)
-	assert b == [1,2,2,2,3,3,4,4,5]
+	assert sortfn(b) == [1,2,2,2,3,3,4,4,5]
 
 	# negative numbers
 	c = [3, -1 , 2, -2, 4, 0, 1, 5, 3]
-	sortfn(c)
-	assert c == [-2, -1, 0, 1, 2, 3, 3, 4, 5]
+	assert sortfn(c) == [-2, -1, 0, 1, 2, 3, 3, 4, 5]
+
+	assert sortfn([5, 3, 1, 7, 4, 1, 1, 20]) == [1, 1, 1, 3, 4, 5, 7, 20]
 
 
 if __name__ == '__main__':
 	test_abacus_sort(abacus_sort)
 	test_abacus_sort(abacus_sort_2)
+	test_abacus_sort(abacus_sort_3)
 
 
