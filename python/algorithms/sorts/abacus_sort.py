@@ -348,6 +348,8 @@ def test_abacus_sort(sortfn):
 
 	assert sortfn([5, 3, 1, 7, 4, 1, 1, 20]) == [1, 1, 1, 3, 4, 5, 7, 20]
 
+	assert sortfn([5, -1, 3, -2, 4, -3]) == [-3, -2, -1, 3, 4, 5]
+
 
 if __name__ == '__main__':
 	test_abacus_sort(abacus_sort)
