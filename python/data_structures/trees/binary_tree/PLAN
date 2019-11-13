@@ -13,7 +13,7 @@
 + [X] Construct tree from pre+in(order) or post+in(order) traversals
 + [X] Flatten a binary tree into a DLL/SLL (ordered by in/pre/post order traversals)
 + [ ] isBST()
-+ [ ] Clone Binary Tree
++ [X] Clone Binary Tree
 + [ ] Mirror Binary Tree
 + [ ] Diagonal traversals
 + [ ] Make Tree from preorder traversal (+additional info stating if each node is a leaf/non-leaf)
