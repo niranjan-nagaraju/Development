@@ -133,5 +133,5 @@ testcases =
 
 main :: IO()
 main = do
-	putStrLn  $ testcases ++ "Testcases passed!"
+	putStr $ testcases
 
