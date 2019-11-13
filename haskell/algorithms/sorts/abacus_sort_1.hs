@@ -19,7 +19,7 @@ count_greater i lst = length $ filter (>i) lst
 {-
  - Iterate down to 0 from n
  - At each iteration, count number of elements in input list that are greater than current iteration/row i
- - Increment as many elements in the temporary list from the elements, as the count from previous step.
+ - Increment as many elements in the temporary list from the left, as the count from previous step.
  -}
 abacus_sort' :: [Int] -> [Int] -> Int -> [Int]
 abacus_sort' lst temp n 
