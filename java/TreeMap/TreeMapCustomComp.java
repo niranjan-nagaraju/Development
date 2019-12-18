@@ -31,6 +31,7 @@ public class TreeMapCustomComp {
         apps_list.put("com.nodroid.eclair", "eclair");
         apps_list.put("pkg.android.kitkat", "kitkat");
         apps_list.put("code.droid.gingerbread", "gingerbread");
+        apps_list.put("android.froyo", "froyd");
 
         System.out.println("Treemap: " + apps_list);
         
@@ -44,7 +45,7 @@ public class TreeMapCustomComp {
 Treemap: {com.android.donut=donut, com.nodroid.eclair=eclair, android.froyo=froyo, code.droid.gingerbread=gingerbread, pkg.android.kitkat=kitkat}
 com.android.donut: donut
 com.nodroid.eclair: eclair
-android.froyo: froyo
+android.froyo: froyd
 code.droid.gingerbread: gingerbread
 pkg.android.kitkat: kitkat
 */
