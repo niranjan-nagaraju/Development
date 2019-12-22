@@ -82,7 +82,7 @@ def basic_tests():
 
 
 	# fromList and toList
-	assert(SLL.toList(SLL.fromList(range(9, 0, -2))) == range(9, 0, -2))
+	assert(SLL.fromList(range(9, 0, -2)).toList() == range(9, 0, -2))
 
 
 
@@ -275,7 +275,7 @@ def test_findMatchingNode():
 	node.value = (0, 'e')
 	assert node == s2.head.next.next.next
 	assert node.value == (0, 'e')
-	assert SLL.toList(s2) == [(2,1), (1, 'a'), (2, 3), (0, 'e'), (4,1), (3,0)]
+	assert s2.toList() == [(2,1), (1, 'a'), (2, 3), (0, 'e'), (4,1), (3,0)]
 
 
 

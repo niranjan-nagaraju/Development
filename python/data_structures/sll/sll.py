@@ -143,10 +143,9 @@ class SLL(object):
 
 
 	# Return a List constructed from SLL items
-	@staticmethod
-	def toList(sll):
+	def toList(self):
 		l = []
-		for x in sll:
+		for x in self:
 			l.append(x)
 
 		return l
