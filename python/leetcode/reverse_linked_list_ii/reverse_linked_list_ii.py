@@ -68,7 +68,8 @@ class Solution:
 
 		# end is now at a, end's (earlier) next node is at c (also == b)
 
-		# Adjust end to point to beforeStart, and start to point to end
+		# Adjust beforeStart to point to end,
+		# and start to point to end's next node in the original list
 		start.next = c
 
 		if beforeStart:
