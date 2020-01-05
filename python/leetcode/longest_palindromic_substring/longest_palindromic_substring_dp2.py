@@ -121,8 +121,8 @@ class Solution(object):
 		for i in xrange(3, n+1):
 			curr_len = i
 			for j in xrange(0, n-i+1):
-				if Solution.isPalindrome(s, j, j+i-1, palindrome_set) and \
-				   max_len < curr_len:
+				if ( Solution.isPalindrome(s, j, j+i-1, palindrome_set) and
+					 max_len < curr_len ):
 						max_sIdx, max_len = j, curr_len
 					
 		return s[max_sIdx : max_sIdx+max_len]
