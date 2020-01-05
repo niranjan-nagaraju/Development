@@ -138,3 +138,6 @@ if __name__ == '__main__':
 	assert s.longestPalindrome("cbbd") == "bb"
 	assert s.longestPalindrome("babad") == "bab"
 	assert s.longestPalindrome("aaaabcaaa") == "aaaa"
+	assert s.longestPalindrome("racecar") == "racecar"
+	assert s.longestPalindrome("mississippi") == "ississi"
+
