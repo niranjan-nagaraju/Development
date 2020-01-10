@@ -137,4 +137,4 @@ if __name__ == '__main__':
 	assert longestPalindrome("aaaabcaaa") == "aaaa"
 	assert longestPalindrome("racecar") == "racecar"
 	assert longestPalindrome("mississippi") == "ississi"
-
+	assert longestPalindrome("babaddtattarrattatddetartrateedredividerb") == "ddtattarrattatdd"
