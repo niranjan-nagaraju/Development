@@ -132,4 +132,8 @@ if __name__ == '__main__':
 	assert n.find() == [-1, -1, -1, -1]
 	assert n.findCircular() == [-1,4,4,4]
 
+	n = NextGreaterElement([4,5,6,1,2,7])
+	assert n.find() == [5,6,7,2,7,-1]
+	assert n.findCircular() == [5,6,7,2,7,-1]
+
 
