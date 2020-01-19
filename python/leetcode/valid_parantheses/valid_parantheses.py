@@ -78,11 +78,11 @@ class Solution(object):
 
 		for p in s:
 			if p in ('(', '[', '{'):
-				stack.insert(0, p)
+				stack.append(p)
 			else:
-				if not stack or stack[0] != matching_pairs(p):
+				if not stack or stack[-1] != matching_pairs(p):
 					return False
-				stack.pop(0)
+				stack.pop()
 
 		return True if not stack else False
 
