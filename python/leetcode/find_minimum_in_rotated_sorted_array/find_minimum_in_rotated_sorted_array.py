@@ -68,4 +68,5 @@ if __name__ == '__main__':
 	assert s.findMin([4,5,1,2,3]) == 1
 	assert s.findMin([6,7,3,4,5]) == 3
 	assert s.findMin([2,3,4,5,6]) == 2 # no rotation
+	assert s.findMin([1,3,5]) == 1 # no rotation
 
