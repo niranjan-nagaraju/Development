@@ -51,8 +51,8 @@ def binary_search_i(lst, key, l=0, h=None):
 
 
 
-# If not explicity called, use recursive binary search as default
-binary_search = binary_search_r
+# If not explicity called, use iterative binary search as default
+binary_search = binary_search_i
 
 
 def test_binary_search(search_f):
@@ -90,6 +90,6 @@ def test_binary_search(search_f):
 
 # basic testcases
 if __name__ == "__main__":
+	test_binary_search(binary_search_r)
 	test_binary_search(binary_search)
-	test_binary_search(binary_search_i)
 
