@@ -100,11 +100,11 @@ findRightMost(5, 9, 4):
 return (2,6)
 '''
 
-from binary_search import binary_search_i
+from binary_search import binary_search_i as binary_search
 
 # Returns the first and last occurence of 'element' in array
 def findFirstLast(array, element):
-	match = binary_search_i(array, element)
+	match = binary_search(array, element)
 
 	if match == -1:
 		return (-1, -1)
@@ -150,7 +150,7 @@ def findRightMost(array, element, l, h, position):
 
 	
 if __name__ == '__main__':
-	assert binary_search_i([1,1,2,2,2,2,2,3,3,3], 2) == 4
+	assert binary_search([1,1,2,2,2,2,2,3,3,3], 2) == 4
 
 	assert findLeftMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 9) == 2
 	assert findRightMost([1,1,2,2,2,2,2,3,3,3], 2, 0, 9, 0) == 6
