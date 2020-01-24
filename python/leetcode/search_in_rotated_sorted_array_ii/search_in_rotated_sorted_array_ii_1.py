@@ -1,26 +1,27 @@
 '''
-https://leetcode.com/problems/search-in-rotated-sorted-array/
+https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
 
-33. Search in Rotated Sorted Array
+81. Search in Rotated Sorted Array II
 
 Suppose an array sorted in ascending order is rotated at some pivot unknown to you beforehand.
 
-(i.e., [0,1,2,4,5,6,7] might become [4,5,6,7,0,1,2]).
+(i.e., [0,0,1,2,2,5,6] might become [2,5,6,0,0,1,2]).
 
-You are given a target value to search. If found in the array return its index, otherwise return -1.
-
-You may assume no duplicate exists in the array.
-
-Your algorithm's runtime complexity must be in the order of O(log n).
+You are given a target value to search. If found in the array return true, otherwise return false.
 
 Example 1:
-Input: nums = [4,5,6,7,0,1,2], target = 0
-Output: 4
+Input: nums = [2,5,6,0,0,1,2], target = 0
+Output: true
 
 Example 2:
-Input: nums = [4,5,6,7,0,1,2], target = 3
-Output: -1
+Input: nums = [2,5,6,0,0,1,2], target = 3
+Output: false
+
+Follow up:
+This is a follow up problem to Search in Rotated Sorted Array, where nums may contain duplicates.
+Would this affect the run-time complexity? How and why?
 '''
+
 
 '''
 Solution 1:
@@ -31,7 +32,7 @@ class Solution(object):
 		"""
 		:type nums: List[int]
 		:type target: int
-		:rtype: int
+		:rtype: bool
 		"""
 
 		# Given a rotated sorted array, return the index
@@ -43,6 +44,13 @@ class Solution(object):
 			l, h = 0, len(lst)-1
 			pivot_candidate = l
 			while l <= h:
+				# Down to last 2 elements
+				# If they are both equql, return the first of the pair
+				# as the pivot
+				if l == h-1:
+					if lst[l] == lst[h]:
+						return l
+
 				# Current window [l, h] is in sorted order
 				# Check if the minimum element exists in lst[l]
 				# If so, we are done here since we keep narrowing down the window
@@ -57,7 +65,7 @@ class Solution(object):
 					# and narrow the window down to exclude either ends.
 					if lst[l] == lst[h]:
 						l = l+1
-						h = h-1
+						#h = h-1
 					else:
 						# lst[l] < lst[h]
 						# Either l is the new minimum or we have already found the minimum
@@ -95,7 +103,7 @@ class Solution(object):
 				mid = (mid_ + pivot) % n
 
 				if lst[mid] == key:
-					return mid
+					return True
 				elif key > lst[mid]:
 					# key is in the right half
 					l = (mid_ + 1)
@@ -104,7 +112,7 @@ class Solution(object):
 					h = (mid_ - 1)
 
 			# couldn't find key
-			return -1
+			return False
 
 
 		# Call helper function
@@ -112,46 +120,49 @@ class Solution(object):
 
 
 
-
 if __name__ == '__main__':
 	s = Solution()
-	assert s.search([4,5,6,7,0,1,2], 0) == 4
-	assert s.search([4,5,6,7,0,1,2], 3) == -1
+	assert s.search([4,5,6,7,0,1,2], 0) == True
+	assert s.search([4,5,6,7,0,1,2], 3) == False
 
-	assert s.search([4,5,6,7,1,2], 1) == 4
-	assert s.search([4,5,6,7,1,2], 2) == 5
-	assert s.search([4,5,6,7,1,2], 0) == -1
-	assert s.search([4,5,6,7,1,2], 4) == 0
-	assert s.search([4,5,6,7,1,2], 5) == 1
-	assert s.search([4,5,6,7,1,2], 6) == 2
-	assert s.search([4,5,6,7,1,2], 7) == 3
+	assert s.search([4,5,6,7,1,2], 1) == True
+	assert s.search([4,5,6,7,1,2], 2) == True
+	assert s.search([4,5,6,7,1,2], 0) == False
+	assert s.search([4,5,6,7,1,2], 4) == True
+	assert s.search([4,5,6,7,1,2], 5) == True
+	assert s.search([4,5,6,7,1,2], 6) == True
+	assert s.search([4,5,6,7,1,2], 7) == True
 
-	assert s.search([4,5,1,2,3], 4) == 0
-	assert s.search([4,5,1,2,3], 5) == 1
-	assert s.search([4,5,1,2,3], 1) == 2
-	assert s.search([4,5,1,2,3], 2) == 3
-	assert s.search([4,5,1,2,3], 3) == 4
-	assert s.search([4,5,1,2,3], 6) == -1
-	assert s.search([4,5,1,2,3], 0) == -1
+	assert s.search([4,5,1,2,3], 4) == True
+	assert s.search([4,5,1,2,3], 5) == True
+	assert s.search([4,5,1,2,3], 1) == True
+	assert s.search([4,5,1,2,3], 2) == True
+	assert s.search([4,5,1,2,3], 3) == True
+	assert s.search([4,5,1,2,3], 6) == False
+	assert s.search([4,5,1,2,3], 0) == False
 
-	assert s.search([3,1,3], 0) == -1
-	assert s.search([3,1,3], 3) == 2
-	assert s.search([3,1,3], 1) == 1
+	assert s.search([3,1,3], 0) == False
+	assert s.search([3,1,3], 3) == True
+	assert s.search([3,1,3], 1) == True
 
-	assert s.search([2,2,2,0,1], 2) == 0 # either of 0,1,2 will do
-	assert s.search([2,2,2,0,1], 0) == 3
-	assert s.search([2,2,2,0,1], 1) == 4
-	assert s.search([2,2,2,0,1], -1) == -1
-	assert s.search([2,2,2,0,1], 3) == -1
+	assert s.search([2,2,2,0,1], 2) == True
+	assert s.search([2,2,2,0,1], 0) == True
+	assert s.search([2,2,2,0,1], 1) == True
+	assert s.search([2,2,2,0,1], -1) == False
+	assert s.search([2,2,2,0,1], 3) == False
 
 	# Traditional binary search on an unrotated sorted array
 	# should work just as well
-	assert s.search([1,2,3,4,5,6,7], 1) == 0
-	assert s.search([1,2,3,4,5,6,7], 2) == 1
-	assert s.search([1,2,3,4,5,6,7], 3) == 2
-	assert s.search([1,2,3,4,5,6,7], 4) == 3
-	assert s.search([1,2,3,4,5,6,7], 5) == 4
-	assert s.search([1,2,3,4,5,6,7], 6) == 5
-	assert s.search([1,2,3,4,5,6,7], 7) == 6
+	assert s.search([1,2,3,4,5,6,7], 1) == True
+	assert s.search([1,2,3,4,5,6,7], 2) == True
+	assert s.search([1,2,3,4,5,6,7], 3) == True
+	assert s.search([1,2,3,4,5,6,7], 4) == True
+	assert s.search([1,2,3,4,5,6,7], 5) == True
+	assert s.search([1,2,3,4,5,6,7], 6) == True
+	assert s.search([1,2,3,4,5,6,7], 7) == True
 
+	assert s.search([2,5,6,0,0,1,2], 0) == True
+	assert s.search([2,5,6,0,0,1,2], 2) == True
+	assert s.search([2,5,6,0,0,1,2], 5) == True
+	assert s.search([2,5,6,0,0,1,2], 1) == True
 
