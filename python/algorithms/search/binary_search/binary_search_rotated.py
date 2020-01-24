@@ -78,3 +78,9 @@ if __name__ == '__main__':
 	assert binary_search_rotated([1,2,3,4,5,6,7], 6) == 5
 	assert binary_search_rotated([1,2,3,4,5,6,7], 7) == 6
 
+	assert find_pivot([2,5,6,0,0,1,2]) == 3
+	assert binary_search_rotated([2,5,6,0,0,1,2], 0) == 4  # either of 3/4
+	assert binary_search_rotated([2,5,6,0,0,1,2], 2) == 6  # either of 0 or 6 will do
+	assert binary_search_rotated([2,5,6,0,0,1,2], 5) == 1
+	assert binary_search_rotated([2,5,6,0,0,1,2], 1) == 5
+
