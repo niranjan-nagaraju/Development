@@ -114,7 +114,7 @@ def find_pivot(lst):
 				# pivot is in the left half
 				pivot_candidate = mid
 				h = mid-1
-			elif lst[mid] > lst[h]:
+			else: # lst[mid] > lst[h]
 				# pivot is in the right half
 				pivot_candidate = h
 				l = mid+1
