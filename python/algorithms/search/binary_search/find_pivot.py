@@ -9,8 +9,9 @@ pivot = 1
 '''
 
 '''
-Solution outline: O(log n)
-----------------
+Solution outline: O(log n)-ish
+-----------------------------
+O(n) if the number of repititions are ~n
 
 find_pivot:
 	l = 0, h=n-1
@@ -80,6 +81,13 @@ def find_pivot(lst):
 	l, h = 0, len(lst)-1
 	pivot_candidate = l
 	while l <= h:
+		# Down to last 2 elements
+		# If they are both equql, return the first of the pair
+		# as the pivot
+		if l == h-1:
+			if lst[l] == lst[h]:
+				return l
+
 		# Current window [l, h] is in sorted order
 		# Check if the minimum element exists in lst[l]
 		# If so, we are done here since we keep narrowing down the window
@@ -91,10 +99,10 @@ def find_pivot(lst):
 			pivot_candidate = minIndex(l, pivot_candidate)
 			# If both ends of the window are equal, the pivot might still exist inside it
 			# Check if either l,h can be a pivot candidate
-			# and narrow the window down to exclude either ends.
+			# and narrow the window down to exclude the left end.
 			if lst[l] == lst[h]:
 				l = l+1
-				h = h-1
+				#h = h-1
 			else:
 				# lst[l] < lst[h]
 				# Either l is the new minimum or we have already found the minimum
@@ -120,7 +128,9 @@ if __name__ == '__main__':
 	assert find_pivot([3,1,3]) == 1
 	assert find_pivot([1,1]) == 0
 	assert find_pivot([2,2,2,0,1]) == 3
-	assert find_pivot([2,2,2,1,1]) == 4 # either of 3/4 should work here
+	assert find_pivot([2,2,2,1,1]) == 3
+	assert find_pivot([1,3,1,1]) == 2
+	assert find_pivot([3,1,1,1]) == 1
 
 	# Solution should work even if there aren't any duplicates
 	# or if the sorted array wasn't rotated in the first place
