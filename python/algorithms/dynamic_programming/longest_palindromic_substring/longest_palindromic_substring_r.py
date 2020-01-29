@@ -78,8 +78,9 @@ def isPalindrome(s, startIdx, endIdx):
 	return True
 
 
-def longestPalindrome(s):
-	def longestPalindrome_r(s, l, r):
+# Find and return a (any if many such exist) longest palindromic substring of string 's'
+def longest_palindromic_substring(s):
+	def longest_palindromic_substring_r(s, l, r):
 		if l == r:
 			return (l,l)
 		elif l+1 == r: # 2 letters
@@ -90,25 +91,57 @@ def longestPalindrome(s):
 				# whole of s[l..r] is a palindrome
 				return (l, r)
 
-		ls, le = longestPalindrome_r(s, l, r-1)
-		rs, re = longestPalindrome_r(s, l+1, r)
+		ls, le = longest_palindromic_substring_r(s, l, r-1)
+		rs, re = longest_palindromic_substring_r(s, l+1, r)
 
 		# return the left/right palindrome substrings length whichever is longer
 		return (ls, le) if (le-ls) >= (re-rs) else (rs, re)
 
-	start, end = longestPalindrome_r(s, 0, len(s)-1)
+	start, end = longest_palindromic_substring_r(s, 0, len(s)-1)
 	return s[start:end+1]
+
+
+
+# Find and return the length of any longest palindromic substring of string 's'
+def longest_palindromic_substring_len(s):
+	def longest_palindromic_substring_len_r(s, l, r):
+		if l == r:
+			return 1
+
+		elif l+1 == r: # 2 letters
+			return 2 if s[l] == s[r] else 1
+
+		if s[l] == s[r]:
+			if isPalindrome(s, l+1, r-1):
+				# whole of s[l..r] is a palindrome
+				return (r-l+1)
+
+		left = longest_palindromic_substring_len_r(s, l, r-1)
+		right = longest_palindromic_substring_len_r(s, l+1, r)
+
+		# return the left/right palindrome substrings length whichever is longer
+		return max(left, right)
+
+	return longest_palindromic_substring_len_r(s, 0, len(s)-1)
 
 
 
 
 if __name__ == '__main__':
-	assert longestPalindrome("abcbd") == "bcb"
-	assert longestPalindrome("abcd") == "a"
-	assert longestPalindrome("cbbd") == "bb"
-	assert longestPalindrome("babad") == "bab"
-	assert longestPalindrome("aaaabcaaa") == "aaaa"
-	assert longestPalindrome("racecar") == "racecar"
-	assert longestPalindrome("mississippi") == "ississi"
-	#assert longestPalindrome("babaddtattarrattatddetartrateedredividerb") == "ddtattarrattatdd" # TLE
+	assert longest_palindromic_substring("abcbd") == "bcb"
+	assert longest_palindromic_substring("abcd") == "a"
+	assert longest_palindromic_substring("cbbd") == "bb"
+	assert longest_palindromic_substring("babad") == "bab"
+	assert longest_palindromic_substring("aaaabcaaa") == "aaaa"
+	assert longest_palindromic_substring("racecar") == "racecar"
+	assert longest_palindromic_substring("mississippi") == "ississi"
+	#assert longest_palindromic_substring("babaddtattarrattatddetartrateedredividerb") == "ddtattarrattatdd" # TLE
+
+	assert longest_palindromic_substring_len("abcbd") == 3
+	assert longest_palindromic_substring_len("abcd") == 1
+	assert longest_palindromic_substring_len("cbbd") == 2
+	assert longest_palindromic_substring_len("babad") == 3
+	assert longest_palindromic_substring_len("aaaabcaaa") == 4
+	assert longest_palindromic_substring_len("racecar") == 7
+	assert longest_palindromic_substring_len("mississippi") == 7
 
