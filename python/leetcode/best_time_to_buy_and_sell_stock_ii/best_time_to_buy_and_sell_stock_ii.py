@@ -119,7 +119,6 @@ class Solution(object):
 		if not prices:
 			return 0
 
-		buy = prices[0]
 		profit= 0
 		curr_profit = 0
 		total_profit = 0
@@ -135,7 +134,6 @@ class Solution(object):
 				# Book profits by selling on day {i-1} if there was a profit
 				if profit > 0:
 					total_profit += profit
-				buy = prices[i]
 				curr_profit = 0
 				profit = 0
 
