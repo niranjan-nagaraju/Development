@@ -1,3 +1,4 @@
+#encoding: utf-8
 '''
 https://www.interviewbit.com/problems/largest-rectangle-in-histogram/
 
@@ -196,3 +197,44 @@ Sample run 2:
 	  max area = 5
 	max area = 5
 '''
+
+class Solution:
+	def largest_rectangle(self, histogram):
+		stack = []
+		max_area = 0
+
+		i = 0
+		while i < len(histogram):
+			while stack and stack[-1][0] >= histogram[i]:
+				x, idx = stack.pop()
+				if not stack:
+					idx = 0
+
+				area = (i-idx) * x
+				if area > max_area:
+					max_area = area
+
+			stack.append((histogram[i], i))
+
+			i += 1
+
+		while stack:
+			x, idx = stack.pop()
+			if not stack:
+				idx = 0
+
+			area = (i-idx) * x
+			if area > max_area:
+				max_area = area
+
+		return max_area
+
+
+
+if __name__ == '__main__':
+	s = Solution()
+	assert s.largest_rectangle([2,1,5,6,2,3]) == 10
+	assert s.largest_rectangle([3,2,1,2,3]) == 5
+	print s.largest_rectangle([6, 2, 5, 4, 5, 1, 6]) # prints 10 correct answer should be 12 -- FAIL
+
+
