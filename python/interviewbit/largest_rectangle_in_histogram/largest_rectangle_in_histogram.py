@@ -206,8 +206,17 @@ Sample run 2:
 
 class Solution:
 	def largestRectangleArea(self, histogram):
+		# Helper function to reduce the stack
+		# Reduction rules:
+		#  y, j = pop() -> 3, 5
+		#  x, i = 2, 4
+		#  area = (k - i - 1) * y if (x,i) exists
+		#    or area = (k * y if (y,j) was the only item in the stack
 		def reduce_stack():
 			y, j = stack.pop()
+
+			# if the stack is empty, use -1 for i
+			# so (k-i-1) effectively becomes k
 			i = (-1 if not stack else stack[-1][1])
 
 			area = (k - i - 1) * y
@@ -215,6 +224,7 @@ class Solution:
 			if area > m_area:
 				m_area = area
 			return m_area
+
 
 		stack = []
 		max_area = 0
@@ -228,6 +238,8 @@ class Solution:
 			k += 1
 
 		while stack:
+			# Stack contains the last increasing sequence
+			# from the histograms list, keep reducing
 			max_area = reduce_stack()
 
 		return max_area
@@ -236,8 +248,8 @@ class Solution:
 
 if __name__ == '__main__':
 	s = Solution()
-	assert s.largest_rectangle([2,1,5,6,2,3]) == 10
-	assert s.largest_rectangle([3,2,1,2,3]) == 5
-	assert s.largest_rectangle([6, 2, 5, 4, 5, 1, 6]) == 12
+	assert s.largestRectangleArea([2,1,5,6,2,3]) == 10
+	assert s.largestRectangleArea([3,2,1,2,3]) == 5
+	assert s.largestRectangleArea([6, 2, 5, 4, 5, 1, 6]) == 12
 
 
