@@ -49,22 +49,22 @@ Solution Outline:
 	pop until the stack is non-decreasing when current bar is pushed.
 	  for each popped item, check the rectangular area possible from it.
 
-	  x, idx = pop()
-	  area = (i - idx) * x if stack still has elements in them
-	  otherwise
-	  area = i * x
-	     WHY? because a single element in the stack means its the smallest number so far, 
-		 so the area involving it has to be i * x
-		   for eg,
-		      stack: [(1,3)], i: 5
-			  we have processed 5 bars, and the stack has (1,3) [bar of height 1 at index 3)
-			  area = 1 * 6
-	e.g,
-	  bars: [1,2,3,1]
-	  if the stack is [(1,0), (2,1), (3,2)]. i = 3
-	    pop (3,2), area = (i-2)*3 = 1*3 = 3
-		pop(2,1), area = (i-1)*2 = 2*2 == 4
-	 
+	if the last two entries in the stack were say,
+	  . . ., (x, i), (y, j)   [therefore, y >= x]
+	     If we now encounter a (z, k) s.t. z < y, then we know every bar between (i, j) is atleast y
+		 Therefore, to reduce we remove (y, j) from the stack, and the area involving y would be
+		   (k - i - 1) * y
+		   for e,g,
+			 histogram: [,..,1,4,5,4, ..]
+			 stack: [(1,1), (4,2), (5,3)], k = 4
+			   y, j = 5, 3
+			   x, i = 4, 2
+			   area = (k - i - 1) * y == (4-2-1)*5 == 5
+			   
+		 However, if there was no such (x, i) then y is the smallest element until z
+		 and the area would be
+		   k * y
+		    
 	 At the end, process all the increasing bars in the stack until the stack is empty.
 	 [(1,4), (3,5)] for eg,
 	   reduce as earlier.
@@ -77,66 +77,70 @@ Sample run 1:
 	max area = 0
 	
 	stack: []
-	i: 0 (2)
+	k: 0 (2)
 	  stacktop = empty
 	  push (2,0)
 	  stack: [(2,0)]
 
-	i: 1 (1)
+	k: 1 (1)
 	  stacktop = 2 > 1
-	  x, idx = pop() -> 2, 0
+	  y, j = pop() -> 2, 0
 	  stack: [] is empty
-	  area = (i) * x == 1 * 2 == 2
+	  area = (k) * y == 1 * 2 == 2
 	  max area = 2
 	  push (1,1)
 	  stack: [(1,1)]
 
-	i: 2 (5)
+	k: 2 (5)
 	  stacktop = 1 < 5
 	  push (5,2)
 	  stack: [(5,2), (1,1)]
 
-	i: 3 (6)
+	k: 3 (6)
 	  stacktop = 5 < 6
 	  push (6,3)
 	  stack: [(6,3), (5,2), (1,1)]
 
-	i: 4 (2)
+	k: 4 (2)
 	  stacktop = 6 > 2
-	  x, idx = pop() -> 6, 3
+	  y, j = pop() -> 6, 3
 	  stack: [(5,2), (1,1)]
-	  area = (i - idx) * x == (4-3) * 6 == 6
+	  x, i = 5, 2
+	  area = (k - i - 1) * y == (4-2-1) * 6 == 6
 	  max area = 6
 
 	  stacktop = 5 > 2
-	  x, idx = pop() -> 5, 2
+	  y, j = pop() -> 5, 2
 	  stack: [(1,1)]
-	  area = (i - idx) * x == (4-2) * 5 == 10
+	  x, i = 1,1
+	  area = (k - i - 1) * y == (4-1-1) * 5 == 10
 	  max area = 10
 
 	  stacktop = 1  < 2
 	  push(2,4)
 	  stack: [(2,4), (1,1)]
 
-	i: 5 (3)
+	k: 5 (3)
 	  stacktop = 2 < 3
 	  push (3,5)
 	  stack: [(3,5), (2,4), (1,1)]
    
-    i: 6 -> EOF
+    k: 6 -> EOF
     
 	Reduce until stack is empty
-	  x, idx = pop() -> 3, 5
+	  y, j = pop() -> 3, 5
 	  stack: [(2,4), (1,1)]
-	  area = (i - idx) * x == (6-5) * 3 == 3 < max area
+	  x, i = 2, 4
+	  area = (k - i - 1) * y == (6-4-1) * 3 == 3 < max area
 
-	  x, idx = pop() -> 2, 4
+	  y, j = pop() -> 2, 4
 	  stack: [(1,1)]
-	  area = (i - idx) * x == (6-4) * 2 == 4 < max area
+	  x, i = 1, 1
+	  area = (k-i-1) *y  == (6-1-1) * 2 == 8 < max area
 
-	  x, idx = pop() -> 1, 1
+	  y, j = pop() -> 1, 1
 	  stack: []
-	  area = (i) * x == (6) * 1 == 6 < max area
+	  area = (k) * y == (6) * 1 == 6 < max area
 	max area = 10
 
 
@@ -148,84 +152,83 @@ Sample run 2:
 	max area = 0
 	stack = []
 
-	i: 0 (3)
+	k: 0 (3)
 	  stacktop = empty
 	  push (3,0)
 	  stack: [(3,0)]
 
-	i: 1 (2)
+	k: 1 (2)
 	  stacktop = 3 > 2
-	  x, idx = pop() -> 3, 2
+	  y, j = pop() -> 3, 2
 	  stack: [] -> empty
-	  area = i * x = 1 * 3 = 3
+	  area = k * y = 1 * 3 = 3
 	  max area = 3
 	  push (2,1)
 	  stack: [(2,1)]
 
-	i: 2 (1)
+	k: 2 (1)
 	  stacktop = 2 > 1
-	  x, idx = pop() -> 2, 1
+	  y, j = pop() -> 2, 1
 	  stack: [] -> empty
-	  area = i * x = 2 * 2 = 4
+	  area = k * y = 2 * 2 = 4
 	  max area = 4
 	  push (1, 2)
 	  stack: [(1,2)]
 
-	i: 3 (2)
+	k: 3 (2)
 	  stacktop = 1 < 2
 	  push (2,3)
 	  stack: [(2,3), (1,2)]
 
-	i: 4 (3)
+	k: 4 (3)
 	  stacktop = 2 < 3
 	  push (3,4)
 	  stack: [(3,4), (2,3), (1,2)]
 
-	i: 5 -> EOF
+	k: 5 -> EOF
 	Reduce until stack is empty
-	  x, idx = pop() -> 3, 4
+	  y, j = pop() -> 3, 4
 	  stack: [(2,3), (1,2)]
-	  area = (i - idx) * x = (5-4)*3 = 3 < max area
+	  x, i = 2, 3
+	  area = (k - i - 1) * y = (5-3-1)*3 = 3 < max area
 
-	  x, idx = pop() -> 2, 3
+	  y, j = pop() -> 2, 3
 	  stack: [(1,2)]
-	  area = (i - idx) * x = (5-3)*2 = 4 == max area
+	  x, i = 1, 2
+	  area = (k - i - 1) * y = (5-2-1)*2 = 4 == max area
 
-	  x, idx = pop() -> 1, 2
+	  y, j = pop() -> 1, 2
 	  stack: [] -> empty
-	  area = (i) * x = (5)*1 = 5 > max area
+	  area = (k) * y = (5)*1 = 5 > max area
 	  max area = 5
 	max area = 5
 '''
 
 class Solution:
-	def largest_rectangle(self, histogram):
+	def largestRectangleArea(self, histogram):
+		def reduce_stack():
+			y, j = stack.pop()
+			i = (-1 if not stack else stack[-1][1])
+
+			area = (k - i - 1) * y
+			m_area = max_area
+			if area > m_area:
+				m_area = area
+			return m_area
+
 		stack = []
 		max_area = 0
-
-		i = 0
-		while i < len(histogram):
-			while stack and stack[-1][0] >= histogram[i]:
-				x, idx = stack.pop()
-				if not stack:
-					idx = 0
-
-				area = (i-idx) * x
-				if area > max_area:
-					max_area = area
-
-			stack.append((histogram[i], i))
-
-			i += 1
+		k = 0
+		while k < len(histogram):
+			# while stacktop > current bar
+			# keep reducing
+			while stack and stack[-1][0] > histogram[k]:
+				max_area = reduce_stack()
+			stack.append((histogram[k], k))
+			k += 1
 
 		while stack:
-			x, idx = stack.pop()
-			if not stack:
-				idx = 0
-
-			area = (i-idx) * x
-			if area > max_area:
-				max_area = area
+			max_area = reduce_stack()
 
 		return max_area
 
@@ -235,6 +238,6 @@ if __name__ == '__main__':
 	s = Solution()
 	assert s.largest_rectangle([2,1,5,6,2,3]) == 10
 	assert s.largest_rectangle([3,2,1,2,3]) == 5
-	print s.largest_rectangle([6, 2, 5, 4, 5, 1, 6]) # prints 10 correct answer should be 12 -- FAIL
+	assert s.largest_rectangle([6, 2, 5, 4, 5, 1, 6]) == 12
 
 
