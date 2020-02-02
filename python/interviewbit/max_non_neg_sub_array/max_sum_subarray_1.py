@@ -1,6 +1,12 @@
 '''
 https://www.interviewbit.com/problems/max-non-negative-subarray/?ref=success-next-suggestion
 '''
+
+'''
+Solution Outline:
+	Create sub-arrays separated by -ve numbers
+	Return one with the maximum sum.
+'''
 class Solution:
 	# @param A : list of integers
 	# @return a list of integers
@@ -43,9 +49,15 @@ def max_sub_array(sub_arrays):
 	return max_sub_array
 
 
-sol = Solution()
-arr = [1, 2, 5, -7, 2, 3]
-#sub_arrays = create_sub_arrays(arr)
-#print sub_arrays
-#print max_sub_array(sub_arrays)
-print sol.maxset(arr)
+if __name__ == '__main__':
+	sol = Solution()
+	arr = [1, 2, 5, -7, 2, 3]
+	assert sol.maxset(arr) == [1,2,5]
+
+	arr = [2, 6, -8, 1, 2, 5, -7, 2, 3]
+	assert sol.maxset(arr) == [1,2,5]
+
+	arr = [2, 7, -8, 1, 2, 5, -7, 2, 3]
+	assert sol.maxset(arr) == [2,7]
+
+
