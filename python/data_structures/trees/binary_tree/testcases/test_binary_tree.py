@@ -164,6 +164,15 @@ def traversals():
 	btree.bottom_view(collate_fn, lst=l)
 	assert (l == ['a', 'b',  '*', 'c'])
 
+
+	print 'Zig zag level-order: ',
+	btree.zigzag_levelorder_traversal()
+	print
+
+	l = []
+	btree.zigzag_levelorder_traversal(collate_fn, lst=l)
+	assert (l == ['+', '*',  'a', 'b', 'c'])
+
 	print 'Testcase TC1 passed!'
 
 
@@ -327,9 +336,62 @@ def test_tree_maker():
 
 
 
+def test_zigzag_traversal():
+	'''
+        1
+      /   \	
+     2     3
+   /        \
+  4          5	
+	'''
+	btree = BinaryTree.fromList([1, 2, 3, 4, None, None, 5])
+	assert btree is not None
+	assert btree.root is not None
+
+	collate_fn = lambda kwargs, data : kwargs['lst'].append(data)
+
+	l = []
+	btree.zigzag_levelorder_traversal(collate_fn, lst=l)
+	assert(l == [1,3,2,4,5])
+
+	'''
+							1
+						  /   \	
+						 2     3
+					   /  \  /  \
+					  4   5 6    7
+
+	'''
+	btree = BinaryTree.fromList([1,2,3,4,5,6,7])
+	assert btree is not None
+	assert btree.root is not None
+	l = []
+	btree.zigzag_levelorder_traversal(collate_fn, lst=l)
+	assert(l == [1,3,2,4,5,6,7])
+
+	'''
+							a
+						  /   \	
+						 b     c
+					   /  \  /  \
+					  d   e f    g
+					 /            \
+					h              i
+	'''
+	btree = BinaryTree.fromList("abcdefghi")
+	assert btree is not None
+	assert btree.root is not None
+	l = []
+	btree.zigzag_levelorder_traversal(collate_fn, lst=l)
+	assert(''.join(l) == "acbdefgih")
+
+
+
 
 if __name__ == "__main__":
 	basic_tests()
 	traversals()
+	test_zigzag_traversal()
 	test_path_and_lca()
 	test_tree_maker()
+

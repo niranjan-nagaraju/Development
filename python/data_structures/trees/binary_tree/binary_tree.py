@@ -7,6 +7,7 @@ from data_structures.sll.queue import Queue # import just the Queue, as sll.Node
 from data_structures.sll.sll import SLL
 from node import Node
 from  data_structures.sll.sll import UnderFlowError
+from data_structures.dll.deque import Deque
 
 class BinaryTree:
 	# A default print function if no aggregator is provided
@@ -438,10 +439,105 @@ class BinaryTree:
 
 
 	'''
-	TODO: Implement
+	Use a deque for an intermediate structure, defer traversing any level until all the nodes from that level are in the deque
+	Always enqueue from the rear end.
+	Dequeue from front if odd (LIFO), else back (FIFO)
+	    a
+	   / \
+      b   c
+	 /  \/ \
+	d   ef  g
+   /         \
+  h           i
+	traversal = []
+
+	bfs_q: {(a,0)}
+	pop: (a,0)
+	 add to deque:
+	 deq: [a]
+	bfs_q: add (b,1), (c,1)
+	  bfs_q level: 1 > 0 ==> flush deque (L-R)
+	  traversal = [a]
+	
+	pop(bfs_q): (b,1)
+	  add to deque: [b]
+	bfs_q: add(d,2), (e.2) 
+	bfs_q: {(c,1), (d,2), (e,2)}
+
+	pop(bfs_q): (c,1)
+	 add to deque: [b, c]
+	bfs_q: add(f,2), (g.2) 
+	bfs_q: {(d,2), (e,2), (f,2), (g,2)}
+	  q_level: 2 > 1 => flush deque (R-L)
+	  traversal = [a,c,b]
+
+	pop(bfs_q): (d,2)
+	  add to deque: [d]
+	bfs_q: add(h,3)
+	bfs_q: {(e,2), (f,2), (g,2), (h,3)}
+
+	pop(bfs_q): (e,2)
+	  add to deque: [d,e]
+	bfs_q: {(f,2), (g,2), (h,3)}
+
+	pop(bfs_q): (f,2)
+	  add to deque: [d,e,f]
+	bfs_q: {(g,2), (h,3)}
+
+	pop(bfs_q): (g,2)
+	  add to deque: [d,e,f,g]
+	bfs_q: add(i, 3)
+	bfs_q: {(h,3), (i,3)}
+	  q_level: 3 > 2 => flush deque (L-R)
+	  traversal = [a,c,b,d,e,f,g]
+
+	pop(bfs_q): (h,3)
+	  add to deque: [h]
+	bfs_q: {(i,3)}
+
+	pop(bfs_q): (i,3)
+	  add to deque: [h,i]
+	bfs_q: {}
+
+	current level: 3 => flush deque (R-L)
+	  traversal = [a,c,b,d,e,f,g,i,h]
 	'''
 	def zigzag_levelorder_traversal(self, aggregate_fn=_default_printfn, **kwargs):
-		pass
+		# Helper function to flush deque
+		def flush():
+			# odd: R-L
+			if curr_level & 1:
+				while deq:
+					aggregate_fn(kwargs, deq.pop_back())
+			else: # even: L-R
+				while deq:
+					aggregate_fn(kwargs, deq.pop_front())
+
+
+		# start zig-zag traversal
+		if not self.root:
+			return
+
+		bfs_q = Queue()
+		deq = Deque()
+
+		bfs_q.enqueue((0, self.root))
+		curr_level = 0
+		while bfs_q:
+			curr_level, node = bfs_q.dequeue()
+			deq.push_back(node.value)
+			bfs_q.enqueue((curr_level+1, node.left)) if node.left else None
+			bfs_q.enqueue((curr_level+1, node.right)) if node.right else None
+
+			# We just popped the last node for current level
+			# flush deque L-R if curr_level is even
+			# R-L if curr_level is odd
+			if bfs_q and bfs_q.front()[0] > curr_level:
+				flush()
+			
+
+		# At the end, we are left with nodes from the last level in the deque
+		flush()
 
 
 
@@ -658,4 +754,5 @@ class BinaryTree:
 		node1 = wrap_node(n1)
 		node2 = wrap_node(n2)
 		return _lca_(self.root, node1, node2)
+
 
