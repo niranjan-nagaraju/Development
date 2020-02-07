@@ -75,12 +75,35 @@ class Solution(object):
 				return lookup_map[c], i 
 
 			lookup_map[nums[i]] = i
+
+
+	# O(n), single-pass
+	def twoSum_4(self, nums, target):
+		# Create a reverse lookup map that returns index i, for nums[i]
+		lookup_map = {}
+
+		# Create lookup as we match
+		# Trial run, {2, 7, 11, 15}, 18
+		# 2 -> 16 does not exist, add 16 to map indicating we needed 16 to complete at index 0
+		# 7 -> 11 does not exist(yet), add 11 to map at index 1
+		# 11 -> 11 does exist, we have to return 7,11
+		for i in range(len(nums)):
+			c = target - nums[i]
+			if lookup_map.has_key(nums[i]):
+				# we return {map[c], i} instead of {i, map[c]} because
+				# we might have missed returning {map[c], i} earlier as map[c] wasn't added yet
+				return lookup_map[nums[i]], i 
+
+			lookup_map[c] = i
 			
 
-s = Solution()
-assert( s.twoSum_1([0,4,3,0], 0) == s.twoSum_2([0,4,3,0], 0) == s.twoSum_3([0,4,3,0], 0) == (0,3) )
+if __name__ == '__main__':
+	s = Solution()
+	assert( s.twoSum_1([0,4,3,0], 0) == s.twoSum_2([0,4,3,0], 0) == s.twoSum_3([0,4,3,0], 0) == (0,3) )
+	assert (s.twoSum_4([0,4,3,0], 0) == (0,3))
 
-l = [2,7,11,15]
-assert( s.twoSum_1(l, 18) == s.twoSum_2(l, 18) == s.twoSum_3(l, 18) == (1,2) )
-assert( s.twoSum_1(l, 13) == s.twoSum_2(l, 13) == s.twoSum_3(l, 13) == (0,2) )
-assert( s.twoSum_1(l, 9) == s.twoSum_2(l, 9) == s.twoSum_3(l, 9) == (0,1) )
+	l = [2,7,11,15]
+	assert( s.twoSum_1(l, 18) == s.twoSum_2(l, 18) == s.twoSum_3(l, 18) == s.twoSum_4(l, 18) == (1,2))
+	assert( s.twoSum_1(l, 13) == s.twoSum_2(l, 13) == s.twoSum_3(l, 13) == s.twoSum_4(l, 13) == (0,2) )
+	assert( s.twoSum_1(l, 9) == s.twoSum_2(l, 9) == s.twoSum_3(l, 9) == s.twoSum_4(l,9) == (0,1) )
+
