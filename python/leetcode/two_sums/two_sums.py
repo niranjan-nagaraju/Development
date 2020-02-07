@@ -1,6 +1,11 @@
+#encoding: utf-8
 '''
-	https://leetcode.com/problems/two-sum/
-	Example:
+https://leetcode.com/problems/two-sum/
+1. Two Sum
+Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+You may assume that each input would have exactly one solution, and you may not use the same element twice.
+
+Example:
 	Given nums = [2, 7, 11, 15], target = 9,
 
 	Because nums[0] + nums[1] = 2 + 7 = 9,
@@ -8,27 +13,39 @@
 '''
 
 class Solution(object):
-	# Find Indices i and j that contains key1 and key2 | i != j even if key1==key2
-	def findIndices(self, nums, key1, key2):
-		a,b=-1,-1
-		for i in range(len(nums)):
-			if (nums[i] == key1) and a == -1:
-				a = i
-			elif (nums[i] == key2):
-				b = i
+	"""
+	:type nums: List[int]
+	:type target: int
+	:rtype: List[int]
+	"""
+	# Solution #1: O(n²)
+	# Find the first i,j pair i>j s.t nums[i]+nums[j] == target
+	def twoSum(self, nums, target):
+		for i in xrange(len(nums)):
+			for j in xrange(i+1, len(nums)):
+				if target == nums[i]+nums[j]:
+					return i,j
 
-			i = i + 1
-
-		return a,b
+		return -1,-1 # Shouldn't happen as atleast one solution is guaranteed
 
 
+	# Solution #2: Sort and find a,b s.t. nums[a]+nums[b] == target
 	# O(nlogn)
 	def twoSum_1(self, nums, target):
-		"""
-		:type nums: List[int]
-		:type target: int
-		:rtype: List[int]
-		"""
+		# Find Indices i and j that contains key1 and key2 | i != j even if key1==key2
+		def findIndices(nums, key1, key2):
+			a,b=-1,-1
+			for i in range(len(nums)):
+				if (nums[i] == key1) and a == -1:
+					a = i
+				elif (nums[i] == key2):
+					b = i
+
+				i = i + 1
+
+			return a,b
+
+
 		nums_ = nums[:]
 		nums_.sort()
 		i = 0
@@ -36,7 +53,7 @@ class Solution(object):
 		while ( i <= j ):
 			c = nums_[i] + nums_[j]
 			if target == c:
-				return self.findIndices(nums, nums_[i], nums_[j])
+				return findIndices(nums, nums_[i], nums_[j])
 			elif c < target:
 				i += 1
 			else:
@@ -44,6 +61,10 @@ class Solution(object):
 
 		return 0,0
 
+
+
+	# Solution #3: Create a reverse lookup table mapping nums[i] -> i
+	# Then start matching b to (target-b) in the second pass
 	# O(n), Two-pass
 	def twoSum_2(self, nums, target):
 		# Create a reverse lookup map that returns index i, for nums[i]
@@ -57,6 +78,9 @@ class Solution(object):
 				return i, lookup_map[c]
 
 
+
+	# Solution #4: Create a reverse lookup table mapping nums[i] -> i in-place
+	# while matching b to (target-b) in a single pass
 	# O(n), single-pass
 	def twoSum_3(self, nums, target):
 		# Create a reverse lookup map that returns index i, for nums[i]
@@ -77,6 +101,9 @@ class Solution(object):
 			lookup_map[nums[i]] = i
 
 
+	
+	# Solution #5: Create a reverse lookup table mapping (target-nums[i]) -> i in-place
+	# while matching target-b to b in a single pass
 	# O(n), single-pass
 	def twoSum_4(self, nums, target):
 		# Create a reverse lookup map that returns index i, for nums[i]
@@ -99,11 +126,32 @@ class Solution(object):
 
 if __name__ == '__main__':
 	s = Solution()
-	assert( s.twoSum_1([0,4,3,0], 0) == s.twoSum_2([0,4,3,0], 0) == s.twoSum_3([0,4,3,0], 0) == (0,3) )
-	assert (s.twoSum_4([0,4,3,0], 0) == (0,3))
+	assert s.twoSum([1,2,3,4,5], 7) == (1,4)
+
+	assert( s.twoSum([0,4,3,0], 0) ==
+			s.twoSum_1([0,4,3,0], 0) ==
+			s.twoSum_2([0,4,3,0], 0) ==
+			s.twoSum_3([0,4,3,0], 0) ==
+			s.twoSum_4([0,4,3,0], 0) ==
+			(0,3))
 
 	l = [2,7,11,15]
-	assert( s.twoSum_1(l, 18) == s.twoSum_2(l, 18) == s.twoSum_3(l, 18) == s.twoSum_4(l, 18) == (1,2))
-	assert( s.twoSum_1(l, 13) == s.twoSum_2(l, 13) == s.twoSum_3(l, 13) == s.twoSum_4(l, 13) == (0,2) )
-	assert( s.twoSum_1(l, 9) == s.twoSum_2(l, 9) == s.twoSum_3(l, 9) == s.twoSum_4(l,9) == (0,1) )
+	assert( s.twoSum(l, 18) ==
+			s.twoSum_1(l, 18) ==
+			s.twoSum_2(l, 18) ==
+			s.twoSum_3(l, 18) ==
+			s.twoSum_4(l, 18) ==
+			(1,2))
+	assert( s.twoSum(l, 13) ==
+			s.twoSum_1(l, 13) ==
+			s.twoSum_2(l, 13) ==
+			s.twoSum_3(l, 13) ==
+			s.twoSum_4(l, 13) ==
+			(0,2) )
+	assert( s.twoSum(l, 9) ==
+			s.twoSum_1(l, 9) ==
+			s.twoSum_2(l, 9) ==
+			s.twoSum_3(l, 9) ==
+			s.twoSum_4(l, 9) ==
+			(0,1) )
 
