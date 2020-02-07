@@ -84,4 +84,5 @@ if __name__ == '__main__':
 	assert sol.find_pairs([1,2,3,4,5,1], 0, 5) == [(2,3), (1,4)]
 	assert sol.threeSum([-1, 0, 1, 2, -1, -4]) == [[-1, -1, 2], [-1, 0, 1]]
 	assert sol.threeSum([1,2,3,-1,0]) == [[-1, 0, 1]]
+	assert sol.threeSum([0,0,0]) == [[0,0,0]]
 
