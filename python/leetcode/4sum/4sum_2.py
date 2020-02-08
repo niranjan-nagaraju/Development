@@ -104,6 +104,7 @@ class Solution(object):
 if __name__ == '__main__':
 	s = Solution()
 	assert s.fourSum([0,0,0,0], 0) == [[0,0,0,0]]
+	assert s.fourSum([-1,3,2,0,1], 4) == [[-1,0,2,3]]
 	assert s.fourSum([3,5,7,11,13,12,9,8,16,32], 26) == [[3,5,7,11]]
 	assert sorted(s.fourSum([1, 0, -1, 0, -2, 2], 0)) == sorted([[-1, 0, 0, 1], [-2, -1, 1, 2], [-2, 0, 0, 2]])
 	assert s.fourSum([10, 20, 30, 40, 1, 2], 91) == [[1, 20, 30, 40]]
