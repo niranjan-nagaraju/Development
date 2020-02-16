@@ -21,6 +21,8 @@ Solution Outline:
 
 #include <stdio.h>
 
+typedef struct ListNode * (*mergefn_t)(struct ListNode *l1, struct ListNode *l2);
+
 /**
  * Definition for singly-linked list.
  */
@@ -31,9 +33,8 @@ struct ListNode {
 
 
 struct ListNode*
-mergeTwoLists(struct ListNode* l1, struct ListNode* l2)
+mergeTwoLists_1(struct ListNode* l1, struct ListNode* l2)
 {
-
 	/** Append 'node' to end of LL(head, tail) */
 	#define APPEND(head, tail, node) {\
 		if (!head) \
@@ -80,6 +81,54 @@ mergeTwoLists(struct ListNode* l1, struct ListNode* l2)
 }
 
 
+
+
+/**
+ * Create a dummy head node for the merged chain so we dont have to check if its empty
+ * while appending
+ */ 
+struct ListNode*
+mergeTwoLists_2(struct ListNode* l1, struct ListNode* l2)
+{
+
+	/** Append 'node' to end of LL(head, tail) 
+	 *  'head' will never be NULL
+	 */
+	#define APPEND_2(head, tail, node) {\
+		tail->next = node; \
+		tail = node; \
+	}
+
+	struct ListNode dummy_head = {0, 0};
+	struct ListNode *l3_head = &dummy_head, *l3_tail = &dummy_head;
+
+	while (l1 && l2) {
+		struct ListNode *node;
+		if (l1->val < l2->val)
+			node = POP_HEAD(l1);
+		else
+			node = POP_HEAD(l2);
+
+		APPEND_2(l3_head, l3_tail, node);
+	}
+
+	/** 
+	 * If any of l1 or l2 still has elements left,
+	 * then the other list is empty
+	 * and everything remaining in this list is > everything seen so far
+	 * => just link the remaining chain to the end of the merged list
+	 */
+	if (l1)
+		APPEND_2(l3_head, l3_tail, l1);
+	if (l2)
+		APPEND_2(l3_head, l3_tail, l2);
+
+	/** skip dummy head and return the second node as head of the merged LL */
+	return l3_head->next;
+}
+
+
+/** Convenience function to print a linked list */
 void print_ll(struct ListNode *l)
 {
 	while (l) {
@@ -90,8 +139,8 @@ void print_ll(struct ListNode *l)
 	printf("\n");
 }
 
-
-int main(void) {
+void test_merge(mergefn_t mergefn)
+{
 	struct ListNode n1_1, n1_2, n1_3;
 	struct ListNode n2_1, n2_2, n2_3;
 	struct ListNode *merged_ll;
@@ -106,8 +155,17 @@ int main(void) {
 
 	print_ll(&n1_1);
 	print_ll(&n2_1);
-	merged_ll = mergeTwoLists(&n1_1, &n2_1);
+	merged_ll = mergefn(&n1_1, &n2_1);
 
 	print_ll(merged_ll);
+}
+
+
+
+int main(void)
+{
+	test_merge(mergeTwoLists_1);
+	test_merge(mergeTwoLists_2);
 	return 0;
 }
+
