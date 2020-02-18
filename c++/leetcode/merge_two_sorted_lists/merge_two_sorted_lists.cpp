@@ -43,6 +43,8 @@ class Solution {
 			ListNode *merged_chain_tail = merged_ll;
 
 			/** Helper lambda to pop head node of a specified linked list */
+			// alternately, declare as
+			// function<ListNode*(ListNode *)> pop_head = [&](ListNode *ll) -> ListNode* {
 			auto pop_head = [&](ListNode *ll) {
 				ListNode *p = ll;
 
