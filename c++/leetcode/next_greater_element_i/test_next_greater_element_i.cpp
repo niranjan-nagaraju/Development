@@ -19,7 +19,7 @@ int
 main(void)
 {
 	Solution s;
-	vector<int> a{1,2,3,4};
+	vector<int> a = {1,2,3,4};
 	vector<int> a_{2,4};
 	vector<int> expected_a{3, -1};
 
