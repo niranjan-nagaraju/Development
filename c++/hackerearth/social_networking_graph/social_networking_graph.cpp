@@ -75,9 +75,14 @@ class Graph {
 
 	public:
 		Graph(int nVertices, int nEdges) {
-			this->nVertices = nVertices+1; // 1-indexed
+			this->nVertices = nVertices+1; // 1-indexed, 0 is unused
 			this->nEdges = nEdges;
 			this->adjlist = new std::vector<int>[this->nVertices];
+		}
+
+		~Graph() {
+			/** Free allocation for the array of vectors */
+			delete[] this->adjlist;
 		}
 
 
@@ -89,17 +94,13 @@ class Graph {
 
 
 		/** Read graph edges' endpoints and link them */
-		static Graph* read_graph(int n, int m)  {
-			Graph *graph = new Graph(n, m);
-
-			for (int i=0; i<m; i++) {
+		void read_graph()  {
+			for (int i=0; i<this->nEdges; i++) {
 				int src, dst;
 
 				std::cin >> src >> dst;
-				graph->add_edge(src, dst);
+				add_edge(src, dst);
 			}
-
-			return graph;
 		}
 
 
@@ -157,15 +158,18 @@ int main(void)
 	int nQueries;
 
 	std::cin >> n >> m;
-	Graph *g = Graph::read_graph(n, m);
-	//g->print();
+
+	Graph g(n, m);;
+	g.read_graph();
+	//g.print();
 
 	std::cin >> nQueries;
 	while (nQueries--) {
 		int src, dist;
 		std::cin >> src >> dist;
-		std::cout << g->bfs_distances(src, dist) << std::endl;
+		std::cout << g.bfs_distances(src, dist) << std::endl;
 	}
+
 	return 0;
 }
 
