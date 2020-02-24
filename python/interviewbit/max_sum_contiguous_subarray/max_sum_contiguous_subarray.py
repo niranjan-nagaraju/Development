@@ -155,5 +155,6 @@ if __name__ == '__main__':
 	assert s.max_sum_contiguous_subarray([-2, 1, -3, 4, -1, 2, 1, -5, 4]) == 6
 	assert s.max_sum_contiguous_subarray([-4, -2, -3, 1, -2]) == 1
 	assert s.max_sum_contiguous_subarray([1, 2, 3, -10, 20]) == 20
+	assert s.max_sum_contiguous_subarray([1, 2, 3, 4, 5]) == 15
 
 	
