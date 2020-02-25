@@ -157,4 +157,3 @@ if __name__ == '__main__':
 	assert s.max_sum_contiguous_subarray([1, 2, 3, -10, 20]) == 20
 	assert s.max_sum_contiguous_subarray([1, 2, 3, 4, 5]) == 15
 
-	
