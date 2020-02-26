@@ -16,13 +16,6 @@ For example, given an array  arr = [-2,1,3,-4,5], we have the following possible
 	[3, 5]       8
 Our maximum subset sum is 8.
 
-Function Description
-Complete the  maxSubsetSum function in the editor below.
-It should return an integer representing the maximum subset sum for the given array.
-
-maxSubsetSum has the following parameter(s):
-	arr: an array of integers
-
 Input Format
 The first line contains an integer, n.
 The second line contains  space-separated integers arr[i].
@@ -223,4 +216,5 @@ if __name__ == '__main__':
 	assert max_non_adjacent_subset_sum([5, 5, 10, 100, 10, 5]) == 110
 	assert max_non_adjacent_subset_sum([1,2,3]) == 4
 	assert max_non_adjacent_subset_sum([1,20,3]) == 20
+	assert max_non_adjacent_subset_sum([1,2,3,4,5]) == 9
 
