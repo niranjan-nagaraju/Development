@@ -197,8 +197,7 @@ Sample run 4:
 	DP: [-2, 1, 3, 3, 8]
 '''
 
-# Complete the maxSubsetSum function below.
-def maxSubsetSum(arr):
+def max_non_adjacent_subset_sum(arr):
 	max_sum = max(arr[0], arr[1])
 	look_behind = [arr[0], max_sum]
 
@@ -217,12 +216,12 @@ def maxSubsetSum(arr):
 
 
 if __name__ == '__main__':
-	assert maxSubsetSum([-2, 1, 3, -4, 5]) == 8
-	assert maxSubsetSum([3, 7, 4, 6, 5]) == 13
-	assert maxSubsetSum([2, 1, 5, 8, 4]) == 11 
-	assert maxSubsetSum([3, 5, -7, 8, 10]) == 15
-	assert maxSubsetSum([3, 10, 5, -8, 13]) == 23
-	assert maxSubsetSum([5, 5, 10, 100, 10, 5]) == 110
-	assert maxSubsetSum([1,2,3]) == 4
-	assert maxSubsetSum([1,20,3]) == 20
+	assert max_non_adjacent_subset_sum([-2, 1, 3, -4, 5]) == 8
+	assert max_non_adjacent_subset_sum([3, 7, 4, 6, 5]) == 13
+	assert max_non_adjacent_subset_sum([2, 1, 5, 8, 4]) == 11 
+	assert max_non_adjacent_subset_sum([3, 5, -7, 8, 10]) == 15
+	assert max_non_adjacent_subset_sum([3, 10, 5, -8, 13]) == 23
+	assert max_non_adjacent_subset_sum([5, 5, 10, 100, 10, 5]) == 110
+	assert max_non_adjacent_subset_sum([1,2,3]) == 4
+	assert max_non_adjacent_subset_sum([1,20,3]) == 20
 
