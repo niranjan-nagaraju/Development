@@ -31,19 +31,20 @@ Solution Outline:
 '''
 def non_adjacent_subsets(a):
 	subsets = []
-	def non_adjacent_subsets_(subs):
-		x = subs[-1]
+	def non_adjacent_subsets_(subs_idxs):
+		x = subs_idxs[-1]
 		if x >= len(a):
 			return
 
-		subsets.append(map(lambda x: a[x], subs))
+		# Fill a[x] from each index in subset indexes
+		subsets.append(map(lambda x: a[x], subs_idxs))
 
 		# Add index+2 elements
-		non_adjacent_subsets_(subs + [x+2])
+		non_adjacent_subsets_(subs_idxs + [x+2])
 
 		# Once we are done with index+2, replace last element in the subset with index+1
 		# so we are still handling the same length subset at this level
-		non_adjacent_subsets_(subs[:-1] + [x+1])
+		non_adjacent_subsets_(subs_idxs[:-1] + [x+1])
 
 	non_adjacent_subsets_([0])
 	return subsets
