@@ -120,6 +120,7 @@ if __name__ == '__main__':
 		n = ds.find(f_v)
 		assert (n is not None)
 		assert (n.key == f_v)
+		assert (n.parent == None)
 
 	# fruits set
 	for i in xrange(len(fruits)-1):
