@@ -92,11 +92,12 @@ class DSU(object):
 			return
 		
 		if lrep.rank <= rrep.rank:
-			rrep.rank += 1
+			if lrep.rank == rrep.rank:
+				rrep.rank += 1
 			lrep.parent = rrep
 		else:
 			rrep.parent = lrep
-			lrep.rank += 1
+
 
 # Graph
 class Graph(object):
@@ -154,7 +155,7 @@ class Graph(object):
 		return mst
 
 
-	# Calculate distance between src -> dst
+	# Calculate distance between src -> dst using bfs
 	def bfs_distance(self, src, dst):
 		visited = [False] * self.nV
 		q = [(src, 0)]
@@ -170,6 +171,24 @@ class Graph(object):
 
 		# 'If' the graph is disconnected !!
 		return -1
+
+	# Calculate distance between src -> dst using dfs
+	def dfs_distance(self, src, dst):
+		def dfs(curr, curr_dist):
+			if curr == dst:
+				dist[0] = curr_dist
+				return
+
+			for (v, vdist) in self.adjlist[curr]:
+				if not visited[v]:
+					visited[v] = True
+					dfs(v, curr_dist+vdist)
+			
+		visited = [False] * self.nV
+		dist = [0]
+		visited[src] = True
+		dfs(src, 0)
+		return dist[0]
 
 
 
@@ -190,7 +209,12 @@ def aliens_and_portals():
 
 	while q > 0:
 		src, dst = map(int, raw_input().strip().split())
-		print mst.bfs_distance(src, dst)
+		dist = mst.bfs_distance(src, dst)
+
+		# An MST should return the same distance between src->dst
+		# using both bfs and dfs
+		assert dist == mst.dfs_distance(src, dst)
+		print dist
 		q -= 1
 
 
