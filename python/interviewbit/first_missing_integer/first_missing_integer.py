@@ -44,5 +44,6 @@ if __name__ == '__main__':
 	assert s.firstMissingPositive([1,2,3,4,5]) == 6
 	assert s.firstMissingPositive([1,5,2,4]) == 3
 	assert s.firstMissingPositive([6,0,1,4,3,2]) == 5
+	assert s.firstMissingPositive([1,3,2,5,0,4]) == 6
 
 
