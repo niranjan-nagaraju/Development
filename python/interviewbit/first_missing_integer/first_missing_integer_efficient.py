@@ -76,20 +76,27 @@ Sample run 1:
 	 return 6
 '''
 class Solution:
-    # @param a : list of integers
-    # @return an integer
-    def firstMissingPositive(self, a):
-		n = len(a)
-
-		# Bubble all non-positive numbers to the right
+	# Bubble all non-positive numbers to the right in-place
+	# and return the count of positive numbers
+	# in the array
+	def bubble(self, a):
 		j = 0
+		n = len(a)
 		for i in xrange(n):
 			if a[i] > 0:
 				a[i], a[j] = a[j], a[i]
 				j += 1
 
+		return j
+
+
+	# @param a : list of integers
+	# @return an integer
+	def firstMissingPositive(self, a):
+		n = len(a)
+
 		# Truncate non +ve numbers
-		n = j
+		n = self.bubble(a)
 
 		for i in xrange(n):
 			x = abs(a[i])
