@@ -20,27 +20,30 @@ class Solution:
 	# @param A : string
 	# @return a list of integers
 	def flip(self, A):
-		max_diff = 0
-		diff = 0
-		start = 0
-		ans = None
+		max_sum = 0
+		curr_sum = 0
+		l = 0
+		max_array = None
 
 		for i in xrange(len(A)):
-			diff += (1 if A[i] == '0' else -1)
+			curr_sum += (1 if A[i] == '0' else -1)
 
-			if diff < 0:
-				diff = 0
-				start = i + 1
-				continue
+			# If current sum dips below 0
+			# reset to 0 (indicating no flips)
+			# and set left flip index to the next index
+			# so incase it is 0, we can start flipping from (i+1)
+			if curr_sum < 0:
+				curr_sum = 0
+				l = i + 1
 
-			if diff > max_diff:
-				max_diff = diff
-				ans = [start+1, i+1]
+			if curr_sum > max_sum:
+				max_sum = curr_sum
+				max_array = [l+1, i+1]
 
-		if ans is None:
+		if max_array is None:
 			return []
 
-		return ans
+		return max_array
 
 
 
