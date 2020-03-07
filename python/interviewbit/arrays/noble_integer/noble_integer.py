@@ -38,14 +38,17 @@ class Solution:
 		i = 0
 		while i < n:
 			x = A[i]
+
+			# skip all repeats of A[i]
 			while i < n and A[i] == x:
 				i += 1
-			i -= 1
-			num_greater = n-i-1
+
+			# i is now at the next index that'll be processed next
+			# and therefore is 1 more than we need
+			num_greater = n-i   # n - (i-1) - 1 == n-i
 			if num_greater == x:
 				#print x
 				return 1
-			i += 1
 
 		return -1
 
