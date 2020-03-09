@@ -1,6 +1,6 @@
 def identity(x, y):
 	sigma = lambda n: n * (n+1)/2
-	return sigma(y-1)+1 + sigma(x+y-1) - sigma(y)
+	return 1 + sigma(x+y-1) - y
 
 
 def solution(x,y):
@@ -19,6 +19,8 @@ def get_triangle(rows):
 	
 
 if __name__ == '__main__':
+	assert solution(3,2) == '9'
+	assert solution(5,10) == '96'
 	assert get_triangle(4) == [
 			[7],
 			[4, 8],
