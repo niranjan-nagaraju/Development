@@ -31,30 +31,36 @@ At day = 5, there are 2 guests in the hotel. But I have only one room.
 '''
 
 '''
-Solution Outline:
-	1. Sort the arrivals and departures by 'Arrival' dates
-	2. Use 2 pointers i, j at arrivals and departures
-	   Start at i = arrivals[0], (departures[0] correponds to departure date for arrivals[0])
-	   j = departures[0]
-	   Number of rooms needed initially = 1 (for arrivals[0])
-	   Check arrivals[i] vs departures[j]
-	    Pick whichever is lesser
-		  if arrivals is picked, increment rooms += 1 --> check if rooms > k to see if this is viable or not
-		  if departures is picked, decrement rooms
+Solution Outline: Time: O(nlogn), memory: O(n)
+	1. Sort the arrivals and departures dates while marking arrivals as +1, departures by -1
+	2. For each date, increment rooms by +1 if the date is an arrival, decrement by 1 if the date is a depature.
 
 
 Sample run:
 	A: [1, 3, 5]
 	D: [2, 6, 8]
 
-	i = 1, j = 0, rooms = 1
-	arrivals[i] = 3 > departures[0] => rooms -- == 0
-	j = 1
+	ad: [(1,A), (2,D), (3,A), (5,A). (6,D), (8,D)]
 
-	arrivals[i] = 3 < departures[j] => rooms ++ == 1
-	i =2
+	rooms = 0
 
-	arrivals[i] = 5 < departures[j] => rooms ++ == 2 (> k)
+	i: 0
+	A => rooms = 1
+
+	i: 1
+	D => rooms = 0
+
+	i: 2
+	A => rooms = 1
+
+	i: 3
+	A => rooms = 2 (> k return False)
+
+	i: 4
+	D => rooms = 1
+
+	i: 5
+	D => rooms = 0
 '''
 
 class Solution:
@@ -88,3 +94,4 @@ if __name__ == '__main__':
 	assert s.hotel_bookings_possible([1,2,5], [3,8,6], 2) == True
 	assert s.hotel_bookings_possible([1,2,5], [6,8,6], 2) == False
 	assert s.hotel_bookings_possible([1,2,3], [2,3,4], 1) == True
+
