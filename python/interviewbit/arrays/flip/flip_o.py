@@ -12,6 +12,7 @@ Pair (a, b) is lexicographically smaller than pair (c, d) if a < c or, if a == c
 
 
 '''
+Solution from Interviewbit editorial for minimizing the number of bits to flip (lexicographically smaller)
 Count 0s as 1, 1s as -1
 Max consecutive sum using kadane's
 '''
@@ -46,10 +47,10 @@ class Solution:
 
 if __name__ == '__main__':
 	s = Solution()
-	assert s.flip("0101") == [1,1]
+	assert  s.flip("0101") == [1,1]
 	assert  s.flip("010") == [1,1]
 	assert  s.flip("111") == []
-	assert  s.flip("0100110") == [3,4]
-	assert  s.flip("1101010001") == [7,9]
+	assert  s.flip("0100110") == [3,4]  # deviates from [1,4] from solution 1
+	assert  s.flip("1101010001") == [7,9] # deviates from [3,9] from solution 1
 	assert  s.flip("0111000100010") == [5,11]
 
