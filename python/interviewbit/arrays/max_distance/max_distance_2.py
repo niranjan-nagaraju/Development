@@ -18,6 +18,7 @@ Solution Outline:
 	sort B by A[i]
 	Now we have a list of indices, where A[B[i]] <= A[B[i+1]]
 	So given only this list of ordered indices, find a (j-i) that is maximum.
+	[This is the same as the 'stock buy'  problem with a single transaction allowed]
 	  Initially maximum is 0
 	  i: B[0], j: B[0]
 	  for each index in B[1:]:
