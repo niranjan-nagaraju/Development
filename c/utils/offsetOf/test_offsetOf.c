@@ -37,7 +37,7 @@ main(void)
 	assert((int)OFFSETOF(Test2, d) == 0);
 	assert((int)OFFSETOF(Test2, c1) == sizeof(double));
 	assert((int)OFFSETOF(Test2, c2) == sizeof(double)+1);
-	assert((int)OFFSETOF(Test2, f) == sizeof(double)+sizeof(int)+sizeof(float));
+	assert((int)OFFSETOF(Test2, f) == sizeof(double)+sizeof(int)+sizeof(int));
 	assert((int)OFFSETOF(Test2, i) == sizeof(double)+sizeof(int));
 
 	return 0;
