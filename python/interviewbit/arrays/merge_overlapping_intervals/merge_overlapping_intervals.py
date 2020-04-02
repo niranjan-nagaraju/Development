@@ -14,7 +14,7 @@ For example:
 
 
 '''
-Solution Outline: O(n) time, in-place
+Solution Outline: O(nlogn) time, in-place
 	Given two intervals, left, and right (left.start <= right.start, i.e. sorted by start time)
 	 They can be merged if left.end <= right.start
 	 otherwise they are disjoint
