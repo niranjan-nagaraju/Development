@@ -25,4 +25,5 @@ def sum_of_divisors(n):
 if __name__ == '__main__':
 	assert (sum_of_divisors(24) == sum(divisors(24)) == 60)
 	assert (sum_of_divisors(18) == sum(divisors(18)) == 39)
+	assert (sum_of_divisors(49) == sum(divisors(49)) == 57)
 
