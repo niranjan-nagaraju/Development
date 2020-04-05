@@ -1,3 +1,4 @@
+#encoding: utf-8
 '''
 https://www.interviewbit.com/problems/prime-numbers
 
@@ -20,7 +21,7 @@ class Solution:
 			if x == -1:
 				continue
 
-			j = x << 1  # start with 2*x
+			j = x*x  # start with x²
 			# strike out all factors of i
 			while j < len(primes):
 				primes[j] = -1
