@@ -34,6 +34,25 @@ Solution Outline: Brute force O(N^B) {N: number of digits, B: length of digits n
 
    At length, s = B, include A[i] to the end only if {digits(s-1)+A[i]} < C[0:B-1]
 
+
+if B == 0 => no solution possible
+B = 1 => single digit, return count of numbers in A, < C
+B > len(C) => no solution possible = 0
+
+B < len(C)
+  N: len(A)
+    If A has 0 => 1st digit cannot be 0 => (N-1) ** B
+    A doesnt have 0 => N ** B 
+
+B = len(C):
+	Enumerate all numbers of length 1, 2, ..., B
+	Start with length 1: Filter all A[i] <= C[0]
+	length 2: Append all A[i] to each of previous levels as long as p+A[i] <= C[0,1] into a set (so duplicates are removed)
+	length 3: Append all A[i] to each of previous levels as long as p+A[i] <= C[0,1,2]
+	. . .
+	length == B, Append all A[i] to each of previous levels as long as p+A[i] < C (into a set)
+	  return size of the set at length = B
+
   For e.g.,
     A: 0 1 2 3 5
     B: 3
@@ -50,6 +69,7 @@ Solution Outline: Brute force O(N^B) {N: number of digits, B: length of digits n
                    102, 112, 132, 152, 202, 212, 222, 232, 252,
                    103, 113, 133, 153, 203, 213, 223, 233,
                    105, 115, 135, 155, 205, 215, 225, 235}
+
 '''
 class Solution:
 	def enumerate_numbers(self, A, B, C):
@@ -121,9 +141,12 @@ class Solution:
 
 if __name__ == '__main__':
 	s = Solution()
+	assert s.enumerate_numbers([0,1,2,3,5], 1, 2) == 2
+	assert s.enumerate_numbers([0,1,2,3,5], 1, 253) == 5
 	assert s.enumerate_numbers([0,1,2,3,5], 3, 253) == 48
 	assert s.enumerate_numbers([0,1,2,5], 2, 21) == 5
 	assert s.enumerate_numbers([0,1,2,5,6,7], 2, 253) == 30
 	assert s.enumerate_numbers([1,2,5,6,7,8], 2, 253) == 36
 	assert s.enumerate_numbers([0,1,2,5,6,7], 3, 253) == 57
+	assert s.enumerate_numbers([0,1,2,3,4,5,6], 4, 3524) == 949
 
