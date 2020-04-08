@@ -68,6 +68,11 @@ class Solution:
 if __name__ == '__main__':
 	s = Solution()
 	assert s.pairwise_hamming_distance([2,4,6]) == 8
+	assert s.pairwise_hamming_distance([1,2,3,4]) == 22
+	assert s.pairwise_hamming_distance([1,2,3,4,5]) == 36
+	assert s.pairwise_hamming_distance([1,100,200,300,400]) == 88
+	assert s.pairwise_hamming_distance([0,0,0]) == 0
+	assert s.pairwise_hamming_distance([0,1,2]) == 8
 
 
 
