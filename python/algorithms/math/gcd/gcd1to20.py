@@ -1,10 +1,4 @@
-#!/bin/python
-
-def gcd(m, n):
-		if n == 0:
-				return m
-		else:
-				return gcd(n,m%n)
+from gcd import gcd
 
 x = 1
 intergcd = 1
