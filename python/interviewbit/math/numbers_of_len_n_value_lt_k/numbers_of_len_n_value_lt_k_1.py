@@ -41,7 +41,7 @@ B > len(C) => no solution possible = 0
 
 B < len(C)
   N: len(A)
-    If A has 0 => 1st digit cannot be 0 => (N-1) ** B
+    If A has 0 => 1st digit cannot be 0 => (N-1) * (N ** (B-1))
     A doesnt have 0 => N ** B 
 
 B = len(C):
@@ -149,4 +149,5 @@ if __name__ == '__main__':
 	assert s.enumerate_numbers([1,2,5,6,7,8], 2, 253) == 36
 	assert s.enumerate_numbers([0,1,2,5,6,7], 3, 253) == 57
 	assert s.enumerate_numbers([0,1,2,3,4,5,6], 4, 3524) == 949
+	assert  s.enumerate_numbers([0,1,2,3,4,6], 4, 3524) == 612
 
