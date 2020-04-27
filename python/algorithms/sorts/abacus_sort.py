@@ -169,7 +169,7 @@ i: 4
 temp: 1 2 4 5
 copy into a: [1,2,4,5]
 '''
-def abacus_sort(a):
+def abacus_sort_1(a):
 	minimum, maximum = a[0], a[0]
 	n = len(a)
 
@@ -335,6 +335,9 @@ def abacus_sort_3(a):
 	return a
 
 
+# Use v3 by default
+abacus_sort = abacus_sort_3
+
 def test_abacus_sort(sortfn):
 	a = [2,5,1,4]
 	assert sortfn(a) == [1,2,4,5]
@@ -352,8 +355,9 @@ def test_abacus_sort(sortfn):
 
 
 if __name__ == '__main__':
-	test_abacus_sort(abacus_sort)
+	test_abacus_sort(abacus_sort_1)
 	test_abacus_sort(abacus_sort_2)
 	test_abacus_sort(abacus_sort_3)
+	test_abacus_sort(abacus_sort)
 
 

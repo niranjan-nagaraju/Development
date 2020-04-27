@@ -56,8 +56,12 @@ def heap_sort(a):
 		bubble_down(0, i)
 
 
+	return a
+
+
 
 if __name__ == '__main__':
 	a = [5, 4, 2, 3, 6, 8, 9]
 	heap_sort(a)
 	assert a == [2,3,4,5,6,8,9]
+
