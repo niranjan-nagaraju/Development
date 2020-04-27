@@ -18,7 +18,7 @@ def comparison_counting_sort(a):
 	count = [0]*n
 	for i in xrange(n-1):
 		for j in xrange(i+1, n):
-			if a[i] < a[j]:
+			if a[i] <= a[j]:
 				count[j] += 1
 			else:
 				count[i] += 1
@@ -43,8 +43,8 @@ if __name__ == '__main__':
 		def __cmp__(self, other):
 			return cmp(self.a, other.a)
 
-	# Comparison counting sort is not 'stable'
+	# Comparison counting sort is 'stable'
 	assert comparison_counting_sort([Pair(60,1), Pair(35,2), Pair(81,3), Pair(98,4), Pair(14,5), Pair(35,6)]) == [
-			Pair(14,5), Pair(35,6), Pair(35,2), Pair(60,1), Pair(81,3), Pair(98,4)
+			Pair(14,5), Pair(35,2), Pair(35,6), Pair(60,1), Pair(81,3), Pair(98,4)
 			]
 
