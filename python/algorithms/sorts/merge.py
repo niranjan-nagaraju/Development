@@ -1,6 +1,12 @@
 ''' 
 Implement merge
   Merge two sorted lists into a bigger sorted list
+
+Merge:
+	1. Start with i=la, j=lb
+	2.   Copy the smaller of A[i] vs B[j] into C until we run out of either A or B
+	3.   In the end if either A or B still has items pending, Copy them into C as they will all be > current items in C
+	     NOTE: Either of A or B will have items pending not both.
 '''
 
 # Merge two sorted lists a[la:ua], b[lb:ub] into a single sorted list, c[]
