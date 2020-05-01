@@ -12,4 +12,5 @@ if __name__ == '__main__':
 	test_sortfn(insertion_sort)
 	test_sortfn(comparison_counting_sort)
 	test_sortfn(quick_sort)
+	test_sortfn(counting_sort)
 
