@@ -14,7 +14,7 @@ Find and return the index of the first pattern match in text
 def find(text, pat):
 	n = len(text)
 	m = len(pat)
-	for i in xrange(n-m):
+	for i in xrange(n-m+1):
 		j = 0
 		while j < m:
 			if pat[j] != text[i+j]:
@@ -34,7 +34,7 @@ def find_all(text, pat):
 	n = len(text)
 	m = len(pat)
 	matches = []
-	for i in xrange(n-m):
+	for i in xrange(n-m+1):
 		j = 0
 		while j < m:
 			if pat[j] != text[i+j]:
@@ -51,5 +51,12 @@ if __name__ == '__main__':
 	assert find("abcdef", "bcd") == 1
 	assert find("abcdef", "bce") == -1
 	assert find("abcdabcxabcyef", "abcy") == 8
+	assert find("THIS IS A TEST TEXT", "TEST") == 10
+	assert find("THIS IS A TEST TEXT", "TEXT") == 15
+	assert find("THIS IS A TEST TEXA", "TEXT") == -1
+
 	assert find_all("abcdabcxabcyef", "abc") == [0, 4, 8]
+	assert find_all("THIS IS A TEST TEXT", "TEXT") == [15]
+	assert find_all("THIS IS A TEST TEST", "TEST") == [10, 15]
+	assert find_all("THIS IS A TEST TEST", "TEXT") == []
 
