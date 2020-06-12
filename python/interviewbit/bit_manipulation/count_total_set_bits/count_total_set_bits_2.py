@@ -51,7 +51,7 @@ Explanation 2:
 Solution Outline:
 	A number of the form 2ˣ-1 (i.e x 1s) will have (x * 2ˣ⁻¹) bits set between 1 to 2ˣ-1.
 	e.g,
-	  n = 3, x = 1
+	  n = 3, x = 2
 	  00
 	  01
 	  10
@@ -59,7 +59,7 @@ Solution Outline:
 	  -> total number of bits set = 4
 	  = 2*2¹
 
-	  n = 7
+	  n = 7, x = 3
 	  000
 	  001
 	  010
@@ -155,7 +155,7 @@ class Solution:
 		total_set_bits = 0
 		while n:
 			if n == 1:
-				total_set_bits += 1
+				total_set_bits = (total_set_bits + 1) % mod
 				break
 
 			if n & (1<<m):
@@ -168,6 +168,33 @@ class Solution:
 		return total_set_bits 
 
 
+	# same algorithm as above, but optimize the bit shifts 
+	def count_total_set_bits_2(self, n):
+		mod = 1000000007
+		import math
+
+		# Total (bit)width of n
+		m = int(math.log(n, 2))
+
+		w = 1<<m
+		total_set_bits = 0
+		while n:
+			if n == 1:
+				total_set_bits = (total_set_bits + 1) % mod
+				break
+
+			if n & w:
+				# Add (m*2ᵐ⁻¹)+n-(2ᵐ-1)
+				total_set_bits = (total_set_bits + m * (w>>1) + n-(w-1)) % mod
+				# Clear mᵗʰ bit in n
+				n -= w
+			m -= 1
+			w >>= 1
+
+		return total_set_bits 
+
+
+
 if __name__ == '__main__':
 	s = Solution()
 	assert s.count_total_set_bits(13) == 25
@@ -177,5 +204,12 @@ if __name__ == '__main__':
 	assert s.count_total_set_bits(7) == 12
 	assert s.count_total_set_bits(8) == 13
 
+
+	assert s.count_total_set_bits_2(13) == 25
+	assert s.count_total_set_bits_2(3) == 4
+	assert s.count_total_set_bits_2(4) == 5
+	assert s.count_total_set_bits_2(6) == 9
+	assert s.count_total_set_bits_2(7) == 12
+	assert s.count_total_set_bits_2(8) == 13
 
 
