@@ -1,4 +1,4 @@
-BASE_DIR=../../
+BASE_DIR=../../..
 
 # Source directory for the library
 SRC = palindrome_string.c
