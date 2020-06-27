@@ -42,11 +42,10 @@ class Solution {
 vector<vector<int>>
 Solution::find_3sum_zero(vector<int> &A)
 {
-	vector<vector<int>> triplets;
 	set<vector<int>> triplets_set;
 	    
     if (A.size() < 3)
-        return triplets;
+        return vector<vector<int>>{};
 
 	sort(A.begin(), A.end());
 	for (int i=0; i < A.size()-2; i++) {
@@ -72,10 +71,7 @@ Solution::find_3sum_zero(vector<int> &A)
 		}
 	}
 
-	for (auto v : triplets_set) {
-		triplets.push_back(v);
-	}
-	return triplets;
+	return vector<vector<int>>(triplets_set.begin(), triplets_set.end());
 }
 
 
