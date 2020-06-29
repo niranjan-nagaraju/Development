@@ -27,7 +27,7 @@ class Solution:
 		# cannot have preceeding 0s unless it has a single 0
 		def is_ip_valid(ip):
 			for x in ip:
-				if not x or x[0] == '0' and len(x) > 1:
+				if not x or (x[0] == '0' and len(x) > 1):
 					return False
 				if int(x) > 255:
 					return False
