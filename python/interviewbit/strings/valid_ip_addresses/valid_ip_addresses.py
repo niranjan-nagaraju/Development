@@ -55,4 +55,5 @@ if __name__ == '__main__':
 	assert s.enumerate_valid_ip_addresses("25525511135") == ['255.255.11.135', '255.255.111.35']
 	assert s.enumerate_valid_ip_addresses('0100100') == ['0.10.0.100', '0.100.10.0'] 
 	assert s.enumerate_valid_ip_addresses('1921682040') == ['192.168.20.40', '192.168.204.0']
+	assert s.enumerate_valid_ip_addresses('25505011535') == []
 
