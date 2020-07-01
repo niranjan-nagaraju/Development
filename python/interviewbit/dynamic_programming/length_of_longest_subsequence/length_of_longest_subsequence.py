@@ -44,7 +44,7 @@ Solution Outline:
 	   2.1 LDS table by calculating LIS for reverse of A
 	3. Longest Increasing-Decreasing subsequence would then be 
 		max(
-			{LIS[i]+LDS[i]-1 (0<=i<n)
+			{LIS[i]+LDS[i]-1} (0<=i<n)
 		   )
 		NOTE:
 			A[i] is counted twice, once for the ending of LIS, and again for the start of the LDS, so reduce the max LIDS length by 1}
