@@ -104,9 +104,9 @@ Solution Outline:
 					 : ["hit"] + ["hit", "hot"] + ["hit"]   {-remove "hit"}
 					 : ["hot"]
 
-	hit
-	  \ 
-	    - - hot
+    hit
+      \ 
+        - - hot
 	Q: [("hot",1)]
 	visited: ["hit", "hot"]
 
@@ -115,12 +115,12 @@ Solution Outline:
 	neighbor of "hot": lookup["_ot"] + lookup["h_t"] + lookup["ho_"]
 					 : ["hot", "dot", "lot"] + ["hit","hot"] + ["hot"] {-remove "hot" and "hit" (already visited)}
 					 : ["dot", "lot"]
-	hit
-	  \ 
-	    - - hot
-			  \    / - dot
-				- -
-				   \ - lot
+    hit
+      \ 
+        - - hot
+              \    / - dot
+                - -
+                   \ - lot
 
 	Q: [("dot",2), ("lot",2)]
 	visited: ["hit", "hot", "dot", "lot"]
@@ -142,12 +142,12 @@ Solution Outline:
 	
 	Dequeue: ("dog", 3)
 	Q: [("log",3)]
-	hit
-	  \ 
-	    - - hot
-			  \    / - dot -- dog
-				- -
-				   \ - lot
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog
+                - -
+                   \ - lot
 
 	neighbor of "dog": lookup["_og"] + lookup["d_g"] + lookup["do_"]
 					 : ["dog", "log", "cog"] + ["dog"] + ["dot", "dog"] {remove visited}
@@ -155,12 +155,12 @@ Solution Outline:
 	Q: [("log",3), ("cog",4)]
 	visited: ["hit", "hot", "dot", "lot", "dog", "log", "cog"]
 	Found 'cog' at level 4
-	hit
-	  \ 
-	    - - hot
-			  \    / - dot -- dog -- cog
-				- -
-				   \ - lot
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog -- cog
+                - -
+                   \ - lot
 
 	return (4+1) == 5
 '''
