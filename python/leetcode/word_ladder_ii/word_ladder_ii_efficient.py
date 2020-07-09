@@ -43,10 +43,27 @@ Explanation: The endWord "cog" is not in wordList, therefore no possible transfo
 Solution Outline:
 	0. Let A: starting word, B: ending word, C: wordlist/dictionary
 	1. Build a graph starting from 'A', the starting word, s.t the word at each level is one-letter different from the previous level.
-	2. Do a BFS traversal from 'A', the starting word until we reach 'B' the end word.
-		Calculate the path length - this will be the minimum number of steps needed to change from A to B.
-	3. Start a DFS traversal from 'A', skip all paths that are > minimum steps calculated from the bfs in 2.
-		Return all paths that lead to B', the end word
+	2. Do a BFS traversal from 'A', the starting word until we reach 'B' the end word, recording 'prefix' of the current path along the way.
+		To find all the minimum-length transformation paths from A to B,
+		Re-purpose visited[] table as a levels+visited lookup.
+		visited[word] =  level => indicates 'word' was visited at 'level' steps away from starting word.
+		Add 'neighbor' to the BFS queue only if its not already visited or its level is going to be the same.
+		This ensures, 
+			i.  We don't add paths that exceed minimum-length
+			ii. All the minimum-length paths are added
+
+		for e.g., Consider the graph below, S: starting word, E: ending word
+           S
+        /  |  \       
+       a   b   c
+        \  |  /
+           d
+           |
+           E
+
+		we need 'd' to be added thrice for [S, a, d, E], [S, b, d, E], [S, c, d, E]
+	3. Once we find the endWord using BFS for the first time, its recorded visited[] level stores the minimum steps needed to get to end word from start.
+		We can return as soon as this level is processed.
 
 	To build the graph,
 	  Build a lookup table, of words A, B, and each word in C, and their neighbors.
@@ -99,22 +116,27 @@ Solution Outline:
 	Now use the lookup table as the graph, to get neighbors of each word, and perform a BFS, starting from 'A',
 	until we reach 'B', while recording the number of levels
 
-	Q: [("hit",0)]
-	visited: ["hit"]
+	Q: [("hit", [])]
+	visited: 
+		{"hit": 1}
 
-	Dequeue: ("hit", 0)
+	Dequeue: ("hit", [])
 	Q: []
 	neighbor of "hit": lookup["_it"] + lookup["h_t"] + lookup["hi_"]
-					 : ["hit"] + ["hit", "hot"] + ["hit"]   {-remove "hit"}
+					 : ["hit"] + ["hit", "hot"] + ["hit"]   {remove visited}
 					 : ["hot"]
 
     hit
       \ 
         - - hot
-	Q: [("hot",1)]
-	visited: ["hit", "hot"]
+	Q: [("hot", {"hit"})]
+	visited: 
+		{
+		 "hit": 1, 
+		 "hot": 2
+		}
 
-	Dequeue: ("hot", 1)
+	Dequeue: ("hot", {"hit"})
 	Q: []
 	neighbor of "hot": lookup["_ot"] + lookup["h_t"] + lookup["ho_"]
 					 : ["hot", "dot", "lot"] + ["hit","hot"] + ["hot"] {-remove "hot" and "hit" (already visited)}
@@ -126,26 +148,48 @@ Solution Outline:
                 - -
                    \ - lot
 
-	Q: [("dot",2), ("lot",2)]
-	visited: ["hit", "hot", "dot", "lot"]
+	Q: [("dot", {"hit", "hot"}), ("lot",{"hit", "hot"})]
+	visited: 
+		{
+		 "hit": 1,
+		 "hot": 2,
+		 "dot": 3,
+		 "lot": 3
+		}
 
-	Dequeue: ("dot", 2)
-	Q: [("lot",2)]
+	Dequeue: ("dot", {"hit", "hot"})
+	Q: [("lot", {"hit", "hot"})]
 	neighbor of "dot": lookup["_ot"] + lookup["d_t"] + lookup["do_"]
 					 : ["hot", "dot", "lot"] + ["dot"] + ["dot", "dog"] {-remove "hot", "hit", "lot" and "dot" (already visited)}
 					 : ["dog"]
-	Q: [("lot",2), ("dog",3)]
-	visited: ["hit", "hot", "dot", "lot", "dog"]
+	Q: [("lot", {"hit", "hot"}), ("dog", {"hit", "hot", "dot"})]
+	visited: 
+		{
+		 "hit": 1,
+		 "hot": 2,
+		 "dot": 3,
+		 "lot": 3,
+		 "dog": 4
+		}
 
-	Dequeue: ("lot",2)
+
+	Dequeue: ("lot", {"hit", "hot"})
 	neighbor of "lot": lookup["_ot"] + lookup["l_t"] + lookup["lo_"]
 					 : ["hot", "dot", "lot"] + ["lot"] + ["lot", "log"] {remove visited}
 					 : ["log"]
-	Q: [("dog",3), ("log",3)]
-	visited: ["hit", "hot", "dot", "lot", "dog", "log"]
+	Q: [("dog", {"hit", "hot", "dot"}), ("log", {"hit", "hot", "lot"})]
+	visited: 
+		{
+		 "hit": 1,
+		 "hot": 2,
+		 "dot": 3,
+		 "lot": 3,
+		 "dog": 4,
+		 "log": 4
+		}
 	
-	Dequeue: ("dog", 3)
-	Q: [("log",3)]
+	Dequeue: ("dog", {"hit", "hot", "dot"})
+	Q: [("log", {"hit", "hot", "lot"})]
     hit
       \ 
         - - hot
@@ -156,9 +200,19 @@ Solution Outline:
 	neighbor of "dog": lookup["_og"] + lookup["d_g"] + lookup["do_"]
 					 : ["dog", "log", "cog"] + ["dog"] + ["dot", "dog"] {remove visited}
 					 : ["cog"]
-	Q: [("log",3), ("cog",4)]
-	visited: ["hit", "hot", "dot", "lot", "dog", "log", "cog"]
-	Found 'cog' at level 4
+	Q: [("log", {"hit", "hot", "lot"}), ("cog", {"hit", "hot", "dot", "dog"})]
+	visited: 
+		{
+		 "hit": 1,
+		 "hot": 2,
+		 "dot": 3,
+		 "lot": 3,
+		 "dog": 4,
+		 "log": 4,
+		 "cog": 5
+		}
+	
+	Found 'cog' at level 5
 	hit
       \ 
         - - hot
@@ -167,13 +221,64 @@ Solution Outline:
                    \ - lot
 
 	Minimum level ==  (4+1) == 5
-
 	=> None of our paths should exceed 5 words from "hit" to "cog"
+
+	Dequeue: ("log", {"hit", "hot", "lot"})
+	Q: [("cog", {"hit", "hot", "dot", "dog"})]
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog
+                - -
+                   \ - lot -- log
+
+	neighbor of "log": lookup["_og"] + lookup["l_g"] + lookup["lo_"]
+					 : ["dog", "log", "cog"] + ["log"] + ["lot", "log"] {remove visited}
+					 : ["cog"]
+
+	"cog" is already visited at level 5, this enqueue will also put it at level 5
+	Add "cog" to queue
+	Q: [("cog", {"hit", "hot", "dot", "dog"}), ("cog", {"hit", "hot", "lot", "log"})]
+	visited: 
+		{
+		 "hit": 1,
+		 "hot": 2,
+		 "dot": 3,
+		 "lot": 3,
+		 "dog": 4,
+		 "log": 4,
+		 "cog": 5
+		}
+
+	Dequeue: ("cog", {"hit", "hot", "dot", "dog"})
+	found endword
+		Add to solution: {"hit", "hot", "dot", "dog", "cog"}
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog -- cog
+                - -
+                   \ - lot -- log
+
+
+	Dequeue: ("cog", {"hit", "hot", "lot", "log"})
+	found endword
+		Add to solution: {"hit", "hot", "dot", "dog", "cog"}
+						 {"hit", "hot", "lot", "log", "cog"}
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog -- \
+                - -                  cog
+                   \ - lot -- log -- /
+
+
+  At this point if there were additional levels in the queue, we return as even if they lead to 'cog', they exceed minimum length.
 '''
 
 from collections import defaultdict
 class Solution(object):
-	# Find minimumm-length ladders from beginWord -> endWord
+	# Find minimum-length ladders from beginWord -> endWord
 	def findLadders(self, beginWord, endWord, wordList):
 		"""
 		:type beginWord: str
@@ -188,57 +293,6 @@ class Solution(object):
 				key = word[:i] + '_' + word[i+1:]
 				neighbors_lookup[key].append(word)
 
-
-		# Use BFS to find minimum number of steps
-		# needed to transform startWord to endWord
-		def find_minimum_steps():
-			bfs_q = [(beginWord,1)]
-			visited = defaultdict(lambda: False)
-			visited[beginWord] = True
-			while bfs_q:
-				word, level = bfs_q.pop(0)
-				for i in xrange(n):
-					key = word[:i] + '_' + word[i+1:]
-					for neighbor in neighbors_lookup[key]:
-						# Found 'end word'
-						# return its current level
-						# in the transformation path
-						if neighbor == endWord:
-							return (level+1)
-
-						if not visited[neighbor]:
-							bfs_q.append((neighbor,level+1))
-							visited[neighbor] = True
-
-			# Couldn't find a transformation sequence from beginWord to endWord
-			return 0
-
-
-		# Find all paths from startWord to endWord not
-		# exceeding 'min_steps' levels
-		def dfs_paths(word):
-			if len(prefix) == min_steps:
-				return
-
-			if word == endWord:
-				# append current path to results
-				# dont continue dfs on this path
-				# 'endWord' will always be marked unvisited
-				paths.append(prefix + [endWord])
-				return
-
-			visited[word] = True
-			prefix.append(word)
-			for i in xrange(n):
-				key = word[:i] + '_' + word[i+1:]
-				for neighbor in neighbors_lookup[key]:
-					if not visited[neighbor]:
-						dfs_paths(neighbor)
-
-			prefix.pop() # backtrack
-			visited[word] = False
-
-
 		n = len(beginWord)
 		neighbors_lookup = defaultdict(list)
 
@@ -249,13 +303,44 @@ class Solution(object):
 		for word in wordList:
 			add_to_lookup(word)
 
-		min_steps = find_minimum_steps()
-
-		visited = defaultdict(lambda: False)
-		paths = []
+		# Use BFS to find transformations
+		# needed to transform startWord to endWord
+		bfs_q = [(beginWord,[])]
 		prefix = []
-		dfs_paths(beginWord)
+		visited = defaultdict(lambda: 0, {beginWord: 1})
+		paths = []
+		while bfs_q:
+			word, prefix = bfs_q.pop(0)
+			if len(prefix) == visited[endWord]-1:
+				# prefix is already the same as endWord's level
+				# even if this path leads to endWord, it will exceed the minimum steps
+				# seen so far
+				# Return all the paths recorded so far
+				return paths
+
+			for i in xrange(n):
+				key = word[:i] + '_' + word[i+1:]
+				for neighbor in neighbors_lookup[key]:
+					if neighbor == word:
+						continue
+
+					if neighbor == endWord:
+						# Found 'end word'
+						# return its current level
+						# in the transformation path
+						# NOTE: As a slight optimization, do not add 'endWord' to the queue
+						# we already know its path, and we dont intend to traverse beyond it
+						paths.append(prefix + [word] + [neighbor])
+						visited[endWord] = visited[word]+1
+					else:
+						if not visited.get(neighbor) or visited[neighbor] == (visited[word]+1):
+							# current word is either not visited yet
+							# or it will remain at the same level for a different path
+							bfs_q.append((neighbor,prefix+[word]))
+							visited[neighbor] = visited[word]+1
+
 		return paths
+
 
 
 
@@ -265,6 +350,7 @@ if __name__ == '__main__':
 			['red', 'ted', 'tad', 'tax'], ['red', 'ted', 'tex', 'tax'], ['red', 'rex', 'tex', 'tax']]
 
 	assert s.findLadders("hit", "cog", ["hot","dot","dog","lot","log"]) == []
-	assert sorted(s.findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"])) == sorted([['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']])
+	assert sorted(s.findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"])) == \
+			sorted([['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']])
 	assert s.findLadders("mate", "mile", ["math","path","male","mole","mile","late", "lake", "like"]) == [['mate', 'male', 'mile']]
 
