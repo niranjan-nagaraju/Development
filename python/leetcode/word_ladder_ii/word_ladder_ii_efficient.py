@@ -36,335 +36,235 @@ wordList = ["hot","dot","dog","lot","log"]
 
 Output: []
 Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+'''
 
 
-* Solution description
-  =====================
-  + minlevel = ∞
-  + Start with constructing a Directing Acyclic graph with Ws (= starting word) as starting vertex.
-  + Add links from any word, Wj to word, Wi if Wj is one transformation away from Wi, in a breadth-first manner.
-    - capture level, which is the distance of the current node representing Wx from Ws.
-    - Add an edge from Wj to Wi only if Wi can be tranformed into Wj with a one-letter change.
-      - Since we also capture level information for a vertex, a vertex can have many outgoing links to multiple parents
-      - as long as the level remains intact.
-	- this automatically prevents edges between two vertices in the same level.
-           eg.
-                  W1
-               /      \
-              w2  -   w3  (is not allowed) since w3 is also at level 1, adding edge from w3-w1 will make it level 2, and therefore not allowed)
+'''
+Solution Outline:
+	0. Let A: starting word, B: ending word, C: wordlist/dictionary
+	1. Build a graph starting from 'A', the starting word, s.t the word at each level is one-letter different from the previous level.
+	2. Do a BFS traversal from 'A', the starting word until we reach 'B' the end word.
+		Calculate the path length - this will be the minimum number of steps needed to change from A to B.
+	3. Start a DFS traversal from 'A', skip all paths that are > minimum steps calculated from the bfs in 2.
+		Return all paths that lead to B', the end word
 
-        - also back edges w1-w2 and w2-w1 will be avoided, because w1-w2 puts w2 at level 1, w1 at level 0, w2-w1 will put w2 and w1 and different levels.
+	To build the graph,
+	  Build a lookup table, of words A, B, and each word in C, and their neighbors.
+	  neighbors of word, w: words that are one-letter distance away from w
+	  Let word w: {w1,w2,..wn}
+		  Breakup word into 'n' parts, like below, and add 'word' into each of these 'n' parts as keys.
+		  {_, w2, .., wn}: word
+		  {w1, _, .., wn}: word
+		  .  .  .  .  .
+		  {w1, w2, .., _}: word
 
-	- and more importantly, it allows 'diamond' pattern like below -
+	  After processing all words,
+	  Then, for each word, w,
+		its 'neighbors' are the combination of values at keys:
+			{_, w2, .., wn}
+			{w1, _, .., wn}
+			.  .  .  .  .
+			{w1, w2, .., _}
 
-	     w1
-       /    \
-      w2     w3
-       \     /
-          w4
+	For.e,g, A: "hit", B: "cog", C: ["hot", "dot", "dog", "lot", "log"]
+	  "hit"
+		"_it": ["hit"]
+		"h_t": ["hit"]
+		"hi_": ["hit"]
+	  "hot":
+		"_ot": ["hot"]
+		"h_t": ["hit", "hot"]
+		"ho_": ["hot"]
+	  "dot"
+		"_ot": ["hot", "dot"]
+		"d_t": ["dot"]
+		"do_": ["dot"]
+	  "dog":
+		"_og": ["dog"]
+		"d_g": ["dog"]
+		"do_": ["dot", "dog"]
+	  "lot"
+		"_ot": ["hot", "dot", "lot"]
+		"l_t": ["lot"]
+		"lo_": ["lot"]
+	  "log"
+		"_og": ["dog", "log"]
+		"l_g": ["log"]
+		"lo_": ["lot", "log"]
+	  "cog"
+		"_og": ["dog", "log", "cog"]
+		"c_g": ["cog"]
+		"co_": ["cog"]
 
-            Here w4 is firmly at level 2, but has two outgoing links to w2, and w3.
+	Now use the lookup table as the graph, to get neighbors of each word, and perform a BFS, starting from 'A',
+	until we reach 'B', while recording the number of levels
 
-    - Since each outgoing edge from any vertex for Wi represents its parent, all the way to Ws,
-      if we find We, Simply do a DFS to extract all paths from We to Ws.
+	Q: [("hit",0)]
+	visited: ["hit"]
 
-  + Once We is found, and its level < minlevel, trace back all parent links until Ws.
-    + Continue search for next We as long level == minlevel.
+	Dequeue: ("hit", 0)
+	Q: []
+	neighbor of "hit": lookup["_it"] + lookup["h_t"] + lookup["hi_"]
+					 : ["hit"] + ["hit", "hot"] + ["hit"]   {-remove "hit"}
+					 : ["hot"]
 
+    hit
+      \ 
+        - - hot
+	Q: [("hot",1)]
+	visited: ["hit", "hot"]
 
-*** Example 1
-Ws: "red"
-We: "tax"
-wordlist: ["ted","tex","red","tax","tad","den","rex","pee"]
+	Dequeue: ("hot", 1)
+	Q: []
+	neighbor of "hot": lookup["_ot"] + lookup["h_t"] + lookup["ho_"]
+					 : ["hot", "dot", "lot"] + ["hit","hot"] + ["hot"] {-remove "hot" and "hit" (already visited)}
+					 : ["dot", "lot"]
+    hit
+      \ 
+        - - hot
+              \    / - dot
+                - -
+                   \ - lot
 
-minlevel = ∞
+	Q: [("dot",2), ("lot",2)]
+	visited: ["hit", "hot", "dot", "lot"]
 
-Level: 0
-DAG: (red, 0)
+	Dequeue: ("dot", 2)
+	Q: [("lot",2)]
+	neighbor of "dot": lookup["_ot"] + lookup["d_t"] + lookup["do_"]
+					 : ["hot", "dot", "lot"] + ["dot"] + ["dot", "dog"] {-remove "hot", "hit", "lot" and "dot" (already visited)}
+					 : ["dog"]
+	Q: [("lot",2), ("dog",3)]
+	visited: ["hit", "hot", "dot", "lot", "dog"]
 
-Adjlist:
-  [red]: (None, 0)
+	Dequeue: ("lot",2)
+	neighbor of "lot": lookup["_ot"] + lookup["l_t"] + lookup["lo_"]
+					 : ["hot", "dot", "lot"] + ["lot"] + ["lot", "log"] {remove visited}
+					 : ["log"]
+	Q: [("dog",3), ("log",3)]
+	visited: ["hit", "hot", "dot", "lot", "dog", "log"]
+	
+	Dequeue: ("dog", 3)
+	Q: [("log",3)]
+    hit
+      \ 
+        - - hot
+              \    / - dot -- dog
+                - -
+                   \ - lot
 
-Level: 1
-   (Add all words that are one letter away from red) -- [ted, rex]
-   
-   DAG:
-         (red, 0)
-        /       \
-     (ted, 1)   (rex, 1)
+	neighbor of "dog": lookup["_og"] + lookup["d_g"] + lookup["do_"]
+					 : ["dog", "log", "cog"] + ["dog"] + ["dot", "dog"] {remove visited}
+					 : ["cog"]
+	Q: [("log",3), ("cog",4)]
+	visited: ["hit", "hot", "dot", "lot", "dog", "log", "cog"]
+	Found 'cog' at level 4
+	hit
+      \ 
+        - - hot
+              \    / - dot -- dog -- cog
+                - -
+                   \ - lot
 
+	Minimum level ==  (4+1) == 5
 
-                                       
-Adjlist: 
-  [red]: (None, 0)
-  [ted]: (red, 1)
-  [rex]: (red, 1)
-
-
-Level 2:
-(Add all words that are one letter away from ted) -- [tex, red, tad]
-   red: (None, 0) cannot be replaced with red: (ted, 1)
-
-   DAG:  
-         (red, 0)
-        /       \
-     (ted, 1)   (rex, 1)
-     /      \
-   (tex,2) (tad,2) 
-
-                                       
-Adjlist: 
-  [red]: (None, 0)
-  [ted]: (red, 1)
-  [rex]: (red, 1)
-  [tex]: (ted, 2)
-  [tad]: (ted, 2)
-  
-(Add all words that are one letter away from rex) -- [tex, red]
-  red: level 0 != current level 2
-  tex: level 2 == current level 2, can be added to DAG
-
-   DAG:  
-         (red, 0)
-        /       \
-     (ted, 1)   (rex, 1)
-     /      \   /
-   (tad,2) (tex,2) 
-
-                                       
-Adjlist: 
-  [red]: (None, 0)
-  [ted]: (red, 1)
-  [rex]: (red, 1)
-  [tex]: (ted, 2), (rex, 2)
-  [tad]: (ted, 2)
-
-Level 3:
-(Add all words that are one letter away from tad) -- [ted, tax]
-ted: level 1 != current level 3
-tax: None
-
-   DAG:  
-         (red, 0)
-        /       \
-     (ted, 1)   (rex, 1)
-     /      \   /
-   (tad,2) (tex,2) 
-  /
-(tax,3)
-
-Adjlist: 
-  [red]: (None, 0)
-  [ted]: (red, 1)
-  [rex]: (red, 1)
-  [tex]: (ted, 2), (rex, 2)
-  [tad]: (ted, 2)
-  [tax]: (tad, 3)*
-     
-minlevel = 3
-
-(Add all words that are one letter away from tex) -- [ted, tax, rex]
-ted: level 1 != current level 3
-rex: level 1 != current level 3
-tax: level 3 == current level 3, can be added to DAG
-
-   DAG:  
-         (red,0)
-        /       \
-     (ted,1)   (rex,1)
-     /      \   /
-   (tad,2) (tex,2) 
-      /    /        
-     (tax,3)
-
-Adjlist: 
-  [red]: (None, 0)
-  [ted]: (red, 1)
-  [rex]: (red, 1)
-  [tex]: (ted, 2), (rex, 2)
-  [tad]: (ted, 2)
-  [tax]: (tad, 3), (tex, 3)
-
-Level 4:
-  > minlevel, Proceed to extract all paths from 'tax' to 'red' using DFS
-
-paths:
-  {tax, tad, ted, red}
-  {tax, tex, ted, red}
-  {tax, tex, rex, red}
+	=> None of our paths should exceed 5 words from "hit" to "cog"
 '''
 
 from collections import defaultdict
-
 class Solution(object):
-	# Initialize a lookup-table to quickly get one-letter transforms of a given word
-	def initialize_lookup_table(self, wordList):
-		lookup_table = defaultdict(set)
-		for word in wordList:
-			for i in xrange(len(word)):
-				# Create different placeholder keys for lookup
-				key = word[:i] + '*' + word[i+1:]
-
-				# Using a set so incase there are duplicates in wordlist
-				# (problem statement says there arent)
-				# OR
-				# beginWord already exists in wordList
-				# in which case, we dont want duplicate entries in the lookup table
-				lookup_table[key].add(word)
-
-		return lookup_table
-
-
-	# Find all words in the wordList that are one letter
-	# away from 'word'
-	def findOneLetterTranforms(self, word, lookup_table):
-		transforms = []
-		for i in xrange(len(word)):
-			key = word[:i] + '*' + word[i+1:]
-			words = lookup_table[key]
-			for w in words:
-				if w != word:
-					transforms.append(w)
-
-		return transforms
-
-
-	# print the adjacency list representation of the graph
-	def printGraph(self, graph):
-		print 'Graph:'
-		for j in graph.keys():
-			print '[', j, ']:',
-			if not graph[j]:
-				print 'None'
-			else:
-				for w,level in graph[j]:
-					print  (w, level),
-				print
-
-	# Extract all paths from endWord to beginWord, in reverse order
-	# and return a list of paths
-	def all_paths_dfs(self, graph, endWord, beginWord):
-		# Use dfs to extract all paths
-		# 'NOTE: keeping track of visited' is not needed as this is a DAG
-		def dfs_paths(prefix, current):
-			if current == beginWord:
-				paths.append([beginWord]+prefix)
-
-			prefix.insert(0, current)
-			for w,_ in graph[current]:
-				dfs_paths(prefix, w)
-			prefix.pop(0)
-
-
-		paths = []
-		dfs_paths([], endWord)
-		return paths
-
-
-
-	# Extract all paths from endWord to beginWord, in reverse order using BFS
-	# and return a list of paths
-	def all_paths_bfs(self, graph, endWord, beginWord):
-		# Use bfs to extract all paths
-		# 'NOTE: keeping track of visited' is not needed as this is a DAG
-		def bfs_paths():
-			q = [([], endWord)]
-
-			while q:
-				prefix, current = q.pop(0)
-				if current == beginWord:
-					paths.append([beginWord]+prefix)
-
-				for w,_ in graph[current]:
-					q.append(([current]+prefix, w))
-
-
-		paths = []
-		bfs_paths()
-
-		return paths
-
-
-
 	# Find minimumm-length ladders from beginWord -> endWord
 	def findLadders(self, beginWord, endWord, wordList):
 		"""
 		:type beginWord: str
 		:type endWord: str
 		:type wordList: List[str]
-		:rtype: List[List[str]]
+		:rtype: List of transformation paths
 		"""
-		# Add beginWord to the list, just in case
-		# wordList doesn't have it already
-		wordList.insert(0, beginWord)
-
-		lookup_table = self.initialize_lookup_table(wordList)
-
-
-		shortest_paths = []
-
-		bfs_q = [(beginWord, 0)] # Each 'vertex' in the graph has (parent word index, Level in the graph)
-
-		# Maximum depth == max number of edges in the graph
-		# this'll be equal to the number of words in the dictionary (sans Ws)
-		# in the worst case
-		minlength = len(wordList)
-
-		# adjacency list representation of the transformation DAG
-		# Edge Wj -> Wi exists if Wi can be transformed into Wj by changing one letter in Wi
-		# Use a set for adjacency list so duplicate words wont be added
-		transformation_graph = defaultdict(set)
-		transformation_graph[beginWord].add((None, 0))
-		while bfs_q:
-			(word, curr_level) = bfs_q.pop(0)
-
-			oneLetterTranforms= self.findOneLetterTranforms(word, lookup_table)
-
-			curr_level += 1
-
-			# We have found all the shortest transformation paths
-			if curr_level > minlength:
-				break
-
-			for w in oneLetterTranforms:
-				# add an edge to the parent word from current word,
-				# capturing the level the current word is at
-				# Add an edge only if it doesnt change the vertex's current level
-				vertex_level = curr_level
-				if transformation_graph[w]:
-					# compare against an item in the adjacency list for w
-					_,vertex_level = next(iter(transformation_graph[w]))
-
-				if vertex_level == curr_level:
-					transformation_graph[w].add( (word, curr_level) )
-
-				# Found minimum ladder length
-				# all transformations over this length needn't be included
-				if w == endWord:
-					minlength = curr_level
-				else:
-					# Do not add endWord to the BFS queue
-					# its redundant to find 'neighbors' of endWord
-					bfs_q.append((w, curr_level))
+		# Build a lookup table of neighbors
+		# for current word
+		def add_to_lookup(word):
+			for i in xrange(n):
+				key = word[:i] + '_' + word[i+1:]
+				neighbors_lookup[key].append(word)
 
 
-		#self.printGraph(transformation_graph)
-		shortest_paths = self.all_paths_dfs(transformation_graph, endWord, beginWord)
+		# Use BFS to find minimum number of steps
+		# needed to transform startWord to endWord
+		def find_minimum_steps():
+			bfs_q = [(beginWord,1)]
+			visited = defaultdict(lambda: False)
+			visited[beginWord] = True
+			while bfs_q:
+				word, level = bfs_q.pop(0)
+				for i in xrange(n):
+					key = word[:i] + '_' + word[i+1:]
+					for neighbor in neighbors_lookup[key]:
+						# Found 'end word'
+						# return its current level
+						# in the transformation path
+						if neighbor == endWord:
+							return (level+1)
 
-		return shortest_paths
+						if not visited[neighbor]:
+							bfs_q.append((neighbor,level+1))
+							visited[neighbor] = True
+
+			# Couldn't find a transformation sequence from beginWord to endWord
+			return 0
+
+
+		# Find all paths from startWord to endWord not
+		# exceeding 'min_steps' levels
+		def dfs_paths(word):
+			if len(prefix) == min_steps:
+				return
+
+			if word == endWord:
+				# append current path to results
+				# dont continue dfs on this path
+				# 'endWord' will always be marked unvisited
+				paths.append(prefix + [endWord])
+				return
+
+			visited[word] = True
+			prefix.append(word)
+			for i in xrange(n):
+				key = word[:i] + '_' + word[i+1:]
+				for neighbor in neighbors_lookup[key]:
+					if not visited[neighbor]:
+						dfs_paths(neighbor)
+
+			prefix.pop() # backtrack
+			visited[word] = False
+
+
+		n = len(beginWord)
+		neighbors_lookup = defaultdict(list)
+
+		# Add only beginWord, and wordList words to the lookup table
+		# so if the endWord is not in the dictionary,
+		# BFS will fail to locate it
+		add_to_lookup(beginWord)
+		for word in wordList:
+			add_to_lookup(word)
+
+		min_steps = find_minimum_steps()
+
+		visited = defaultdict(lambda: False)
+		paths = []
+		prefix = []
+		dfs_paths(beginWord)
+		return paths
+
 
 
 if __name__ == '__main__':
 	s = Solution()
-
-	ltable = s.initialize_lookup_table(["mate", "meat", "math", "late", "male", "mile"])
-
-	assert sorted(s.findOneLetterTranforms("mate", ltable)) == sorted(["math", "late", "male"])
-	assert sorted(s.findOneLetterTranforms("male", ltable)) == sorted(["mate", "mile"])
-
 	assert s.findLadders("red", "tax", ["ted","tex","red","tax","tad","den","rex","pee"]) == [
 			['red', 'ted', 'tad', 'tax'], ['red', 'ted', 'tex', 'tax'], ['red', 'rex', 'tex', 'tax']]
 
 	assert s.findLadders("hit", "cog", ["hot","dot","dog","lot","log"]) == []
-	assert s.findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"]) == [['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']]
+	assert sorted(s.findLadders("hit", "cog", ["hot","dot","dog","lot","log","cog"])) == sorted([['hit', 'hot', 'lot', 'log', 'cog'], ['hit', 'hot', 'dot', 'dog', 'cog']])
 	assert s.findLadders("mate", "mile", ["math","path","male","mole","mile","late", "lake", "like"]) == [['mate', 'male', 'mile']]
+
