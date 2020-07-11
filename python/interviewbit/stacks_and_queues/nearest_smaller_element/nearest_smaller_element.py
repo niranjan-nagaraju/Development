@@ -44,10 +44,44 @@ Explaination 2:
 
 '''
 Solution Outline:
-	Use a stack.
-	Scan elements left to right,
-	  for every element, x, remove everything from the stack that is >= x (as x will be a better minimum)
-	  If there's a stack top, then mark it as x's nearest-smallest-element, otherwise x doesnt have an NSE.
+	0. Use a strictly-decreasing stack.
+	1. Scan elements left to right,
+	   1.1 for every element, x, pop everything from the stack that is >= x (as x will be a better minimum)
+	   1.2 If there's a stack top, then mark it as x's nearest-smallest-element, otherwise x doesnt have an NSE.
+
+Sample run:
+	A: [5, 1, 4, 2, 3]
+	stack: [5]
+	nse: [-1]
+
+	x: 1
+	pop all >= 1 from the stack
+	stack: []
+	nse: [-1, -1]
+	push(1)
+	stack: [1]
+
+	x: 4
+	pop all >= 4 from the stack
+	nse: [-1, -1, 1]
+	push(4)
+	stack: [4, 1]
+
+	x: 2
+	pop all >= 2 from the stack
+	stack: [1]
+	nse: [-1, -1, 1, 1]
+	push(2)
+	stack: [2, 1]
+
+	x: 3
+	pop all >= 3 from the stack
+	stack: [2, 1]
+	nse: [-1, -1, 1, 1, 2]
+	push(3)
+	stack: [3, 2, 1]
+
+	return [-1, -1, 1, 1, 2]
 '''
 class Stack:
 	def __init__(self):
@@ -92,8 +126,6 @@ if __name__ == '__main__':
 	assert s.prevSmaller([4,5,2,10,8]) == [-1,4,-1,2,2]
 	assert s.prevSmaller([3,2,1]) == [-1]*3
 	assert s.prevSmaller([1,4,3,2,5]) == [-1, 1, 1, 1, 2]
-
-
-			
+	assert s.prevSmaller([5,1,4,2,3]) == [-1, -1, 1, 1, 2]
 
 
