@@ -143,7 +143,7 @@ class SLLQueueWithLookup:
 			return
 
 		node = self.lookup[key]
-		self.lookup[node.item[0]] = None
+		self.lookup[key] = None
 		self.removeNode(node)
 
 
@@ -185,9 +185,29 @@ class SLLQueueWithLookup:
 			node.item = (key, value)
 			return
 
-		self.removeNode(node)
-		self.enqueue(key, value)
-	
+		# Yank node from the SLL queue
+		# copy node.next item into node
+		# and remove node.next from the list
+		yanked = node.next
+		node.item = node.next.item
+		node.next = node.next.next
+
+		# node that previously contained item(to delete)
+		# now contains next node's item
+		# update lookup table
+		self.lookup[node.item[0]] = node
+
+		# Re-enqueue 'yanked' node at the end of the SLL-Queue
+		self.tail.next = yanked
+		self.tail.item = (key, value)
+		# update lookup table for key
+		self.lookup[key] = self.tail
+
+		# Make 'yanked' node the new dummy tail node
+		yanked.item = None
+		yanked.next = None
+		self.tail = yanked
+
 
 	# Lookup key's node, and return its value
 	# None if the key doesn't exist
