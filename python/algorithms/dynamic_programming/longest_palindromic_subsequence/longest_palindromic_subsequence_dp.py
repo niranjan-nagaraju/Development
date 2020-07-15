@@ -1,7 +1,5 @@
 '''
-https://leetcode.com/problems/longest-palindromic-subsequence/
-
-516. Longest Palindromic Subsequence
+Longest Palindromic Subsequence
 
 Given a string s, find the longest palindromic subsequence's length in s. You may assume that the maximum length of s is 1000.
 
@@ -111,23 +109,16 @@ def longest_palindromic_subsequence_len(s):
 	n = len(s)
 	T = [[(1 if x==y else 0) for x in xrange(n)] for y in xrange(n)]
 
-	# Store all 2-letter palindromes in the table
-	for i in xrange(n-1):
-		if s[i] == s[i+1]:
-			T[i][i+1] = 2
-		else:
-			T[i][i+1] = 1
-
-	# All 3-letter combinations, 4-, etc
-	for k in xrange(3, n+1):
-		for i in xrange(0, n-k+1):
-			j = i+k-1
+	# All 2-letter combinations, 3-, etc
+	for k in xrange(1, n):
+		for i in xrange(0, n-k):
+			j = i+k
 			if s[i] == s[j]:
 				T[i][j] = T[i+1][j-1] + 2
 			else:
 				T[i][j] = max(T[i][j-1], T[i+1][j])
 
-	return T[0][n-1]
+	return T[0][-1]
 
 
 if __name__ == '__main__':
