@@ -52,9 +52,10 @@ Solution Outline:
 		LCS_l([], []) = 0
 		LCS_l(A, []) = 0
 		LCS_l([], []) = 0
-
-	4. Fill a bottom-up DP table, T[][], of m x n, where T[i][j] = LCS_l(A[0:i], B[0:j])
-		T[m-1][n-1] will be the LCS_l(A, B)
+	4. Fill a bottom-up DP table, T[][], of m x n, where T[i][j] = LCS_l(A[0..i], B[0..j])
+		T[0][j] = 0 for all 0 <= j <= n
+		T[i][0] = 0 for all 0 <= i <= m
+		T[m][n] will be the LCS_l(A, B)
 
 Sample run:
 	A: "AGGTAB"
