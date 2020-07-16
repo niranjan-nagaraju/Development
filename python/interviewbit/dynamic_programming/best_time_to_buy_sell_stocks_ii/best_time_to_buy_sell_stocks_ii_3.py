@@ -55,52 +55,67 @@ Solution Outline:
 	2. Max profit: sum of all items in Profits DP table
 
 
+NOTE: We don't need to keep track of profits at the end of each day
+	1. Day 0, Mark A[0] as buy price, we don't have a sell price for it yet
+		max_profits: 0
+	2. At Day i, ( 0 < i < n )
+		if A[i] < A[i-1]
+			close previous position if there's a sell, add to max_profits
+			Mark Day i's price, A[i] as buy
+			Mark sell price as 'Nothing', we don't have anything to sell at this point.
+		otherwise,
+			Mark A[i] as tentative sell 
+			NOTE: Tentative sells ensure if we have an increasing sequence, we
+					continue holding the position until we can realize max profit in a single txn)
+				{e.g, [1,2,3,4],
+					buy at 1, sell at 4 instead of buying at 1, sell 2, buy 2, sell 3, buy 3 and sell 4}
+				This yields the same profit with lesser number of txns, so if each txn has a fee, this reduced # of txns helps.
+	3. Return accumulated max_profits
+
 Sample run:
 	   0 1 2 3 4 5 6
 	A: 5 1 4 3 2 6 8
-	P: 0 0 0 0 0 0 0  {max profits at the end of Day i} 
+	max_profits: 0
 	
 	Day 0:
 		buy: 5
 		sell: None
-		P: 0 0 0 0 0 0 0
 
 	Day 1:
 		price: 1 < Day 0
+		No sell price => no txn
 		buy: 1
-		P: 0 0 0 0 0 0 0
 	
 	Day 2:
 		price: 4 > Day 1
-		sell: 4
-		profit: 4-1 = 3
-		buy: 4
-		P: 0 0 3 0 0 0 0
+		tentative sell: 4
 
 	Day 3:
 		price: 3 < Day 2
+		sell: 4, buy: 1
+		max_pofits: +(4-1) == +3 == 3
 		buy: 3
-		P: 0 0 3 0 0 0 0
+		sell: None
 	
 	Day 4:
 		price: 2 < Day 3
+		No sell price => no txn
 		buy : 2
-		P: 0 0 3 0 0 0 0
 
 	Day 5:
 		price: 6 > Day 4
-		sell: 6
-		profit: 6-2 = 4
-		buy: 6
-		P: 0 0 3 0 0 4 0
+		tentative sell: 6
 
 	Day 6:
 		price: 8 > Day 5
-		sell: 8
-		profit: 8-6 = 2
-		P: 0 0 3 0 0 4 2
+		tentative sell: 8
 
-	Max profit: 3+4+2 = 8
+	EOF:
+		sell: 8, buy: 2
+		close position on Day 6
+		max_profits: +(8-2) == +6 == 9
+
+	max_profits: 9
 '''
 class Solution:
 	def max_profits_any_txns(self, A):
@@ -108,15 +123,27 @@ class Solution:
 			return 0
 
 		buy = A[0]
-		P = [0]*len(A) # profits table for each day
+		sell = None
+		max_profits = 0
 
 		for i in xrange(1, len(A)):
-			if A[i] > A[i-1]:
-				P[i] = A[i]-buy
-			buy = A[i]
+			if A[i] < A[i-1]:
+				# Close previous position if it is
+				# in profit
+				if sell is not None:
+					sell = A[i-1]
+					max_profits += (sell-buy)
+					sell = None
+				buy = A[i]
+			else:
+				sell = A[i]
 
-		# print P
-		max_profits = sum(P)
+		
+		# At the end, check if we have a sell price
+		# if yes, execute a txn with (sell,buy)
+		if sell is not None:
+			max_profits += (sell-buy)
+
 		return max_profits
 
 
