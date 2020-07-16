@@ -45,7 +45,7 @@ Solution Outline:
 	0. Initially, Set A[0] as buy price
 	1. A[i] is the price on Day i
 		if A[i] < A[i-1]
-		  Mark A[i-1] as new buy price (we found a better buy price)
+		  Mark A[i] as new buy price (we found a better buy price)
 		  Profit for Day i: 0 (We didn't sell any)
 		Otherwise,
 			if A[i] >= A[i-1]
