@@ -108,7 +108,6 @@ class Solution:
 			return 0
 
 		buy = A[0]
-		sell = None
 		P = [0]*len(A) # profits table for each day
 
 		for i in xrange(1, len(A)):
