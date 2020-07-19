@@ -12,7 +12,7 @@ class MD5String(MD5):
 		self.finish()
 
 	def __str__(self):
-		return "MD5 (" + self.preimage + "): " + MD5.__str__(self)
+		return MD5.__str__(self)
 
 
 class MD5File(MD5):
@@ -37,4 +37,4 @@ class MD5File(MD5):
 		return self.filehandle.read(1024)
 	
 	def __str__(self):
-		return "MD5 (" + self.filename + "): " + MD5.__str__(self)
+		return MD5.__str__(self)
