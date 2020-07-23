@@ -40,6 +40,24 @@ Explanation 2:
  It is not possible to make this string palindrome just by removing one character
 */
 
+
+
+/**
+Solution Outline: (Brute-force)
+	1. If A is already a palindrome, removing the middle element will still render A palindromic.
+		e.g, 
+			Case I:  A is a palindrome of odd-length
+				A: "racecar"
+					removing "e" from A
+					A': raccar -> still a palindrome
+			Case II: A is a palindrome of even-length
+				A: "redder"
+					removing "d" from A
+					A': reder -> still a palindrome
+	2. for each element x in A,
+		check if removing it results in a palindrome
+*/
+
 #include <iostream>
 #include <assert.h>
 
