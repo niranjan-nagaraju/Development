@@ -11,17 +11,17 @@ Example:
 
 class Solution:
 	# @param A : integer
-	# @return a strings
+	# @return a string
 	def findDigitsInBinary(self, A):
 		if not A:
 			return '0'
 
-		binary = ""
+		binary = []
 		while A:
-			binary = str(A & 1) + binary
-			A /= 2
+			binary.append(str(A & 1))
+			A >>= 1
 
-		return binary
+		return ''.join(binary[::-1])
 
 
 if __name__ == '__main__':
@@ -30,3 +30,5 @@ if __name__ == '__main__':
 	assert s.findDigitsInBinary(18) == '10010'
 	assert s.findDigitsInBinary(10) == '1010'
 	assert s.findDigitsInBinary(15) == '1111'
+	assert s.findDigitsInBinary(18) == '10010'
+
