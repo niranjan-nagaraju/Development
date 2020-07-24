@@ -64,7 +64,7 @@ class TreeNode:
 class Solution:
 	def vertical_order_traversal(self, root):
 		if not root:
-			return [[]]
+			return []
 
 		from collections import defaultdict
 		bfs_q = [(0,root)]
