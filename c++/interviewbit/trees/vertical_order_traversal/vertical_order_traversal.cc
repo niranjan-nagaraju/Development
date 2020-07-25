@@ -78,7 +78,8 @@ class Solution
 
 			std::unordered_map<int, std::vector<int>> widths;
 			std::list< std::pair<TreeNode*, int> > bfs_q = {std::make_pair(root,0)};
-			int lwidth, rwidth;
+			int lwidth=0, rwidth=0;
+
 			while (bfs_q.size()) {
 				TreeNode *node = bfs_q.front().first;
 				int width = bfs_q.front().second;
@@ -192,7 +193,7 @@ int main(void)
      4   5  6   7
                /  \ 
               8   9 
-	*/
+		*/
 
 		TreeNode* root = new TreeNode(1);
 		root->left = new TreeNode(2);
@@ -229,5 +230,6 @@ int main(void)
 		delete root->right;
 		delete root;
 	}
+
 	return 0;
 }
