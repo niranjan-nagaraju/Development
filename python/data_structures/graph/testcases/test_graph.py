@@ -443,7 +443,7 @@ class GraphTester(object):
 
 
 	'''
-	Test toplogical sort on DAGs
+	Test topological sort on DAGs
 	'''
 	def test_topological_sort(self):
 		Graph = self.graphType
@@ -493,6 +493,6 @@ class GraphTester(object):
 		g.add_edge(4, 5)
 		g.add_edge(5, 6)
 
-		assert str(g.topological_sort()) == "[7]: 1 4 0 2 3 5 6"
+		assert [_ for _ in g.topological_sort()] == [1,4,0,2,3,5,6]
 
 
