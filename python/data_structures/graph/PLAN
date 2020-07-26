@@ -3,6 +3,8 @@ Graph problems:
    [ ] Shortest path between two nodes u,v
        [ ] By number of the edges in the paths
 	   [ ] By weight of the edges in the paths
+	   [ ] Djisktra's
+   [ ] Maze-solving
    [ ] Are two nodes u,v connected -- (Union-Find)
    [ ] Cycles
        [ ] Are there negative cycles? (Bellman Ford, Floyd-Warshall)
