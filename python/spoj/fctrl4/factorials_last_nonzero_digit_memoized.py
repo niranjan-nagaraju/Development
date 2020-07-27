@@ -21,6 +21,7 @@ Output file:
 2
 2
 4
+2
 '''
 
 cached_last_digits = {}
@@ -64,5 +65,13 @@ def main():
 
 
 if __name__ == "__main__":
+	assert last_nonzero_digit_in_factorial(1) == 1
+	assert last_nonzero_digit_in_factorial(2) == 2
+	assert last_nonzero_digit_in_factorial(3) == 6
+	assert last_nonzero_digit_in_factorial(4) == 4
+	assert last_nonzero_digit_in_factorial(5) == 2
+	assert last_nonzero_digit_in_factorial(6) == 2
+	assert last_nonzero_digit_in_factorial(7) == 4
+	assert last_nonzero_digit_in_factorial(8) == 2
 	main()
 

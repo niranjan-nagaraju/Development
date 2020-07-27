@@ -1,3 +1,29 @@
+'''
+http://www.spoj.com/problems/FCTRL4/
+
+Last non-zero digit in n!
+
+Input file:
+1
+2
+3
+4
+5
+6
+7
+8
+
+Output file:
+1
+2
+6
+4
+2
+2
+4
+2
+'''
+
 # Return last non-zero from a number 'n'
 # e.g., 10-> 1, 8000 -> 8
 def last_nonzero_digit(n):
@@ -26,5 +52,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+	assert last_nonzero_digit_in_factorial(1) == 1
+	assert last_nonzero_digit_in_factorial(2) == 2
+	assert last_nonzero_digit_in_factorial(3) == 6
+	assert last_nonzero_digit_in_factorial(4) == 4
+	assert last_nonzero_digit_in_factorial(5) == 2
+	assert last_nonzero_digit_in_factorial(6) == 2
+	assert last_nonzero_digit_in_factorial(7) == 4
+	assert last_nonzero_digit_in_factorial(8) == 2
+	main()
            
