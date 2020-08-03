@@ -21,7 +21,9 @@ Note: m and n will be at most 100.
 
 
 '''
-Solution Outline:
+Solution Outline: 
+    (Efficient DP, same approach as solution #1,
+       but uses just 2 rows since only the last 2 rows of the DP are used at any given time)
     0. Allowed directions are R, D
     1. Consider moving to cell x,y from 0,0
         If there were no obstacles, it would be (num_paths_to(x-1,y) + num_paths_to(x,y-1))
@@ -119,7 +121,7 @@ class Solution:
 		if A[-1][-1] == 1:
 			return 0
 
-		DP = [[0 for _ in xrange(n)] for _ in xrange(m)]
+		DP = [[0 for _ in xrange(n)] for _ in xrange(2)]
 
 		# first row
 		for j in xrange(n):
@@ -127,20 +129,22 @@ class Solution:
 				break
 			DP[0][j] = 1
 
-		# first column
-		for i in xrange(m):
-			if A[i][0] == 1:
-				break
-			DP[i][0] = 1
-
 		for i in xrange(1, m):
-			for j in xrange(1, n):
-				if A[i][j] == 0:
-					DP[i][j] = DP[i-1][j] + DP[i][j-1]
-				# if A[i][j] is an obstacle, DP[i][j] remains 0
+			if A[i][0] == 1 or DP[(i-1)&1][0] == 0:
+                # If the current row start is a blockade
+                # or one of the previous rows had a blockade
+                # in column 0, mark this row's column 0 as unreachable
+				DP[i&1][0] = 0
+			else:
+				DP[i&1][0] = 1
 
-		print DP
-		return DP[-1][-1]
+			for j in xrange(1,n):
+				if A[i][j] == 0:
+					DP[i&1][j] = DP[(i-1)&1][j] + DP[i&1][j-1]
+				else: # A[i][j] is an obstacle, DP[i][j] is 0
+					DP[i&1][j] = 0
+
+		return DP[(m-1)&1][-1]
 
 
 if __name__ == '__main__':
