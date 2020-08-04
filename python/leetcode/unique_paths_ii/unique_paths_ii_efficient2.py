@@ -29,7 +29,7 @@ There are two ways to reach the bottom-right corner:
 
 
 '''
-Solution Outline: Efficient DP O(n) memory
+Solution Outline: Efficient DP O(n) memory with a single list of size n
     0. Allowed directions are R, D
     1. Consider moving to cell x,y from 0,0
         If there were no obstacles, it would be (num_paths_to(x-1,y) + num_paths_to(x,y-1))
@@ -132,30 +132,30 @@ class Solution(object):
 		if obstacleGrid[-1][-1] == 1:
 			return 0
 
-		DP = [[0 for _ in xrange(n)] for _ in xrange(2)]
+		DP = [0 for _ in xrange(n)]
 
 		# first row
 		for j in xrange(n):
 			if obstacleGrid[0][j] == 1:
 				break
-			DP[0][j] = 1
+			DP[j] = 1
 
 		for i in xrange(1, m):
-			if obstacleGrid[i][0] == 1 or DP[(i-1)&1][0] == 0:
+			if obstacleGrid[i][0] == 1 or DP[0] == 0:
                 # If the current row start is a blockade
                 # or one of the previous rows had a blockade
                 # in column 0, mark this row's column 0 as unreachable
-				DP[i&1][0] = 0
+				DP[0] = 0
 			else:
-				DP[i&1][0] = 1
+				DP[0] = 1
 
 			for j in xrange(1, n):
 				if obstacleGrid[i][j] == 0:
-					DP[i&1][j] = DP[(i-1)&1][j] + DP[i&1][j-1]
+					DP[j] += DP[j-1]
 				else: # cell[i][j] is an obstacle, DP[i][j] is 0
-					DP[i&1][j] = 0
+					DP[j] = 0
 
-		return DP[(m-1)&1][-1]
+		return DP[-1]
 
 
 if __name__ == '__main__':
