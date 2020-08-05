@@ -377,13 +377,9 @@ class Graph(object):
 
 	# Return the shortest path between vertex v1 and vertex v2 by number of edges in the paths
 	def shortest_path_by_length(self, v1, v2):
-		q = Queue()
-		retrace = {}
-
-		q.enqueue(v1)
-		retrace[v1] = None
-
-		def retrace_path(retrace):
+		# retrace path from v2 to v1 following
+		# the trail left in the retrace dictionary
+		def retrace_path():
 			path = []
 			v = v2
 			while v is not None:
@@ -392,22 +388,22 @@ class Graph(object):
 
 			return path
 
-
 		# Start a BFS traversal
+		q = Queue()
+		retrace = {}
+		q.enqueue(v1)
+		retrace[v1] = None
 		while q:
 			curr_vertex = q.dequeue()
 
 			# found destination vertex,
 			# retrace from last vertex using the mapping all the way to v1
 			if curr_vertex == v2:
-				return retrace_path(retrace)
+				return retrace_path()
 
 			for v,_ in self.get_neighbors(curr_vertex):
-				# visited[] tracking doesn't yield well to BFS
-				# when extracting all paths
-				# Instead just check if we don't add a vertex already
-				# in the current path so we don't loop endlessly
-				# if there's a cycle / its an undirected graph
+				# visited[] tracking is redundant while using the retrace path []
+				# If retrace[] has vertex v added in it, it means we have already visited it
 				if not retrace.has_key(v):
 					q.enqueue(v)
 					retrace[v] = curr_vertex
