@@ -67,17 +67,19 @@ class SLL(object):
 		return lStr
 
 
-	# Return a free node from the available list
+	# Return a free node, initialized to 'data' from the available list.
 	# if there are any
 	# Raises MemoryError if the entire capacity of the array is currently allocated
-	def getNode(self):
+	def getNode(self, data):
 		if self.available_list == -1:
 			raise MemoryError("Linked list is at capacity")
 
 		node = self.available_list
 		self.available_list = self._array[self.available_list].next
 		self._array[node].next = -1
+		self._array[node].data = data
 		self._allocated += 1
+
 		return node
 
 
@@ -96,8 +98,7 @@ class SLL(object):
 	# Insert a node to the end of the SLL
 	def push_back(self, data):
 		# get a freenode from the available list
-		node = self.getNode()
-		self._array[node].data = data
+		node = self.getNode(data)
 
 		if self.allocated_list == -1:
 			self.allocated_list = self.allocated_tail = node
@@ -110,8 +111,7 @@ class SLL(object):
 	# Insert a node at the front to the SLL
 	def push_front(self, data):
 		# get a freenode from the available list
-		node = self.getNode()
-		self._array[node].data = data
+		node = self.getNode(data)
 
 		self._array[node].next = self.allocated_list
 		self.allocated_list = node
@@ -160,67 +160,42 @@ class SLL(object):
 
 
 
+	# Place 'data' in the SLL in its rightful place
+	# Uses cmp(data, x) {x: for each item in the SLL}
+	# Inserting only using 'place()' into the SLL will leave the SLL sorted
+	def place(self, data):
+		# get a freenode from the available list
+		node = self.getNode(data)
 
-if __name__ == '__main__':
-	sll = SLL(10)
-	assert sll.allocated_list == -1 # Empty SLL
-	assert len(sll) == 0
+		if self.allocated_list == -1:
+			self.allocated_list = self.allocated_tail = node
+			return
 
-	sll.push_back(78)
-	sll.push_back(10)
-	sll.push_back(41)
-	sll.push_back(36)
-	sll.push_back(21)
+		if data < self._array[self.allocated_list].data:
+			# current data is < everything in the SLL
+			self._array[node].next = self.allocated_list
+			self.allocated_list = node
+			return
 
-	assert str(sll) == "[5]: 78 -> 10 -> 41 -> 36 -> 21 -> "
-	assert len(sll) == 5
+		if data >= self._array[self.allocated_tail].data:
+			# current data is > everything in the SLL
+			self._array[self.allocated_tail].next = node
+			self.allocated_tail = node
+			return
 
-	sll.push_front(1)
-	sll.push_front(3)
+		tmp = self.allocated_list
+		prev = None
+		while tmp != -1 and self._array[tmp].data <= data:
+			prev = tmp
+			tmp = self._array[tmp].next
 
-	assert str(sll) == "[7]: 3 -> 1 -> 78 -> 10 -> 41 -> 36 -> 21 -> "
+		# At this point, We have found a rightful place to insert current node
+		# prev is node after which 'data' needs to be inserted
+		self._array[prev].next = node
+		self._array[node].next = tmp
 
-	sll.push_back(8)
-	sll.push_back(9)
-	sll.push_back(10)
-	assert str(sll) == "[10]: 3 -> 1 -> 78 -> 10 -> 41 -> 36 -> 21 -> 8 -> 9 -> 10 -> "
 
-	assert sll.available_list == -1 # at capacity
 
-	failed_push = False
-	try: 
-		sll.push_back(10)
-	except MemoryError:
-		failed_push = True
-	assert failed_push == True
 
-	failed_push = False
-	try: 
-		sll.push_front(11)
-	except MemoryError:
-		failed_push = True
-	assert failed_push == True
 
-	assert sll.pop_front() == 3
-	assert str(sll) == "[9]: 1 -> 78 -> 10 -> 41 -> 36 -> 21 -> 8 -> 9 -> 10 -> "
 
-	assert sll.pop_front() == 1
-	assert str(sll) == "[8]: 78 -> 10 -> 41 -> 36 -> 21 -> 8 -> 9 -> 10 -> "
-
-	assert sll.pop_back() == 10
-	assert str(sll) == "[7]: 78 -> 10 -> 41 -> 36 -> 21 -> 8 -> 9 -> "
-
-	assert sll.pop_back() == 9
-	assert str(sll) == "[6]: 78 -> 10 -> 41 -> 36 -> 21 -> 8 -> "
-
-	assert sll.pop_back() == 8
-	assert str(sll) == "[5]: 78 -> 10 -> 41 -> 36 -> 21 -> "
-
-	l = [78, 10, 41, 36, 21]
-	for i in xrange(5):
-		assert len(sll) == 5-i
-		assert sll.pop_front() == l[i]
-
-	assert len(sll) == 0
-	assert sll.allocated_list == -1
-	assert sll.allocated_tail == -1
