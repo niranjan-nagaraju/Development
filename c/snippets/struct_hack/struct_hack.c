@@ -12,11 +12,32 @@
 #include <string.h>
 #include <errno.h>
 
+/** 
+ * custom SIZEOF to actually measure sizeof struct using pointer arithmetic
+ * to ensure struct hacks are not just some compiler trick.
+ */
+#define SIZEOF(T) \
+	(size_t)(((T *)0)+1)
+
 typedef struct hack_s {
 	int a;
 	int b;
 	char c[0];
 }hack_t;
+
+typedef struct {
+	int a;
+	int b;
+	char c[];
+}hack2_t;
+
+
+/** Array of size 0 in the middle of the struct */
+typedef struct {
+	int a;
+	char b[0]; /* b[0] can be used as an alias for c */
+	int c;
+} hack_example2;
 
 #define MAX_STRING_LEN 32
 
@@ -34,6 +55,8 @@ main(void)
 	hack_t *ht2 = 0;
 
 	assert(sizeof(hack_t) == 2 * sizeof(int));
+	assert(SIZEOF(hack_t) == 2 * sizeof(int));
+	assert(SIZEOF(hack2_t) == 2 * sizeof(int));
 	printf("Sizeof struct hack: %lu\n", sizeof(hack_t));
 
 	//c can now be used as c[32]
@@ -50,9 +73,26 @@ main(void)
 	printf("ht: \n");
 	print(ht);
 
+	free(ht);
 
-	//c can now be used as c[64] in ht2
-	ht2 = malloc(sizeof(hack_t) + sizeof(char) * (MAX_STRING_LEN*2));
+	//c can now be used as c[64]
+	ht = malloc(sizeof(hack_t) + sizeof(char) * MAX_STRING_LEN*2);
+	if (!ht)
+		return -ENOMEM;
+
+	assert(sizeof(*ht) == 2 * sizeof(int));
+	ht->a = 3;
+	ht->b = 2;
+	strncpy(ht->c, "The quick brown fox jumped over the lazy dog!", 2*MAX_STRING_LEN);
+	ht->c[2*MAX_STRING_LEN - 1] = 0;
+
+	printf("ht size 64: \n");
+	print(ht);
+
+
+	// ht2 should behave identical to ht
+	// i.e. c[0] declaration is the same as c[] declaration
+	ht2 = malloc(sizeof(hack2_t) + sizeof(char) * (MAX_STRING_LEN*2));
 	if (!ht2)
 		return -ENOMEM;
 
@@ -64,6 +104,19 @@ main(void)
 
 	printf("ht2: \n");
 	print(ht2);
+
+	assert(sizeof(hack_example2) == 2*sizeof(int));
+	assert(SIZEOF(hack_example2) == 2*sizeof(int));
+
+	hack_example2 *he = (hack_example2 *)malloc(sizeof(hack_example2));
+	if (!he)
+		return -ENOMEM;
+	he->a = 1;
+	he->c = 'A';
+
+	/** b[0] can be used as an alias of c */
+	assert(he->b[0] == 'A');
+	assert(he->c == 65);
 	return 0;
 }
 
