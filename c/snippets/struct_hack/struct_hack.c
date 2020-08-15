@@ -52,71 +52,82 @@ int
 main(void)
 {
 	hack_t *ht = 0;
-	hack_t *ht2 = 0;
+	hack2_t *ht2 = 0;
 
-	assert(sizeof(hack_t) == 2 * sizeof(int));
-	assert(SIZEOF(hack_t) == 2 * sizeof(int));
-	assert(SIZEOF(hack2_t) == 2 * sizeof(int));
-	printf("Sizeof struct hack: %lu\n", sizeof(hack_t));
+	{
+		assert(sizeof(hack_t) == 2 * sizeof(int));
+		assert(SIZEOF(hack_t) == 2 * sizeof(int));
+		assert(SIZEOF(hack2_t) == 2 * sizeof(int));
+		printf("Sizeof struct hack: %lu\n", sizeof(hack_t));
 
-	//c can now be used as c[32]
-	ht = malloc(sizeof(hack_t) + sizeof(char) * MAX_STRING_LEN);
-	if (!ht)
-		return -ENOMEM;
+		//c can now be used as c[32]
+		ht = malloc(sizeof(hack_t) + sizeof(char) * MAX_STRING_LEN);
+		if (!ht)
+			return -ENOMEM;
 
-	assert(sizeof(*ht) == 2 * sizeof(int));
-	ht->a = 3;
-	ht->b = 2;
-	strncpy(ht->c, "The quick brown fox jumped over the lazy dog!", MAX_STRING_LEN);
-	ht->c[MAX_STRING_LEN - 1] = 0;
+		assert(sizeof(*ht) == 2 * sizeof(int));
+		ht->a = 3;
+		ht->b = 2;
+		strncpy(ht->c, "The quick brown fox jumped over the lazy dog!", MAX_STRING_LEN);
+		ht->c[MAX_STRING_LEN - 1] = 0;
 
-	printf("ht: \n");
-	print(ht);
+		printf("ht: \n");
+		print(ht);
+	}
 
 	free(ht);
 
-	//c can now be used as c[64]
-	ht = malloc(sizeof(hack_t) + sizeof(char) * MAX_STRING_LEN*2);
-	if (!ht)
-		return -ENOMEM;
+	{
+		//c can now be used as c[64]
+		ht = malloc(sizeof(hack_t) + sizeof(char) * MAX_STRING_LEN*2);
+		if (!ht)
+			return -ENOMEM;
 
-	assert(sizeof(*ht) == 2 * sizeof(int));
-	ht->a = 3;
-	ht->b = 2;
-	strncpy(ht->c, "The quick brown fox jumped over the lazy dog!", 2*MAX_STRING_LEN);
-	ht->c[2*MAX_STRING_LEN - 1] = 0;
+		assert(sizeof(*ht) == 2 * sizeof(int));
+		ht->a = 3;
+		ht->b = 2;
+		strncpy(ht->c, "The quick brown fox jumped over the lazy dog!", 2*MAX_STRING_LEN);
+		ht->c[2*MAX_STRING_LEN - 1] = 0;
 
-	printf("ht size 64: \n");
-	print(ht);
+		printf("ht size 64: \n");
+		print(ht);
+	}
+
+	{
+		// ht2 should behave identical to ht
+		// i.e. c[0] declaration is the same as c[] declaration
+		ht2 = malloc(sizeof(hack2_t) + sizeof(char) * (MAX_STRING_LEN*2));
+		if (!ht2)
+			return -ENOMEM;
+
+		assert(sizeof(*ht2) == 2 * sizeof(int));
+		ht2->a = 6;
+		ht2->b = 4;
+		strncpy(ht2->c, "The quick brown fox jumped over the lazy dog!", 2*MAX_STRING_LEN);
+		ht2->c[2*MAX_STRING_LEN - 1] = 0;
+
+		printf("ht2: \n");
+		/** hack_t and hack2_t share the same structure despite declared differently */
+		print((hack_t *)ht2); 
+	}
 
 
-	// ht2 should behave identical to ht
-	// i.e. c[0] declaration is the same as c[] declaration
-	ht2 = malloc(sizeof(hack2_t) + sizeof(char) * (MAX_STRING_LEN*2));
-	if (!ht2)
-		return -ENOMEM;
+	{
+		/** zero-size array in the middle of the struct */
+		hack_example2 *he = (hack_example2 *)malloc(sizeof(hack_example2));
 
-	assert(sizeof(*ht2) == 2 * sizeof(int));
-	ht2->a = 6;
-	ht2->b = 4;
-	strncpy(ht2->c, "The quick brown fox jumped over the lazy dog!", 2*MAX_STRING_LEN);
-	ht2->c[2*MAX_STRING_LEN - 1] = 0;
+		assert(sizeof(hack_example2) == 2*sizeof(int));
+		assert(SIZEOF(hack_example2) == 2*sizeof(int));
 
-	printf("ht2: \n");
-	print(ht2);
+		if (!he)
+			return -ENOMEM;
+		he->a = 1;
+		he->c = 'A';
 
-	assert(sizeof(hack_example2) == 2*sizeof(int));
-	assert(SIZEOF(hack_example2) == 2*sizeof(int));
-
-	hack_example2 *he = (hack_example2 *)malloc(sizeof(hack_example2));
-	if (!he)
-		return -ENOMEM;
-	he->a = 1;
-	he->c = 'A';
-
-	/** b[0] can be used as an alias of c */
-	assert(he->b[0] == 'A');
-	assert(he->c == 65);
+		/** b[0] can be used as an alias of c */
+		assert(he->b[0] == 'A');
+		assert(he->c == 65);
+	}
 	return 0;
 }
 
