@@ -47,19 +47,19 @@ class MedianFinder {
 	std::priority_queue<int> left;
 	std::priority_queue<int, std::vector<int>, std::greater<int>> right;
 
-public:
-    /** initialize your data structure here. */
-    MedianFinder() {
-        
-    }
-    
-    void addNum(int num) {
+	public:
+	/** initialize your data structure here. */
+	MedianFinder() {
+
+	}
+
+	void addNum(int num) {
 		if (!left.size()) {
 			left.push(num);
 			return;
 		}
-			
-        if (num > left.top()) {
+
+		if (num > left.top()) {
 			right.push(num);
 			if (right.size() > left.size()) {
 				int x = right.top();
@@ -74,15 +74,15 @@ public:
 				right.push(x);
 			}
 		}
-    }
-    
-    double findMedian() {
+	}
+
+	double findMedian() {
 		if (left.size() > right.size())
 			return left.top();
 
 		return (left.top() + right.top())/2.0;
-        
-    }
+
+	}
 };
 
 
