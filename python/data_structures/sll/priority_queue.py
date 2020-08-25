@@ -46,15 +46,15 @@ class PriorityQueue(SLL):
 
 	# Increase priority of item based on 'new' value
 	# new should be < current
-	def promote(self, item, new, comparekeys=cmp):
-		node = self.remove(item, comparekeys)
+	def promote(self, item, new):
+		node = self.remove(item)
 		self.place(new, self.comparatorfn)
 
 
 	# Decrease priority of item based on 'new' value
 	# new should be > current
-	def demote(self, item, new, comparekeys=cmp):
-		node = self.remove(item, comparekeys)
+	def demote(self, item, new):
+		node = self.remove(item)
 		self.place(new, self.comparatorfn)
 
 
@@ -139,13 +139,13 @@ def basic_testcases1():
 	pq.enqueue(("JobX", 11))
 
 	assert pq.toList() == [('Job1', 1), ('Job3', 3), ('Job4', 4), ('Job7', 7), ('JobX', 11)]
-	pq.promote(('JobX', 11), ('JobX', 1), lambda (a,p1),(b,p2): cmp(a,b))
+	pq.promote(('JobX', 11), ('JobX', 1))
 
 	assert pq.toList() == [('Job1', 1), ('JobX', 1), ('Job3', 3), ('Job4', 4), ('Job7', 7)]
-	pq.demote(('JobX', 1), ('JobX', 2), lambda (a,p1),(b,p2): cmp(a,b))
+	pq.demote(('JobX', 1), ('JobX', 2))
 
 	assert pq.toList() == [('Job1', 1), ('JobX', 2), ('Job3', 3), ('Job4', 4), ('Job7', 7)]
-	pq.demote(('JobX', 2), ('JobX', 6), lambda (a,p1),(b,p2): cmp(a,b))
+	pq.demote(('JobX', 2), ('JobX', 6))
 	assert pq.toList() == [('Job1', 1), ('Job3', 3), ('Job4', 4), ('JobX', 6), ('Job7', 7)]
 
 
