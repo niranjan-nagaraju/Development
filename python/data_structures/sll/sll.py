@@ -255,6 +255,30 @@ class SLL(object):
 
 
 
+	# Find and remove a matching node from the SLL
+	def remove(self, item, comparatorfn=cmp):
+		tmp = self.head
+		prev = None
+		while tmp and comparatorfn(tmp.value,item) !=0:
+			prev = tmp
+			tmp = tmp.next
+
+		# Couldn't find item in the queue
+		if not tmp:
+			return None
+
+		prev.next = tmp.next
+		self.size -= 1
+
+		tmp.next = None # sanitize 'tmp' link and remove it from the chain
+		if self.size == 0:
+			self.head = self.tail = None
+		elif tmp == self.tail:
+			self.tail = prev
+		
+		return tmp
+
+	
 
 	# Keep the SLL sorted, every insert places the item at the right place in order to keep the list sorted
 	# NOTE: assumes the list is sorted - if all inserts are done using place() it actually would be
