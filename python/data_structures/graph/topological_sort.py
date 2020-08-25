@@ -1,10 +1,31 @@
+# -*- coding: UTF-8 -*-
 
 from data_structures.sll.stack import Stack
 
 class TopologicalSorter(object):
 	'''
 	Get a topological sort order of vertices given a DAG
+	u -> v indicates u then v
 	Returns a stack containing the ordering
+
+	Run DFS on the DAG, add a node to the stack when all its neighbors are visited.
+	The topological ordering is the reverse of the order in which the nodes are added, => a stack is used
+
+	e.g.,
+            /-> c 
+      a -> b    ↑  
+            \-> d
+
+    DFS: a -> b -> c {add c}
+        topological ordering: {c}
+    DFS: a -> b -> d {add d}
+        topological ordering: {c, d}
+    DFS: a -> b  {add b}
+        topological ordering: {c, d, b}
+    DFS: a  {add a}
+        topological ordering: {c, d, b, a}
+
+    reverse(nodes in topological ordering) to get the actual topological ordering: {a, b, d, c}
 	'''
 	@staticmethod
 	def topological_sort(graph):

@@ -444,6 +444,7 @@ class GraphTester(object):
 
 	'''
 	Test topological sort on DAGs
+	u -> v indicates u then v
 	'''
 	def test_topological_sort(self):
 		Graph = self.graphType
@@ -495,4 +496,16 @@ class GraphTester(object):
 
 		assert [_ for _ in g.topological_sort()] == [1,4,0,2,3,5,6]
 
+		'''
+            /-> c 
+      a -> b    ↑  
+            \-> d
+		'''
+		g = Graph(4, True)
+		g.add_edge(0, 1)
+		g.add_edge(1, 2)
+		g.add_edge(1, 3)
+		g.add_edge(3, 2)
+		assert [_ for _ in g.topological_sort()] == [0, 1, 3, 2]
+		
 
