@@ -144,7 +144,7 @@ class Heap(object):
 	the last item in the heap replaces the top of the heap
 	and is bubbled down, until heap property is restored.
 	'''
-	def bubble_down(self, n, i=0):
+	def bubble_down_r(self, n, i=0):
 		l, r = self.left(i), self.right(i)
 		smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
 
@@ -159,8 +159,46 @@ class Heap(object):
 		# swap root of the subtree with the smallest of the left and right children
 		if (smallest != i):
 			self.items[i], self.items[smallest] = self.items[smallest], self.items[i]
-			self.bubble_down(n, smallest)
+			self.bubble_down_r(n, smallest)
 
+
+	'''
+	Bubble-down: Iterative version
+	Bubble-down an item at 'i'
+	to its rightful place, and the heap property is restored
+	Assumes left and right subtrees are already heaps.
+
+	Typically used after extracting the top of the heap,
+	the last item in the heap replaces the top of the heap
+	and is bubbled down, until heap property is restored.
+	'''
+	def bubble_down(self, n, i=0):
+		smaller_of = lambda i,j: i if self.comparatorfn(self.items[i], self.items[j])<0 else j
+
+		l, r = self.left(i), self.right(i)
+
+		# Bubble-down until item at 'i' is a leaf-node
+		# (no left-child, therefore no right-child either)
+		# OR
+		# when item at 'i' is bubbled down far enough, no more changes are needed
+		# to maintain the heap property
+		while l < n:
+			if not r < n:
+				# No right-child, l is the smaller child
+				idx = l
+			else:
+				# Pick smaller of the left and right children to swap with parent, i
+				idx = smaller_of(l, r)
+
+			if (smaller_of(i, idx) == i):
+				# parent 'i' is in its rightful place
+				# bubble-down complete
+				break
+
+			# item at 'i' > its children => bubble-down
+			self.items[i], self.items[idx] = self.items[idx], self.items[i]
+			i = idx
+			l, r = self.left(i), self.right(i)
 
 
 	'''
