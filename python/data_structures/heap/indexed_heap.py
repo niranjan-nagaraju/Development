@@ -84,6 +84,9 @@ class IndexedHeap(Heap):
 
 
 
+	'''
+	Return the index where 'item' is in the heap-array
+	'''
 	def find(self, item):
 		return self.lookup.get(item)
 
