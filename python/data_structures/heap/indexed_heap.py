@@ -1,6 +1,7 @@
 '''
 Indexed Min heap:
 	Min heap that supports O(1) find(key)
+	Override hash() function of the object being added to the heap to find the object based on a desired key.
 '''
 from heap import Heap, HeapEmptyError
 class IndexedHeap(Heap):
@@ -35,8 +36,8 @@ class IndexedHeap(Heap):
 	def bubble_up(self, i):
 		while (i > 0) and self.comparatorfn(self.items[i], self.items[self.parent(i)]) < 0:
 			self.items[i], self.items[self.parent(i)] = self.items[self.parent(i)], self.items[i]
-			self.lookup[self.items[self.parent(i)]] = self.parent(i)
-			self.lookup[self.items[i]] = i
+			self.lookup[hash(self.items[self.parent(i)])] = self.parent(i)
+			self.lookup[hash(self.items[i])] = i
 			i = self.parent(i)
 
 
@@ -66,8 +67,8 @@ class IndexedHeap(Heap):
 		if (smaller_of(i, idx) != i):
 			# item at 'i' > its children => bubble-down
 			self.items[i], self.items[idx] = self.items[idx], self.items[i]
-			self.lookup[self.items[idx]] = idx
-			self.lookup[self.items[i]] = i
+			self.lookup[hash(self.items[idx])] = idx
+			self.lookup[hash(self.items[i])] = i
 			self.bubble_down(n, idx)
 
 
@@ -79,7 +80,7 @@ class IndexedHeap(Heap):
 	'''
 	def add(self, item):
 		self.items.append(item)
-		self.lookup[item] = len(self.items)-1
+		self.lookup[hash(item)] = len(self.items)-1
 		self.bubble_up(len(self.items)-1)
 
 
@@ -88,7 +89,7 @@ class IndexedHeap(Heap):
 	Return the index where 'item' is in the heap-array
 	'''
 	def find(self, item):
-		return self.lookup.get(item)
+		return self.lookup.get(hash(item))
 
 
 	'''
@@ -101,10 +102,11 @@ class IndexedHeap(Heap):
 		self.items.pop()
 
 		if self.items:
-			self.lookup[self.items[0]] = 0
+			self.lookup[hash(self.items[0])] = 0
 			self.bubble_down(len(self.items), 0)
 
-		self.lookup[top] = -1
+		# Remove the entry from the lookup table as well
+		del self.lookup[hash(top)]
 		return top
 
 	'''
@@ -115,9 +117,11 @@ class IndexedHeap(Heap):
 		if not self.comparatorfn(new, self.items[i]) < 0:
 			raise ValueError("%s: %s() - New key should be less than current value" %('ValueError', self.decreaseKey.__name__))
 
-		self.lookup[self.items[i]] = -1
+		# remove previous key from the lookup table on decreaseKey
+		# the 'new' key should replace it
+		del self.lookup[hash(self.items[i])]
 		self.items[i] = new
-		self.lookup[new] = i
+		self.lookup[hash(new)] = i
 		self.bubble_up(i)
 
 
@@ -132,9 +136,11 @@ class IndexedHeap(Heap):
 		if not self.comparatorfn(new, self.items[i]) > 0:
 			raise ValueError("%s: %s() - New key should be greater than current value" %('ValueError', self.increaseKey.__name__))
 
-		self.lookup[self.items[i]] = -1
+		# remove previous key from the lookup table on increaseKey
+		# the 'new' key should replace it
+		del self.lookup[hash(self.items[i])]
 		self.items[i] = new
-		self.lookup[new] = i
+		self.lookup[hash(new)] = i
 		self.bubble_down(len(self.items), i)
 
 
@@ -169,39 +175,39 @@ if __name__ == '__main__':
 	assert ih.remove() == 0
 	assert len(ih) == 3
 	assert ih.items == [1, 3, 2]
-	assert ih.lookup == {0:-1, 1:0,  2:2, 3:1} # deleted keys still exist in the lookup
+	assert ih.lookup == {1:0,  2:2, 3:1}
 
 	ih.decreaseKey(2, 0)
 	assert len(ih) == 3
 	assert ih.items == [0, 3, 1]
-	assert ih.lookup == {0:0, 1:2,  2:-1, 3:1} # deleted keys still exist in the lookup
-	assert ih.find(2) == -1
+	assert ih.lookup == {0:0, 1:2, 3:1}
+	assert ih.find(2) == None
 	assert ih.find(0) == 0
 
 	ih.increaseKey(2, 4)  # change key at index '2' -> 1 to 4
 	assert len(ih) == 3
 	assert ih.items == [0, 3, 4]
-	assert ih.lookup == {0:0, 1:-1,  2:-1, 3:1, 4:2} # deleted keys still exist in the lookup
-	assert ih.find(1) == -1
+	assert ih.lookup == {0:0, 3:1, 4:2}
+	assert ih.find(1) == None
 	assert ih.find(4) == 2
 
 	ih.increaseKey(0, 5)  # change key at index '0' -> 0 to 5
 	assert len(ih) == 3
 	assert ih.items == [3, 5, 4]
-	assert ih.lookup == {0:-1, 1:-1,  2:-1, 3:0, 4:2, 5:1} # deleted keys still exist in the lookup
+	assert ih.lookup == {3:0, 4:2, 5:1}
 
 	assert ih.remove() == 3
 	assert len(ih) == 2
 	assert ih.items == [4,5]
-	assert ih.lookup == {0:-1, 1:-1,  2:-1, 3:-1, 4:0, 5:1} # deleted keys still exist in the lookup
+	assert ih.lookup == {4:0, 5:1}
 
 	assert ih.remove() == 4
 	assert len(ih) == 1
 	assert ih.items == [5]
-	assert ih.lookup == {0:-1, 1:-1,  2:-1, 3:-1, 4:-1, 5:0} # deleted keys still exist in the lookup
+	assert ih.lookup == {5:0}
 
 	assert ih.remove() == 5
 	assert len(ih) == 0
 	assert ih.items == []
-	assert ih.lookup == {0:-1, 1:-1,  2:-1, 3:-1, 4:-1, 5:-1} # deleted keys still exist in the lookup
+	assert ih.lookup == {}
 
