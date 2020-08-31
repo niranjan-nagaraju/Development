@@ -507,5 +507,40 @@ class GraphTester(object):
 		g.add_edge(1, 3)
 		g.add_edge(3, 2)
 		assert [_ for _ in g.topological_sort()] == [0, 1, 3, 2]
-		
+	
+
+	def test_dijkstras(self):
+		'''
+			  2
+		(0) ------> (1) 
+		|     +-----/ |
+	  4 |    /        | 5
+		|   / 1       |
+		v  v          v
+		(2) --------> (3)
+			   2
+		'''
+		from data_structures.graph.dijkstras import Dijkstras
+		Graph = self.graphType
+
+		g = Graph(4, directed=True)
+		g.add_edge(0, 1, 2)
+		g.add_edge(0, 2, 4)
+		g.add_edge(1, 3, 5)
+		g.add_edge(1, 2, 1)
+		g.add_edge(2, 3, 2)
+
+		sp = Dijkstras.sssp(g, 0, 3)
+		assert Dijkstras.extract_path(sp, 3) == [0, 1, 2, 3]
+		assert Dijkstras.extract_distance(sp, 3) == 5
+
+		# Calculate shortest-paths 
+		sp = Dijkstras.sssp(g, 0)
+		assert Dijkstras.extract_distance(sp, 1) == 2
+		assert Dijkstras.extract_path(sp, 1) == [0, 1]
+		assert Dijkstras.extract_distance(sp, 2) == 3
+		assert Dijkstras.extract_path(sp, 2) == [0, 1, 2]
+		assert Dijkstras.extract_distance(sp, 3) == 5
+		assert Dijkstras.extract_path(sp, 3) == [0, 1, 2, 3]
+
 

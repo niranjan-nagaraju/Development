@@ -60,9 +60,6 @@ def basic_testcases():
 	assert [x for x in g.get_neighbors(2)] == []
 
 
-
-
-
 if __name__ == '__main__':
 	basic_testcases()
 
@@ -73,4 +70,5 @@ if __name__ == '__main__':
 	gt.test_bfs()
 	gt.test_paths()
 	gt.test_topological_sort()
+	gt.test_dijkstras()
 

@@ -93,4 +93,5 @@ if __name__ == '__main__':
 	gt.test_bfs()
 	gt.test_paths()
 	gt.test_topological_sort()
+	gt.test_dijkstras()
 
