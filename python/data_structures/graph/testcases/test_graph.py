@@ -510,6 +510,10 @@ class GraphTester(object):
 	
 
 	def test_dijkstras(self):
+		from data_structures.graph.dijkstras import Dijkstras
+		Graph = self.graphType
+
+		# Graph 1
 		'''
               2
         (0) ------> (1) 
@@ -520,8 +524,6 @@ class GraphTester(object):
         (2) --------> (3)
                2
 		'''
-		from data_structures.graph.dijkstras import Dijkstras
-		Graph = self.graphType
 
 		g = Graph(4, directed=True)
 		g.add_edge(0, 1, 2)
@@ -543,4 +545,83 @@ class GraphTester(object):
 		assert Dijkstras.extract_distance(sp, 3) == 5
 		assert Dijkstras.extract_path(sp, 3) == [0, 1, 2, 3]
 
+		from enum import IntEnum
+		class Vertex(IntEnum):
+			A = 1
+			B = 2
+			C = 3
+			D = 4
+			E = 5
+			F = 6
+			G = 7
+			H = 8
+			I = 9
+			J = 10
+			K = 11
+			L = 12
+			M = 13
+			N = 14
+			O = 15
+			P = 16
+			Q = 17
+			R = 18
+			S = 19
+			T = 20
+			U = 21
+			V = 22
+			W = 23
+			X = 24
+			Y = 25
+			Z = 26
+
+
+		# Graph 2
+		# The graph from Computerphile
+		'''
+               
+      7 /- S --3-------- C -----\2
+       /   |2                  / L ------\
+      A -3 B                4/            \4
+     4|   /|1                I -----6----- J  
+      | /4 |                  \ -4- K ----/4
+      D    H ---2-- G             5/     
+      5 \ /3          \---2------- E
+         F
+		'''
+
+		g = Graph(26, directed=False)
+		g.add_edge(Vertex.S, Vertex.C, 3)
+		g.add_edge(Vertex.S, Vertex.B, 2)
+		g.add_edge(Vertex.S, Vertex.A, 7)
+
+		g.add_edge(Vertex.A, Vertex.B, 3)
+		g.add_edge(Vertex.A, Vertex.D, 4)
+
+		g.add_edge(Vertex.B, Vertex.H, 1)
+		g.add_edge(Vertex.B, Vertex.D, 4)
+
+		g.add_edge(Vertex.C, Vertex.L, 2)
+
+		g.add_edge(Vertex.D, Vertex.F, 5)
+
+		g.add_edge(Vertex.F, Vertex.H, 3)
+
+		g.add_edge(Vertex.G, Vertex.H, 2)
+		g.add_edge(Vertex.G, Vertex.E, 2)
+
+		g.add_edge(Vertex.I, Vertex.L, 4)
+		g.add_edge(Vertex.I, Vertex.J, 6)
+		g.add_edge(Vertex.I, Vertex.K, 4)
+
+		g.add_edge(Vertex.J, Vertex.K, 4)
+		g.add_edge(Vertex.J, Vertex.L, 4)
+
+		g.add_edge(Vertex.K, Vertex.E, 5)
+
+		sp = Dijkstras.sssp(g, Vertex.S, Vertex.E)
+		assert Dijkstras.extract_distance(sp, Vertex.E) == 7
+		assert Dijkstras.extract_path(sp, Vertex.E) == [Vertex.S, Vertex.B, Vertex.H, Vertex.G, Vertex.E]
+
+		assert Dijkstras.extract_distance(sp, Vertex.G) == 5
+		assert Dijkstras.extract_path(sp, Vertex.G) == [Vertex.S, Vertex.B, Vertex.H, Vertex.G]
 
