@@ -26,13 +26,13 @@ class GraphTester(object):
 		g.add_edge(5, 5)
 
 		'''
-		0 -- 1
-		 \	 |
-		  -- 2 -- |
-				  |
-		3 -- 4 -- |
+        0 -- 1
+         \   |
+          -- 2 -- |
+                  |
+        3 -- 4 -- |
 
-		5
+        5
 		'''
 
 		def aggregate_list(v):
@@ -100,14 +100,14 @@ class GraphTester(object):
 		g.add_edge(5, 5)
 
 		'''
-		0 -> 1
-		|    |
-		|  	 v
-	   < - > 2 <- |
-				  |
-		3 -> 4 -> |
+        0 -> 1
+        |    |
+        |    v
+       < - > 2 <- |
+                  |
+        3 -> 4 -> |
 
-		5
+        5
 		'''
 
 		def aggregate_list(v):
@@ -168,13 +168,13 @@ class GraphTester(object):
 		g.add_edge(5, 5)
 
 		'''
-		0 -- 1
-		 \	 |
-		  -- 2 -- |
-				  |
-		3 -- 4 -- |
+        0 -- 1
+         \   |
+          -- 2 -- |
+                  |
+        3 -- 4 -- |
 
-		5
+        5
 		'''
 
 		def aggregate_list(v):
@@ -230,14 +230,14 @@ class GraphTester(object):
 		g.add_edge(5, 5)
 
 		'''
-		0 -> 1
-		|    |
-		|  	 v
-	   < - > 2 <- |
-				  |
-		3 -> 4 -> |
+        0 -> 1
+        |    |
+        |    v
+       < - > 2 <- |
+                  |
+        3 -> 4 -> |
 
-		5
+        5
 		'''
 
 		def aggregate_list(v):
@@ -304,13 +304,13 @@ class GraphTester(object):
 		g.add_edge(4, 6)
 
 		'''
-			1
-		  ↗   ↘ 
-		0 → 2 → 5 → 6
-		↓↘     ↗    ↑  
-		↓   3     ↗  
-		↘       ↗ 
-		  4 → ↗ 
+            1
+          ↗   ↘ 
+        0 → 2 → 5 → 6
+        ↓↘     ↗    ↑  
+        ↓   3     ↗  
+        ↘       ↗ 
+          4 → ↗ 
 
 		'''
 
@@ -376,13 +376,13 @@ class GraphTester(object):
 		g.add_edge(4, 6)
 
 		'''
-			1
-		  ⤢   ⤡
-		0 ⇿  2 ⇿  5 ⇿  6
-		↕⤡    ⤢      ⤢  
-		↕   3      ⤢
-		⤡        ⤢ 
-		  4 ⇿  ⤢ 
+            1
+          ⤢   ⤡
+        0 ⇿  2 ⇿  5 ⇿  6
+        ↕⤡    ⤢      ⤢  
+        ↕   3      ⤢
+        ⤡        ⤢ 
+          4 ⇿  ⤢ 
 
 		'''
 
@@ -461,13 +461,13 @@ class GraphTester(object):
 		g.add_edge(4, 6)
 
 		'''
-			1
-		  ↗   ↘ 
-		0 → 2 → 5 → 6
-		↓↘     ↗    ↑  
-		↓   3     ↗  
-		↘       ↗ 
-		  4 → ↗ 
+            1
+          ↗   ↘ 
+        0 → 2 → 5 → 6
+        ↓↘     ↗    ↑  
+        ↓   3     ↗  
+        ↘       ↗ 
+          4 → ↗ 
 		'''
 		s = g.topological_sort()
 		l = [0, 4, 3, 2, 1, 5, 6]
@@ -475,15 +475,15 @@ class GraphTester(object):
 			assert s.pop() == l[i]
 
 		'''
-		0     1
-		 ↘  ↙ |
-		   2  |
-		 ↙    ↓
-		3     4
-		 ↘  ↙ 
-		   5
-		   ↓
-		   6
+        0     1
+         ↘  ↙ |
+           2  |
+         ↙    ↓
+        3     4
+         ↘  ↙ 
+           5
+           ↓
+           6
 		'''
 		g = Graph(7, directed=True)
 		g.add_edge(0, 2)
@@ -511,14 +511,14 @@ class GraphTester(object):
 
 	def test_dijkstras(self):
 		'''
-			  2
-		(0) ------> (1) 
-		|     +-----/ |
-	  4 |    /        | 5
-		|   / 1       |
-		v  v          v
-		(2) --------> (3)
-			   2
+              2
+        (0) ------> (1) 
+        |     +-----/ |
+      4 |    /        | 5
+        |   / 1       |
+        v  v          v
+        (2) --------> (3)
+               2
 		'''
 		from data_structures.graph.dijkstras import Dijkstras
 		Graph = self.graphType
