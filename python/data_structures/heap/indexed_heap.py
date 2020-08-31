@@ -88,8 +88,18 @@ class IndexedHeap(Heap):
 	'''
 	Return the index where 'item' is in the heap-array
 	'''
-	def find(self, item):
+	def _find_idx(self, item):
 		return self.lookup.get(hash(item))
+
+
+	'''
+	Return the item in the priority queue based on the matching key
+	'''
+	def find(self, key):
+		idx = self._find_idx(key)
+		if idx is None:
+			return None
+		return self.items[idx]
 
 
 	'''
@@ -152,20 +162,21 @@ if __name__ == '__main__':
 	assert len(ih) == 1
 	assert ih.items == [3]
 	assert ih.lookup == {3: 0}
-	assert ih.find(3) == 0
+	assert ih._find_idx(3) == 0
 
 	ih.add(2)
 	assert len(ih) == 2
 	assert ih.items == [2, 3]
 	assert ih.lookup == {2:0, 3: 1}
-	assert ih.find(3) == 1
-	assert ih.find(2) == 0
+	assert ih._find_idx(3) == 1
+	assert ih._find_idx(2) == 0
 
 	ih.add(1)
 	assert len(ih) == 3
 	assert ih.items == [1, 3, 2]
 	assert ih.lookup == {1:0, 2:2, 3:1}
-	assert ih.find(3) == 1
+	assert ih._find_idx(3) == 1
+	assert ih.find(3) == 3 # returns the entry in the heap matching the key
 
 	ih.add(0)
 	assert len(ih) == 4
@@ -181,15 +192,16 @@ if __name__ == '__main__':
 	assert len(ih) == 3
 	assert ih.items == [0, 3, 1]
 	assert ih.lookup == {0:0, 1:2, 3:1}
-	assert ih.find(2) == None
-	assert ih.find(0) == 0
+	assert ih._find_idx(2) == None
+	assert ih._find_idx(0) == 0
 
 	ih.increaseKey(2, 4)  # change key at index '2' -> 1 to 4
 	assert len(ih) == 3
 	assert ih.items == [0, 3, 4]
 	assert ih.lookup == {0:0, 3:1, 4:2}
+	assert ih._find_idx(1) == None
 	assert ih.find(1) == None
-	assert ih.find(4) == 2
+	assert ih._find_idx(4) == 2
 
 	ih.increaseKey(0, 5)  # change key at index '0' -> 0 to 5
 	assert len(ih) == 3
