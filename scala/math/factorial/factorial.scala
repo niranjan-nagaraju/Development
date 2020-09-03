@@ -1,6 +1,7 @@
 
 /* tail recursive factorial */
 
+@scala.annotation.tailrec
 def factorial(n: Int, acc: Int = 1): Int = {
   if (n == 0)
     acc
