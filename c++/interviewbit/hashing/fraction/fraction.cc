@@ -47,6 +47,7 @@ Solution Outline:
 #include <cassert>
 #include <vector>
 #include <cstdlib>
+#include <iostream>
 
 class Solution {
 public:
@@ -68,8 +69,8 @@ public:
 		denominator = std::abs(denominator);
 
 		std::vector<int> quotients = {(int)(numerator / denominator)};
-		int remainder = numerator % denominator;
-		std::unordered_map<int, int> remainder_tbl;
+		int64_t remainder = numerator % denominator;
+		std::unordered_map<int64_t, int> remainder_tbl;
 
 		auto toStr = [&quotients](int startIdx, int endIdx) {
 			std::string res;
@@ -121,6 +122,7 @@ main(void)
 	assert( s.get_decimal(22, 7) == "3.(142857)"); // (22/7) is not pi
 	assert( s.get_decimal(-1, 2) == "-0.5");
 	assert( s.get_decimal(-50, 22) == "-2.(27)" );
+	assert( s.get_decimal(-1, -2147483648) == "0.0000000004656612873077392578125");
 
 	return 0;
 }

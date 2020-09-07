@@ -6,12 +6,14 @@ SRC = fraction.cc
 
 CXXFLAGS += -g -ggdb -std=c++11 -Wall
 
-all::
+all:: run
+
+build::
 	@ mkdir -p $(OBJDIR)
 	$(CC) $(CXXFLAGS) $(INCLUDE) $(SRC) -o $(OBJDIR)/$(basename $(SRC))
 
 
-run:
+run: build
 	@ ./$(OBJDIR)/$(basename $(SRC))
 	@ echo "Tests Complete!"
 
