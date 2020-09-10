@@ -62,7 +62,7 @@ class Solution
 
 	/**
 	 * return current prefix on encountering empty string
-     * Else, recursively call self to dfs down while tracking prefix so far, and accumulate results
+	 * Else, recursively call self to dfs down while tracking prefix so far, and accumulate results
 	 */
 	def letterCombinationHelper(depth: Int, prefix: String=""): Array[String] = {
 	  if (depth == digits.length)
