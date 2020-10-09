@@ -1,3 +1,7 @@
+;; Dark theme
+(load-theme 'misterioso)
+
+
 (setq org-todo-keywords (quote ((sequence "TODO(t!)" "NEXT(n!)" "STARTED(S)" "|" "DONE(d!/!)" "COMPLETED(l!)" "VERIFIED(v)")
                                 (sequence "FIXED(F@/!)" "WAITING(w@/!)" "PROGRESS(p)" "SCHEDULED(h@)" "POSTPONED(P@/!)" "|" "CANCELLED(c@/!)" "FAILED(f!)")
                                 (sequence "SUCCEEDED(s)" "DEFERRED(D)" "|" "APPROVED(A@)" "EXPIRED(E@)" "REJECTED(R@)")
@@ -75,4 +79,61 @@
 (add-to-list 'load-path "~/elisp")
 
 ;; Emacs as a tiling window manager a.l.a xMonad 
-(require 'emacsd-tile)
+;; (require 'emacsd-tile)
+
+;; Emacs as a tiling window manager a.l.a xMonad 
+;; (require 'emacsd-tile)
+
+;; display images inline
+(setq org-startup-with-inline-images t)
+
+
+;; Use org-babel to highlight syntax in code blocks
+(setq org-src-fontify-natively t
+    org-src-tab-acts-natively t
+    org-confirm-babel-evaluate nil
+    org-edit-src-content-indentation 0)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("31deed4ac5d0b65dc051a1da3611ef52411490b2b6e7c2058c13c7190f7e199b" default)))
+ '(org-export-backends (quote (ascii html icalendar latex md freemind))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
+
+
+(require 'org-bullets)
+(add-hook 'org-mode-hook #'org-bullets-mode)
+
+;; (add-to-list 'custom-theme-load-path
+;;         (concat
+;;          "~/elisp/"
+;;          (elt (directory-files "~/elisp/" nil "org-beautify-theme-[0-9].*") 0)))
+;;(add-hook 'org-mode-hook (lambda () (load-theme 'org-beautify)))
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((R . t)
+   (ditaa . t)
+   (dot . t)
+   (emacs-lisp . t)
+   (gnuplot . t)
+   (haskell . nil)
+   (latex . t)
+   (ledger . t)         ;this is the important one for this tutorial
+   (ocaml . nil)
+   (octave . t)
+   (python . t)
+   (ruby . t)
+   (screen . nil)
+   (shell . t)
+   (sql . nil)
+   (sqlite . t)))
