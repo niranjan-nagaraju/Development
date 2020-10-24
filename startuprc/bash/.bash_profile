@@ -69,7 +69,7 @@ alias ls='ls -G'
 export PATH=$PATH:/usr/texbin:/opt/git/bin:~/Development/PyQt4/Qt4/bin:/System/Library/Frameworks/Python.framework/Versions/2.6/bin/
 
 # python libraries/modules path
-export PYTHONPATH=$PYTHONPATH:/Users/Niranjan/Development/python/:/Library/Python/2.6/site-packages/
+export PYTHONPATH=$PYTHONPATH:~/Development/python/:/Library/Python/2.6/site-packages/
 
 # MIT-Scheme Core
 export MITSCHEME_LIBRARY_PATH="/Applications/MIT\:GNU\ Scheme.app/Contents/Resources"

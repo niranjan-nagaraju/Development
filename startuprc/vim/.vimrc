@@ -1,6 +1,7 @@
+execute pathogen#infect()
 syntax on
 filetype plugin indent on
-colorscheme desert
+colorscheme gruvbox
 
 " Tabs = 4 columns
 set tabstop=4
@@ -56,3 +57,9 @@ autocmd BufReadPost *
 if &diff " only for diff mode/vimdiff
       set diffopt=filler,context:1000000 " filler is default and inserts empty lines for sync
 endif 
+
+
+" enable scrollwheel inside vim in gnu screen
+set mouse=n             " hold shift to copy xterm
+set ttymouse=xterm2     " necessary for gnu screen & mouse
+

@@ -1,6 +1,9 @@
 ;; Dark theme
 (load-theme 'misterioso)
 
+;; save temporary files at ~/.emacs.d/backup/
+(setq backup-directory-alist `(("." . "~/.emacs.d/backup/"))
+	  auto-save-file-name-transforms `((".*" "~/.emacs.d/backup/" t)))
 
 (setq org-todo-keywords (quote ((sequence "TODO(t!)" "NEXT(n!)" "STARTED(S)" "|" "DONE(d!/!)" "COMPLETED(l!)" "VERIFIED(v)")
                                 (sequence "FIXED(F@/!)" "WAITING(w@/!)" "PROGRESS(p)" "SCHEDULED(h@)" "POSTPONED(P@/!)" "|" "CANCELLED(c@/!)" "FAILED(f!)")
@@ -124,6 +127,7 @@
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((R . t)
+   (C . t)
    (ditaa . t)
    (dot . t)
    (emacs-lisp . t)
@@ -151,3 +155,26 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(org-ellipsis ((t (:foreground "LightGoldenrod" :underline nil)))))
+
+
+(setq-default
+ tab-width 4
+ indent-tabs-mode t)
+
+;; show parentheses-match
+(show-paren-mode 1)
+
+;; Match parantheses on '%'
+(global-set-key "%" 'match-paren)
+(defun match-paren (arg)
+    "Go to the matching paren if on a paren; otherwise insert %."
+	(interactive "p")
+	(cond ((looking-at "\\s(") (forward-list 1) (backward-char 1))
+		  ((looking-at "\\s)") (forward-char 1) (backward-list 1))
+		  (t (self-insert-command (or arg 1)))))
+
+
+(setq c-default-style "linux"
+      c-basic-offset 4)
+
+

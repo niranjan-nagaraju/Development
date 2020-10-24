@@ -1,0 +1,21 @@
+hardstatus on                                                                                                                                     
+hardstatus alwayslastline
+hardstatus string "%w"
+
+# binding the F1 - F10 keys to the first 10 screens(starts from 0) 
+bindkey -k k1 select 0
+bindkey -k k2 select 1
+bindkey -k k3 select 2
+bindkey -k k4 select 3
+bindkey -k k5 select 4
+bindkey -k k6 select 5
+bindkey -k k7 select 6
+bindkey -k k8 select 7
+bindkey -k k9 select 8
+bindkey -k k; select 9   # F10
+bindkey -k F1 select 10  # F11 
+bindkey -k F2 select 11  # F12
+
+termcapinfo xterm* ti@:te@+
+term xterm-256color
+
