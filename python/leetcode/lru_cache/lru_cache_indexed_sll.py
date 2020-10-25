@@ -147,11 +147,10 @@ class IndexedSLL(object):
 			self.tail = self.head
 
 		self.lookup[first.item[0]] = None
-		return first.item
 
 
 	# Remove a 'key' from the SLL
-	# and return the (key,value) pair corresponding to 'key'
+	#
 	# *UNSAFE* :
 	#	doesn't check if the key is present in the SLL
 	#	or if the key is in the tail node. 
@@ -181,7 +180,6 @@ class IndexedSLL(object):
 		self.lookup[node.item[0]] = node
 		self.lookup[key] = None
 
-		return item
 
 
 	# Lookup key's node, and return its value
@@ -221,7 +219,7 @@ class IndexedQueue(IndexedSLL):
 			node.item = item
 			return
 
-		removed = self.remove(key)
+		self.remove(key)
 		self.enqueue(key, item[1])
 	
 
