@@ -42,11 +42,11 @@ Solution Outline:
 		2.2 Get the node for the key, move it to the back of the queue marking it as MRU
 			return its value
 	3. Indexed-queue implemented using an SLL-based queue with a lookup table.
-		1.1 Maintain a lookup table which maps keys to their node in the Queue.
-		1.2 A regular SLL-based Queue would do as we don't have to remove the tail node.
+		3.1 Maintain a lookup table which maps keys to their node in the Queue.
+		3.2 A regular SLL-based Queue would do as we don't have to remove the tail node.
 			1.1.1 A node is only deleted to be re-enqueued to the back of the queue.
 			1.1.2 Re-enqueing a tail node is a NO-OP, needn't involve removing tail node as it'll be redundant.
-		1.3 Use the `copy next node's contents to current to delete curent node in O(1)` trick to delete a node using its reference.
+		3.3 Use the `copy next node's contents to current to delete curent node in O(1)` trick to delete a node using its reference.
 
 Sample run:
 	Lookup: {}
