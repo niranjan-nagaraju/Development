@@ -25,7 +25,7 @@ fn sieve(n: u32) -> Vec<u32> {
 
 
 fn main() {
-	// println!("Sieve: {:#?}: ", sieve(23));
+	println!("Sieve: {:#?}: ", sieve(23));
     assert!( sieve(23) == vec![2,3,5,7,11,13,17,19,23] );
     assert!( sieve(25) == vec![2,3,5,7,11,13,17,19,23] );
     assert!( sieve(29) == vec![2,3,5,7,11,13,17,19,23,29] );
