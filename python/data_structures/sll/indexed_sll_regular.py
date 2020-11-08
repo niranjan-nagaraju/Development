@@ -71,9 +71,10 @@ class IndexedSLL(object):
 	# Remove 'key' from the front of the SLL and lookup table
 	def pop_front(self):
 		if self.num_items == 0:
-			return
+			raise ValueError("IndexedSLL is empty.")
 
 		first = self.head.next
+		item = first.item
 	
 		self.num_items-= 1
 		self.head.next = first.next
@@ -84,6 +85,7 @@ class IndexedSLL(object):
 			self.tail = self.head
 
 		self.lookup[first.item[0]] = None
+		return item
 
 
 	# Remove a 'key' from the SLL
@@ -144,7 +146,7 @@ if __name__ == '__main__':
 	isll.push_back(3,15)
 	assert isll.num_items == 3
 
-	isll.pop_front() == (1,5)
+	assert isll.pop_front() == (1,5)
 	assert isll.num_items == 2
 	assert isll.lookup.get(1) == None
 	assert isll.lookup.get(2) == isll.head.next
@@ -191,5 +193,11 @@ if __name__ == '__main__':
 	assert str(isll).split('\n')[0] == \
 			"['None', '(3, 15)', \"(6, 'six')\"]"
 
+	assert isll.pop_front() == (3,15)
+	assert isll.num_items == len(isll) == 1
+	assert isll.get(3) == None
 
+	assert isll.pop_front() == (6, 'six')
+	assert isll.num_items == len(isll) == 0
+	assert isll.get(6) == None
 
