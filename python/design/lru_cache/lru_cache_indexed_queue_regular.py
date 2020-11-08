@@ -3,10 +3,10 @@ https://leetcode.com/problems/lru-cache/
 
 146. LRU Cache
 
-Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and set.
 
 get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
-put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+set(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
 
 The cache is initialized with a positive capacity.
 
@@ -17,12 +17,12 @@ Example:
 
 LRUCache cache = new LRUCache( 2 /* capacity */ );
 
-cache.put(1, 1);
-cache.put(2, 2);
+cache.set(1, 1);
+cache.set(2, 2);
 cache.get(1);       // returns 1
-cache.put(3, 3);    // evicts key 2
+cache.set(3, 3);    // evicts key 2
 cache.get(2);       // returns -1 (not found)
-cache.put(4, 4);    // evicts key 1
+cache.set(4, 4);    // evicts key 1
 cache.get(1);       // returns -1 (not found)
 cache.get(3);       // returns 3
 cache.get(4);       // returns 4
@@ -31,7 +31,7 @@ cache.get(4);       // returns 4
 '''
 Solution Outline:
 	0. Use an Indexed-queue made from a regular SLL, with a lookup for nodes.
-	1. put(key, value):
+	1. set(key, value):
 		1.1 if the cache already has the key, move its node to the back marking it as MRU
 			Update its value in the node
 		1.2 Otherwise.
@@ -72,7 +72,7 @@ class LRUCache(object):
 		return item
 
 
-	def put(self, key, value):
+	def set(self, key, value):
 		"""
 		:type key: int
 		:type value: int
@@ -96,46 +96,46 @@ class LRUCache(object):
 
 
 if __name__ == '__main__':
-	#2,[put(2,1),put(2,2),get(2),put(1,1),put(4,1),get(2)]
+	#2,[set(2,1),set(2,2),get(2),set(1,1),set(4,1),get(2)]
 	cache1 = LRUCache(2)
-	cache1.put(2,1)
-	cache1.put(2,2)
+	cache1.set(2,1)
+	cache1.set(2,2)
 	assert cache1.get(2) == 2
-	cache1.put(1,1)
-	cache1.put(4,1) # evicts (2,2)
+	cache1.set(1,1)
+	cache1.set(4,1) # evicts (2,2)
 	assert cache1.get(2) == -1
 
 	cache = LRUCache(2)
-	cache.put(1,2)
-	cache.put(2,3)
+	cache.set(1,2)
+	cache.set(2,3)
 	assert(cache.get(1) == 2)
-	cache.put(3,4) # Invalidates (2,3)
+	cache.set(3,4) # Invalidates (2,3)
 	assert(cache.get(2) == -1)
 	assert(cache.get(3) == 4)
-	cache.put(4,5) # Invalidates (1,2)
+	cache.set(4,5) # Invalidates (1,2)
 	assert(cache.get(1) == -1)
 	assert(cache.get(4) == 5)
 	assert(cache.get(3) == 4)
 
 	cache3 = LRUCache(2)
-	cache3.put(1,11)
-	cache3.put(2,22)
+	cache3.set(1,11)
+	cache3.set(2,22)
 	assert cache3.get(1) == 11
-	cache3.put(3,33) # evicts (2,22)
+	cache3.set(3,33) # evicts (2,22)
 	assert cache3.get(2) == -1
-	cache3.put(4,44) # evicts (1,11)
+	cache3.set(4,44) # evicts (1,11)
 	assert cache3.get(1) == -1
 	assert cache3.get(3) == 33
 	assert cache3.get(4) == 44
 
 	cache = LRUCache(5)
-	cache.put(1, 101)
-	cache.put(2, 202)
-	cache.put(1, 111)
-	cache.put(3, 303)
-	cache.put(4, 404)
-	cache.put(5, 505)
+	cache.set(1, 101)
+	cache.set(2, 202)
+	cache.set(1, 111)
+	cache.set(3, 303)
+	cache.set(4, 404)
+	cache.set(5, 505)
 	assert cache.get(1) == 111
-	cache.put(6, 616) # invalidates 2
+	cache.set(6, 616) # invalidates 2
 	assert cache.get(2) == -1
 
