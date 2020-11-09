@@ -22,7 +22,7 @@ first_n_primes n = (take n) sieve
 
 -- Get nth prime number
 nth_prime :: Int -> Integer
-nth_prime n = last $ first_n_primes n
+nth_prime n = sieve !! (n-1) -- Get (n-1)th item from the 0-indexed list of primes
 
 
 -- Get all primes below 'n'
@@ -42,6 +42,7 @@ main = do
 	putStr $ assert ( (first_n_primes 10) == [2,3,5,7,11,13,17,19,23,29] ) ""
 	putStr $ assert ( (first_n_primes 1) == [2] ) ""
 
+	putStr $ assert ( (nth_prime 1) == 2 ) ""
 	putStr $ assert ( (nth_prime 10) == 29 ) ""
 	putStr $ assert ( (nth_prime 100) == 541 ) ""
 
