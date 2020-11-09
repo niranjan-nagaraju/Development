@@ -7,7 +7,7 @@ import Control.Exception (assert)
  -}
 sieve' :: [Integer] -> [Integer]
 sieve' [] = []
-sieve' (x : xs) = x : sieve' [p | p <- xs, p `mod` x /= 0]
+sieve' (x : xs) = x : sieve' [i | i <- xs, i `mod` x /= 0]
 
 
 -- Infinite list of prime numbers, filter lazily using a predicate
