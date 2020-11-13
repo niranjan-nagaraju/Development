@@ -118,6 +118,10 @@ class Solution:
 				# target-sum can achieved with prefix+C[0]
 				# add to results, and backtrack to previous levels
 				results.add(tuple(prefix))
+				# backtrack to previous levels
+				# because current level can only
+				# have 1 candidate to match the target sum
+				return
 
 			combinations_sum_(c, t-c[0], prefix+[c[0]])
 			# upon backtrack, reduce candidate-set and try with the same prefix/target sum

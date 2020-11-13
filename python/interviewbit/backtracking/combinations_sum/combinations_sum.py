@@ -109,7 +109,6 @@ class Solution:
 		def combinations_sum_(c, t, prefix=[]):
 			if not c:
 				return
-
 			if t < 0:
 				# backtrack to previous levels
 				# the lowest number in C > required target sum
@@ -118,6 +117,10 @@ class Solution:
 				# target-sum can achieved with prefix+C[0]
 				# add to results, and backtrack to previous levels
 				results.add(tuple(prefix))
+				# backtrack to previous levels
+				# because current level can only
+				# have 1 candidate to match the target sum
+				return
 
 			for i in xrange(len(c)):
 				combinations_sum_(c[i:], t-c[i], prefix+[c[i]])
