@@ -51,16 +51,16 @@ f([y,x], z, 0)  f([y,x], z, 1)  f([y,x], z, 2)   f([x,y], z, 0)  f([x,y], z, 1) 
 '''
 class Solution:
     def permutations(self, A):
-        def permutations_(prefix, level, idx):
+        def permutations_(prefix, level):
             if len(prefix) == len(A):
                 permutations_list.append(prefix)
                 return
 
             for i in xrange(len(prefix)+1):
-                permutations_(prefix[:i] + [A[level]] + prefix[i:], level+1, idx+1)
+                permutations_(prefix[:i] + [A[level]] + prefix[i:], level+1)
 
         permutations_list = []
-        permutations_([], 0, 0)
+        permutations_([], 0)
         return sorted(permutations_list)
 
 
