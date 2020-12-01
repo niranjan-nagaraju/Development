@@ -51,67 +51,67 @@ f([y,x], z, 0)  f([y,x], z, 1)  f([y,x], z, 2)   f([x,y], z, 0)  f([x,y], z, 1) 
 
 */
 class Solution {
-  def permutations(A: Array[Int]): Array[Array[Int]] = {
-	var results = Array[Array[Int]]()
+	def permutations(A: Array[Int]): Array[Array[Int]] = {
+		var results = Array[Array[Int]]()
 
-	// recursive permutations generator
-	def permutations_(prefix: Array[Int], level: Int): Unit = {
-	  if(prefix.length == A.length) {
-		results :+= prefix
-		return
-	  }
+		// recursive permutations generator
+		def permutations_(prefix: Array[Int], level: Int): Unit = {
+			if(prefix.length == A.length) {
+				results :+= prefix
+				return
+			}
 
-	  for(i <- 0 to prefix.length) {
-		permutations_(
-		  prefix.slice(0,i) ++ Array(A(level)) ++ prefix.slice(i, prefix.length),
-		  level+1
-		)
-		// backtrack to previous levels
-      }
+			for(i <- 0 to prefix.length) {
+				permutations_(
+						prefix.slice(0,i) ++ Array(A(level)) ++ prefix.slice(i, prefix.length),
+						level+1
+						)
+				// backtrack to previous levels
+			}
+		}
+
+		/** Compare two permutation arrays */
+		def compare_permutations(one: Array[Int], two: Array[Int]): Boolean = {
+			for(i <- 0 until one.length) {
+				if(one(i) != two(i))
+					return one(i) < two(i)
+			}
+			return false
+		}
+
+		permutations_(Array[Int](), 0)
+		return results.sortWith(compare_permutations)
 	}
-
-	/** Compare two permutation arrays */
-	def compare_permutations(one: Array[Int], two: Array[Int]): Boolean = {
-	  for(i <- 0 until one.length) {
-		if(one(i) != two(i))
-		  return one(i) < two(i)
-	  }
-	  return false
-	}
-
-	permutations_(Array[Int](), 0)
-	return results.sortWith(compare_permutations)
-  }
 }
 
 object Solution {
-  def main(args: Array[String]): Unit = {
-	val s = new Solution
+	def main(args: Array[String]): Unit = {
+		val s = new Solution
 
-    {
-	  val expected = Array(Array(1,2), Array(2,1))
-	  val perms = s.permutations(Array(1,2))
-	  for(i <- 0 until expected.length) {
-		assert( perms(i) sameElements expected(i) )
-	  }
+		{
+			val expected = Array(Array(1,2), Array(2,1))
+				val perms = s.permutations(Array(1,2))
+				for(i <- 0 until expected.length) {
+					assert( perms(i) sameElements expected(i) )
+				}
+		}
+
+		{
+			val expected = Array(Array(1))
+				val perms = s.permutations(Array(1))
+				for(i <- 0 until expected.length) {
+					assert( perms(i) sameElements expected(i) )
+				}
+		}
+
+		{
+			val expected = Array(Array(1,2,3), Array(1,3,2), Array(2,1,3), Array(2,3,1), Array(3,1,2), Array(3,2,1))
+				val perms = s.permutations(Array(1,2,3))
+				for(i <- 0 until expected.length) {
+					assert( perms(i) sameElements expected(i) )
+				}
+		}
+
 	}
-
-    {
-	  val expected = Array(Array(1))
-	  val perms = s.permutations(Array(1))
-	  for(i <- 0 until expected.length) {
-		assert( perms(i) sameElements expected(i) )
-	  }
-	}
-
-    {
-	  val expected = Array(Array(1,2,3), Array(1,3,2), Array(2,1,3), Array(2,3,1), Array(3,1,2), Array(3,2,1))
-	  val perms = s.permutations(Array(1,2,3))
-	  for(i <- 0 until expected.length) {
-		assert( perms(i) sameElements expected(i) )
-	  }
-	}
-
-  }
 }
 
