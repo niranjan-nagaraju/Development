@@ -53,8 +53,9 @@ f([y,x], z, 0)  f([y,x], z, 1)  f([y,x], z, 2)   f([x,y], z, 0)  f([x,y], z, 1) 
 struct Solution;
 
 impl Solution {
-	pub fn permutations(a: Vec<i32>) -> Vec<Vec<i32>> {
-		fn permutations_(a: &Vec<i32>, prefix: &mut Vec<i32>, level: i32, results: &mut Vec<Vec<i32>>) {
+	pub fn permutations<T>(a: Vec<T>) -> Vec<Vec<T>>
+	where T: std::cmp::Ord + std::clone::Clone {
+		fn permutations_<T: std::clone::Clone>(a: &Vec<T>, prefix: &mut Vec<T>, level: i32, results: &mut Vec<Vec<T>>) {
 			if prefix.len() == a.len() {
 				results.push(prefix.clone());
 				return;
@@ -63,7 +64,7 @@ impl Solution {
 				// Slicing prefix to a new array while inserting
 				// A[level] will take O(n) - same as insert(idx)+pop(idx)
 				// So we might as well save some memory modifying prefix vs copying
-				prefix.insert(i, a[level as usize]);
+				prefix.insert(i, a[level as usize].clone());
 				permutations_(&a,
 					prefix,
 					level+1,
@@ -82,9 +83,18 @@ impl Solution {
 
 
 fn main() {
-	assert!( Solution::permutations(vec![]) == [[]] );
+	assert!( Solution::permutations::<i32>(vec![]) == [[]] );
 	assert!( Solution::permutations(vec![1]) == [[1]] );
 	assert!( Solution::permutations(vec![1,2]) == [[1,2], [2,1]] );
 	assert!( Solution::permutations(vec![1,2,3]) ==
 		[[1, 2, 3], [1, 3, 2], [2, 1, 3], [2, 3, 1], [3, 1, 2], [3, 2, 1]] );
+	assert!( Solution::permutations(vec!['a', 'b', 'c']).into_iter()
+								.map(|x| { x.iter().collect::<String>() })
+								.collect::<Vec<String>>() == ["abc", "acb", "bac", "bca", "cab", "cba"]
+		);
+	assert!( Solution::permutations(vec!['a', 'b', 'c']) == [
+			['a','b','c'], ['a','c','b'],
+			['b', 'a', 'c'], ['b', 'c', 'a'],
+			['c','a','b'], ['c','b','a']
+		] );
 }
