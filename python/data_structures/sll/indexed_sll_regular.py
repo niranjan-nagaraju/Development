@@ -31,7 +31,7 @@ class IndexedSLL(object):
 	
 
 	def __str__(self):
-		tmp = self.head
+		tmp = self.head.next
 		qstr = []
 		while tmp:
 			qstr.append(str(tmp))
@@ -191,7 +191,7 @@ if __name__ == '__main__':
 	assert isll.get(1) == None
 
 	assert str(isll).split('\n')[0] == \
-			"['None', '(3, 15)', \"(6, 'six')\"]"
+			"['(3, 15)', \"(6, 'six')\"]"
 
 	assert isll.pop_front() == (3,15)
 	assert isll.num_items == len(isll) == 1

@@ -89,24 +89,24 @@ if __name__ == '__main__':
 	iq.enqueue(1, 600) # 2 -> 4 -> 1
 	assert len(iq) == 3
 	assert iq.get(1) == 600
-	assert str(iq).split('\n')[0] == "['None', '(2, 200)', '(4, 400)', '(1, 600)']"
+	assert str(iq).split('\n')[0] == "['(2, 200)', '(4, 400)', '(1, 600)']"
 
 	iq.reEnqueue(4)
 	assert len(iq) == 3
-	assert str(iq).split('\n')[0] == "['None', '(2, 200)', '(1, 600)', '(4, 400)']"
+	assert str(iq).split('\n')[0] == "['(2, 200)', '(1, 600)', '(4, 400)']"
 
 	iq.reEnqueue(2)
 	assert len(iq) == 3
-	assert str(iq).split('\n')[0] == "['None', '(1, 600)', '(4, 400)', '(2, 200)']"
+	assert str(iq).split('\n')[0] == "['(1, 600)', '(4, 400)', '(2, 200)']"
 
 	assert iq.tail.item == (2, 200)
 	iq.reEnqueue(2)
 	assert len(iq) == 3
-	assert str(iq).split('\n')[0] == "['None', '(1, 600)', '(4, 400)', '(2, 200)']"
+	assert str(iq).split('\n')[0] == "['(1, 600)', '(4, 400)', '(2, 200)']"
 
 	iq.reEnqueue(1, 111)
 	assert len(iq) == 3
-	assert str(iq).split('\n')[0] == "['None', '(4, 400)', '(2, 200)', '(1, 111)']"
+	assert str(iq).split('\n')[0] == "['(4, 400)', '(2, 200)', '(1, 111)']"
 
 	assert iq.dequeue() == (4,400)
 	assert len(iq) == 2
