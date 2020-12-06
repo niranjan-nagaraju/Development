@@ -1,5 +1,5 @@
-from design.lru_cache.lru_cache_dll import LRUCache as LRUCacheDLL
-from design.lru_cache.lru_cache_indexed_queue_regular import LRUCache as LRUCacheSLLR
+from design.lru_cache.lru_cache_indexed_queue_dll import LRUCache as LRUCacheDLL
+from design.lru_cache.lru_cache_indexed_queue_sll import LRUCache as LRUCacheSLLR
 
 
 def runtests(LRUCache):

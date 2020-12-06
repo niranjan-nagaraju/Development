@@ -30,7 +30,7 @@ cache.get(4);       // returns 4
 
 '''
 Solution Outline:
-	0. Use an Indexed-queue made from a regular SLL, with a lookup for nodes.
+	0. Use an Indexed-queue based off of a DLL, with a lookup for nodes.
 	1. set(key, value):
 		1.1 if the cache already has the key, move its node to the back marking it as MRU
 			Update its value in the node
@@ -41,14 +41,12 @@ Solution Outline:
 		2.1 If the key is not found in the lookup table, => return -1
 		2.2 Get the node for the key, move it to the back of the queue marking it as MRU
 			return its value
-		3.2 A regular SLL-based Queue would do as we don't have to remove the tail node.
-			1.1.1 A node is only deleted to be re-enqueued to the back of the queue.
-			1.1.2 Re-enqueing a tail node is a NO-OP, needn't involve removing tail node as it'll be redundant.
-		3.3 Use the `copy next node's contents to current to delete curent node in O(1)` trick to delete a node using its reference.
+			2.2.1 A node is only deleted to be re-enqueued to the back of the queue.
+			2.2.2 Re-enqueing a tail node is a NO-OP, needn't involve removing tail node as it'll be redundant.
 '''
 
+from data_structures.dll.indexed_queue import IndexedQueue
 
-from data_structures.sll.indexed_queue_regular import IndexedQueue
 
 class LRUCache(object):
 	def __init__(self, capacity):
@@ -138,4 +136,5 @@ if __name__ == '__main__':
 	assert cache.get(1) == 111
 	cache.set(6, 616) # invalidates 2
 	assert cache.get(2) == -1
+
 
