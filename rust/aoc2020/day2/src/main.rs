@@ -110,9 +110,9 @@ fn main() {
 mod tests_day2 {
 	use super::*;
 
-    #[test]
-    fn basic_tests_day2() {
-        assert_eq!(
+	#[test]
+	fn basic_tests_day2() {
+		assert_eq!(
 			PasswordPolicy::from_str("12-34 c: abcdef").unwrap(),
 			PasswordPolicy{
 				min: 12,
@@ -122,7 +122,7 @@ mod tests_day2 {
 			}
 		);
 
-        assert_eq!(
+		assert_eq!(
 			PasswordPolicy::from_str("12*34 c: abcdef"),
 			Err("Invalid format - Couldn't locate '-'".to_string())
 		);
@@ -135,6 +135,6 @@ mod tests_day2 {
 
 		let p3 = PasswordPolicy::from_str("2-34 x: abcbef").unwrap();
 		assert_eq!(p3.valid(), false);
-    }
+	}
 }
 
