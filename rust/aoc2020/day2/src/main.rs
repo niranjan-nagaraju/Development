@@ -38,8 +38,12 @@ Given the same example list from above:
 1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
 2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
 How many passwords are valid according to the new interpretation of the policies?
+Your puzzle answer was 485.
 
+Both parts of this puzzle are complete! They provide two gold stars: **
 */
+
+#![allow(unused)]
 
 use std::str::FromStr;
 use std::io::{self, BufRead};
@@ -79,9 +83,9 @@ impl FromStr for PasswordPolicy {
 
 impl PasswordPolicy {
 	// Validate password according to policy
-	// Password is valid if `policy_char` appears
+	// Password is valid per scheme I, if `policy_char` appears
 	// between `min` .. `max` times in the password.
-	pub fn valid(&self) -> bool {
+	pub fn valid_p1(&self) -> bool {
 		(self.min .. self.max+1)
 			.contains(&(
 					self.password
@@ -90,16 +94,37 @@ impl PasswordPolicy {
 					.count() as i32)
 			)
 	}
+
+	// Validate password according to policy
+	// Password is valid per scheme II, if `policy_char` appears
+	// exactly once at either position `min` or `max` times in the password.
+	// x y | r
+	// ------
+	// 0 0 | 0
+	// 0 1 | 1
+	// 1 0 | 1
+	// 1 1 | 0
+	//    -> xor
+	pub fn valid_p2(&self) -> bool {
+		(self.password.chars().nth((self.min-1) as usize).unwrap() == self.policy_char)
+			^
+		(self.password.chars().nth((self.max-1) as usize).unwrap() == self.policy_char)
+	}
 }
 
 fn main() {
 	let stdin = io::stdin();
+
+	// NOTE: Switch between validating passwords using scheme 1 or 2
+	// let validatorfn = PasswordPolicy::valid_p1;
+	let validatorfn = PasswordPolicy::valid_p2;
+
 	let valid_passwords = stdin
 		.lock()
 		.lines()
 		.filter_map(|line_result| line_result.ok())
 		.filter_map(|line| PasswordPolicy::from_str(line.as_str()).ok())
-		.filter(|ppolicy| ppolicy.valid())
+		.filter(|ppolicy| validatorfn(ppolicy))
 		.count();
 
 	println!("Valid passwords: {:#?}", valid_passwords);
@@ -111,7 +136,7 @@ mod tests_day2 {
 	use super::*;
 
 	#[test]
-	fn basic_tests_day2() {
+	fn test_parsing() {
 		assert_eq!(
 			PasswordPolicy::from_str("12-34 c: abcdef").unwrap(),
 			PasswordPolicy{
@@ -126,15 +151,37 @@ mod tests_day2 {
 			PasswordPolicy::from_str("12*34 c: abcdef"),
 			Err("Invalid format - Couldn't locate '-'".to_string())
 		);
+	}
 
+
+	#[test]
+	fn test_password_validation_p1() {
 		let p = PasswordPolicy::from_str("12-34 c: abcdef").unwrap();
-		assert_eq!(p.valid(), false);
+		assert_eq!(p.valid_p1(), false);
 
 		let p2 = PasswordPolicy::from_str("2-34 b: abcbef").unwrap();
-		assert_eq!(p2.valid(), true);
+		assert_eq!(p2.valid_p1(), true);
 
 		let p3 = PasswordPolicy::from_str("2-34 x: abcbef").unwrap();
-		assert_eq!(p3.valid(), false);
+		assert_eq!(p3.valid_p1(), false);
+
+		let p4 = PasswordPolicy::from_str("1-3 b: cdefg").unwrap();
+		assert_eq!(p4.valid_p1(), false);
+
+		let p5 = PasswordPolicy::from_str("2-9 c: ccccccccc").unwrap();
+		assert_eq!(p5.valid_p1(), true);
+	}
+
+	#[test]
+	fn test_password_validation_p2() {
+		let p = PasswordPolicy::from_str("1-3 a: abcdef").unwrap();
+		assert_eq!(p.valid_p2(), true);
+
+		let p2 = PasswordPolicy::from_str("1-3 b: cdefg").unwrap();
+		assert_eq!(p2.valid_p2(), false);
+
+		let p3 = PasswordPolicy::from_str("2-9 c: ccccccccc").unwrap();
+		assert_eq!(p3.valid_p2(), false);
 	}
 }
 
