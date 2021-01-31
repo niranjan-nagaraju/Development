@@ -3,7 +3,6 @@ https://www.interviewbit.com/problems/xor-between-two-arrays/
 
 Xor Between Two Arrays!
 
-
 Problem Description
 Given two integer array A and B, you have to pick one element from each array such that their xor is maximum.
 Return this maximum xor value.
@@ -39,6 +38,15 @@ Explanation 1:
 
 '''
 Solution Outline:
+    0. Use a binary-trie to build a prefix trie for A
+    1. For each item, B[i], in B
+       1.1 Traverse bits, MSB to LSB and for every bit b in B[i], match the opposite bit, b' in the trie
+           to maximize b xor b' == 1 if b != b'
+       1.2 If no such b' is found in the trie, traverse b in the path, and onto the next bit.
+       1.3 Set or reset the bit b position in current xor if b' is found or not respectively.
+    2. Return max of the current xors found for each B[i]
+  
+Sample run: 
     A: [1, 2, 3] -> [001, 010, 011]
     B: [1, 2, 4] -> [001, 010, 100]
     A as a prefix tree
@@ -142,6 +150,49 @@ class BitArray(object):
 
 
 
+class BinaryTrie(object):
+    class Node(object):
+        def __init__(self):
+            self.children = [None, None]
+
+    def __init__(self, max_width):
+        self.root = BinaryTrie.Node()
+        self.max_width = max_width
+
+
+    def add(self, number):
+        bA = BitArray(number, self.max_width)
+        node = self.root
+        for i in xrange(self.max_width):
+            b = bA[i]
+            if node.children[b] is None:
+                node.children[b] = BinaryTrie.Node()
+            node = node.children[b]
+            
+
+    # return max xor possible with the current trie
+    # and the given number
+    def calculate_max_xor(self, number):
+        # return bit-wise opposite of x
+        flip = lambda x: 0 if x == 1 else 1
+
+        current_xor = BitArray(0, self.max_width)
+        bA = BitArray(number, self.max_width)
+        node = self.root
+        for i in xrange(self.max_width):
+            b = bA[i]
+            b_ = flip(b)
+            if node.children[b_] is not None:
+                current_xor[i] = 1
+                node = node.children[b_]
+            else:
+                current_xor[i] = 0 # this is redundant, but for the sake of consistency
+                node = node.children[b]
+
+        return current_xor.number
+
+
+
 if __name__ == '__main__':
     b = BitArray(5, 5)
     assert (b[0], b[1], b[2], b[3], b[4]) == (0, 0, 1, 0, 1)
@@ -151,5 +202,40 @@ if __name__ == '__main__':
     assert b.number == 0b10101
     b[2] = 0
     assert b.number == 0b10001
-   
+
+    trie = BinaryTrie(3)
+    trie.add(3)
+
+    root = trie.root
+    node0 = trie.root.children[0] 
+    assert node0 is not None
+    assert trie.root.children[1] is None
+    node01 = trie.root.children[0].children[1]
+    assert node01 is not None
+    node011 = trie.root.children[0].children[1].children[1]
+    assert node011 is not None
+    assert node011.children == [None, None]
+  
+    trie.add(2)
+    assert root == trie.root
+    assert trie.root.children[0] == node0
+    assert trie.root.children[0].children[1] == node01
+    assert trie.root.children[0].children[1].children[1] == node011
+    assert trie.root.children[0].children[1].children[0] is not None
+
+    A = [1,2,3]
+    b = 1
+    bt = BinaryTrie(3)
+    map(lambda x: bt.add(x), A)
+
+    assert bt.calculate_max_xor(1) == 3
+    assert bt.calculate_max_xor(2) == 3
+    assert bt.calculate_max_xor(3) == 2
+    assert bt.calculate_max_xor(4) == 7
+
+    bt2 = BinaryTrie(7)
+    A = [14,70,53,83,49,91,36,80,92,51,66,70]
+    map(lambda x: bt2.add(x), A)
+    assert max([bt2.calculate_max_xor(x) for x in A]) == 127
+
 
