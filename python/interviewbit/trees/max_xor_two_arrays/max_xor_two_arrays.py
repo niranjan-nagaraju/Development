@@ -80,7 +80,7 @@ Sample run:
       current xor: 0
       B[1][1] = 1, locate *00 in trie, => found => set 2nd bit in current xor
       current xor: 0b010
-      B[1][2] = 0, locate *011 in trie => found => set 3rd bit in current xor
+      B[1][2] = 0, locate *001 in trie => found => set 3rd bit in current xor
       current xor: 0b011
       == max xor
       => using only B[1] = 2, and any of A[]
