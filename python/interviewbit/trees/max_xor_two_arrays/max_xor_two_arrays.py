@@ -105,137 +105,159 @@ Sample run:
     => max xor: 0b111 = 7
 '''
 
+from math import floor, log
+
 # Provide bit-wise access to a stored
 # number
 # b = BitArray(5) == 0b101
 # b[0], b[1], b[2] == 1, 0, 1
 class BitArray(object):
-    def __init__(self, number, max_width):
-        self.number = number
-        self.max_width = max_width
+	def __init__(self, number, max_width):
+		self.number = number
+		self.max_width = max_width
 
-    # ensure idx is between 0..max_width-1
-    def check_idx(func):
-        def f(self, *args, **kwargs):
-            idx = args[0]
-            if not (0 <= idx < self.max_width):
-                raise IndexError("Invalid index: %d" % idx)
-            rv = func(self, *args, **kwargs)
-            return rv
-        return f
+	# ensure idx is between 0..max_width-1
+	def check_idx(func):
+		def f(self, *args, **kwargs):
+			idx = args[0]
+			if not (0 <= idx < self.max_width):
+				raise IndexError("Invalid index: %d" % idx)
+			rv = func(self, *args, **kwargs)
+			return rv
+		return f
 
-    # Get 'idx'th bit
-    # idx is 0-indexed MSB to LSB
-    @check_idx
-    def __getitem__(self, idx):
-        mask = 1 << (self.max_width - idx - 1)
-        return 1 if (self.number & mask) else 0
+	# Get 'idx'th bit
+	# idx is 0-indexed MSB to LSB
+	@check_idx
+	def __getitem__(self, idx):
+		mask = 1 << (self.max_width - idx - 1)
+		return 1 if (self.number & mask) else 0
 
-    # Set 'idx'th bit to 'value'
-    # value is either 1 or 0
-    # idx is 0-indexed MSB to LSB
-    @check_idx
-    def __setitem__(self, idx, val):
-        mask = 1 << (self.max_width - idx - 1)
-        if val:
-            self.number |= mask
-        else:
-            self.number &= ~mask
+	# Set 'idx'th bit to 'value'
+	# value is either 1 or 0
+	# idx is 0-indexed MSB to LSB
+	@check_idx
+	def __setitem__(self, idx, val):
+		mask = 1 << (self.max_width - idx - 1)
+		if val:
+			self.number |= mask
+		else:
+			self.number &= ~mask
 
 
-    def __str__(self):
-        return str(self.number) + ': ' +\
-            str([self.__getitem__(x) for x in xrange(self.max_width)])
+	def __str__(self):
+		return str(self.number) + ': ' +\
+				str([self.__getitem__(x) for x in xrange(self.max_width)])
 
 
 
 
 class BinaryTrie(object):
-    class Node(object):
-        def __init__(self):
-            self.children = [None, None]
+	class Node(object):
+		def __init__(self):
+			self.children = [None, None]
 
-    def __init__(self, max_width):
-        self.root = BinaryTrie.Node()
-        self.max_width = max_width
+	def __init__(self, max_width):
+		self.root = BinaryTrie.Node()
+		self.max_width = max_width
 
 
-    def add(self, number):
-        bA = BitArray(number, self.max_width)
-        node = self.root
-        for i in xrange(self.max_width):
-            b = bA[i]
-            if node.children[b] is None:
-                node.children[b] = BinaryTrie.Node()
-            node = node.children[b]
-            
+	def add(self, number):
+		bA = BitArray(number, self.max_width)
+		node = self.root
+		for i in xrange(self.max_width):
+			b = bA[i]
+			if node.children[b] is None:
+				node.children[b] = BinaryTrie.Node()
+			node = node.children[b]
 
-    # return max xor possible with the current trie
-    # and the given number
-    def calculate_max_xor(self, number):
-        # return bit-wise opposite of x
-        flip = lambda x: 0 if x == 1 else 1
 
-        current_xor = BitArray(0, self.max_width)
-        bA = BitArray(number, self.max_width)
-        node = self.root
-        for i in xrange(self.max_width):
-            b = bA[i]
-            b_ = flip(b)
-            if node.children[b_] is not None:
-                current_xor[i] = 1
-                node = node.children[b_]
-            else:
-                current_xor[i] = 0 # this is redundant, but for the sake of consistency
-                node = node.children[b]
+	# return max xor possible with the current trie
+	# and the given number
+	def calculate_max_xor(self, number):
+		# return bit-wise opposite of x
+		flip = lambda x: 0 if x == 1 else 1
 
-        return current_xor.number
+		current_xor = BitArray(0, self.max_width)
+		bA = BitArray(number, self.max_width)
+		node = self.root
+		for i in xrange(self.max_width):
+			b = bA[i]
+			b_ = flip(b)
+			if node.children[b_] is not None:
+				current_xor[i] = 1
+				node = node.children[b_]
+			else:
+				current_xor[i] = 0 # this is redundant, but for the sake of consistency
+				node = node.children[b]
 
+		return current_xor.number
+
+
+
+class Solution:
+	def max_xor_two_arrays(self, A, B):
+		if not A or not B:
+			return 0
+
+		max_number = max(max(A), max(B))
+		max_bit_width = int(floor(log(max_number, 2))) + 1
+
+		# Build a binary (prefix) trie out of A
+		trieA = BinaryTrie(max_bit_width)
+		map(lambda x: trieA.add(x), A)
+
+		return max([trieA.calculate_max_xor(b) for b in B])
 
 
 if __name__ == '__main__':
-    b = BitArray(5, 5)
-    assert (b[0], b[1], b[2], b[3], b[4]) == (0, 0, 1, 0, 1)
-    assert str(b) == '5: [0, 0, 1, 0, 1]'
-    b[0] = 1
-    assert b[0] == 1
-    assert b.number == 0b10101
-    b[2] = 0
-    assert b.number == 0b10001
+	b = BitArray(5, 5)
+	assert (b[0], b[1], b[2], b[3], b[4]) == (0, 0, 1, 0, 1)
+	assert str(b) == '5: [0, 0, 1, 0, 1]'
+	b[0] = 1
+	assert b[0] == 1
+	assert b.number == 0b10101
+	b[2] = 0
+	assert b.number == 0b10001
 
-    trie = BinaryTrie(3)
-    trie.add(3)
+	trie = BinaryTrie(3)
+	trie.add(3)
 
-    root = trie.root
-    node0 = trie.root.children[0] 
-    assert node0 is not None
-    assert trie.root.children[1] is None
-    node01 = trie.root.children[0].children[1]
-    assert node01 is not None
-    node011 = trie.root.children[0].children[1].children[1]
-    assert node011 is not None
-    assert node011.children == [None, None]
-  
-    trie.add(2)
-    assert root == trie.root
-    assert trie.root.children[0] == node0
-    assert trie.root.children[0].children[1] == node01
-    assert trie.root.children[0].children[1].children[1] == node011
-    assert trie.root.children[0].children[1].children[0] is not None
+	root = trie.root
+	node0 = trie.root.children[0] 
+	assert node0 is not None
+	assert trie.root.children[1] is None
+	node01 = trie.root.children[0].children[1]
+	assert node01 is not None
+	node011 = trie.root.children[0].children[1].children[1]
+	assert node011 is not None
+	assert node011.children == [None, None]
 
-    A = [1,2,3]
-    b = 1
-    bt = BinaryTrie(3)
-    map(lambda x: bt.add(x), A)
+	trie.add(2)
+	assert root == trie.root
+	assert trie.root.children[0] == node0
+	assert trie.root.children[0].children[1] == node01
+	assert trie.root.children[0].children[1].children[1] == node011
+	assert trie.root.children[0].children[1].children[0] is not None
 
-    assert bt.calculate_max_xor(1) == 3
-    assert bt.calculate_max_xor(2) == 3
-    assert bt.calculate_max_xor(3) == 2
-    assert bt.calculate_max_xor(4) == 7
+	A = [1,2,3]
+	b = 1
+	bt = BinaryTrie(3)
+	map(lambda x: bt.add(x), A)
 
-    bt2 = BinaryTrie(7)
-    A = [14,70,53,83,49,91,36,80,92,51,66,70]
-    map(lambda x: bt2.add(x), A)
-    assert max([bt2.calculate_max_xor(x) for x in A]) == 127
+	assert bt.calculate_max_xor(1) == 3
+	assert bt.calculate_max_xor(2) == 3
+	assert bt.calculate_max_xor(3) == 2
+	assert bt.calculate_max_xor(4) == 7
 
+	bt2 = BinaryTrie(7)
+	A = [14,70,53,83,49,91,36,80,92,51,66,70]
+	map(lambda x: bt2.add(x), A)
+	assert max([bt2.calculate_max_xor(x) for x in A]) == 127
+
+	s = Solution()
+	assert s.max_xor_two_arrays([1,2,3], [1,2,4]) == 0b111
+	assert s.max_xor_two_arrays([2,1,3], [4,2,1]) == 0b111
+	assert s.max_xor_two_arrays([4,2,1], [2,1,3]) == 0b111
+	assert s.max_xor_two_arrays(A, A) == 127  # max xor of any two numbers within A
 
