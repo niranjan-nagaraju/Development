@@ -1,6 +1,6 @@
 import sys
 sys.path.append("../../../../")
-from data_structures.trees.tries.trie import Trie, Node, TrieEmptyError
+from data_structures.trees.tries.simple_trie import Trie, Node, TrieEmptyError
 
 
 # trie node testcases

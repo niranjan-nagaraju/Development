@@ -7,6 +7,11 @@ Design:
 	  root.children['A'] -> child node, indicates there is a word that begins with the character, 'A'
 	  the child node's properties, such as eow indicates eow status of 'A'
 	  Additional properties such as frequency can be added to the child nodes.
+
+
+	word, 'abcd' utilizes 5 nodes.
+	  * -> a -> b -> c -> d -> $  ($: blank node with eow status)
+	NOTE: This `simplistic` implementation of the trie isnt very memory-efficie - there will be numerous empty nodes with `eow` and nothing else in them.
 '''
 
 
