@@ -23,9 +23,11 @@ def calculate (n):
 		if withdrawal_amt > corpus_remaining:
 			print "{: >5} Not enough dough!".format(i)
 			return
-		returns_on_corpus = round((returns * corpus_remaining / 100.0), 2)
+
 		corpus_remaining = round((100 + returns) * corpus_remaining / 100.0  - withdrawal_amt, 2)
+		returns_on_corpus = round((returns * corpus_remaining / 100.0), 2)
 		print "{: >5} {: >15} {: >15} {: >15} {: >15} {: >20}".format(i,
-				corpus_remaining+withdrawal_amt, withdrawal_amt, corpus_remaining, returns_on_corpus, corpus_remaining+returns_on_corpus)
+				corpus_remaining+withdrawal_amt, withdrawal_amt, corpus_remaining,
+				returns_on_corpus, corpus_remaining+returns_on_corpus)
 
 calculate(100)
