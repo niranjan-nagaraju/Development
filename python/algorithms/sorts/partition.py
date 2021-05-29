@@ -60,6 +60,9 @@ Sample run:
 
   return j=4 as the partition point
 '''
+
+
+# FIXME: Fix infinite loop on random inputs
 def partition(a, l, r):
 	pivot = a[l]
 	i, j = l+1, r
