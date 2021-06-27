@@ -15,7 +15,7 @@ myLast' [x] = x
 myLast' (x:xs) = myLast' xs
 
 -- foldl1 uses lst[0] as initial accumulator
--- \_ x -> returns second element passed as accumulator as-is
+-- \_ x -> returns accumulator(second argument) as-is
 myLast'' = foldl1 (\_ x -> x)
 
 main = do
