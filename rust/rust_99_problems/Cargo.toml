@@ -1,0 +1,10 @@
+[package]
+name = "rust_99_problems"
+version = "0.1.0"
+authors = ["Niranjan"]
+edition = "2018"
+readme = "README.txt"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
