@@ -13,6 +13,10 @@ Example in Haskell:
 'z'
 */
 
-pub fn my_last<T: Copy>( list: &[T] ) -> T {
-	list.iter().fold( list[0], |_,x| *x )
+pub fn my_last<T: Copy>( list: &[T] ) -> Option<T> {
+	if list.len() < 1 {
+		None
+	} else {
+		Some( list.iter().fold( list[0], |_,x| *x ) )
+	}
 }
