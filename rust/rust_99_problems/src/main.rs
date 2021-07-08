@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 mod my_last;
 mod my_but_last;
+mod element_at;
+use element_at::element_at;
 
 fn main() {
 	println!("99 rust problems!");
@@ -24,5 +26,20 @@ mod tests_99_rust_problems {
 		assert!( crate::my_but_last::my_but_last(&vec![1,2,3,4,5]) == Some(4) );
 		assert!( crate::my_but_last::my_but_last(&vec!['a', 'b', 'c']).unwrap() == 'b' );
 		assert!( crate::my_but_last::my_but_last(&vec!["hello", "world"]).unwrap() == "hello" );
+    }
+
+    #[test]
+    fn test_element_at() {
+		assert!( crate::element_at::<i32>(&vec![], 1) == None );
+		assert!( crate::element_at(&vec![1], 2) == None );
+		assert!( crate::element_at(&vec![1], 1).unwrap() == 1 );
+		assert!( crate::element_at(&vec![1,2,3,4,5], 4) == Some(4) );
+		assert!( crate::element_at(&vec![1,2,3,4,5], 1) == Some(1) );
+		assert!( crate::element_at(&vec![1,2,3,4,5], 0) == None );
+		assert!( crate::element_at(&vec![1,2,3,4,5], 5) == Some(5) );
+		assert!( crate::element_at(&vec![1,2,3,4,5], 6) == None );
+		assert!( crate::element_at(&vec!['a', 'b', 'c'], 2).unwrap() == 'b' );
+		assert!( crate::element_at(&vec!["hello", "world"], 1).unwrap() == "hello" );
+		assert!( crate::element_at(&vec!["hello", "world"], 2).unwrap() == "world" );
     }
 }
