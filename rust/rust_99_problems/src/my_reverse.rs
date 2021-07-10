@@ -10,6 +10,8 @@ Example in Haskell:
 [4,3,2,1]
 */
 
+// Move head of each iteration to the end
+// creating a reversed list
 pub fn my_reverse<T: Copy>( list: &[T] ) -> Vec<T> {
     if list.len() == 0 {
         return list.to_vec();
@@ -19,3 +21,42 @@ pub fn my_reverse<T: Copy>( list: &[T] ) -> Vec<T> {
         (head, tail) => [&my_reverse(tail), head].concat(),
     }
 }
+
+// Use a reverse iterator, collecting the items
+// into a list in the reverse order
+pub fn my_reverse2<T: Copy>( list: &[T] ) -> Vec<T> {
+    list
+		.iter()
+		.rev()
+		.cloned()
+		.collect()
+}
+
+
+// Reverse using two-pointers
+// reverse([a, mid.., b]) -> [b, reverse(mid), a] 
+pub fn my_reverse3<T: Copy>( list: &[T] ) -> Vec<T> {
+	if list.len() == 0 {
+		return Vec::new();
+	}
+	match (
+		list.iter()
+			.next(), 
+		list.iter()
+			.take(list.len()-1)
+			.skip(1)
+			.cloned()
+			.collect::<Vec<T>>(), 
+		list.iter()
+			.skip(1)
+			.last()) {
+			(Some(&first), mid, Some(&last)) => [
+						&[last],
+						my_reverse(&mid).as_slice(),
+						&[first]
+					].concat(),
+			(Some(&item), _, None) => vec![item],
+			(None, _, _) => Vec::new(),
+	}
+}
+

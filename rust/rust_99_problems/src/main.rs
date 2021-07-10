@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+#![allow(unused_imports)]
 mod my_last;
 mod my_but_last;
 mod element_at;
@@ -6,7 +7,9 @@ use element_at::element_at;
 mod my_length;
 use my_length::my_length;
 mod my_reverse;
-use my_reverse::my_reverse;
+use my_reverse::*;
+mod is_palindrome;
+use is_palindrome::*;
 
 fn main() {
 	println!("99 rust problems!");
@@ -68,5 +71,47 @@ mod tests_99_rust_problems {
 		assert!( str::from_utf8( &crate::my_reverse("hello".as_bytes())).unwrap() == "olleh" );
 		assert!( str::from_utf8( &crate::my_reverse("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
 					"!amanap ,lanac a ,nalp a ,nam A" );
+
+		assert!( crate::my_reverse2::<i32>(&vec![]) == vec![] );
+		assert!( crate::my_reverse2(&vec![1]) == vec![1] );
+		assert!( crate::my_reverse2(&vec![1,2,3,4,5]) == vec![5,4,3,2,1] );
+		assert!( crate::my_reverse2(&vec!['a', 'b', 'c']) == vec!['c', 'b', 'a'] );
+		assert!( crate::my_reverse2(&vec!["hello", "world"]) == vec!["world", "hello"] );
+		assert!( str::from_utf8( &crate::my_reverse2("hello".as_bytes())).unwrap() == "olleh" );
+		assert!( str::from_utf8( &crate::my_reverse2("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
+					"!amanap ,lanac a ,nalp a ,nam A" );
+
+		assert!( crate::my_reverse3::<i32>(&vec![]) == vec![] );
+		assert!( crate::my_reverse3(&vec![1]) == vec![1] );
+		assert!( crate::my_reverse3(&vec![1,2,3,4,5]) == vec![5,4,3,2,1] );
+		assert!( crate::my_reverse3(&vec!['a', 'b', 'c']) == vec!['c', 'b', 'a'] );
+		assert!( crate::my_reverse3(&vec!["hello", "world"]) == vec!["world", "hello"] );
+		assert!( str::from_utf8( &crate::my_reverse3("hello".as_bytes())).unwrap() == "olleh" );
+		assert!( str::from_utf8( &crate::my_reverse3("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
+					"!amanap ,lanac a ,nalp a ,nam A" );
+    }
+
+    #[test]
+    fn test_is_palindrome() {
+		assert!( crate::is_palindrome::<i32>(&vec![]) == true );
+		assert!( crate::is_palindrome(&vec![1]) == true );
+		assert!( crate::is_palindrome(&vec![1,2,3,4,5]) == false );
+		assert!( crate::is_palindrome(&vec![1,2,3,2,1]) == true );
+		assert!( crate::is_palindrome(&vec![1,2,2,1]) == true );
+		assert!( crate::is_palindrome("racecar".as_bytes()) );
+
+		assert!( crate::is_palindrome2::<i32>(&vec![]) == true );
+		assert!( crate::is_palindrome2(&vec![1]) == true );
+		assert!( crate::is_palindrome2(&vec![1,2,3,4,5]) == false );
+		assert!( crate::is_palindrome2(&vec![1,2,3,2,1]) == true );
+		assert!( crate::is_palindrome2(&vec![1,2,2,1]) == true );
+		assert!( crate::is_palindrome2("racecar".as_bytes()) );
+
+		assert!( crate::is_palindrome3::<i32>(&vec![]) == true );
+		assert!( crate::is_palindrome3(&vec![1]) == true );
+		assert!( crate::is_palindrome3(&vec![1,2,3,4,5]) == false );
+		assert!( crate::is_palindrome3(&vec![1,2,3,2,1]) == true );
+		assert!( crate::is_palindrome3(&vec![1,2,2,1]) == true );
+		assert!( crate::is_palindrome3("racecar".as_bytes()) );
     }
 }
