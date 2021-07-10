@@ -5,6 +5,8 @@ mod element_at;
 use element_at::element_at;
 mod my_length;
 use my_length::my_length;
+mod my_reverse;
+use my_reverse::my_reverse;
 
 fn main() {
 	println!("99 rust problems!");
@@ -53,5 +55,18 @@ mod tests_99_rust_problems {
 		assert!( crate::my_length(&vec!['a', 'b', 'c']) == 3 );
 		assert!( crate::my_length(&vec!["hello", "world"]) == 2 );
 		assert!( crate::my_length("hello".as_bytes()) == 5 );
+    }
+
+    #[test]
+    fn test_my_reverse() {
+		use std::str;
+		assert!( crate::my_reverse::<i32>(&vec![]) == vec![] );
+		assert!( crate::my_reverse(&vec![1]) == vec![1] );
+		assert!( crate::my_reverse(&vec![1,2,3,4,5]) == vec![5,4,3,2,1] );
+		assert!( crate::my_reverse(&vec!['a', 'b', 'c']) == vec!['c', 'b', 'a'] );
+		assert!( crate::my_reverse(&vec!["hello", "world"]) == vec!["world", "hello"] );
+		assert!( str::from_utf8( &crate::my_reverse("hello".as_bytes())).unwrap() == "olleh" );
+		assert!( str::from_utf8( &crate::my_reverse("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
+					"!amanap ,lanac a ,nalp a ,nam A" );
     }
 }
