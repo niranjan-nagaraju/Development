@@ -14,7 +14,7 @@
  -  []
  -}
 
--- Solution shamelessly lifted from page. :)
+-- Solutions shamelessly lifted from the wiki page. :)
 
 import Control.Exception( assert )
 
@@ -24,7 +24,19 @@ flatten :: NestedList a -> [a]
 flatten (Elem x) = [x]
 flatten (List x) = concatMap flatten x -- concatMap applies "flatten" to every element in the list and concatenates
 
+flatten' :: NestedList a -> [a]
+flatten' (Elem x) = [x]
+flatten' (List []) = []
+flatten' (List(x:xs)) = flatten' x ++ flatten' (List xs)
+
 main = do
+	putStr $ assert ( (flatten (List []::NestedList Int)) == [] ) ""
 	putStr $ assert ( (flatten (Elem 5)) == [5] ) ""
 	putStr $ assert ( (flatten (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])) == [1,2,3,4,5] ) ""
-	-- print $ flatten (List [])
+	putStr $ assert ( (flatten (List [List [List [Elem 1]]])) == [1] ) ""
+
+	putStr $ assert ( (flatten' (List []::NestedList Int)) == [] ) ""
+	putStr $ assert ( (flatten' (Elem 5)) == [5] ) ""
+	putStr $ assert ( (flatten' (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])) == [1,2,3,4,5] ) ""
+	putStr $ assert ( (flatten (List [List [List [Elem 1]]])) == [1] ) ""
+
