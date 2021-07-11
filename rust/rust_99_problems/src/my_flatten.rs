@@ -24,16 +24,16 @@ use std::fmt::Debug;
 
 #[derive(Debug)]
 pub enum NestedList<T> {
-    Num(T),
+    Elem(T),
     List(Vec<NestedList<T>>),
 }
 
-pub use NestedList::Num as Num;
+pub use NestedList::Elem as Elem;
 pub use NestedList::List as List;
 
 pub fn my_flatten<T: Copy + Debug>( nl: &NestedList<T>) -> Vec<T> {
     match nl {
-        Num(x) => vec![*x],
+        Elem(x) => vec![*x],
         List(v) => v
 				.iter()
 				.fold(

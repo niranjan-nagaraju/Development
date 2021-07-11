@@ -120,13 +120,13 @@ mod tests_99_rust_problems {
     fn test_flatten() {
 		use crate::my_flatten::*;
 		assert!( my_flatten::<i32>( &List(vec![]) ) == vec![] );
-		assert!( my_flatten( &Num(100) ) == vec![100] );
-		assert!( my_flatten( &List( vec![Num(100), List( vec![Num(200)] )] ) ) == vec![100, 200] );
-		assert!( my_flatten( &List( vec![Num(1),
-								List( vec![Num(2),
-									List( vec![Num(3), Num(4)] ),
-									Num(5)]
+		assert!( my_flatten( &Elem(100) ) == vec![100] );
+		assert!( my_flatten( &List( vec![Elem(100), List( vec![Elem(200)] )] ) ) == vec![100, 200] );
+		assert!( my_flatten( &List( vec![Elem(1),
+								List( vec![Elem(2),
+									List( vec![Elem(3), Elem(4)] ),
+									Elem(5)]
 								)] ) ) == vec![1,2,3,4,5] );
-		assert!( my_flatten( &List( vec![List( vec![List( vec![Num(1)] )] )] ) ) == [1].to_vec() ); 
+		assert!( my_flatten( &List( vec![List( vec![List( vec![Elem(1)] )] )] ) ) == [1].to_vec() ); 
 	}
 }
