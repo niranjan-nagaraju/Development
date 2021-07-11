@@ -10,6 +10,7 @@ mod my_reverse;
 use my_reverse::*;
 mod is_palindrome;
 use is_palindrome::*;
+mod my_flatten;
 
 fn main() {
 	println!("99 rust problems!");
@@ -114,4 +115,18 @@ mod tests_99_rust_problems {
 		assert!( crate::is_palindrome3(&vec![1,2,2,1]) == true );
 		assert!( crate::is_palindrome3("racecar".as_bytes()) );
     }
+
+    #[test]
+    fn test_flatten() {
+		use crate::my_flatten::*;
+		assert!( my_flatten::<i32>( &List(vec![]) ) == vec![] );
+		assert!( my_flatten( &Num(100) ) == vec![100] );
+		assert!( my_flatten( &List( vec![Num(100), List( vec![Num(200)] )] ) ) == vec![100, 200] );
+		assert!( my_flatten( &List( vec![Num(1),
+								List( vec![Num(2),
+									List( vec![Num(3), Num(4)] ),
+									Num(5)]
+								)] ) ) == vec![1,2,3,4,5] );
+		assert!( my_flatten( &List( vec![List( vec![List( vec![Num(1)] )] )] ) ) == [1].to_vec() ); 
+	}
 }
