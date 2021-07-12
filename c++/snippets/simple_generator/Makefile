@@ -1,12 +1,13 @@
 BASE_DIR=../..
+include $(BASE_DIR)/build/Makefile.inc
 
 # Source directory for the library
 SRC = simple_generator.cc
 SRC2 = simple_generator2.cc
 
-CXXFLAGS += -g -ggdb -std=c++14 -Wall
+CC = g++-8
+CXXFLAGS += -g -ggdb -std=c++17 -Wall
 
-include $(BASE_DIR)/build/Makefile.inc
 all::
 	@ mkdir -p $(OBJDIR)
 	$(CC) $(CXXFLAGS) $(INCLUDE) -c $(SRC) -o $(OBJDIR)/$(basename $(SRC)).o
