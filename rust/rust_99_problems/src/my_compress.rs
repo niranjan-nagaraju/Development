@@ -35,4 +35,23 @@ where T: Copy+Debug+Display+PartialEq {
 	}
 }
 
+/* FIXME
+// Build goes into an infinite loop
+// evaluating skipWhile() recursively
+pub fn compress2<T>( list: &[T]) -> Vec<T>
+where T: Copy+Debug+Display+PartialEq {
+	fn compress2_<'a, T: 'a>( iter : &mut impl Iterator<Item=T> ) -> Vec<T>
+	where T: Copy+Debug+Display+PartialEq {
+		match iter.next() {
+			None => Vec::new(),
+			Some(item) => {
+				println!("item: {:?}", item);
+				[vec![item], compress2_( &mut iter.skip_while(|x| *x==item) )].concat()
+			},
+		}
+	}
+	compress2_(&mut list.iter().map(|x| *x))
+}
+*/
+
 
