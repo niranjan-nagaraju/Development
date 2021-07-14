@@ -11,6 +11,7 @@ use my_reverse::*;
 mod is_palindrome;
 use is_palindrome::*;
 mod my_flatten;
+mod my_compress;
 
 fn main() {
 	println!("99 rust problems!");
@@ -128,5 +129,15 @@ mod tests_99_rust_problems {
 									Elem(5)]
 								)] ) ) == vec![1,2,3,4,5] );
 		assert!( my_flatten( &List( vec![List( vec![List( vec![Elem(1)] )] )] ) ) == [1].to_vec() ); 
+	}
+
+	#[test]
+    fn test_compress() {
+		use crate::my_compress::*;
+		use std::str;
+		assert!( compress::<i32>(&vec![]) == vec![] );
+		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
+		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
+		assert!( str::from_utf8( &compress("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
 	}
 }
