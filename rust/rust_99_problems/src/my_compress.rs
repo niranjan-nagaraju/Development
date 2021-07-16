@@ -44,7 +44,7 @@ where T: Copy+Debug+Display+PartialEq {
 // as long as current item != last item in the unique items vector
 // weeding out all the consecutive repeats.
 pub fn compress2<T>( list: &[T]) -> Vec<T>
-    where T: Copy+Debug+Display+std::cmp::PartialEq {
+    where T: Copy+Debug+Display+PartialEq {
     list.iter()
         .fold(vec![], |mut acc_v, &item| {
             match acc_v.iter().last() {
