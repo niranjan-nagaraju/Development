@@ -20,6 +20,11 @@ use std::cmp::PartialEq;
 use std::fmt::Debug;
 use std::fmt::Display;
 
+// Accumulate current item into a unique-items vector.
+// skip ahead all items == current item
+// collect the remaining items into a vector
+// recursively compress ( remaining items vector )
+// Return the accumulated unique items vector.
 pub fn compress<T>( list: &[T]) -> Vec<T>
 where T: Copy+Debug+Display+PartialEq {
 	match list.iter().next() {
@@ -34,6 +39,22 @@ where T: Copy+Debug+Display+PartialEq {
 		None => Vec::new(),
 	}
 }
+
+// Accumulate into unique items vector
+// as long as current item != last item in the unique items vector
+// weeding out all the consecutive repeats.
+pub fn compress2<T>( list: &[T]) -> Vec<T>
+    where T: Copy+Debug+Display+std::cmp::PartialEq {
+    list.iter()
+        .fold(vec![], |mut acc_v, &item| {
+            match acc_v.iter().last() {
+                Some(&last) => if last != item { acc_v.push(item); },
+                None => { acc_v.push(item); },
+            }
+            acc_v
+        })
+}
+
 
 /* FIXME
 // Build goes into an infinite loop

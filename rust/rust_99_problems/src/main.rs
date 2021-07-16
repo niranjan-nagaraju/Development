@@ -139,5 +139,10 @@ mod tests_99_rust_problems {
 		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
 		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
 		assert!( str::from_utf8( &compress("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
+
+		assert!( compress2::<i32>(&vec![]) == vec![] );
+		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
+		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
+		assert!( str::from_utf8( &compress2("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
 	}
 }
