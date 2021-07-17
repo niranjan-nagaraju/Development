@@ -10,3 +10,4 @@ pack (x:xs) =
 
 main = do
 	putStr $ assert ( (pack ['a', 'a', 'a', 'a', 'b', 'c', 'c', 'a', 'a', 'd', 'e', 'e', 'e', 'e']) == ["aaaa","b","cc","aa","d","eeee"] ) ""
+	putStr $ assert ( (pack "aaaabccaadeeee" ) == ["aaaa","b","cc","aa","d","eeee"] ) ""
