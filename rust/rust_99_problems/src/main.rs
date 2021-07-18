@@ -12,6 +12,7 @@ mod is_palindrome;
 use is_palindrome::*;
 mod my_flatten;
 mod my_compress;
+mod my_pack;
 
 fn main() {
 	println!("99 rust problems!");
@@ -144,5 +145,25 @@ mod tests_99_rust_problems {
 		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
 		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
 		assert!( str::from_utf8( &compress2("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
+	}
+
+	#[test]
+	fn test_pack() {
+		use crate::my_pack::*;
+		use std::str;
+
+		// Convert a nested list of utf-8 codes to a list of strings.
+		// [[97,97], [98,98]] -> ["aa", "bb"]
+		fn to_string_vec( slist: &Vec<Vec<u8>> ) -> Vec<String> {
+			slist
+				.iter()
+				.map(|inner_list| str::from_utf8(inner_list).unwrap().to_string())
+				.collect::<Vec<String>>()
+		}
+		assert!( pack::<i32>(&vec![]) == vec![] as Vec<Vec<i32>>);
+		assert!( pack(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4], vec![3], vec![4]] );
+		assert!( pack(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4,4,4]] );
+		assert!( to_string_vec(&pack("aabbcdabb".as_bytes()) ) == vec!["aa", "bb", "c", "d", "a", "bb"] );
+		assert!( to_string_vec(&pack("aaaabccaadeeee".as_bytes()) ) == vec!["aaaa","b","cc","aa","d","eeee"] );
 	}
 }
