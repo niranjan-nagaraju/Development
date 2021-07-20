@@ -177,7 +177,7 @@ mod tests_99_rust_problems {
 				.iter()
 				.fold( Vec::new(),
 					   |mut acc_v, (x,y)| {
-						 acc_v.push((*x, char::from_u32(*y as u32).unwrap()));
+						 acc_v.push((*x, *y as char)); //u can be cast as char
 						 acc_v
 						}
 					)
