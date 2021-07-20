@@ -13,6 +13,7 @@ use is_palindrome::*;
 mod my_flatten;
 mod my_compress;
 mod my_pack;
+mod encode;
 
 fn main() {
 	println!("99 rust problems!");
@@ -165,5 +166,29 @@ mod tests_99_rust_problems {
 		assert!( pack(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4,4,4]] );
 		assert!( to_string_vec(&pack("aabbcdabb".as_bytes()) ) == vec!["aa", "bb", "c", "d", "a", "bb"] );
 		assert!( to_string_vec(&pack("aaaabccaadeeee".as_bytes()) ) == vec!["aaaa","b","cc","aa","d","eeee"] );
+	}
+
+	#[test]
+	fn test_encode() {
+		use crate::encode::*;
+		// Convert [(u32, utf8-code)] -> [(u32, char)]
+		fn from_utf8_to_char_in_tuples(list: &Vec<(u32, u8)>) -> Vec<(u32, char)> {
+			list
+				.iter()
+				.fold( Vec::new(),
+					   |mut acc_v, (x,y)| {
+						 acc_v.push((*x, char::from_u32(*y as u32).unwrap()));
+						 acc_v
+						}
+					)
+		}
+
+		assert!( encode::<i32>(&vec![]) == vec![] );
+		assert!( encode(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![(3,1), (2,2), (4,3), (1,4), (1,3), (1,4)] );
+		assert!( encode(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![(3,1), (2,2), (4,3), (3,4)] );
+		assert!( from_utf8_to_char_in_tuples(&encode("aabbcdabb".as_bytes()))  ==
+			vec![(2,'a'), (2,'b'), (1,'c'), (1,'d'),(1,'a'),(2,'b')] );
+		assert!( from_utf8_to_char_in_tuples(
+			&encode("aaaabccaadeeee".as_bytes())) == vec![(4,'a'), (1,'b'), (2,'c'),(2,'a'),(1,'d'),(4,'e')] );
 	}
 }
