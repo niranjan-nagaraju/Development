@@ -13,6 +13,9 @@ Example in Haskell:
 */
 
 
+// using fold to store (previous item, current item)
+// as a "zip" but replacing the pair at every iteration.
+// return 'x' from the last stored (x,y)
 pub fn my_but_last<T: Copy>( list: &[T] ) -> Option<T> {
 	if list.len() < 2 {
 		None
@@ -23,3 +26,22 @@ pub fn my_but_last<T: Copy>( list: &[T] ) -> Option<T> {
 		)
 	}
 }
+
+// using slices
+pub fn my_but_last2<T: Copy>( list: &[T] ) -> Option<T> {
+	match list {
+		[] | [_]  => None,
+		[one, _] => Some(*one),
+		[.., last_but_one, _] => Some(*last_but_one),
+	}
+}
+
+// using (x:xs) slice, and recursively calling f(xs) until (x,y)
+pub fn my_but_last3<T: Copy>( list: &[T] ) -> Option<T> {
+	match list {
+		[] | [_]  => None,
+		[one, _] => Some(*one),
+		[_, rest @ .. ] => my_but_last3(rest),
+	}
+}
+

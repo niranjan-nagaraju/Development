@@ -48,11 +48,27 @@ mod tests_99_rust_problems {
 
     #[test]
     fn test_my_but_last() {
+		use std::char;
 		assert!( crate::my_but_last::my_but_last::<i32>(&vec![]) == None );
 		assert!( crate::my_but_last::my_but_last(&vec![1]) == None );
 		assert!( crate::my_but_last::my_but_last(&vec![1,2,3,4,5]) == Some(4) );
 		assert!( crate::my_but_last::my_but_last(&vec!['a', 'b', 'c']).unwrap() == 'b' );
 		assert!( crate::my_but_last::my_but_last(&vec!["hello", "world"]).unwrap() == "hello" );
+		assert!( char::from_u32( crate::my_but_last::my_but_last("abcdef".as_bytes() ).unwrap() as u32 ) == Some('e') );
+
+		assert!( crate::my_but_last::my_but_last2::<i32>(&vec![]) == None );
+		assert!( crate::my_but_last::my_but_last2(&vec![1]) == None );
+		assert!( crate::my_but_last::my_but_last2(&vec![1,2,3,4,5]) == Some(4) );
+		assert!( crate::my_but_last::my_but_last2(&vec!['a', 'b', 'c']).unwrap() == 'b' );
+		assert!( crate::my_but_last::my_but_last(&vec!["hello", "world"]).unwrap() == "hello" );
+		assert!( char::from_u32( crate::my_but_last::my_but_last2("abcdef".as_bytes() ).unwrap() as u32 ) == Some('e') );
+
+		assert!( crate::my_but_last::my_but_last3::<i32>(&vec![]) == None );
+		assert!( crate::my_but_last::my_but_last3(&vec![1]) == None );
+		assert!( crate::my_but_last::my_but_last3(&vec![1,2,3,4,5]) == Some(4) );
+		assert!( crate::my_but_last::my_but_last3(&vec!['a', 'b', 'c']).unwrap() == 'b' );
+		assert!( crate::my_but_last::my_but_last3(&vec!["hello", "world"]).unwrap() == "hello" );
+		assert!( char::from_u32( crate::my_but_last::my_but_last3("abcdef".as_bytes() ).unwrap() as u32 ) == Some('e') );
     }
 
     #[test]
