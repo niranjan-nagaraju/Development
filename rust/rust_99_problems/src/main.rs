@@ -23,11 +23,27 @@ fn main() {
 mod tests_99_rust_problems {
     #[test]
     fn test_my_last() {
+		use std::char;
 		assert!( crate::my_last::my_last::<i32>(&vec![]) == None );
 		assert!( crate::my_last::my_last(&vec![1]) == Some(1) );
 		assert!( crate::my_last::my_last(&vec![1,2,3,4,5]).unwrap() == 5 );
 		assert!( crate::my_last::my_last(&vec!['a', 'b', 'c']).unwrap() == 'c' );
 		assert!( crate::my_last::my_last(&vec!["hello", "world"]).unwrap() == "world" );
+		assert!( char::from_u32( crate::my_last::my_last("abcdef".as_bytes() ).unwrap() as u32 ) == Some('f') );
+
+		assert!( crate::my_last::my_last2::<i32>(&vec![]) == None );
+		assert!( crate::my_last::my_last2(&vec![1]) == Some(1) );
+		assert!( crate::my_last::my_last2(&vec![1,2,3,4,5]).unwrap() == 5 );
+		assert!( crate::my_last::my_last2(&vec!['a', 'b', 'c']).unwrap() == 'c' );
+		assert!( crate::my_last::my_last2(&vec!["hello", "world"]).unwrap() == "world" );
+		assert!( char::from_u32( crate::my_last::my_last2("abcdef".as_bytes() ).unwrap() as u32 ) == Some('f') );
+
+		assert!( crate::my_last::my_last3::<i32>(&vec![]) == None );
+		assert!( crate::my_last::my_last3(&vec![1]) == Some(1) );
+		assert!( crate::my_last::my_last3(&vec![1,2,3,4,5]).unwrap() == 5 );
+		assert!( crate::my_last::my_last3(&vec!['a', 'b', 'c']).unwrap() == 'c' );
+		assert!( crate::my_last::my_last3(&vec!["hello", "world"]).unwrap() == "world" );
+		assert!( char::from_u32( crate::my_last::my_last3("abcdef".as_bytes() ).unwrap() as u32 ) == Some('f') );
     }
 
     #[test]

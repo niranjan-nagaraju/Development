@@ -13,6 +13,7 @@ Example in Haskell:
 'z'
 */
 
+// using fold
 pub fn my_last<T: Copy>( list: &[T] ) -> Option<T> {
 	if list.len() < 1 {
 		None
@@ -20,3 +21,24 @@ pub fn my_last<T: Copy>( list: &[T] ) -> Option<T> {
 		Some( list.iter().fold( list[0], |_,x| *x ) )
 	}
 }
+
+// using [first, mid, last] slice
+pub fn my_last2<T : Copy>( list: &[T] ) -> Option<T> {
+	match list {
+		[_first, _middle @ .., last] => Some(*last),
+		[item] => Some(*item),
+		[] => None,
+	}
+}
+
+// using (x:xs) and recursively calling f(xs)
+// until a last item can be resolved
+pub fn my_last3<T>(items: &[T]) -> Option<T>
+where T: Copy {
+	match items {
+		[] => None,
+		[item] => Some(*item),
+		[_first, rest @ .. ] => my_last3(rest),
+	}
+}
+
