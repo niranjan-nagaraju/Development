@@ -3,7 +3,7 @@
 mod my_last;
 mod my_but_last;
 mod element_at;
-use element_at::element_at;
+use element_at::*;
 mod my_length;
 use my_length::my_length;
 mod my_reverse;
@@ -84,6 +84,19 @@ mod tests_99_rust_problems {
 		assert!( crate::element_at(&vec!['a', 'b', 'c'], 2).unwrap() == 'b' );
 		assert!( crate::element_at(&vec!["hello", "world"], 1).unwrap() == "hello" );
 		assert!( crate::element_at(&vec!["hello", "world"], 2).unwrap() == "world" );
+
+		assert!( crate::element_at2::<i32>(&vec![], 1) == None );
+		assert!( crate::element_at2(&vec![1], 2) == None );
+		assert!( crate::element_at2(&vec![1], 1).unwrap() == 1 );
+		assert!( crate::element_at2(&vec![1,2,3,4,5], 4) == Some(4) );
+		assert!( crate::element_at2(&vec![1,2,3,4,5], 1) == Some(1) );
+		assert!( crate::element_at2(&vec![1,2,3,4,5], 0) == None );
+		assert!( crate::element_at2(&vec![1,2,3,4,5], 5) == Some(5) );
+		assert!( crate::element_at2(&vec![1,2,3,4,5], 6) == None );
+		assert!( crate::element_at2(&vec!['a', 'b', 'c'], 2).unwrap() == 'b' );
+		assert!( crate::element_at2(&vec!["hello", "world"], 1).unwrap() == "hello" );
+		assert!( crate::element_at2(&vec!["hello", "world"], 2).unwrap() == "world" );
+
     }
 
     #[test]

@@ -31,3 +31,15 @@ pub fn element_at<T: Copy>( list: &[T], idx: usize ) -> Option<T> {
 		Some(&x) => Some(x),
 	}
 }
+
+// using (x:xs) slice pattern
+pub fn element_at2<T: Copy>(list: &[T], idx: usize) -> Option<T> {
+	if idx == 0 {
+		// usize cannot be -ve
+		return None;
+	}
+	match list {
+		[] => None,
+		[ first, rest @ .. ] => if idx == 1 { Some(*first) } else { element_at2(rest, idx-1) },
+	}
+}
