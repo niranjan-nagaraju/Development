@@ -11,6 +11,14 @@ Example in Haskell:
 13
 */
 
+use itertools::fold;
+
 pub fn my_length<T: Copy>( list: &[T] ) -> usize {
 	list.iter().count()
+}
+
+
+// using fold
+pub fn my_length2<T: Copy>(list: &[T]) -> usize {
+	fold(list, 0, |acc, &_| acc+1)
 }

@@ -5,7 +5,7 @@ mod my_but_last;
 mod element_at;
 use element_at::*;
 mod my_length;
-use my_length::my_length;
+use my_length::*;
 mod my_reverse;
 use my_reverse::*;
 mod is_palindrome;
@@ -107,6 +107,13 @@ mod tests_99_rust_problems {
 		assert!( crate::my_length(&vec!['a', 'b', 'c']) == 3 );
 		assert!( crate::my_length(&vec!["hello", "world"]) == 2 );
 		assert!( crate::my_length("hello".as_bytes()) == 5 );
+
+		assert!( crate::my_length2::<i32>(&vec![]) == 0 );
+		assert!( crate::my_length2(&vec![1]) == 1 );
+		assert!( crate::my_length2(&vec![1,2,3,4,5]) == 5 );
+		assert!( crate::my_length2(&vec!['a', 'b', 'c']) == 3 );
+		assert!( crate::my_length2(&vec!["hello", "world"]) == 2 );
+		assert!( crate::my_length2("hello".as_bytes()) == 5 );
     }
 
     #[test]
