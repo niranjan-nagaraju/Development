@@ -145,6 +145,24 @@ mod tests_99_rust_problems {
 		assert!( str::from_utf8( &crate::my_reverse3("hello".as_bytes())).unwrap() == "olleh" );
 		assert!( str::from_utf8( &crate::my_reverse3("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
 					"!amanap ,lanac a ,nalp a ,nam A" );
+
+		assert!( crate::my_reverse4::<i32>(&vec![]) == vec![] );
+		assert!( crate::my_reverse4(&vec![1]) == vec![1] );
+		assert!( crate::my_reverse4(&vec![1,2,3,4,5]) == vec![5,4,3,2,1] );
+		assert!( crate::my_reverse4(&vec!['a', 'b', 'c']) == vec!['c', 'b', 'a'] );
+		assert!( crate::my_reverse4(&vec!["hello", "world"]) == vec!["world", "hello"] );
+		assert!( str::from_utf8( &crate::my_reverse4("hello".as_bytes())).unwrap() == "olleh" );
+		assert!( str::from_utf8( &crate::my_reverse4("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
+					"!amanap ,lanac a ,nalp a ,nam A" );
+
+		assert!( crate::my_reverse5::<i32>(&vec![]) == vec![] );
+		assert!( crate::my_reverse5(&vec![1]) == vec![1] );
+		assert!( crate::my_reverse5(&vec![1,2,3,4,5]) == vec![5,4,3,2,1] );
+		assert!( crate::my_reverse5(&vec!['a', 'b', 'c']) == vec!['c', 'b', 'a'] );
+		assert!( crate::my_reverse5(&vec!["hello", "world"]) == vec!["world", "hello"] );
+		assert!( str::from_utf8( &crate::my_reverse5("hello".as_bytes())).unwrap() == "olleh" );
+		assert!( str::from_utf8( &crate::my_reverse5("A man, a plan, a canal, panama!".as_bytes()) ).unwrap() ==
+					"!amanap ,lanac a ,nalp a ,nam A" );
     }
 
     #[test]

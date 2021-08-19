@@ -10,6 +10,9 @@ Example in Haskell:
 [4,3,2,1]
 */
 
+
+use itertools::fold;
+
 // Move head of each iteration to the end
 // creating a reversed list
 pub fn my_reverse<T: Copy>( list: &[T] ) -> Vec<T> {
@@ -60,3 +63,15 @@ pub fn my_reverse3<T: Copy>( list: &[T] ) -> Vec<T> {
 	}
 }
 
+// using fold
+pub fn my_reverse4<T: Copy>( list: &[T] ) -> Vec<T> {
+	fold(list, vec![], |acc,x| [vec![*x], acc].concat())
+}
+
+// using slices, and recursively appending `head` back into tail
+pub fn my_reverse5<T: Copy>( list: &[T] ) -> Vec<T> {
+	match list {
+		[] => vec![],
+		[first, tail @ ..] =>[my_reverse5(tail), vec![*first]].concat(),
+	}
+}
