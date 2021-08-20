@@ -21,6 +21,7 @@ Example:
 */
 
 use std::fmt::Debug;
+use itertools::fold;
 
 #[derive(Debug)]
 pub enum NestedList<T> {
@@ -35,11 +36,21 @@ pub fn my_flatten<T: Copy + Debug>( nl: &NestedList<T>) -> Vec<T> {
     match nl {
         Elem(x) => vec![*x],
         List(v) => v
-				.iter()
-				.fold(
+			.iter()
+			.fold(
 					Vec::new(),
 					|acc_v, inner_list| [acc_v, my_flatten(inner_list)].concat()
-				),
-    } 
+				 ),
+	}
 }
 
+pub fn my_flatten2<T: Copy + Debug>( nl: &NestedList<T>) -> Vec<T> {
+	match nl {
+		Elem(x) => vec![*x],
+		List(v) => fold(
+				v,
+				vec![],
+				|acc_v, inner_list| [acc_v, my_flatten2(inner_list)].concat()
+		),
+	}
+}
