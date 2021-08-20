@@ -187,6 +187,13 @@ mod tests_99_rust_problems {
 		assert!( crate::is_palindrome3(&vec![1,2,3,2,1]) == true );
 		assert!( crate::is_palindrome3(&vec![1,2,2,1]) == true );
 		assert!( crate::is_palindrome3("racecar".as_bytes()) );
+
+		assert!( crate::is_palindrome4::<i32>(&vec![]) == true );
+		assert!( crate::is_palindrome4(&vec![1]) == true );
+		assert!( crate::is_palindrome4(&vec![1,2,3,4,5]) == false );
+		assert!( crate::is_palindrome4(&vec![1,2,3,2,1]) == true );
+		assert!( crate::is_palindrome4(&vec![1,2,2,1]) == true );
+		assert!( crate::is_palindrome4("racecar".as_bytes()) );
     }
 
     #[test]

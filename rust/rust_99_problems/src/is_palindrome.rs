@@ -44,3 +44,12 @@ pub fn is_palindrome3<T: Copy + std::cmp::PartialEq>( list: &[T] ) -> bool {
 			)
 		.all(|(&a, &b)| a == b)
 }
+
+
+// using slices
+pub fn is_palindrome4<T: Copy + std::cmp::PartialEq>( list: &[T] ) -> bool {
+	match list {
+		[] | [_] => true,
+		[first, mid @ .., last] => (first == last) && is_palindrome4(mid),
+	}
+}
