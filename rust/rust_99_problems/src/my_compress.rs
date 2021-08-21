@@ -55,6 +55,29 @@ pub fn compress2<T>( list: &[T]) -> Vec<T>
         })
 }
 
+// using slices
+pub fn compress3<T: Copy+PartialEq+Debug+Display>(list: &[T]) -> Vec<T> {
+	pub fn compress3_<T: Copy+PartialEq+Debug+Display>(list: &[T], last: T, packed_list: &mut Vec<T>) {
+		match list {
+			[] => (),
+			[first, rest @ ..] => {
+				if *first != last {
+					packed_list.push(*first);
+				}
+				compress3_( &rest, *first, packed_list );
+			},
+		}
+	}
+
+	match list {
+		[] => vec![],
+		_ => {
+			let mut v = vec![list[0]];
+			compress3_(list, list[0], &mut v);
+			v
+		}
+	}
+}
 
 /* FIXME
 // Build goes into an infinite loop
