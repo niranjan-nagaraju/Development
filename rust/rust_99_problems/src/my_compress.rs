@@ -19,6 +19,7 @@ Example in Haskell:
 use std::cmp::PartialEq;
 use std::fmt::Debug;
 use std::fmt::Display;
+use itertools::fold;
 
 // Accumulate current item into a unique-items vector.
 // skip ahead all items == current item
@@ -47,7 +48,7 @@ pub fn compress2<T>( list: &[T]) -> Vec<T>
     where T: Copy+Debug+Display+PartialEq {
     list.iter()
         .fold(vec![], |mut acc_v, &item| {
-            match acc_v.iter().last() {
+            match acc_v.last() {
                 Some(&last) => if last != item { acc_v.push(item); },
                 None => { acc_v.push(item); },
             }
@@ -57,26 +58,37 @@ pub fn compress2<T>( list: &[T]) -> Vec<T>
 
 // using slices
 pub fn compress3<T: Copy+PartialEq+Debug+Display>(list: &[T]) -> Vec<T> {
-	pub fn compress3_<T: Copy+PartialEq+Debug+Display>(list: &[T], last: T, packed_list: &mut Vec<T>) {
+	pub fn compress3_<T: Copy+PartialEq+Debug+Display>(list: &[T], packed_list: &mut Vec<T>) {
 		match list {
 			[] => (),
 			[first, rest @ ..] => {
-				if *first != last {
+				let last = packed_list.last();
+				if Some(first) != last || last == None {
+					// either current item != last seen
+					// *OR*
+					// "last seen" is empty => this is the first item
+					// in the original list
 					packed_list.push(*first);
 				}
-				compress3_( &rest, *first, packed_list );
+				compress3_( &rest, packed_list );
 			},
 		}
 	}
 
-	match list {
-		[] => vec![],
-		_ => {
-			let mut v = vec![list[0]];
-			compress3_(list, list[0], &mut v);
-			v
+	let mut v = vec![];
+	compress3_(list, &mut v);
+	v
+}
+
+// using fold
+pub fn compress4<T: Copy+PartialEq+Debug+Display>(list: &[T]) -> Vec<T> {
+	fold(list, vec![], |mut acc_v, item| {
+		let last = acc_v.last();
+		if Some(item) != last || last == None {
+			acc_v.push(*item);
 		}
-	}
+		acc_v
+	})
 }
 
 /* FIXME

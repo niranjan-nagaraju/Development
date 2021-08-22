@@ -225,19 +225,28 @@ mod tests_99_rust_problems {
 		use crate::my_compress::*;
 		use std::str;
 		assert!( compress::<i32>(&vec![]) == vec![] );
+		assert!( compress(&vec![1,2,3,4]) == vec![1,2,3,4] );
 		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
 		assert!( compress(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
 		assert!( str::from_utf8( &compress("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
 
 		assert!( compress2::<i32>(&vec![]) == vec![] );
+		assert!( compress2(&vec![1,2,3,4]) == vec![1,2,3,4] );
 		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
 		assert!( compress2(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
 		assert!( str::from_utf8( &compress2("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
 
 		assert!( compress3::<i32>(&vec![]) == vec![] );
+		assert!( compress3(&vec![1,2,3,4]) == vec![1,2,3,4] );
 		assert!( compress3(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
 		assert!( compress3(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
 		assert!( str::from_utf8( &compress3("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
+
+		assert!( compress4::<i32>(&vec![]) == vec![] );
+		assert!( compress4(&vec![1,2,3,4]) == vec![1,2,3,4] );
+		assert!( compress4(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![1,2,3,4,3,4] );
+		assert!( compress4(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![1,2,3,4] );
+		assert!( str::from_utf8( &compress4("aabbcdabb".as_bytes()) ).unwrap() == "abcdab" );
 	}
 
 	#[test]
