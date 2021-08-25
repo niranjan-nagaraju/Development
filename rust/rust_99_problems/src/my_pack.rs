@@ -20,6 +20,8 @@ use std::fmt::Debug;
 use std::fmt::Display;
 use std::cmp::PartialEq;
 
+use itertools::fold;
+
 pub fn pack<T>( list: &[T]) -> Vec<Vec<T>>
 where T: Copy+Debug+Display+PartialEq {
 	list.iter()
@@ -34,5 +36,20 @@ where T: Copy+Debug+Display+PartialEq {
 			}
 			acc_vv
 		})
+}
+
+pub fn pack2<T>( list: &[T]) -> Vec<Vec<T>>
+where T: Copy+Debug+Display+PartialEq {
+	fold(list, vec![], |mut acc_vv, &item| {
+		match acc_vv.last_mut() {
+			Some(last_v) => if last_v[0] != item {
+					acc_vv.push(vec![item]);
+				} else {
+					last_v.push(item);
+				},
+			None => { acc_vv.push(vec![item]); },
+		}
+		acc_vv
+	})
 }
 

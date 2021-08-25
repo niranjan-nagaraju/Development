@@ -267,6 +267,12 @@ mod tests_99_rust_problems {
 		assert!( pack(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4,4,4]] );
 		assert!( to_string_vec(&pack("aabbcdabb".as_bytes()) ) == vec!["aa", "bb", "c", "d", "a", "bb"] );
 		assert!( to_string_vec(&pack("aaaabccaadeeee".as_bytes()) ) == vec!["aaaa","b","cc","aa","d","eeee"] );
+
+		assert!( pack2::<i32>(&vec![]) == vec![] as Vec<Vec<i32>>);
+		assert!( pack2(&vec![1,1,1,2,2,3,3,3,3,4,3,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4], vec![3], vec![4]] );
+		assert!( pack2(&vec![1,1,1,2,2,3,3,3,3,4,4,4]) == vec![vec![1,1,1], vec![2,2], vec![3,3,3,3], vec![4,4,4]] );
+		assert!( to_string_vec(&pack2("aabbcdabb".as_bytes()) ) == vec!["aa", "bb", "c", "d", "a", "bb"] );
+		assert!( to_string_vec(&pack2("aaaabccaadeeee".as_bytes()) ) == vec!["aaaa","b","cc","aa","d","eeee"] );
 	}
 
 	#[test]
