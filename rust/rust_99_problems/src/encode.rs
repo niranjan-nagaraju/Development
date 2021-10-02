@@ -16,14 +16,35 @@ Example in Haskell:
 use std::fmt::Debug;
 use std::fmt::Display;
 use std::cmp::PartialEq;
+use crate::my_pack::pack;
 
 // using pack
 pub fn encode<T>( list: &[T]) -> Vec<(u32, T)>
 where T: Copy+Debug+Display+PartialEq {
-	use crate::my_pack::pack;
     pack(&list)
 		.iter()
 		.map(|inner| (inner.len() as u32, inner[0]))
 		.collect()
 }
+
+
+// using pack and (x:xs) recursion
+pub fn encode2<T>( list: &[T]) -> Vec<(u32, T)>
+where T: Copy+Debug+Display+PartialEq {
+    fn encode_helper<T>(list: &[Vec<T>], out: &mut Vec<(u32, T)>)
+    where T: Copy+Debug+Display+PartialEq {
+        match list {
+            [] => (),
+            [first, rest @ ..] => {
+				out.push((first.len() as u32, first[0]));
+				encode_helper(rest, out);
+			},
+        }
+    }
+    let packed : Vec<Vec<T>> = pack(&list);
+    let mut out = Vec::new();
+    encode_helper(&packed, &mut out);
+    out
+} 
+
 
