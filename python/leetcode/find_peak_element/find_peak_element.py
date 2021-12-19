@@ -56,6 +56,6 @@ class Solution(object):
 
 if __name__ == '__main__':
 	s = Solution()
-	s.findPeakElement([1,2,3,1]) == 2
-	s.findPeakElement([1,2,1,3,5,6,4]) in [1,5]
+	assert s.findPeakElement([1,2,3,1]) == 2
+	assert s.findPeakElement([1,2,1,3,5,6,4]) in [1,5]
 
