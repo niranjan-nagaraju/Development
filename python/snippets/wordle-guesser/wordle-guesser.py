@@ -1,3 +1,5 @@
+#encoding: utf-8
+
 from ospd5 import ospd5
 
 
@@ -91,7 +93,8 @@ class WordleGuesser:
 
 
 	def add_guess( self, guess, score ):
-		print(' Adding:', guess, score )
+		emoji_mapping = { 'x': '🟨', '-': '⬛', '+': '🟩' }
+		print(' Adding:', guess, ''.join([emoji_mapping[x] for x in score]))
 		self.filter_out(guess.lower(), score.lower())
 
 	def print_candidates( self ):
