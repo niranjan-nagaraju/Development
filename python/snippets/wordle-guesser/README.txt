@@ -1,10 +1,10 @@
 # HOW-TO
 
-cat input.txt | python3 ordle-guesser.py
+cat input.txt | python3 wordle-guesser.py
 
 
 # Sample run
- cat sample.in | python3 wordle-guesser.py
+$ cat sample.in | python3 wordle-guesser.py
 Legend: +: green, x: orange, -: blank
  Adding: IRONS --x--
  Adding: BEAUT ---x-
