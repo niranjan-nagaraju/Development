@@ -66,17 +66,11 @@ class Solution:
 		# sort intervals by li, then reverse-sorted by ri
 		sorted_intervals = sorted(intervals, key=itemgetter(1), reverse=True) # first reverse-sort by ri
 		sorted_intervals = sorted(sorted_intervals, key=itemgetter(0)) # then sort by li
-		# check if (a,b) covers (c,d)
-		covered_intervals = lambda (a,b), (c,d): c >= a and d <= b
+		# check if any interval (c,d) in discrete_intervals covers (c,d)
+		covered_by_discrete_intervals = lambda (a,b): any( (c,d) for (c,d) in discrete_intervals if c<=a and d>=b  )
 		discrete_intervals = [sorted_intervals[0]]
-		for interval in sorted_intervals[1:]:
-			covered = False
-			for di in discrete_intervals:
-				if covered_intervals(di, interval):
-					covered = True
-					break
-			if not covered:
-				discrete_intervals.append(interval)
+		for interval in sorted_intervals:
+			discrete_intervals.append(interval) if not covered_by_discrete_intervals( interval ) else None
 
 		return len(discrete_intervals)
 
