@@ -13,6 +13,20 @@ Design:
 
 
 class Trie(object):
+	class NodeItem(object):
+		def __init__(self, data=None, eow=False ):
+			self.data = data
+			self.eow = eow
+			self.child = None
+
+		def __eq__(self, other):
+			return self.data == other.data and \
+				self.eow == other.eow and \
+				self.child == other.child
+
+		def __str__(self):
+			return '(' + str(self.data) + ', ' + str(self.eow) + ')'
+
 	class Node(object):
 		def __init__(self):
 			self.keys = {}
@@ -26,12 +40,9 @@ class Trie(object):
 		# raise `KeyError` if key is not in the dictionary
 		def __setitem__(self, key, nodeItem):
 			self.keys[key] = nodeItem
-
-	class NodeItem(object):
-		def __init__(self, data=None):
-			self.data = data
-			self.eow = False
-			self.child = None
+		
+		def __eq__(self, other):
+			return other and self.keys == other.keys
 
 	def __init__(self):
 		self.root = Trie.Node()
