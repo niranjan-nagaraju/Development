@@ -131,6 +131,8 @@ def run_tests():
 import sys
 if __name__ == '__main__':
 	#run_tests()
+	assert not filter_empty( 'rupee', 'ruler', '++-+-') #????
+	assert filter_rightly_placed( 'rupee', 'ruler', '++-+-')
 	w = WordleGuesser()
 	print('Legend: +: green, x: orange, -: blank')
 	guesses_scores = [l.strip().split() for l in sys.stdin]
