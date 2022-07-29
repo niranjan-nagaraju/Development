@@ -161,7 +161,6 @@ class Trie(object):
 		if not trav.end_of_word:
 			self.num_words += 1
 
-
 		# mark EoW and increase frequency
 		trav.end_of_word = True
 		trav.frequency += 1

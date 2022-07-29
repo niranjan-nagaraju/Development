@@ -26,22 +26,40 @@ def node_testcases():
 	assert n2['b'].child == None
 
 def trie_testcases():
-	t = Trie()
-	assert t.root == Trie.Node()
+	def test_add(addfn):
+		t = Trie()
+		assert t.root == Trie.Node()
+		addfn(t, 'ab', 'abadidea')
+		n1 = t.root
+		assert len(n1.keys) == 1
+		assert n1.keys.keys() == ['a']
+		n2 = n1['a'].child
+		assert n2
+		assert n2.keys.keys() == ['b']
+		assert n2['b'] == Trie.NodeItem( 'abadidea', True )
+		assert n2['b'].child == None
+		assert n2['b'].eow == True
+		assert n2['b'].child == None
 
-	t.add('ab', 'abadidea')
-	n1 = t.root
-	assert len(n1.keys) == 1
-	assert n1.keys.keys() == ['a']
+		addfn(t, 'ac', 'air-conditioner')
+		n1 = t.root
+		assert len(n1.keys) == 1
+		assert n1.keys.keys() == ['a']
+		n2 = n1['a'].child
+		assert n2
+		assert sorted(n2.keys.keys()) == ['b', 'c']
+		assert n2['b'] == Trie.NodeItem( 'abadidea', True )
+		assert n2['b'].child == None
+		assert n2['b'].eow == True
+		assert n2['b'].child == None
+		assert n2['c'] == Trie.NodeItem( 'air-conditioner', True )
+		assert n2['c'].child == None
+		assert n2['c'].eow == True
+		assert n2['c'].child == None
+
+	test_add(Trie.add)
+	test_add(Trie.add_r)
 	
-	n2 = n1['a'].child
-	assert n2
-	assert n2.keys.keys() == ['b']
-	assert n2['b'] == Trie.NodeItem( 'abadidea', True )
-	assert n2['b'].child == None
-	assert n2['b'].eow == False
-	assert n2['b'].child == None
-
 if __name__ == '__main__':
 	node_testcases()
 	trie_testcases()
