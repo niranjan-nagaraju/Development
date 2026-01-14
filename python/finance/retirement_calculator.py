@@ -1,7 +1,7 @@
 corpus = 300.0 # In lakhs, = 3 Cr
-inflation_rate = 9.0
-returns = 4.0 
-withdrawal_rate = 2.0 # Increases at <inflation_rate>% yoy
+inflation_rate = 5.0
+returns = 7.0 
+withdrawal_rate = 2.5 # Increases at <inflation_rate>% yoy
 
 def calculate (n):
 	headline = ["Year", "Corpus(L)",
@@ -20,8 +20,8 @@ def calculate (n):
 	for i in xrange(2, n+1):
 		withdrawal_amt = round ((100 + inflation_rate) * withdrawal_amt / 100.0, 2)
 
-		if withdrawal_amt > corpus_remaining:
-			print "{: >5} Not enough dough!".format(i)
+		if withdrawal_amt > (corpus_remaining+returns_on_corpus):
+			print "{: >5} Not enough dough!, Need: {: >5}, Have: {: >5}".format(i, withdrawal_amt, corpus_remaining+returns_on_corpus)
 			return
 
 		corpus_remaining = round((100 + returns) * corpus_remaining / 100.0  - withdrawal_amt, 2)
